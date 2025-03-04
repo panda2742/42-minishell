@@ -17,6 +17,7 @@ Voici ce que chaque branche fait et quel but leur sont donné :
 ### `main`
 
 La branche principale sur laquelle se trouvera la version 100% fonctionnelle. Sans doute la branche la moins avancée, mais c'est celle qui ne contient aucun bug. Également la branche par défaut qui sera mise en avant lors d'un git pull.
+C'est également cette branche qui sera push sur la vogosphere.
 
 ### `develop`
 
@@ -51,3 +52,38 @@ $ git pull origin develop --rebase
 En cas de conflit, on essaie de les régler à deux, mais si on s'y prend bien ca ne devrait pas arriver souvent. Au pire, on fait preuve de bon sens.
 
 > **Évidemment on essaie de faire petite feature par petite feature, pour éviter de travailler sur la même branche pendant deux semaines, ca sera plus simple pour être efficace.**
+
+## 3. Setup l'environnement de travail
+
+Pour travailler de facon cohérente avec cette organisation des branches, il faut :
+
+### Initialisation du repo sur le pc
+
+1. Cloner ce repo GitHub en premier
+```bash
+$ git clone https://github.com/panda2742/42-minishell
+```
+2. Ajouter le repo de la vogosphere en même temps
+```bash
+$ cd 42-minishell
+$ git remote add vog <repo_url>
+```
+
+### Comment push ?
+
+Par défaut, quand on push, ca push ici sur GitHub :
+```
+$ git add .
+$ git commit -m "message explicite"
+$ git push
+```
+
+On résoud nos pull requests et quand on fait une mise à jour de main, on doit update le contenu de la vogosphere :
+```
+$ git checkout main
+$ git push vog main
+```
+
+C'est tout :)
+
+Normalement y a tout ce qu'il faut savoir pour qu'on dead ca sur l'organisation, maintenant il ne reste plus qu'à coder ce fameux shell !
