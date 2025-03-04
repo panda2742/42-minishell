@@ -42,10 +42,10 @@ RM			:=	rm -r
 all: $(NAME)
 
 $(NAME): $(OBJ) $(HDR) $(LIBFT) Makefile
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
 $(BUILD_DIR)%.o: $(SRC_DIR)%.c | $(DIRS)
-	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR) -I$(HDR_DIR) $< -o $@
+	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR)/include -I$(HDR_DIR) $< -o $@
 
 $(LIBFT): libft
 
@@ -79,7 +79,7 @@ $(DIRS):
 
 .PHONY: norm
 norm:
-	norminette $(SRC_DIR) include/ libft/
+	norminette $(SRC_DIR) include/ $(LIBFT_DIR)/
 
 .PHONY: run
 run:

@@ -6,11 +6,13 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/04 08:32:42 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/03/04 15:27:43 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# include "libft.h"
 
 #endif
