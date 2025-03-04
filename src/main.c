@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/04 15:56:28 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/04 16:29:06 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	**test_parsing(char *s)
 	int	i;
 	
 	i = 0;
-	mapped = ft_split(s, ' ');
+	mapped = ft_split(s, " ");
 	while (mapped[i])
 	{
 		ft_printf("%s\n", mapped[i]);
