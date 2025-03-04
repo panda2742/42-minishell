@@ -19,7 +19,7 @@ override	SRC_DIR		:=	src/
 # The formatted version of the C source code files (with directory and extension), for example src/main.c
 override	SRC			:=	$(addprefix $(SRC_DIR),$(addsuffix .c,$(SRCS)))
 # The libft submodule directory
-override	LIBFT_DIR	:=	libft/
+override	LIBFT_DIR	:=	lib/
 # The libft executable path
 override	LIBFT		:=	$(LIBFT_DIR)libft.a
 # Every object for each C source code file
