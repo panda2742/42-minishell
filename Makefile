@@ -84,6 +84,12 @@ norm:
 .PHONY: run
 run:
 	$(MAKE) bonus
-	./$(NAME)
+	 ./$(NAME)
+
+.PHONY: runv
+runv:
+	$(MAKE) bonus
+	valgrind --leak-check=full ./$(NAME)
+
 
 -include $(DEPS)
