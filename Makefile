@@ -1,24 +1,42 @@
+# The name of the built executable
 NAME				:=	minishell
+# The directory where the built files will be
 MAKE_DIR			:=	.make/
 
+# The header files of the project
 override	HDRS	:=	minishell
+# The C source code files of the project
 override	SRCS	:=	main
 
+# The subdirectory where the built objects will be, for example ./make/minishell_develop/
 override	BUILD_DIR	:=	$(MAKE_DIR)$(NAME)_$(shell git branch --show-current)/
+# The header files directory
 override	HDR_DIR		:=	include/
+# The formatted version of the headers (with directory and extension), for example include/minishell.h
 override	HDR			:=	$(addprefix $(HDR_DIR),$(addsuffix .h,$(HDRS)))
+# The C source code files directory
 override	SRC_DIR		:=	src/
+# The formatted version of the C source code files (with directory and extension), for example src/main.c
 override	SRC			:=	$(addprefix $(SRC_DIR),$(addsuffix .c,$(SRCS)))
+# The libft submodule directory
 override	LIBFT_DIR	:=	libft/
+# The libft executable path
 override	LIBFT		:=	$(LIBFT_DIR)libft.a
+# Every object for each C source code file
 override	OBJ			:=	$(patsubst $(SRC_DIR)%.c,$(BUILD_DIR)%.o,$(SRC))
+# Every dep file (.d) for each C source code file
 override	DEPS		:=	$(patsubst %.o,%.d,$(OBJ))
+# All the required directories for the build of the project
 override	DIRS		:=	$(sort $(dir $(NAME) $(OBJ) $(LIBFT) $(DEPS)))
 
+# The C compilation flags
 CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP
+# The Makefile flags to hide the current directory on compilation
 MAKEFLAGS	:=	--no-print-directory
+# The compiler binary 
 GCC			:=	cc
-RM			:=	rm -rf
+# The rm command used to remove some things
+RM			:=	rm -r
 
 .PHONY: all
 all: $(NAME)
@@ -27,7 +45,7 @@ $(NAME): $(OBJ) $(HDR) $(LIBFT) Makefile
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 $(BUILD_DIR)%.o: $(SRC_DIR)%.c | $(DIRS)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR) -I$(HDR_DIR) $< -o $@
 
 $(LIBFT): libft
 
