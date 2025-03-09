@@ -1,32 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/09 20:00:35 by abonifac         ###   ########.fr       */
+/*   Created: 2025/03/09 18:05:50 by abonifac          #+#    #+#             */
+/*   Updated: 2025/03/09 18:08:31 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "../../include/ft_is.h"
 
-# include "libft.h"
-
-typedef enum e_token_type {
-	WORD, PIPE, REDIR_IN, REDIR_OUT, APPEND, HEREDOC
-} t_token_type;
-
-typedef struct s_token {
-	t_token_type type;
-	char *value;
-	struct s_token *next;
-} t_token;
-
-void	ft_lexer(void);
-t_token	*ft_input(char *string);
-
-
-#endif
+t_bool	ft_isspace(char c)
+{
+	if (c == ' ' || c == '\t')
+		return (true);
+	else
+		return (false);
+}

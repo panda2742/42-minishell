@@ -87,3 +87,8 @@ $ git push vog main
 C'est tout :)
 
 Normalement y a tout ce qu'il faut savoir pour qu'on dead ca sur l'organisation, maintenant il ne reste plus qu'à coder ce fameux shell !
+
+### Supression d'une branche
+
+git branch -D nom_de_la_branche
+git push origin --delete nom_de_la_branche

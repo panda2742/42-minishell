@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    variables.mk                                       :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+         #
+#    By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 14:44:31 by ehosta            #+#    #+#              #
-#    Updated: 2025/03/04 08:48:44 by ehosta           ###   ########.fr        #
+#    Updated: 2025/03/09 18:57:56 by abonifac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,8 @@ override	SRC_IS		:=	ft_isalnum \
 							ft_isdigit \
 							ft_isincharset \
 							ft_isprint \
-							ft_issorted
+							ft_issorted \
+							ft_isspace
 override	SRC_LST		:=	ft_lstadd_back \
 							ft_lstadd_front \
 							ft_lstclear \
@@ -108,7 +109,7 @@ override	DEPS		:=	$(patsubst %.o,%.d,$(OBJ))
 override	DIRS		:=	$(sort $(dir $(NAME) $(OBJ) $(DEPS)))
 
 override	DEPFLAGS	:=	-MMD -MP
-OFLAGS		:=	-O3
+OFLAGS		:=	-O0
 CFLAGS		:=	-Wall -Wextra -Werror $(DEPFLAGS)
 ARFLAGS		:=	rcs
 MAKEFLAGS	:=	--no-print-directory
