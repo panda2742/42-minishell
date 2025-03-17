@@ -41,10 +41,10 @@ RM			:=	rm -r
 .PHONY: all
 all: $(NAME)
 
-$(NAME): $(OBJ) $(HDR) $(LIBFT) Makefile
+$(NAME): $(OBJ) $(LIBFT) 
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
-$(BUILD_DIR)%.o: $(SRC_DIR)%.c | $(DIRS)
+$(BUILD_DIR)%.o: $(SRC_DIR)%.c Makefile $(HDR) | $(DIRS)
 	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR)/include -I$(HDR_DIR) $< -o $@
 
 $(LIBFT): libft
