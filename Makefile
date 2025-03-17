@@ -42,10 +42,10 @@ RM			:=	rm -r
 all: $(NAME)
 
 $(NAME): $(OBJ) $(HDR) $(LIBFT) Makefile
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline
 
 $(BUILD_DIR)%.o: $(SRC_DIR)%.c | $(DIRS)
-	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR)/include -I$(HDR_DIR) $< -o $@
+	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR)/include -I$(HDR_DIR) $< -o $@ 
 
 $(LIBFT): libft
 
@@ -89,7 +89,7 @@ run:
 .PHONY: runv
 runv:
 	$(MAKE) bonus
-	valgrind --leak-check=full ./$(NAME)
+	valgrind --leak-check=full --suppressions=readline.supp ./$(NAME)
 
 
 -include $(DEPS)

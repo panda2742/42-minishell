@@ -1,0 +1,1 @@
+cd ls -e "coucou'bon|jour'" 'bonjour"cou>cou"' | > >> < <<
