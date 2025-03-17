@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/17 16:06:54 by ehosta           ###   ########.fr       */
+/*   Created: 2025/03/17 15:38:55 by ehosta            #+#    #+#             */
+/*   Updated: 2025/03/17 16:07:06 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include "libft.h"
-# include "builtins.h"
-# include "exec.h"
+t_exit	builtins_pwd(void)
+{
+	char	*buffer;
 
-#endif
+	buffer = getcwd(NULL, 0);
+	write(1, buffer, ft_strlen(buffer));
+	free(buffer);
+}
