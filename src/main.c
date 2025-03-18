@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/18 14:40:27 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/03/18 14:42:49 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,13 @@
 
 char	**test_parsing(char *s)
 {
-	exec_command(s, NULL);
+	char	*command_name;
+
+	/* Remplace cette instruction la par ton call de parsing */
+	/* TODO */
+	command_name = s;
+
+	exec_command(command_name, NULL);
 	return (NULL);
 }
 
