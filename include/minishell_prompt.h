@@ -1,35 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell_prompt.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/18 14:40:27 by ehosta           ###   ########.fr       */
+/*   Created: 2025/03/18 09:14:05 by ehosta            #+#    #+#             */
+/*   Updated: 2025/03/18 09:18:08 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef MINISHELL_PROMPT_H
+# define MINISHELL_PROMPT_H
 
-char	**test_parsing(char *s)
-{
-	exec_command(s, NULL);
-	return (NULL);
-}
+void	show_prompt(void);
 
-int	main(void)
-{
-	char	*line;
-	char	**map;
-	
-	while (1)
-	{
-		show_prompt();
-		line = readline(" ");
-		map = test_parsing(line);
-		free(line);
-	}
-	(void)map;
-	return (0);
-}
+#endif
