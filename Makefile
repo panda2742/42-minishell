@@ -6,11 +6,11 @@ MAKE_DIR				:=	.make/
 # The header files of the project
 override	HDRS		:=	minishell
 # The C source code files of the project
-override	BUILTINS	:=	pwd
+override	BUILTINS	:=	cd echo env exit export pwd unset
 override	EXEC		:=	exec
 override	PROMPT		:=	show_prompt
 override	SRCS		:=	main \
-							$(addprefix builtins/,$(BUILTINS)) \
+							$(addprefix builtins/builtins_,$(BUILTINS)) \
 							$(addprefix exec/,$(EXEC)) \
 							$(addprefix prompt/,$(PROMPT))
 

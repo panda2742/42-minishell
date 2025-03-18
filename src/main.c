@@ -1,18 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/18 14:42:49 by ehosta           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
-char	**test_parsing(char *s)
+static void	_create_env(t_minishell *minishell, char **env);
+
+char	**test_parsing(t_minishell *minishell, char *s)
 {
 	char	*command_name;
 
@@ -20,22 +10,50 @@ char	**test_parsing(char *s)
 	/* TODO */
 	command_name = s;
 
-	exec_command(command_name, NULL);
+	exec_command(minishell, command_name, NULL);
 	return (NULL);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
-	char	*line;
-	char	**map;
+	char		*line;
+	char		**map;
+	t_minishell	minishell;
 	
+	(void)argc;
+	(void)argv;
+	_create_env(&minishell, env);
 	while (1)
 	{
 		show_prompt();
 		line = readline(" ");
-		map = test_parsing(line);
+		map = test_parsing(&minishell, line);
 		free(line);
 	}
 	(void)map;
 	return (0);
+}
+
+static void	_create_env(t_minishell *minishell, char **env)
+{
+	size_t	env_size;
+	size_t	i;
+	size_t	env_var_len;
+
+	env_size = 0;
+	while (env[env_size])
+		env_size++;
+	minishell->env = malloc(sizeof(char *) * (env_size + 1));
+	if (!minishell->env)
+		return ;
+	minishell->env[env_size] = 0;
+	i = -1;
+	while (++i < env_size)
+	{
+		env_var_len = ft_strlen(env[i]);
+		minishell->env[i] = malloc(sizeof(char) * (env_var_len + 1));
+		if (!minishell->env)
+			ft_free_strtab(minishell->env);
+		ft_strlcpy(minishell->env[i], env[i], env_var_len);
+	}
 }
