@@ -1,41 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/18 14:42:49 by ehosta           ###   ########.fr       */
+/*   Created: 2025/03/17 15:38:55 by ehosta            #+#    #+#             */
+/*   Updated: 2025/03/18 09:21:04 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**test_parsing(char *s)
+t_exit	builtins_pwd(t_command	*c)
 {
-	char	*command_name;
+	char	*buffer;
 
-	/* Remplace cette instruction la par ton call de parsing */
-	/* TODO */
-	command_name = s;
-
-	exec_command(command_name, NULL);
-	return (NULL);
-}
-
-int	main(void)
-{
-	char	*line;
-	char	**map;
-	
-	while (1)
-	{
-		show_prompt();
-		line = readline(" ");
-		map = test_parsing(line);
-		free(line);
-	}
-	(void)map;
+	(void)c;
+	buffer = getcwd(NULL, 0);
+	write(1, buffer, ft_strlen(buffer));
+	free(buffer);
+	write(1, "\n", 1);
 	return (0);
 }

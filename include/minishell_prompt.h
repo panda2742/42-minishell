@@ -1,41 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell_prompt.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/18 14:42:49 by ehosta           ###   ########.fr       */
+/*   Created: 2025/03/18 09:14:05 by ehosta            #+#    #+#             */
+/*   Updated: 2025/03/18 09:18:08 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef MINISHELL_PROMPT_H
+# define MINISHELL_PROMPT_H
 
-char	**test_parsing(char *s)
-{
-	char	*command_name;
+void	show_prompt(void);
 
-	/* Remplace cette instruction la par ton call de parsing */
-	/* TODO */
-	command_name = s;
-
-	exec_command(command_name, NULL);
-	return (NULL);
-}
-
-int	main(void)
-{
-	char	*line;
-	char	**map;
-	
-	while (1)
-	{
-		show_prompt();
-		line = readline(" ");
-		map = test_parsing(line);
-		free(line);
-	}
-	(void)map;
-	return (0);
-}
+#endif

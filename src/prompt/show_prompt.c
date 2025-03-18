@@ -1,41 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   show_prompt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/18 14:42:49 by ehosta           ###   ########.fr       */
+/*   Created: 2025/03/18 09:09:25 by ehosta            #+#    #+#             */
+/*   Updated: 2025/03/18 14:40:20 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**test_parsing(char *s)
+void	show_prompt(void)
 {
-	char	*command_name;
+	const char	*cwd = getcwd(NULL, 0);
 
-	/* Remplace cette instruction la par ton call de parsing */
-	/* TODO */
-	command_name = s;
-
-	exec_command(command_name, NULL);
-	return (NULL);
-}
-
-int	main(void)
-{
-	char	*line;
-	char	**map;
-	
-	while (1)
-	{
-		show_prompt();
-		line = readline(" ");
-		map = test_parsing(line);
-		free(line);
-	}
-	(void)map;
-	return (0);
+	printf(GREEN "%s/ " RESET, ft_strrchr(cwd, '/') + 1);
+	free((char *)cwd);
+	printf(BLUE "minishell $" RESET);
 }

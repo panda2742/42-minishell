@@ -1,41 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/18 14:42:49 by ehosta           ###   ########.fr       */
+/*   Created: 2025/03/17 16:06:21 by ehosta            #+#    #+#             */
+/*   Updated: 2025/03/17 19:36:17 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
-char	**test_parsing(char *s)
-{
-	char	*command_name;
+# include "exec.h"
 
-	/* Remplace cette instruction la par ton call de parsing */
-	/* TODO */
-	command_name = s;
+t_exit	builtins_pwd(t_command	*c);
 
-	exec_command(command_name, NULL);
-	return (NULL);
-}
-
-int	main(void)
-{
-	char	*line;
-	char	**map;
-	
-	while (1)
-	{
-		show_prompt();
-		line = readline(" ");
-		map = test_parsing(line);
-		free(line);
-	}
-	(void)map;
-	return (0);
-}
+#endif

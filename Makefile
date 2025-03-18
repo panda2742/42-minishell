@@ -1,12 +1,18 @@
 # The name of the built executable
-NAME				:=	minishell
+NAME					:=	minishell
 # The directory where the built files will be
-MAKE_DIR			:=	.make/
+MAKE_DIR				:=	.make/
 
 # The header files of the project
-override	HDRS	:=	minishell
+override	HDRS		:=	minishell
 # The C source code files of the project
-override	SRCS	:=	main
+override	BUILTINS	:=	pwd
+override	EXEC		:=	exec
+override	PROMPT		:=	show_prompt
+override	SRCS		:=	main \
+							$(addprefix builtins/,$(BUILTINS)) \
+							$(addprefix exec/,$(EXEC)) \
+							$(addprefix prompt/,$(PROMPT))
 
 # The subdirectory where the built objects will be, for example ./make/minishell_develop/
 override	BUILD_DIR	:=	$(MAKE_DIR)$(NAME)_$(shell git branch --show-current)/
@@ -30,7 +36,7 @@ override	DEPS		:=	$(patsubst %.o,%.d,$(OBJ))
 override	DIRS		:=	$(sort $(dir $(NAME) $(OBJ) $(LIBFT) $(DEPS)))
 
 # The C compilation flags
-CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP
+CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP -g3
 # The Makefile flags to hide the current directory on compilation
 MAKEFLAGS	:=	--no-print-directory
 # The compiler binary 
@@ -41,10 +47,10 @@ RM			:=	rm -r
 .PHONY: all
 all: $(NAME)
 
-$(NAME): $(OBJ) $(HDR) $(LIBFT) Makefile
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+$(NAME): $(OBJ) $(LIBFT) 
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline
 
-$(BUILD_DIR)%.o: $(SRC_DIR)%.c | $(DIRS)
+$(BUILD_DIR)%.o: $(SRC_DIR)%.c Makefile $(HDR) | $(DIRS)
 	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR)/include -I$(HDR_DIR) $< -o $@
 
 $(LIBFT): libft

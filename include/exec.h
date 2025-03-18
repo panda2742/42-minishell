@@ -1,41 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/18 14:42:49 by ehosta           ###   ########.fr       */
+/*   Created: 2025/03/17 15:39:07 by ehosta            #+#    #+#             */
+/*   Updated: 2025/03/17 19:37:21 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef EXEC_H
+# define EXEC_H
 
-char	**test_parsing(char *s)
-{
-	char	*command_name;
+# include <unistd.h>
 
-	/* Remplace cette instruction la par ton call de parsing */
-	/* TODO */
-	command_name = s;
+typedef unsigned char t_exit;
 
-	exec_command(command_name, NULL);
-	return (NULL);
-}
+typedef struct s_command {
+	char	*name;
+	char	**args;
+}			t_command;
 
-int	main(void)
-{
-	char	*line;
-	char	**map;
-	
-	while (1)
-	{
-		show_prompt();
-		line = readline(" ");
-		map = test_parsing(line);
-		free(line);
-	}
-	(void)map;
-	return (0);
-}
+typedef t_exit (* command_prototype)(t_command *);
+
+t_exit	exec_command(const char *command_name, const char **command_args);
+
+#endif
