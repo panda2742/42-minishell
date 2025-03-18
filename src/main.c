@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/04 16:29:06 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/03/17 19:43:22 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,8 @@
 
 char	**test_parsing(char *s)
 {
-	char	**mapped;
-	int	i;
-	
-	i = 0;
-	mapped = ft_split(s, " ");
-	while (mapped[i])
-	{
-		ft_printf("%s\n", mapped[i]);
-		i++;
-	}
-	return (mapped);
+	exec_command(s, NULL);
+	return (NULL);
 }
 
 int	main(void)
@@ -40,5 +31,6 @@ int	main(void)
 		map = test_parsing(line);
 		free(line);
 	}
+	(void)map;
 	return (0);
 }

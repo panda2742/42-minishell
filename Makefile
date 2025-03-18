@@ -1,12 +1,16 @@
 # The name of the built executable
-NAME				:=	minishell
+NAME					:=	minishell
 # The directory where the built files will be
-MAKE_DIR			:=	.make/
+MAKE_DIR				:=	.make/
 
 # The header files of the project
-override	HDRS	:=	minishell
+override	HDRS		:=	minishell
 # The C source code files of the project
-override	SRCS	:=	main
+override	BUILTINS	:=	pwd
+override	EXEC		:=	exec
+override	SRCS		:=	main \
+							$(addprefix builtins/,$(BUILTINS)) \
+							$(addprefix exec/,$(EXEC))
 
 # The subdirectory where the built objects will be, for example ./make/minishell_develop/
 override	BUILD_DIR	:=	$(MAKE_DIR)$(NAME)_$(shell git branch --show-current)/
