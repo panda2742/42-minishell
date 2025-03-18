@@ -6,45 +6,6 @@
 #include "libft.h"
 #include "minishell.h"
 
-
-t_token *ft_create_token(t_token_type type, char *value, int expand, t_token **head)
-{
-	t_token *new = malloc(sizeof(t_token));
-	t_token	*tmp;
-	static int i;
-
-	if (!new)
-		return (NULL);
-	
-	new->type = type;
-	new->value = ft_strdup(value);
-	new->index = i;
-	new->expand = expand;
-	new->next = NULL;
-	i++;
-	// si head pointait vers NULL on l assigne au nouveau pointeur
-	if (!*head)
-		*head = new;
-	// sinon on parcourt la liste et on ajoute new a la fin
-	else
-	{
-		tmp = *head;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
-	return (new);
-}
-
-void ft_print_tokens(t_token *head)
-{
-	while (head)
-	{
-		ft_printf("Token: Type = %d, Value = %s \n", head->type, head->value);
-		head = head->next;
-	}
-}
-
 // renvoie  positif si c == quelque chose
 int is_token(char c)
 {
