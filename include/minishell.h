@@ -1,23 +1,71 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/18 09:17:59 by ehosta           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
-# include "builtins.h"
-# include "exec.h"
-# include "minishell_prompt.h"
+
+/**
+ * An alias to the unsigned char type, just to set the code more readable.
+ */
+typedef unsigned char t_exit;
+
+/**
+ * @brief A command data structure.
+ * The base structure of a command data. Those data is passed for example when
+ * you call the function for a builtin command.
+ */
+typedef struct s_command {
+	/**
+	 * The name of the command.
+	 */
+	char	*name;
+	/**
+	 * The argument passed to the command.
+	 */
+	char	**args;
+	/**
+	 * The environment variables of the process.
+	 */
+	char	**env;
+}			t_command;
+
+/**
+ * Represents a prototype of a command function (used for builtins commands).
+ * The parameter is a pointer to a s_command structure, defined above.
+ */
+typedef t_exit (* command_prototype)(t_command *);
+
+/**
+ * The main structure of the project/code.
+ */
+typedef struct	s_minishell
+{
+	/**
+	 * Containing all the environment variables, duplicated. You can edit,
+	 * delete or add some and everything will be fine.
+	 */
+	char	**env;
+}			t_minishell;
+
+/**
+ * Base command which manages the execution process of a command.
+ */
+t_exit	exec_command(t_minishell *minishell, const char *command_name, const char **command_args);
+
+/** 
+ * Simply display the base prompt with readline.
+ */
+void	show_prompt(void);
+
+// BUILTINS ------------------------
+
+t_exit	builtins_cd(t_command *c);
+t_exit	builtins_echo(t_command *c);
+t_exit	builtins_env(t_command *c);
+t_exit	builtins_exit(t_command *c);
+t_exit	builtins_export(t_command *c);
+t_exit	builtins_pwd(t_command	*c);
+t_exit	builtins_unset(t_command *c);
 
 #endif
