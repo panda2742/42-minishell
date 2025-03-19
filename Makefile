@@ -7,10 +7,12 @@ MAKE_DIR				:=	.make/
 override	HDRS		:=	minishell
 # The C source code files of the project
 override	BUILTINS	:=	cd echo env exit export pwd unset
+override	ENV			:=	create_env get_env
 override	EXEC		:=	exec
 override	PROMPT		:=	show_prompt
 override	SRCS		:=	main \
 							$(addprefix builtins/builtins_,$(BUILTINS)) \
+							$(addprefix env_manager/,$(ENV)) \
 							$(addprefix exec/,$(EXEC)) \
 							$(addprefix prompt/,$(PROMPT))
 

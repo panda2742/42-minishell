@@ -2,10 +2,13 @@
 
 t_exit	builtins_env(t_command *c)
 {
-	while (*c->env)
+	char	**env;
+
+	env = env_str(c->env);
+	while (*env)
 	{
-		printf("%s\n", *c->env);
-		c->env++;
+		printf("%s\n", *env);
+		env++;
 	}
 	return (0);
 }

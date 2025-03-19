@@ -10,6 +10,26 @@
  */
 typedef unsigned char t_exit;
 
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}					t_env;
+
+typedef struct s_env_manager
+{
+	/**
+	 * Containing all the environment variables, duplicated in a linked list.
+	 * You can edit, delete or add some and everything will be fine.
+	 */
+	t_env	**vars;
+	/**
+	 * The amount of environment variables.
+	 */
+	size_t	env_size;
+}			t_env_manager;
+
 /**
  * @brief A command data structure.
  * The base structure of a command data. Those data is passed for example when
@@ -19,15 +39,15 @@ typedef struct s_command {
 	/**
 	 * The name of the command.
 	 */
-	char	*name;
+	char			*name;
 	/**
 	 * The argument passed to the command.
 	 */
-	char	**args;
+	char			**args;
 	/**
 	 * The environment variables of the process.
 	 */
-	char	**env;
+	t_env_manager	*env;
 }			t_command;
 
 /**
@@ -41,11 +61,7 @@ typedef t_exit (* command_prototype)(t_command *);
  */
 typedef struct	s_minishell
 {
-	/**
-	 * Containing all the environment variables, duplicated. You can edit,
-	 * delete or add some and everything will be fine.
-	 */
-	char	**env;
+	t_env_manager	env;
 }			t_minishell;
 
 /**
@@ -57,6 +73,11 @@ t_exit	exec_command(t_minishell *minishell, const char *command_name, const char
  * Simply display the base prompt with readline.
  */
 void	show_prompt(void);
+
+// ENV -----------------------------
+
+t_env	**create_env(const char **envp, t_env_manager *env);
+char	**env_str(t_env_manager *env);
 
 // BUILTINS ------------------------
 

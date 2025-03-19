@@ -10,7 +10,7 @@ t_exit	exec_command(t_minishell *minishell, const char *command_name, const char
 
 	command.name = (char *)command_name;
 	command.args = (char **)command_args;
-	command.env = minishell->env;
+	command.env = &minishell->env;
 	proto_res = _is_builtin(command.name);
 	if (!proto_res)
 		return (1);
@@ -25,7 +25,8 @@ static command_prototype	*_is_builtin(const char *command_name)
 		"cd", "echo", "env", "exit", "export", "pwd", "unset"
 	};
 	static command_prototype command_prototypes[7] = {
-		builtins_cd, builtins_echo, builtins_env, builtins_exit, builtins_export, builtins_pwd, builtins_unset
+		builtins_cd, builtins_echo, builtins_env, builtins_exit,
+		builtins_export, builtins_pwd, builtins_unset
 	};
 	size_t		len;
 	int			i;
