@@ -2,6 +2,7 @@
 
 static char	*_get_name(const char *env_var);
 static char	*_get_value(const char *env_var);
+static void	_init_manager(const char **envp, t_env_manager *env);
 
 t_env	**create_env(const char **envp, t_env_manager *env)
 {
@@ -9,27 +10,24 @@ t_env	**create_env(const char **envp, t_env_manager *env)
 	t_env	*elt;
 	t_env	*prev;
 
-	env->env_size = 0;
-	while (envp[env->env_size])
-		env->env_size += 1;
+	_init_manager(envp, env);
 	i = -1;
-	env->vars = malloc(sizeof(t_env *));
 	if (env->vars == NULL)
 		return (NULL);
+	env->vars[0] = NULL;
 	prev = NULL;
 	while (++i < env->env_size)
 	{
 		elt = malloc(sizeof(t_env));
 		if (elt == NULL)
-			return (NULL);
+			return (handle_env_mem_alloc(env));
 		elt->name = _get_name(envp[i]);
 		elt->value = _get_value(envp[i]);
 		elt->next = NULL;
-		if (env->vars == NULL)
-			env->vars = &elt;
+		if (env->vars[0] == NULL)
+			env->vars[0] = elt;
 		if (prev)
 			prev->next = elt;
-		printf("%p -> %p %s=%s\n", prev, elt, elt->name, elt->value);
 		prev = elt;
 	}
 	return (env->vars);
@@ -68,4 +66,12 @@ static char	*_get_value(const char *env_var)
 		return (NULL);
 	ft_strlcpy(res, env_var, len + 1);
 	return (res);
+}
+
+static void	_init_manager(const char **envp, t_env_manager *env)
+{
+	env->env_size = 0;
+	while (envp[env->env_size])
+		env->env_size += 1;
+	env->vars = malloc(sizeof(t_env *));
 }

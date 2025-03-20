@@ -8,7 +8,7 @@
 /**
  * An alias to the unsigned char type, just to set the code more readable.
  */
-typedef unsigned char t_exit;
+typedef unsigned char	t_exit;
 
 typedef struct s_env
 {
@@ -35,7 +35,8 @@ typedef struct s_env_manager
  * The base structure of a command data. Those data is passed for example when
  * you call the function for a builtin command.
  */
-typedef struct s_command {
+typedef struct s_command
+{
 	/**
 	 * The name of the command.
 	 */
@@ -48,18 +49,22 @@ typedef struct s_command {
 	 * The environment variables of the process.
 	 */
 	t_env_manager	*env;
-}			t_command;
+	/**
+	 * The command exit status. Default on success.
+	 */
+	t_exit			status;
+}					t_command;
 
 /**
  * Represents a prototype of a command function (used for builtins commands).
  * The parameter is a pointer to a s_command structure, defined above.
  */
-typedef t_exit (* command_prototype)(t_command *);
+typedef t_exit (*		t_cmdproto)(t_command *);
 
 /**
  * The main structure of the project/code.
  */
-typedef struct	s_minishell
+typedef struct s_minishell
 {
 	t_env_manager	env;
 }			t_minishell;
@@ -67,7 +72,11 @@ typedef struct	s_minishell
 /**
  * Base command which manages the execution process of a command.
  */
-t_exit	exec_command(t_minishell *minishell, const char *command_name, const char **command_args);
+t_exit	exec_command(
+			t_minishell *minishell,
+			const char *command_name,
+			const char **command_args
+			);
 
 /** 
  * Simply display the base prompt with readline.
@@ -77,7 +86,12 @@ void	show_prompt(void);
 // ENV -----------------------------
 
 t_env	**create_env(const char **envp, t_env_manager *env);
-char	**env_str(t_env_manager *env);
+void	debug_display_env(t_env_manager *env);
+void	free_env(t_env_manager *env);
+
+// ERRORS --------------------------
+
+void	*handle_env_mem_alloc(t_env_manager *env);
 
 // BUILTINS ------------------------
 

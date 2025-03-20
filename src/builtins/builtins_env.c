@@ -2,13 +2,19 @@
 
 t_exit	builtins_env(t_command *c)
 {
-	char	**env;
+	size_t	i;
+	t_env	*var;
 
-	env = env_str(c->env);
-	while (*env)
+	i = -1;
+	var = *c->env->vars;
+	while (++i < c->env->env_size)
 	{
-		printf("%s\n", *env);
-		env++;
+		if (ft_printf("%s%s%s=%s\n", BLUE, var->name, RESET, var->value) == -1)
+		{
+			c->status = EXIT_FAILURE;
+			break ;
+		}
+		var = var->next;
 	}
-	return (0);
+	return (c->status);
 }
