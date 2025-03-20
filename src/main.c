@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/18 17:57:23 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:29:59 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(void)
 	while (1)
 	{
 		set_sig_action();
-		line = readline(BLUE "minishell$ " RESET);
+		line = readline("minishell$ ");
 		// Gere la sortie propre avec CTRL D
 		if (!line)
 		{
