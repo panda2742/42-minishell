@@ -21,6 +21,19 @@ void	sigint_handler(int signal)
 	rl_redisplay();
 }
 
+/*
+	sigaction struct: 
+		struct sigaction {
+			void (*sa_handler)(int);
+			sigset_t sa_mask;
+			int sa_flags;
+		};
+		- sa_handler: pointeur sur la fonction de gestion du signal
+		- sigemptyset: initialise le masque de signaux a bloquer, en gros on ne bloque aucun signal
+		- sa_flags: flags pour la gestion du signal, SA_RESTART pour redemarrer les appels systeme interrompus
+		- sigaction: Quand SIGINT arrive, appelle sigint_handler et applique les options (sa_mask, sa_flags)
+		- signal: ignore SIGQUIT
+*/
 
 void set_sig_action(void)
 {
@@ -30,5 +43,5 @@ void set_sig_action(void)
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &act, NULL);
-	
+	signal(SIGQUIT, SIG_IGN);
 }
