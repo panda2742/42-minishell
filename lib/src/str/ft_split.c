@@ -73,7 +73,7 @@ static int	_bufcpy(char **result, size_t w, const char *s, const char *charset)
 	len = 0;
 	while (_is_in_charset(*s, charset) && *s)
 		s++;
-	while (_is_in_charset(s[len], charset) && s[len])
+	while (!_is_in_charset(s[len], charset) && s[len])
 		len++;
 	result[w] = (char *)malloc((len + 1) * sizeof(char));
 	if (!result[w])
@@ -99,6 +99,7 @@ static t_bool	_is_in_charset(char c, const char *charset)
 	{
 		if (*charset == c)
 			return (true);
+		charset++;
 	}
 	return (false);
 }

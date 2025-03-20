@@ -9,6 +9,11 @@ t_exit	builtins_env(t_command *c)
 	var = *c->env->vars;
 	while (++i < c->env->env_size)
 	{
+		if (!var->name || !var->value)
+		{
+			var = var->next;
+			continue ;
+		}
 		if (ft_printf("%s%s%s=%s\n", BLUE, var->name, RESET, var->value) == -1)
 		{
 			c->status = EXIT_FAILURE;

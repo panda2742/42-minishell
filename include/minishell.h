@@ -46,6 +46,10 @@ typedef struct s_command
 	 */
 	char			**args;
 	/**
+	 * The number of arguments passed to the command.
+	 */
+	int				argc;
+	/**
 	 * The environment variables of the process.
 	 */
 	t_env_manager	*env;
@@ -74,8 +78,9 @@ typedef struct s_minishell
  */
 t_exit	exec_command(
 			t_minishell *minishell,
-			const char *command_name,
-			const char **command_args
+			char *command_name,
+			char **command_args,
+			int command_argc
 			);
 
 /** 
@@ -88,6 +93,7 @@ void	show_prompt(void);
 t_env	**create_env(const char **envp, t_env_manager *env);
 void	debug_display_env(t_env_manager *env);
 void	free_env(t_env_manager *env);
+t_env	*get_var(t_env_manager *env, const char *name);
 
 // ERRORS --------------------------
 

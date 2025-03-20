@@ -4,16 +4,18 @@ static t_cmdproto	*_is_builtin(const char *command_name);
 
 t_exit	exec_command(
 			t_minishell *minishell,
-			const char *command_name,
-			const char **command_args
+			char *command_name,
+			char **command_args,
+			int command_argc
 			)
 {
 	t_cmdproto	*proto_res;
 	t_cmdproto	prototype;
 	t_command	command;
 
-	command.name = (char *)command_name;
-	command.args = (char **)command_args;
+	command.name = command_name;
+	command.args = command_args;
+	command.argc = command_argc;
 	command.env = &minishell->env;
 	command.status = EXIT_SUCCESS;
 	proto_res = _is_builtin(command.name);

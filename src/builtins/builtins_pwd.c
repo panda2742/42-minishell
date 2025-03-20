@@ -4,10 +4,20 @@ t_exit	builtins_pwd(t_command	*c)
 {
 	char	*buffer;
 
-	(void)c;
 	buffer = getcwd(NULL, 0);
-	write(1, buffer, ft_strlen(buffer));
+	if (buffer == NULL)
+	{
+		c->status = EXIT_FAILURE;
+		return (c->status);
+	}
+	if (ft_putstr_fd(buffer, 1) == -1)
+	{
+		free(buffer);
+		c->status = EXIT_FAILURE;
+		return (c->status);
+	}
 	free(buffer);
-	write(1, "\n", 1);
-	return (0);
+	if (ft_putstr_fd("\n", 1) == -1)
+		c->status = EXIT_FAILURE;
+	return (c->status);
 }
