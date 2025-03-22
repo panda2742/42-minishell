@@ -15,7 +15,15 @@
 // Si tu tombes sur un pipe ➔ tu vérifies que t’as bien eu une commande avant ➔ tu passes à la suite
 // Si la liste se termine ➔ tu vérifies que la dernière commande était valide
 
-#include "minishell.h"
+typedef struct s_token {
+	t_token_type type;
+	char *value;
+	int expand;
+	int	index;
+	struct s_token *next;
+} t_token;
+
+
 
 typedef struct s_redir
 {
@@ -30,15 +38,32 @@ typedef struct s_cmds
 	struct s_cmds	*next;
 } t_cmds;
 
+#include "minishell.h"
 
 int parser(t_token *head)
 {
 	t_token *tmp = head;
 
-	while (tmp->type != PIPE)
+	while (tmp->type != PIPE || tmp != NULL)
 	{
 		tmp = tmp->next;
 	}
 	return 0;
+}
+
+void create_cmds(t_cmds **head, int n)
+{
+	t_cmds *new;
+
+	new = malloc(sizeof(t_cmds));
+	if (!new)
+		return ; //
+	new->str = malloc(n);
+
+	
+	if (head == NULL)
+	{
+		head = new;
+	}
 
 }
