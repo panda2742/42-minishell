@@ -4,11 +4,12 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <unistd.h>
+#include <sys/types.h>
 
 /*
-	Handle CTRL C 
+	Handle CTRL C
 */
-void	sigint_handler(int signal)
+void sigint_handler(int signal)
 {
 	// void juste pour utiliser signal pour les flags
 	(void)signal;
@@ -22,7 +23,7 @@ void	sigint_handler(int signal)
 }
 
 /*
-	sigaction struct: 
+	sigaction struct:
 		struct sigaction {
 			void (*sa_handler)(int);
 			sigset_t sa_mask;
@@ -38,7 +39,7 @@ void	sigint_handler(int signal)
 void set_sig_action(void)
 {
 	struct sigaction act;
-	
+
 	act.sa_handler = &sigint_handler;
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = SA_RESTART;

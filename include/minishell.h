@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/18 17:58:59 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/23 16:19:02 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ void	del_token(void *content);
 // Signals
 void	set_sig_action(void);
 void	sigint_handler(int signal);
+
+// Parser
+int parser(t_token *head);
 
 
 
