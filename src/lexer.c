@@ -112,9 +112,9 @@ t_token	*ft_input(char *string)
 			if (cpy == NULL)
 			{
 				ft_printf("Error: memory allocation failed\n");
-				return (NULL);		
+				return (NULL);
 			}
-			ft_create_token(WORD, cpy, NO_EXPAND, &head);
+			ft_create_token(WORD, cpy, EXPAND, &head);
 			free(cpy);
 		}
 	}

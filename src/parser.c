@@ -59,7 +59,7 @@ void create_cmds(t_cmds **head, int n)
 	if (!new)
 		return ; //
 	new->str = malloc(n);
-
+	
 	
 	if (head == NULL)
 	{
