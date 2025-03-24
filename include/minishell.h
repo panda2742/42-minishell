@@ -5,6 +5,8 @@
 # include <readline/history.h>
 # include "libft.h"
 
+# define PROJECT_NAME "Minishell"
+
 /**
  * An alias to the unsigned char type, just to set the code more readable.
  */
@@ -83,11 +85,6 @@ t_exit	exec_command(
 			int command_argc
 			);
 
-/** 
- * Simply display the base prompt with readline.
- */
-void	show_prompt(void);
-
 // ENV -----------------------------
 
 t_env	**create_env(char **envp, t_env_manager *env);
@@ -97,7 +94,14 @@ t_env	*get_var(t_env_manager *env, const char *name);
 
 // ERRORS --------------------------
 
+typedef enum e_error
+{
+	E_BUILTINS_CD_WARGS,
+}	t_error;
+
 void	*handle_env_mem_alloc(t_env_manager *env);
+char	**error_msgs(void);
+void	puterr(t_error err);
 
 // BUILTINS ------------------------
 

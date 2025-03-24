@@ -13,16 +13,16 @@
 #ifndef FT_BASE_H
 # define FT_BASE_H
 
-// # if defined(__APPLE__)
-// # define RED ""
-// # define GREEN ""
-// # define YELLOW ""
-// # define BLUE ""
-// # define MAGENTA ""
-// # define CYAN ""
-// # define RESET ""
-// # define GRAY ""
-// # endif
+# if defined(__APPLE__)
+# define RED ""
+# define GREEN ""
+# define YELLOW ""
+# define BLUE ""
+# define MAGENTA ""
+# define CYAN ""
+# define RESET ""
+# define GRAY ""
+# endif
 
 # ifndef RED
 # define RED "\033[31m"

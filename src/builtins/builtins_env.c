@@ -28,11 +28,11 @@ t_exit	builtins_env(t_command *c)
 
 static t_bool	_write_var(t_env *var)
 {
-	if (write(1, BLUE, 1) == -1)
+	if (write(1, BLUE, 6) == -1)
 		return (false);
 	if (write(1, var->name, ft_strlen(var->name)) == -1)
 		return (false);
-	if (write(1, RESET, 1) == -1)
+	if (write(1, RESET, 6) == -1)
 		return (false);
 	if (write(1, "=", 1) == -1)
 		return (false);

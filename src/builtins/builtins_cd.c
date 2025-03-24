@@ -7,7 +7,7 @@ t_exit	builtins_cd(t_command *c)
 
 	if (c->argc >= 2)
 	{
-		ft_putstr_fd("", 2);
+		puterr(E_BUILTINS_CD_WARGS);
 		c->status = EXIT_FAILURE;
 		return (c->status);
 	}

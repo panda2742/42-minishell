@@ -31,8 +31,7 @@ int	main(int argc, char **argv, char **env)
 		return (EXIT_FAILURE);
 	while (1)
 	{
-		show_prompt();
-		line = readline(" ");
+		line = readline("\001"RED"\002minishell $ \001"RESET"\002");
 		map = test_parsing(&minishell, line);
 		free(line);
 	}
