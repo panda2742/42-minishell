@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-static char	*_get_name(const char *env_var);
-static char	*_get_value(const char *env_var);
-static void	_init_manager(const char **envp, t_env_manager *env);
+static char	*_get_name(char *env_var);
+static char	*_get_value(char *env_var);
+static void	_init_manager(char **envp, t_env_manager *env);
 
-t_env	**create_env(const char **envp, t_env_manager *env)
+t_env	**create_env(char **envp, t_env_manager *env)
 {
 	size_t	i;
 	t_env	*elt;
@@ -33,7 +33,7 @@ t_env	**create_env(const char **envp, t_env_manager *env)
 	return (env->vars);
 }
 
-static char	*_get_name(const char *env_var)
+static char	*_get_name(char *env_var)
 {
 	size_t	len;
 	char	*res;
@@ -48,7 +48,7 @@ static char	*_get_name(const char *env_var)
 	return (res);
 }
 
-static char	*_get_value(const char *env_var)
+static char	*_get_value(char *env_var)
 {
 	size_t	len;
 	char	*res;
@@ -68,7 +68,7 @@ static char	*_get_value(const char *env_var)
 	return (res);
 }
 
-static void	_init_manager(const char **envp, t_env_manager *env)
+static void	_init_manager(char **envp, t_env_manager *env)
 {
 	env->env_size = 0;
 	while (envp[env->env_size])

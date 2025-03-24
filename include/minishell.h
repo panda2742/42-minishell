@@ -90,7 +90,7 @@ void	show_prompt(void);
 
 // ENV -----------------------------
 
-t_env	**create_env(const char **envp, t_env_manager *env);
+t_env	**create_env(char **envp, t_env_manager *env);
 void	debug_display_env(t_env_manager *env);
 void	free_env(t_env_manager *env);
 t_env	*get_var(t_env_manager *env, const char *name);

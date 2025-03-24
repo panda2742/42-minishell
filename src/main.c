@@ -27,7 +27,7 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	if (create_env((const char **)env, &minishell.env) == NULL)
+	if (create_env(env, &minishell.env) == NULL)
 		return (EXIT_FAILURE);
 	while (1)
 	{

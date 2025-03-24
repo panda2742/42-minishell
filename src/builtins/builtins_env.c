@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+static t_bool	_write_var(t_env *var);
+
 t_exit	builtins_env(t_command *c)
 {
 	size_t	i;
@@ -14,7 +16,7 @@ t_exit	builtins_env(t_command *c)
 			var = var->next;
 			continue ;
 		}
-		if (ft_printf("%s%s%s=%s\n", BLUE, var->name, RESET, var->value) == -1)
+		if (!_write_var(var))
 		{
 			c->status = EXIT_FAILURE;
 			break ;
@@ -22,4 +24,21 @@ t_exit	builtins_env(t_command *c)
 		var = var->next;
 	}
 	return (c->status);
+}
+
+static t_bool	_write_var(t_env *var)
+{
+	if (write(1, BLUE, 1) == -1)
+		return (false);
+	if (write(1, var->name, ft_strlen(var->name)) == -1)
+		return (false);
+	if (write(1, RESET, 1) == -1)
+		return (false);
+	if (write(1, "=", 1) == -1)
+		return (false);
+	if (write(1, var->value, ft_strlen(var->value)) == -1)
+		return (false);
+	if (write(1, "\n", 1) == -1)
+		return (false);
+	return (true);
 }

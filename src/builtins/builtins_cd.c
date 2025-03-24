@@ -5,6 +5,12 @@ t_exit	builtins_cd(t_command *c)
 	t_env	*pwd;
 	t_env	*oldpwd;
 
+	if (c->argc >= 2)
+	{
+		ft_putstr_fd("", 2);
+		c->status = EXIT_FAILURE;
+		return (c->status);
+	}
 	pwd = get_var(c->env, "PWD");
 	oldpwd = get_var(c->env, "OLDPWD");
 	if (oldpwd)
@@ -21,7 +27,11 @@ t_exit	builtins_cd(t_command *c)
 	}
 	if (pwd)
 	{
-		
+		if (c->args[0])
+		{
+			printf("%s\n", c->args[0]);
+			chdir(c->args[0]);
+		}
 	}
-	return (0);
+	return (c->status);
 }

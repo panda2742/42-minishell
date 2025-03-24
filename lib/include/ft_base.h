@@ -13,14 +13,48 @@
 #ifndef FT_BASE_H
 # define FT_BASE_H
 
-# define RED "\x1b[31m"
-# define GREEN "\x1b[32m"
-# define YELLOW "\x1b[33m"
-# define BLUE "\x1b[34m"
-# define MAGENTA "\x1b[35m"
-# define CYAN "\x1b[36m"
-# define RESET "\x1b[0m"
-# define GRAY "\x1b[37m"
+// # if defined(__APPLE__)
+// # define RED ""
+// # define GREEN ""
+// # define YELLOW ""
+// # define BLUE ""
+// # define MAGENTA ""
+// # define CYAN ""
+// # define RESET ""
+// # define GRAY ""
+// # endif
+
+# ifndef RED
+# define RED "\033[31m"
+# endif
+
+# ifndef GREEN
+# define GREEN "\033[32m"
+# endif
+
+# ifndef YELLOW
+# define YELLOW "\033[33m"
+# endif
+
+# ifndef BLUE
+#  define BLUE "\033[34m"
+# endif
+
+# ifndef MAGENTA
+# define MAGENTA "\033[35m"
+# endif
+
+# ifndef CYAN
+# define CYAN "\033[36m"
+# endif
+
+# ifndef RESET
+#  define RESET "\033[0m"
+# endif
+
+# ifndef GRAY
+#  define GRAY "\033[37m"
+# endif
 
 typedef enum e_bool
 {
