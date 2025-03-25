@@ -32,7 +32,7 @@ static t_bool	_write_var(t_env *var)
 		return (false);
 	if (write(1, var->name, ft_strlen(var->name)) == -1)
 		return (false);
-	if (write(1, RESET, 6) == -1)
+	if (write(1, RESET, 5) == -1)
 		return (false);
 	if (write(1, "=", 1) == -1)
 		return (false);

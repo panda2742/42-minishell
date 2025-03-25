@@ -31,7 +31,7 @@ int	main(int argc, char **argv, char **env)
 		return (EXIT_FAILURE);
 	while (1)
 	{
-		line = readline("\001"RED"\002minishell $ \001"RESET"\002");
+		line = readline("\001"MAGENTA"\002minishell $ \001"RESET"\002");
 		map = test_parsing(&minishell, line);
 		free(line);
 	}

@@ -97,11 +97,12 @@ t_env	*get_var(t_env_manager *env, const char *name);
 typedef enum e_error
 {
 	E_BUILTINS_CD_WARGS,
+	E_BUILTINS_CD_NOHOME,
 }	t_error;
 
 void	*handle_env_mem_alloc(t_env_manager *env);
 char	**error_msgs(void);
-void	puterr(t_error err);
+void	puterr(t_error err, t_bool is_perror, char *err_arg);
 
 // BUILTINS ------------------------
 
