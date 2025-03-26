@@ -17,3 +17,9 @@ const char *get_token_type_str(t_token_type type)
 		return "HEREDOC";
     return "UNKNOWN";
 }
+
+int is_redir(t_token *head_token)
+{
+	return (head_token->type == REDIR_IN || head_token->type == REDIR_OUT ||
+		head_token->type == APPEND || head_token->type == HEREDOC);
+}

@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/25 19:11:22 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:21:33 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,13 @@ void	sigint_handler(int signal);
 int parser(t_token *head);
 
 
-// Utils
+// Utils parser
 const char *get_token_type_str(t_token_type type); // pour print les noms des redir
+int is_redir(t_token *head_token); // return 1 si c est une redir
 
-
+// Utils lexer
+int is_separator(char c);
+int is_token(char c);
 
 
 #endif

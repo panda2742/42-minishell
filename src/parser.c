@@ -157,6 +157,9 @@ void create_redir(t_redir **head_r, t_token *head)
 	}
 	// ft_printf("Create redir: type %i | value: %s | expand %i\n", new->type, new->filename, new->expand);
 }
+
+
+
 void create_cmds(t_token *head_token, t_token *end, t_cmds **head)
 {
 	t_cmds *new;
@@ -174,7 +177,7 @@ void create_cmds(t_token *head_token, t_token *end, t_cmds **head)
 		{
 			create_word(head_token->value, head_token->expand, &head_w);
 		}
-		else if (head_token->type == REDIR_IN || head_token->type == REDIR_OUT || head_token->type == APPEND || head_token->type == HEREDOC)
+		else if (is_redir(head_token))
 		{
 			create_redir(&head_r, head_token);
 			head_token = head_token->next;
