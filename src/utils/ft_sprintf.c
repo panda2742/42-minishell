@@ -2,7 +2,6 @@
 
 static size_t	_total_len(const char *format, va_list args);
 static char		*_write_res(const char *format, va_list args, char *buffer);
-static void 	_write_in_buffer();
 
 char	*ft_sprintf(const char *format, ...)
 {
@@ -19,7 +18,6 @@ char	*ft_sprintf(const char *format, ...)
 	if (!res)
 		return (NULL);
 	res[len] = 0;
-	printf("len: %zu\n", len);
 	va_start(args, format);
 	res = _write_res(format, args, res);
 	va_end(args);
@@ -75,13 +73,4 @@ static char	*_write_res(const char *format, va_list args, char *buffer)
 		format++;
 	}
 	return (buffer);
-}
-
-static void _write_in_buffer(char *buffer, char *str)
-{
-	while (*str)
-	{
-		*buffer = *str;
-		str++;
-	}
 }

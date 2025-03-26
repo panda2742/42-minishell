@@ -9,7 +9,7 @@ t_exit	builtins_env(t_command *c)
 
 	i = -1;
 	var = *c->env->vars;
-	while (++i < c->env->env_size)
+	while (++i < c->env->env_size && var)
 	{
 		if (!var->name || !var->value)
 		{
