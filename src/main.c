@@ -8,14 +8,14 @@ char	**test_parsing(t_minishell *minishell, char *s)
 
 	/* Remplace cette instruction la par ton call de parsing */
 	/* TODO */
-	command_name = s;
 	command_args = ft_split(s, " ");
-	command_args++;
+	command_name = command_args[0];
 	command_argc = 0;
 	while (command_args[command_argc])
 		command_argc++;
 
 	exec_command(minishell, command_name, command_args, command_argc);
+	ft_free_strtab(command_args);
 	return (NULL);
 }
 

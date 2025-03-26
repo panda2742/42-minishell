@@ -1,40 +1,29 @@
 #include "minishell.h"
 
-static char	*_set_home(t_env_manager *env);
-static void	_update_vars(t_env *pwd, t_env *old_pwd);
+static t_exit	_set_home(t_command *c);
+static void		_update_vars(t_env_manager *env);
 
 t_exit	builtins_cd(t_command *c)
 {
-	t_env	*pwd;
-	t_env	*old_pwd;
 
-	if (c->argc >= 2)
-	{
-		puterr(E_BUILTINS_CD_WARGS, false, NULL);
-		c->status = EXIT_FAILURE;
+	if (c->argc > 2)
+		return (command_failure(c, ft_sprintf(": %s: Too many arguments", c->name), false));
+	if (c->argc == 1 && _set_home(c) == EXIT_FAILURE)
 		return (c->status);
-	}
-	if (c->argc == 0 && !_set_home(c->env))
-	{
-		c->status = EXIT_FAILURE;
-		return (c->status);
-	}
-	else if (c->argc > 0 && chdir(c->args[0]) == -1)
-	{
-		puterr(0, true, c->args[0]);
-		c->status = EXIT_FAILURE;
-		return (c->status);
-	}
-	pwd = get_var(c->env, "PWD");
-	old_pwd = get_var(c->env, "OLDPWD");
-	_update_vars(pwd, old_pwd);
+	else if (c->argc == 2 && chdir(c->args[1]) == -1)
+		return (command_failure(c, ft_sprintf(": %s: %s", c->name, c->args[1]), true));
+	_update_vars(c->env);
 	return (c->status);
 }
 
-static void	_update_vars(t_env *pwd, t_env *old_pwd)
+static void	_update_vars(t_env_manager *env)
 {
-	char	*cwd;
+	t_env	*pwd;
+	t_env	*old_pwd;
+	char		*cwd;
 
+	pwd = get_var(env, "PWD");
+	old_pwd = get_var(env, "OLDPWD");
 	if (old_pwd)
 	{
 		if (old_pwd->value)
@@ -53,20 +42,14 @@ static void	_update_vars(t_env *pwd, t_env *old_pwd)
 	}
 }
 
-static char	*_set_home(t_env_manager *env)
+static t_exit	_set_home(t_command *c)
 {
 	t_env	*home;
 
-	home = get_var(env, "HOME");
+	home = get_var(c->env, "HOME");
 	if (!home || !home->value)
-	{
-		puterr(E_BUILTINS_CD_NOHOME, false, NULL);
-		return (NULL);
-	}
+		return (command_failure(c, ft_sprintf(": %s: Home variable not set", c->name), true));
 	if (chdir(home->value) == -1)
-	{
-		puterr(0, true, NULL);
-		return (NULL);
-	}
-	return (home->value);
+		return (command_failure(c, ft_sprintf(": %s", c->name), true));
+	return (c->status);
 }

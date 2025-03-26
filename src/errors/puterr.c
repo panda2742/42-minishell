@@ -1,20 +1,22 @@
 #include "minishell.h"
 
-void	puterr(t_error err, t_bool call_perror, char *err_arg)
+void	puterr(char *message, t_bool call_perror)
 {
-	const char	*errmsg = error_msgs()[err];
-
-	ft_putstr_fd(RED PROJECT_NAME ": cd", 2);
-	if (call_perror)
+	ft_putstr_fd(RED PROJECT_NAME, 2);
+	if (message)
 	{
-		if (err_arg)
-			ft_putstr_fd(": ", 2);
-		perror(err_arg);
+		if (call_perror)
+			perror(message);
+		else
+			ft_putstr_fd(message, 2);
+		free(message);
 	}
 	else
 	{
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd((char *)errmsg, 2);
-		ft_putstr_fd("\n" RESET, 2);
+		if (call_perror)
+			perror(": An error occured");
+		else
+			ft_putstr_fd(": An error occured\n", 2);
 	}
+	ft_putstr_fd(RESET, 2);
 }

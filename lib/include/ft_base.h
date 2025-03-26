@@ -14,26 +14,26 @@
 # define FT_BASE_H
 
 # if defined(__APPLE__)
-# define RED ""
-# define GREEN ""
-# define YELLOW ""
-# define BLUE ""
-# define MAGENTA ""
-# define CYAN ""
-# define RESET ""
-# define GRAY ""
+#  define RED ""
+#  define GREEN ""
+#  define YELLOW ""
+#  define BLUE ""
+#  define MAGENTA ""
+#  define CYAN ""
+#  define RESET ""
+#  define GRAY ""
 # endif
 
 # ifndef RED
-# define RED "\033[31m"
+#  define RED "\033[31m"
 # endif
 
 # ifndef GREEN
-# define GREEN "\033[32m"
+#  define GREEN "\033[32m"
 # endif
 
 # ifndef YELLOW
-# define YELLOW "\033[33m"
+#  define YELLOW "\033[33m"
 # endif
 
 # ifndef BLUE
@@ -41,11 +41,11 @@
 # endif
 
 # ifndef MAGENTA
-# define MAGENTA "\033[35m"
+#  define MAGENTA "\033[35m"
 # endif
 
 # ifndef CYAN
-# define CYAN "\033[36m"
+#  define CYAN "\033[36m"
 # endif
 
 # ifndef RESET

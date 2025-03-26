@@ -94,15 +94,9 @@ t_env	*get_var(t_env_manager *env, const char *name);
 
 // ERRORS --------------------------
 
-typedef enum e_error
-{
-	E_BUILTINS_CD_WARGS,
-	E_BUILTINS_CD_NOHOME,
-}	t_error;
-
 void	*handle_env_mem_alloc(t_env_manager *env);
-char	**error_msgs(void);
-void	puterr(t_error err, t_bool is_perror, char *err_arg);
+void	puterr(char *message, t_bool call_perror);
+t_exit	command_failure(t_command *c, char *message, t_bool call_perror);
 
 // BUILTINS ------------------------
 
@@ -113,5 +107,9 @@ t_exit	builtins_exit(t_command *c);
 t_exit	builtins_export(t_command *c);
 t_exit	builtins_pwd(t_command	*c);
 t_exit	builtins_unset(t_command *c);
+
+// TOOLS ---------------------------
+
+char	*ft_sprintf(const char *format, ...);
 
 #endif
