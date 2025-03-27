@@ -19,8 +19,10 @@ t_exit	builtins_unset(t_command *c)
 				c->env->vars[0] = var->next;
 			else
 				prev->next = var->next;
+			free(var->name);
 			free(var->value);
 			free(var);
+			c->env->env_size -= 1;
 			break ;
 		}
 		prev = var;

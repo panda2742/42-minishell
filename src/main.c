@@ -22,19 +22,38 @@ char	**test_parsing(t_minishell *minishell, char *s)
 int	main(int argc, char **argv, char **env)
 {
 	char		*line;
+	char		*prompt;
+	char		*cwd;
+	t_env		*var;
+	char		*user;
 	char		**map;
 	t_minishell	minishell;
 
-	(void)argc;
-	(void)argv;
 	if (create_env(env, &minishell.env) == NULL)
 		return (EXIT_FAILURE);
 	while (1)
 	{
-		line = readline("\001"MAGENTA"\002minishell $ \001"RESET"\002");
+		cwd = getcwd(NULL, 0);
+		var = get_var(&minishell.env, "USER");
+		if (var)
+			user = var->value;
+		else
+			user = "unknown";
+		prompt = ft_sprintf(
+					"\001"B_GREEN"\002%s @ \001"RESET"\002"
+					"\001"B_WHITE"\002%s \001"RESET"\002"
+					"\001"B_MAGENTA"\002minishell > \001"RESET"\002",
+					user,
+					cwd
+					);
+		line = readline(prompt);
+		free(cwd);
+		free(prompt);
 		map = test_parsing(&minishell, line);
 		free(line);
 	}
+	(void)argc;
+	(void)argv;
 	(void)map;
 	return (0);
 }

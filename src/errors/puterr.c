@@ -2,7 +2,7 @@
 
 void	puterr(char *message, t_bool call_perror)
 {
-	ft_putstr_fd(RED PROJECT_NAME, 2);
+	ft_putstr_fd(B_RED PROJECT_NAME, 2);
 	if (message)
 	{
 		if (call_perror)
