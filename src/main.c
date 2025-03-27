@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/25 16:23:13 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:14:03 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,17 @@ int	main(void)
 		
 		token = ft_input(line);
 
-		t_token *tmp = token;
-		while (tmp != NULL)
+		if (!lexer_parse(token))
 		{
-			// ft_printf("Type is: %d, value is %s, index is %i, expand %i\n", tmp->type, tmp->value, tmp->index, tmp->expand);
-			tmp = tmp->next;
+			free(line);
+			token_clear(&token, del_token);
 		}
-		parser(token);
-		free(line);
-		token_clear(&token, del_token);
+		else
+		{	
+			parser(token);
+			free(line);
+			token_clear(&token, del_token);
+		}
 	}
 	return (0);
 }

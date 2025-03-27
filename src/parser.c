@@ -24,29 +24,6 @@
 // } t_token;
 
 
-
-typedef struct s_redir
-{
-	int type;
-	char *filename;
-	int	expand;
-	struct s_redir *next;
-} t_redir;
-
-typedef struct s_word
-{
-	int expand;
-	char *word;
-	struct s_word *next;
-} t_word;
-
-typedef struct s_cmds
-{
-	t_word			*words;
-	t_redir 		*redir;
-	struct s_cmds	*next;
-} t_cmds;
-
 #include "minishell.h"
 
 
@@ -61,11 +38,7 @@ int parser(t_token *head)
 	// si on fait entrer renvoie le prompt
 	if (tmp == NULL)
 		return 0; //
-	if (tmp->type == PIPE)
-	{
-		ft_printf("Error: syntax error near unexpected token `|'\n"); //
-		return 0; //
-	}
+
 
 	// permet de retourner en arriere pour lire du debut jusqu au | ou NULL
 	t_token *start = head;
@@ -159,6 +132,34 @@ void create_redir(t_redir **head_r, t_token *head)
 }
 
 
+void	del_word(void *content)
+{
+	t_word *token;
+	token = (t_word *)content;
+	if (token->word)
+		free(token->word);
+	free(token);
+}
+
+void	del_redir(void *content)
+{
+	t_redir *token;
+	token = (t_redir *)content;
+	if (token->filename)
+		free(token->filename);
+	free(token);
+}
+
+void	del_cmds(void *content)
+{
+	t_cmds *node;
+	node = (t_cmds *)content;
+	if (node->words)
+		free(node->words);
+	if (node->redir)
+		free(node->redir);
+	free(node);
+}
 
 void create_cmds(t_token *head_token, t_token *end, t_cmds **head)
 {
@@ -212,4 +213,8 @@ void create_cmds(t_token *head_token, t_token *end, t_cmds **head)
 		ft_printf("Create redir: type %s | value: %s | expand %i\n", get_token_type_str(head_r->type), head_r->filename, head_r->expand);
 		head_r = head_r->next;
 	}
+	lst_clear((void **)&head_w, get_next_word, del_word);
+	lst_clear((void **)&head_r, get_next_redir, del_redir);
+	lst_clear((void **)head, get_next_cmds, del_cmds);
 }
+

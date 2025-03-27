@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/26 16:21:33 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:01:13 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,28 @@ typedef struct s_token {
 	struct s_token *next;
 } t_token;
 
+typedef struct s_redir
+{
+	int type;
+	char *filename;
+	int	expand;
+	struct s_redir *next;
+} t_redir;
+
+typedef struct s_word
+{
+	int expand;
+	char *word;
+	struct s_word *next;
+} t_word;
+
+typedef struct s_cmds
+{
+	t_word			*words;
+	t_redir 		*redir;
+	struct s_cmds	*next;
+} t_cmds;
+
 // $VAR
 # define NO_EXPAND 0 
 # define EXPAND 1
@@ -38,6 +60,9 @@ void	ft_print_tokens(t_token *head);
 t_token	*ft_create_token(t_token_type type, char *value, int expand, t_token **head);
 void	token_clear(t_token **lst, void (*del)(void *));
 void	del_token(void *content);
+
+// Lexer parser
+int lexer_parse(t_token *token);
 
 // Signals
 void	set_sig_action(void);
@@ -55,5 +80,10 @@ int is_redir(t_token *head_token); // return 1 si c est une redir
 int is_separator(char c);
 int is_token(char c);
 
+// Utils 1
+void	*get_next_cmds(void *node);
+void	*get_next_word(void *node);
+void	*get_next_redir(void *node);
+void 	lst_clear(void **lst, void *(*get_next)(void *), void (*del)(void *));
 
 #endif
