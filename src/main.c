@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/27 14:14:03 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:21:34 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ int	main(void)
 			free(line);
 			token_clear(&token, del_token);
 		}
+		//lst_clear((void **)head, get_next_cmds, del_cmds);
+
 	}
 	return (0);
 }

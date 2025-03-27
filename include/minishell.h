@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/27 15:01:13 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:54:33 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,16 @@ void	*get_next_cmds(void *node);
 void	*get_next_word(void *node);
 void	*get_next_redir(void *node);
 void 	lst_clear(void **lst, void *(*get_next)(void *), void (*del)(void *));
+
+// Get next token
+void	*get_next_token(void *node);
+void	*get_next_cmds(void *node);
+void	*get_next_word(void *node);
+void	*get_next_redir(void *node);
+
+// Utils del lst
+void	del_cmds(void *content);
+void	del_redir(void *content);
+void	del_word(void *content);
 
 #endif

@@ -132,34 +132,7 @@ void create_redir(t_redir **head_r, t_token *head)
 }
 
 
-void	del_word(void *content)
-{
-	t_word *token;
-	token = (t_word *)content;
-	if (token->word)
-		free(token->word);
-	free(token);
-}
 
-void	del_redir(void *content)
-{
-	t_redir *token;
-	token = (t_redir *)content;
-	if (token->filename)
-		free(token->filename);
-	free(token);
-}
-
-void	del_cmds(void *content)
-{
-	t_cmds *node;
-	node = (t_cmds *)content;
-	if (node->words)
-		free(node->words);
-	if (node->redir)
-		free(node->redir);
-	free(node);
-}
 
 void create_cmds(t_token *head_token, t_token *end, t_cmds **head)
 {
@@ -172,12 +145,15 @@ void create_cmds(t_token *head_token, t_token *end, t_cmds **head)
 	if (!new)
 		return ; //
 
+	// parcourt la chaine de la fin du precedent pipe au suivant
 	while (head_token != end->next)
 	{
+		// cree la liste de mot
 		if (head_token->type == WORD)
 		{
 			create_word(head_token->value, head_token->expand, &head_w);
 		}
+		// cree la liste de redir
 		else if (is_redir(head_token))
 		{
 			create_redir(&head_r, head_token);
@@ -185,8 +161,8 @@ void create_cmds(t_token *head_token, t_token *end, t_cmds **head)
 		}
 		head_token = head_token->next;
 	}
-	// create_word(head_token->value, head_token->expand, &head_w);
 
+	// initialise les pointeurs de cmds
 	new->words = head_w;
 	new->redir = head_r;
 	new->next = NULL;
@@ -203,15 +179,18 @@ void create_cmds(t_token *head_token, t_token *end, t_cmds **head)
 			tmp = tmp->next;
 		tmp->next = new;
 	}
-	while (head_w != NULL)
+
+	t_word *tmp_w = head_w;
+	while (tmp_w != NULL)
 	{
-		ft_printf("Create word: %s expand %i\n", head_w->word, head_w->expand);
-		head_w = head_w->next;
+		ft_printf("Create word: %s expand %i\n", tmp_w->word, tmp_w->expand);
+		tmp_w = tmp_w->next;
 	}
-	while (head_r != NULL)
+	t_redir *tmp_r = head_r;
+	while (tmp_r != NULL)
 	{
-		ft_printf("Create redir: type %s | value: %s | expand %i\n", get_token_type_str(head_r->type), head_r->filename, head_r->expand);
-		head_r = head_r->next;
+		ft_printf("Create redir: type %s | value: %s | expand %i\n", get_token_type_str(tmp_r->type), tmp_r->filename, tmp_r->expand);
+		tmp_r = tmp_r->next;
 	}
 	lst_clear((void **)&head_w, get_next_word, del_word);
 	lst_clear((void **)&head_r, get_next_redir, del_redir);
