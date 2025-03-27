@@ -10,12 +10,14 @@ override	BUILTINS	:=	cd echo env exit export pwd unset
 override	ENV			:=	create_env free_env get_var
 override	ERRORS		:=	error_handler puterr
 override	EXEC		:=	exec
+override	PROMPT		:=	show_prompt
 override	UTILS		:=	ft_sprintf
 override	SRCS		:=	main \
 							$(addprefix builtins/builtins_,$(BUILTINS)) \
 							$(addprefix env_manager/,$(ENV)) \
 							$(addprefix errors/,$(ERRORS)) \
 							$(addprefix exec/,$(EXEC)) \
+							$(addprefix prompt/,$(PROMPT)) \
 							$(addprefix utils/,$(UTILS))
 
 # The subdirectory where the built objects will be, for example ./make/minishell_develop/

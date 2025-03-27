@@ -47,6 +47,7 @@ typedef struct s_command
 	 * The argument passed to the command.
 	 */
 	char			**args;
+	char			*arg_str;
 	/**
 	 * The number of arguments passed to the command.
 	 */
@@ -82,7 +83,8 @@ t_exit	exec_command(
 			t_minishell *minishell,
 			char *command_name,
 			char **command_args,
-			int command_argc
+			int command_argc,
+			char *arg_str
 			);
 
 // ENV -----------------------------
@@ -108,7 +110,11 @@ t_exit	builtins_export(t_command *c);
 t_exit	builtins_pwd(t_command	*c);
 t_exit	builtins_unset(t_command *c);
 
-// TOOLS ---------------------------
+// PROMPT --------------------------
+
+char	*show_prompt(t_env_manager *env);
+
+// UTILS ---------------------------
 
 char	*ft_sprintf(const char *format, ...);
 

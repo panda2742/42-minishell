@@ -6,7 +6,8 @@ t_exit	exec_command(
 			t_minishell *minishell,
 			char *command_name,
 			char **command_args,
-			int command_argc
+			int command_argc,
+			char *arg_str
 			)
 {
 	t_cmdproto	*proto_res;
@@ -17,6 +18,7 @@ t_exit	exec_command(
 	command.args = command_args;
 	command.argc = command_argc;
 	command.env = &minishell->env;
+	command.arg_str = arg_str;
 	command.status = EXIT_SUCCESS;
 	proto_res = _is_builtin(command.name);
 	if (!proto_res)
