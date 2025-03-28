@@ -1,15 +1,15 @@
 
+#include <readline/history.h>
+#include <readline/readline.h>
 #include <signal.h>
 #include <stddef.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <unistd.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 /*
 	Handle CTRL C
 */
-void sigint_handler(int signal)
+void	sigint_handler(int signal)
 {
 	// void juste pour utiliser signal pour les flags
 	(void)signal;
@@ -30,13 +30,16 @@ void sigint_handler(int signal)
 			int sa_flags;
 		};
 		- sa_handler: pointeur sur la fonction de gestion du signal
-		- sigemptyset: initialise le masque de signaux a bloquer, en gros on ne bloque aucun signal
-		- sa_flags: flags pour la gestion du signal, SA_RESTART pour redemarrer les appels systeme interrompus
-		- sigaction: Quand SIGINT arrive, appelle sigint_handler et applique les options (sa_mask, sa_flags)
+		- sigemptyset: initialise le masque de signaux a bloquer,
+			en gros on ne bloque aucun signal
+		- sa_flags: flags pour la gestion du signal,
+			SA_RESTART pour redemarrer les appels systeme interrompus
+		- sigaction: Quand SIGINT arrive,
+			appelle sigint_handler et applique les options (sa_mask, sa_flags)
 		- signal: ignore SIGQUIT
 */
 
-void set_sig_action(void)
+void	set_sig_action(void)
 {
 	struct sigaction act;
 

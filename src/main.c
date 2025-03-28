@@ -12,12 +12,11 @@
 
 #include "minishell.h"
 
-
 char	**test_parsing(char *s)
 {
 	char	**mapped;
-	int	i;
-	
+	int		i;
+
 	i = 0;
 	mapped = ft_split(s, " ");
 	while (mapped[i])
@@ -28,18 +27,16 @@ char	**test_parsing(char *s)
 	return (mapped);
 }
 
-#include <strings.h>
-#include <stdio.h>
-#include <readline/readline.h>
 #include <readline/history.h>
-
-
+#include <readline/readline.h>
+#include <stdio.h>
+#include <strings.h>
 
 int	main(void)
 {
 	char	*line;
 	t_token	*token;
-	
+
 	token = NULL;
 	// char	**map;
 	while (1)
@@ -52,26 +49,21 @@ int	main(void)
 			ft_printf("exit\n");
 			break ;
 		}
-		
 		token = ft_input(line);
-
 		if (!lexer_parse(token))
 		{
 			free(line);
 			token_clear(&token, del_token);
 		}
 		else
-		{	
+		{
 			parser(token);
 			free(line);
 			token_clear(&token, del_token);
 		}
-		//lst_clear((void **)head, get_next_cmds, del_cmds);
-
+		// lst_clear((void **)head, get_next_cmds, del_cmds);
 	}
 	return (0);
 }
 
-
 // cd ls -e "coucou'bon|jour'" 'bonjour"cou>cou"' | > >> < <<
-

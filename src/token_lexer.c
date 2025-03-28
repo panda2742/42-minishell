@@ -3,7 +3,8 @@
 
 void	del_token(void *content)
 {
-	t_token *token;
+	t_token	*token;
+
 	token = (t_token *)content;
 	if (token->value)
 		free(token->value);
@@ -12,8 +13,8 @@ void	del_token(void *content)
 
 void	token_clear(t_token **lst, void (*del)(void *))
 {
-	t_token *tmp;
-	
+	t_token	*tmp;
+
 	if (!lst || !del)
 		return ;
 	while (*lst)
@@ -25,15 +26,16 @@ void	token_clear(t_token **lst, void (*del)(void *))
 	*lst = NULL;
 }
 
-t_token *ft_create_token(t_token_type type, char *value, int expand, t_token **head)
+t_token	*ft_create_token(t_token_type type, char *value, int expand,
+		t_token **head)
 {
-	t_token *new = malloc(sizeof(t_token));
-	t_token	*tmp;
-	static int i;
+	t_token		*new;
+	t_token		*tmp;
+	static int	i;
 
+	new = malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
-	
 	new->type = type;
 	new->value = ft_strdup(value);
 	new->index = i;
@@ -54,7 +56,7 @@ t_token *ft_create_token(t_token_type type, char *value, int expand, t_token **h
 	return (new);
 }
 
-void ft_print_tokens(t_token *head)
+void	ft_print_tokens(t_token *head)
 {
 	while (head)
 	{

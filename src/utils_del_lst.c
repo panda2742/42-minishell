@@ -3,7 +3,8 @@
 
 void	del_word(void *content)
 {
-	t_word *token;
+	t_word	*token;
+
 	token = (t_word *)content;
 	if (token->word)
 		free(token->word);
@@ -12,7 +13,8 @@ void	del_word(void *content)
 
 void	del_redir(void *content)
 {
-	t_redir *token;
+	t_redir	*token;
+
 	token = (t_redir *)content;
 	if (token->filename)
 	{
@@ -23,9 +25,8 @@ void	del_redir(void *content)
 
 void	del_cmds(void *content)
 {
-	t_cmds *node;
-	node = (t_cmds *)content;
+	t_cmds	*node;
 
+	node = (t_cmds *)content;
 	free(node);
 }
-
