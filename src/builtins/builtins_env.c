@@ -2,7 +2,7 @@
 
 static t_bool	_write_var(t_env *var);
 
-t_exit	builtins_env(t_command *c)
+t_exit	builtins_env(t_excmd *c)
 {
 	size_t	i;
 	t_env	*var;

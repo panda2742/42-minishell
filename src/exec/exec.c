@@ -1,34 +1,42 @@
 #include "minishell.h"
 
-static t_cmdproto	*_is_builtin(const char *command_name);
-
-t_exit	exec_command(
-			t_minishell *minishell,
-			char *command_name,
-			char **command_args,
-			int command_argc,
-			char *arg_str
-			)
+t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 {
-	t_cmdproto	*proto_res;
-	t_cmdproto	prototype;
-	t_command	command;
+	t_exit		status;
+	t_cmdproto	*proto;
+	t_excmd		*cmd;
 
-	command.name = command_name;
-	command.args = command_args;
-	command.argc = command_argc;
-	command.env = &minishell->env;
-	command.arg_str = arg_str;
-	command.status = EXIT_SUCCESS;
-	proto_res = _is_builtin(command.name);
-	if (!proto_res)
-		return (1);
-	prototype = *proto_res;
-	prototype(&command);
-	return (0);
+	status = EXIT_SUCCESS;
+	proto = NULL;
+
+	(void)minishell;
+	// here docs
+	cmd = *cmds;
+	while (cmd)
+	{
+		if (cmd->has_heredoc)
+			heredoc(cmd->heredoc_del, cmd->heredoc_content);
+	}
+
+	// exec
+	cmd = *cmds;
+	while (cmd)
+	{
+		if (cmd->is_builtin)
+		{
+			if (!cmd->in_a_child)
+			{
+				(*cmd->proto)(cmd);
+				status = cmd->status;
+			}
+			cmd = cmd->next;
+			continue ;
+		}
+	}
+	return (status);
 }
 
-static t_cmdproto	*_is_builtin(const char *command_name)
+t_cmdproto	*load_builtin(const char *command_name, t_cmdproto *proto)
 {
 	static char			*builtins[7] = {
 		"cd", "echo", "env", "exit", "export", "pwd", "unset"
@@ -45,7 +53,10 @@ static t_cmdproto	*_is_builtin(const char *command_name)
 	{
 		len = ft_strlen(builtins[i]);
 		if (ft_strncmp(command_name, builtins[i], len) == 0)
-			return (&command_prototypes[i]);
+		{
+			proto = &command_prototypes[i];
+			break ;
+		}
 	}
-	return (NULL);
+	return (proto);
 }

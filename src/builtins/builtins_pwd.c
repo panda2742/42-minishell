@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_exit	builtins_pwd(t_command	*c)
+t_exit	builtins_pwd(t_excmd	*c)
 {
 	char	*buffer;
 

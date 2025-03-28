@@ -11,11 +11,12 @@ char	*show_prompt(t_env_manager *env)
 	char		*res;
 
 	res = ft_sprintf(
-				"%s%s%s @ %s%s%s %sminishell >%s ",
-				B_BLUE, user, RESET,
-				B_CYAN, path, RESET,
-				B_MAGENTA, RESET
-				);
+			"%sMinishell%s::%s%s%s @ %s%s%s %s>%s ",
+			B_MAGENTA, RESET,
+			B_BLUE, user, RESET,
+			B_CYAN, path, RESET,
+			B_MAGENTA, RESET
+			);
 	free((char *)path);
 	return (res);
 }

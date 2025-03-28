@@ -16,7 +16,7 @@ char	**test_parsing(t_minishell *minishell, char *s)
 	while (command_args[command_argc])
 		command_argc++;
 
-	exec_command(minishell, command_name, command_args, command_argc, arg_str);
+	(void)minishell;
 	ft_free_strtab(command_args);
 	return (NULL);
 }

@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-t_exit	builtins_echo(t_command *c)
+t_exit	builtins_echo(t_excmd *c)
 {
-	const size_t	len = ft_strlen(c->arg_str);
-	const char		*s = c->arg_str;
+	const size_t	len = ft_strlen(c->raw);
+	const char		*s = c->raw;
 	size_t			i;
 	t_bool			continue_nl;
 	char			current_quote;

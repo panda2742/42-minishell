@@ -33,40 +33,36 @@ typedef struct s_env_manager
 }			t_env_manager;
 
 /**
- * @brief A command data structure.
- * The base structure of a command data. Those data is passed for example when
- * you call the function for a builtin command.
- */
-typedef struct s_command
-{
-	/**
-	 * The name of the command.
-	 */
-	char			*name;
-	/**
-	 * The argument passed to the command.
-	 */
-	char			**args;
-	char			*arg_str;
-	/**
-	 * The number of arguments passed to the command.
-	 */
-	int				argc;
-	/**
-	 * The environment variables of the process.
-	 */
-	t_env_manager	*env;
-	/**
-	 * The command exit status. Default on success.
-	 */
-	t_exit			status;
-}					t_command;
-
-/**
  * Represents a prototype of a command function (used for builtins commands).
  * The parameter is a pointer to a s_command structure, defined above.
  */
-typedef t_exit (*		t_cmdproto)(t_command *);
+
+typedef struct s_excmd
+{
+	char			*name;
+	t_bool			is_builtin;
+	t_bool			in_a_child;
+	t_exit 			(*proto)(struct s_excmd *);
+	int				argc;
+	char			**argv;
+	t_env_manager	*env;
+	char			**envp;
+	char			*raw;
+	char			**paths;
+	t_bool			has_heredoc;
+	char			*heredoc_del;
+	char			*heredoc_content;
+	char			*infile;
+	int				in_fd;
+	char			*outfile;
+	int				out_fd;
+	int				pipe[2];
+	t_exit			status;
+	struct s_excmd	*prev;
+	struct s_excmd	*next;
+}					t_excmd;
+
+typedef t_exit (*		t_cmdproto)(t_excmd *);
 
 /**
  * The main structure of the project/code.
@@ -76,16 +72,8 @@ typedef struct s_minishell
 	t_env_manager	env;
 }			t_minishell;
 
-/**
- * Base command which manages the execution process of a command.
- */
-t_exit	exec_command(
-			t_minishell *minishell,
-			char *command_name,
-			char **command_args,
-			int command_argc,
-			char *arg_str
-			);
+t_cmdproto	*load_builtin(const char *command_name, t_cmdproto *proto);
+t_exit	heredoc(char *del, char *buffer);
 
 // ENV -----------------------------
 
@@ -98,17 +86,17 @@ t_env	*get_var(t_env_manager *env, const char *name);
 
 void	*handle_env_mem_alloc(t_env_manager *env);
 void	puterr(char *message, t_bool call_perror);
-t_exit	command_failure(t_command *c, char *message, t_bool call_perror);
+t_exit	command_failure(t_excmd *c, char *message, t_bool call_perror);
 
 // BUILTINS ------------------------
 
-t_exit	builtins_cd(t_command *c);
-t_exit	builtins_echo(t_command *c);
-t_exit	builtins_env(t_command *c);
-t_exit	builtins_exit(t_command *c);
-t_exit	builtins_export(t_command *c);
-t_exit	builtins_pwd(t_command	*c);
-t_exit	builtins_unset(t_command *c);
+t_exit	builtins_cd(t_excmd *c);
+t_exit	builtins_echo(t_excmd *c);
+t_exit	builtins_env(t_excmd *c);
+t_exit	builtins_exit(t_excmd *c);
+t_exit	builtins_export(t_excmd *c);
+t_exit	builtins_pwd(t_excmd	*c);
+t_exit	builtins_unset(t_excmd *c);
 
 // PROMPT --------------------------
 
