@@ -21,7 +21,7 @@ char *build_word(const char *string, int *i)
 	char *segment;
 	int start;
 
-	while (string[*i] && !is_separator(string[*i])) // tant qu'on n'est pas sur un vrai separateur
+	while (string[*i] && !is_separator(string[*i])) // tant qu on n est pas sur un vrai separateur
 	{
 		if (string[*i] == '"')
 		{
