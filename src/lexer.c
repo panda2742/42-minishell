@@ -75,7 +75,7 @@ t_token	*ft_input(char *string)
 	while (string[i])
 	{
 		// Ignore les espaces
-		if (ft_isspace(string[i]))
+		while (ft_isspace(string[i]))
 			i++;
 		// Gere "" et '' et les enchainements
 		if (is_word_start(string[i]))
@@ -178,3 +178,4 @@ t_token	*ft_input(char *string)
 	}
 	return (head);
 }
+
