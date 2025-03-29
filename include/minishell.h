@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/29 12:17:00 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/29 19:59:52 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_cmds
 {
 	t_word			*words;
 	t_redir 		*redir;
+	int				leak_flag;
 	struct s_cmds	*next;
 } t_cmds;
 
@@ -201,5 +202,9 @@ void	*get_next_redir(void *node);
 void	del_cmds(void *content);
 void	del_redir(void *content);
 void	del_word(void *content);
+
+// To delete later
+void	print_elements_cmds(t_word *head_w, t_redir *head_r);
+
 
 #endif
