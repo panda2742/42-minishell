@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/27 15:54:33 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/29 11:56:31 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,31 @@ typedef struct s_cmds
 // $VAR
 # define NO_EXPAND 0 
 # define EXPAND 1
+
+// typedef struct s_excmd
+// {
+// 	char			*name;
+// 	t_bool			is_builtin;
+// 	t_bool			in_a_child;
+// 	t_exit 			(*proto)(struct s_excmd *);
+// 	int				argc;
+// 	char			**argv;
+// 	t_env_manager	*env;
+// 	char			**envp;
+// 	char			*raw;
+// 	char			**paths;
+// 	t_bool			has_heredoc;
+// 	char			*heredoc_del;
+// 	char			*heredoc_content;
+// 	char			*infile;
+// 	int				in_fd;
+// 	char			*outfile;
+// 	int				out_fd;
+// 	int				pipe[2];
+// 	t_exit			status;
+// 	struct s_excmd	*prev;
+// 	struct s_excmd	*next;
+// }					t_excmd;
 
 
 // Lexer
