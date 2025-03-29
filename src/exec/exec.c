@@ -22,6 +22,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	cmd = *cmds;
 	while (cmd)
 	{
+		
 		if (cmd->is_builtin)
 		{
 			if (!cmd->in_a_child)

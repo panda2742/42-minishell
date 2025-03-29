@@ -1,8 +1,7 @@
 #include "minishell.h"
 
-t_exit	heredoc(char *del, char *buffer)
+t_exit	heredoc(char *buffer, char *del)
 {
-	del = NULL;
-	buffer = NULL;
+	buffer = "Ceci est un test";
 	return (EXIT_SUCCESS);
 }
