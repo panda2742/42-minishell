@@ -6,27 +6,11 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/27 15:21:34 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/30 17:22:50 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	**test_parsing(char *s)
-{
-	char	**mapped;
-	int		i;
-
-	i = 0;
-	mapped = ft_split(s, " ");
-	while (mapped[i])
-	{
-		ft_printf("%s\n", mapped[i]);
-		i++;
-	}
-	return (mapped);
-}
-
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <stdio.h>

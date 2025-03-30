@@ -14,7 +14,7 @@ char *join_and_free(char *s1, const char *s2)
     return result;
 }
 
-char *build_word(const char *string, int *i)
+char *build_word(const char *string, int *i, int *quote_type)
 {
 	char *word = ft_strdup(""); // chaîne a construire
 	char *segment;
@@ -31,6 +31,7 @@ char *build_word(const char *string, int *i)
 			if (string[*i] == '\0')
 				return (free(word), NULL); // quote non fermee
 			segment = ft_substr(string, start, *i - start);
+			*quote_type = DOUBLE_QUOTE;
 			(*i)++; // skip closing quote
 		}
 		else if (string[*i] == '\'')
@@ -42,6 +43,7 @@ char *build_word(const char *string, int *i)
 			if (string[*i] == '\0')
 				return (free(word), NULL); // quote non fermee
 			segment = ft_substr(string, start, *i - start);
+			*quote_type = SINGLE_QUOTE;
 			(*i)++; // skip closing quote
 		}
 		else
@@ -50,6 +52,7 @@ char *build_word(const char *string, int *i)
 			while (string[*i] && !is_separator(string[*i]) && string[*i] != '\'' && string[*i] != '"')
 				(*i)++;
 			segment = ft_substr(string, start, *i - start);
+			*quote_type = NO_QUOTE;
 		}
 		word = join_and_free(word, segment); // concatene tout
 		free(segment);
@@ -66,10 +69,9 @@ int is_word_start(char c)
 t_token	*ft_input(char *string)
 {
 	int i = 0;
-	char *cpy = NULL;
 	char *word = NULL;
-	int start;
 	t_token *head = NULL;
+	int	quote_type = 0;
 
 	while (string[i])
 	{
@@ -79,100 +81,36 @@ t_token	*ft_input(char *string)
 		// Gere "" et '' et les enchainements
 		if (is_word_start(string[i]))
 			{
-				word = build_word(string, &i);
+				word = build_word(string, &i, &quote_type);
 				if (!word)
 					return (NULL); // error
-				ft_create_token(WORD, word, EXPAND, &head);
+				ft_create_token(WORD, word, quote_type, &head);
 				free(word);
 			}
-			
-		/*Copie le contenu des " " */
-		// else if (string[i] == '"')
-		// {
-		// 	i++;
-		// 	start = i;
-		// 	while (string[i] != '"' && string[i])
-		// 		i++;
-
-		// 	// on verifie que les guillement sont bien fermees
-		// 	if (string[i] == '"')
-		// 	{
-		// 		// on copie l ensemble des guillemets pour l envoyer a token value
-		// 		cpy = ft_substr(string, start, i - start);
-		// 		if (cpy == NULL)
-		// 		{
-		// 			ft_printf("Error: memory allocation failed\n");
-		// 			return (NULL);
-		// 		}
-		// 		ft_create_token(WORD, cpy, EXPAND, &head);
-		// 		free(cpy);
-		// 		i++;
-		// 	}
-		// 	else
-		// 		ft_printf("Error: quote not closed\n");
-		// }
-		// else if (string[i] == '\'')
-		// {
-		// 	i++;
-		// 	start = i;
-		// 	while (string[i] != '\'' && string[i])
-		// 		i++;
-
-		// 	// on verifie que les guillement sont bien fermees
-		// 	if (string[i] == '\'')
-		// 	{
-		// 		// on copie l ensemble des guillemets pour l envoyer a token value
-		// 		cpy = ft_substr(string, start, i - start);
-		// 		if (cpy == NULL)
-		// 		{
-		// 			ft_printf("Error: memory allocation failed\n");
-		// 			return (NULL);
-		// 		}
-		// 		ft_create_token(WORD, cpy, NO_EXPAND, &head);
-		// 		free(cpy);
-		// 		i++;
-		// 	}
-		// 	else
-		// 		ft_printf("Error: quote not closed\n");
-		// }
 		else if (string[i] == '|')
 		{
-			ft_create_token(PIPE, "|", NO_EXPAND, &head);
+			ft_create_token(PIPE, "|", NO_QUOTE, &head);
 			i++;
 		}
 		else if (string[i] == '>' && string[i + 1] == '>')
 		{
-			ft_create_token(APPEND, ">>", NO_EXPAND, &head);
+			ft_create_token(APPEND, ">>", NO_QUOTE, &head);
 			i += 2;
 		}
 		else if (string[i] == '<' && string[i + 1] == '<')
 		{
-			ft_create_token(HEREDOC, "<<", NO_EXPAND, &head);
+			ft_create_token(HEREDOC, "<<", NO_QUOTE, &head);
 			i += 2;
 		}
 		else if (string[i] == '<')
 		{
-			ft_create_token(REDIR_IN, "<", NO_EXPAND, &head);
+			ft_create_token(REDIR_IN, "<", NO_QUOTE, &head);
 			i++;
 		}
 		else if (string[i] == '>')
 		{
-			ft_create_token(REDIR_OUT, ">", NO_EXPAND, &head);
+			ft_create_token(REDIR_OUT, ">", NO_QUOTE, &head);
 			i++;
-		}
-		else
-		{
-			start = i;
-			while (string[i] && !is_separator(string[i]))
-				i++;
-			cpy = ft_substr(string, start, i - start);
-			if (cpy == NULL)
-			{
-				ft_printf("Error: memory allocation failed\n");
-				return (NULL);
-			}
-			ft_create_token(WORD, cpy, EXPAND, &head);
-			free(cpy);
 		}
 	}
 	return (head);

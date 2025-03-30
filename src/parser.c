@@ -5,7 +5,7 @@
 // Deux pipes qui se suivent : erreur
 // Si je termine par un pipe : erreur
 // Les quotes fermées : déjà gérées dans le lexer normalement,
-	// donc le parser est clean là-dessus
+// donc le parser est clean là-dessus
 
 // Tu pars du début de la liste des tokens
 // Tant que ce n’est pas un pipe ou la fin :
@@ -15,16 +15,15 @@
 // Si tu tombes sur un pipe : tu vérifies que t’as bien eu une commande avant : tu passes à la suite
 // Si la liste se termine : tu vérifies que la dernière commande était valide
 
-
 #include "minishell.h"
 
-void	create_cmds(t_token *head_token, t_token *end, t_cmds **head);
+void create_cmds(t_token *head_token, t_token *end, t_cmds **head);
 
-int	parser(t_token *head)
+int parser(t_token *head)
 {
-	t_token	*tmp;
-	t_cmds	*head_cmd;
-	t_token	*start;
+	t_token *tmp;
+	t_cmds *head_cmd;
+	t_token *start;
 
 	tmp = head;
 	head_cmd = NULL;
@@ -47,75 +46,90 @@ int	parser(t_token *head)
 	return (0);
 }
 
-void	create_word(char *value, int expand, t_word **head_w)
+void append_word(t_word **head, t_word *new)
 {
-	t_word	*new;
-	t_word	*tmp;
+	t_word *tmp;
 
-	tmp = *head_w;
-	new = malloc(sizeof(t_word));
-	if (!new)
-		return ;                   //
-	new->word = ft_strdup(value); // value direct ou copier?
-	if (!new->word)
+	if (!*head)
 	{
-		free(new);
-		return ; //
+		*head = new;
+		return;
 	}
-	new->expand = expand; // $ ou pas
-	new->next = NULL;
-	if (*head_w == NULL)
-	{
-		*head_w = new;
-	}
-	else
-	{
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
-	// ft_printf("Create word: %s expand %i\n", new->word, new->expand);
+	tmp = *head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
 }
 
-void	create_redir(t_redir **head_r, t_token *head)
+void create_word(t_cmds *cmd, t_token *token)
 {
-	t_redir	*new;
-	t_redir	*tmp;
+	t_word *new;
+	t_word *tmp;
+
+	tmp = cmd->words;
+	new = malloc(sizeof(t_word));
+	if (!new)
+	{
+		cmd->leak_flag = 1;
+		return (perror("Malloc failed")); // return Success mais normal, il faut faire echouer avec -1
+	} //
+	new->word = ft_strdup(token->value);
+	if (!new->word)
+	{
+		cmd->leak_flag = 1;
+		free(new);
+		return (perror("Malloc failed")); //
+	}
+	new->quote_type = token->quote_type; // $ ou pas
+	new->next = NULL;
+	append_word(&cmd->words, new);
+	// ft_printf("Create word: %s quote_type %i\n", new->word, new->quote_type);
+}
+
+void append_redir(t_redir **head, t_redir *new)
+{
+	t_redir *tmp;
+
+	if (!*head)
+	{
+		*head = new;
+		return;
+	}
+	tmp = *head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+void create_redir(t_cmds *cmd, t_token *head)
+{
+	t_redir *new;
+	t_redir *tmp;
 
 	if (!head->next || !head)
-		return ;
-	tmp = *head_r;
+		return;
+	tmp = cmd->redir;
 	new = malloc(sizeof(t_redir));
 	if (!new)
 	{
+		cmd->leak_flag = 1;
 		return (perror("Malloc failed")); // return Success mais normal, il faut faire echouer avec -1
 	}
-	new->type = head->type;           // redir type
-	new->expand = head->next->expand; // $ ou pas
 	// on dup ce qu'il y a apres la redir
 	new->filename = ft_strdup(head->next->value);
 	if (!new->filename)
 	{
 		free(new);
-		return ; //
+		cmd->leak_flag = 1;
+		return (perror("Malloc failed")); //
 	}
-	if (!new->filename)
-		return ; //
+	new->type = head->type;					  // redir type
+	new->quote_type = head->next->quote_type; // $ ou pas
 	new->next = NULL;
-	if (*head_r == NULL)
-		*head_r = new;
-	else
-	{
-		tmp = *head_r;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
-	// ft_printf("Create redir: type %i | value: %s | expand %i\n", new->type,
-		// new->filename, new->expand);
+	append_redir(&cmd->redir, new);
 }
 
-void	lst_clear_cmds(t_word **head_w, t_redir **head_r, t_cmds **head)
+void lst_clear_cmds(t_word **head_w, t_redir **head_r, t_cmds **head)
 {
 	lst_clear((void **)head_w, get_next_word, del_word);
 
@@ -123,30 +137,29 @@ void	lst_clear_cmds(t_word **head_w, t_redir **head_r, t_cmds **head)
 	lst_clear((void **)head, get_next_cmds, del_cmds);
 }
 
-void	add_word_and_redir(t_token *head_token, t_token *end, t_cmds *cmd)
+void add_word_and_redir(t_token *head_token, t_token *end, t_cmds *cmd)
 {
 	while (head_token != end->next)
 	{
 		// cree la liste de mot
 		if (head_token->type == WORD)
 		{
-			create_word(head_token->value, head_token->expand, &cmd->words);
+			create_word(cmd, head_token);
 		}
 		// cree la liste de redir
 		else if (is_redir(head_token))
 		{
-			create_redir(&cmd->redir, head_token);
+			create_redir(cmd, head_token);
 			head_token = head_token->next;
 		}
 		head_token = head_token->next;
 	}
 }
 
-
-void	create_cmds(t_token *head_token, t_token *end, t_cmds **head)
+void create_cmds(t_token *head_token, t_token *end, t_cmds **head)
 {
-	t_cmds	*new;
-	t_cmds	*tmp;
+	t_cmds *new;
+	t_cmds *tmp;
 
 	new = malloc(sizeof(t_cmds));
 	if (!new)

@@ -6,24 +6,40 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/29 19:59:52 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/30 18:04:03 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-# define MINISHELL_H
+#define MINISHELL_H
 
-# include "libft.h"
+#include "libft.h"
 
-typedef enum e_token_type {
-	WORD, PIPE, REDIR_IN, REDIR_OUT, APPEND, HEREDOC
+typedef enum e_token_type
+{
+	WORD,
+	PIPE,
+	REDIR_IN,
+	REDIR_OUT,
+	APPEND,
+	HEREDOC
 } t_token_type;
 
-typedef struct s_token {
+typedef struct s_fragment
+{
+	char	*text;
+	int		quote_type;
+	struct	s_fragment *next;
+} t_fragment;
+
+
+typedef struct s_token
+{
 	t_token_type type;
 	char *value;
-	int expand;
-	int	index;
+	int quote_type;
+	int index;
+	t_fragment *fragments;
 	struct s_token *next;
 } t_token;
 
@@ -31,28 +47,30 @@ typedef struct s_redir
 {
 	int type;
 	char *filename;
-	int	expand;
+	int quote_type;
 	struct s_redir *next;
 } t_redir;
 
 typedef struct s_word
 {
-	int expand;
+	int quote_type;
 	char *word;
 	struct s_word *next;
 } t_word;
 
 typedef struct s_cmds
 {
-	t_word			*words;
-	t_redir 		*redir;
-	int				leak_flag;
-	struct s_cmds	*next;
+	t_word *words;
+	t_redir *redir;
+	int leak_flag;
+	struct s_cmds *next;
 } t_cmds;
 
 // $VAR
-# define NO_EXPAND 0 
-# define EXPAND 1
+
+#define NO_QUOTE 0
+#define SINGLE_QUOTE 1
+#define DOUBLE_QUOTE 2
 
 // typedef struct s_excmd
 // {
@@ -107,12 +125,12 @@ typedef struct s_cmds
 // 	 */
 // 	t_bool			has_heredoc;
 // 	/**
-// 	 * The delimiter used for a Here Document. Set to NULL as default. 
+// 	 * The delimiter used for a Here Document. Set to NULL as default.
 // 	 */
 // 	char			*heredoc_del;
 // 	/**
 // 	 * If there is an Here Document, the content is firstly written into the
-// 	 * memory, and then put into a pipe's output file descriptor when it has to 
+// 	 * memory, and then put into a pipe's output file descriptor when it has to
 // 	 * be used. Set to NULL as default.
 // 	 */
 // 	char			*heredoc_content;
@@ -137,7 +155,7 @@ typedef struct s_cmds
 // 	/**
 // 	 * @brief The pipe of the command. Creates a stream between the input and
 // 	 * the output of the command.
-// 	 * 
+// 	 *
 // 	 * How does it work? The scenario that occur is:
 // 	 * - The command is instanced, the pipe is created.
 // 	 * - Reads: stdin if first command, s_excmd::pipe[0] otherwise.
@@ -149,7 +167,7 @@ typedef struct s_cmds
 // 	 */
 // 	t_exit			status;
 // 	/**
-// 	 * The previous element of the command list. If it is the first element or 
+// 	 * The previous element of the command list. If it is the first element or
 // 	 * if there is no other element, default value is NULL.
 // 	 */
 // 	struct s_excmd	*prev;
@@ -161,50 +179,48 @@ typedef struct s_cmds
 // }					t_excmd;
 
 // Lexer
-t_token	*ft_input(char *string);
-void	ft_print_tokens(t_token *head);
-t_token	*ft_create_token(t_token_type type, char *value, int expand, t_token **head);
-void	token_clear(t_token **lst, void (*del)(void *));
-void	del_token(void *content);
+t_token *ft_input(char *string);
+void ft_print_tokens(t_token *head);
+t_token *ft_create_token(t_token_type type, char *value, int quote_type, t_token **head);
+void token_clear(t_token **lst, void (*del)(void *));
+void del_token(void *content);
 
 // Lexer parser
 int lexer_parse(t_token *token);
 
 // Signals
-void	set_sig_action(void);
-void	sigint_handler(int signal);
+void set_sig_action(void);
+void sigint_handler(int signal);
 
 // Parser
 int parser(t_token *head);
 
-
 // Utils parser
 const char *get_token_type_str(t_token_type type); // pour print les noms des redir
-int is_redir(t_token *head_token); // return 1 si c est une redir
+int is_redir(t_token *head_token);				   // return 1 si c est une redir
 
 // Utils lexer
 int is_separator(char c);
 int is_token(char c);
 
 // Utils 1
-void	*get_next_cmds(void *node);
-void	*get_next_word(void *node);
-void	*get_next_redir(void *node);
-void 	lst_clear(void **lst, void *(*get_next)(void *), void (*del)(void *));
+void *get_next_cmds(void *node);
+void *get_next_word(void *node);
+void *get_next_redir(void *node);
+void lst_clear(void **lst, void *(*get_next)(void *), void (*del)(void *));
 
 // Get next token
-void	*get_next_token(void *node);
-void	*get_next_cmds(void *node);
-void	*get_next_word(void *node);
-void	*get_next_redir(void *node);
+void *get_next_token(void *node);
+void *get_next_cmds(void *node);
+void *get_next_word(void *node);
+void *get_next_redir(void *node);
 
 // Utils del lst
-void	del_cmds(void *content);
-void	del_redir(void *content);
-void	del_word(void *content);
+void del_cmds(void *content);
+void del_redir(void *content);
+void del_word(void *content);
 
 // To delete later
-void	print_elements_cmds(t_word *head_w, t_redir *head_r);
-
+void print_elements_cmds(t_word *head_w, t_redir *head_r);
 
 #endif

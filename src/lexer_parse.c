@@ -1,9 +1,9 @@
 
 #include "minishell.h"
 
-int	ft_strcmp(char *s1, char *s2)
+int ft_strcmp(char *s1, char *s2)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (s1[i] && s2[i] && s1[i] == s2[i])
@@ -13,12 +13,12 @@ int	ft_strcmp(char *s1, char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-int	return_empty(t_token *token)
+int return_empty(t_token *token)
 {
 	return (!ft_strcmp(token->value, ":") || !ft_strcmp(token->value, "!"));
 }
 
-int	lexer_parse(t_token *token)
+int lexer_parse(t_token *token)
 {
 	// que des espaces
 	if (token == NULL)
@@ -33,7 +33,7 @@ int	lexer_parse(t_token *token)
 	if (token->type == PIPE)
 	{
 		ft_printf("Error: syntax error near unexpected token `|'\n"); //
-		return (0);                                                     //
+		return (0);													  //
 	}
 	while (token != NULL)
 	{
@@ -66,8 +66,8 @@ int	lexer_parse(t_token *token)
 				return (0);
 			}
 		}
-		ft_printf("Type is: %d, value is %s, index is %i, expand %i\n",
-			token->type, token->value, token->index, token->expand);
+		ft_printf("Type is: %d, value is %s, index is %i, quote_type %i\n",
+				  token->type, token->value, token->index, token->quote_type);
 		token = token->next;
 	}
 	return (1);

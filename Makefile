@@ -6,7 +6,7 @@ MAKE_DIR			:=	.make/
 # The header files of the project
 override	HDRS	:=	minishell
 # The C source code files of the project
-override	SRCS	:=	main lexer token_lexer signals parser utils_parser \
+override	SRCS	:=	main_parsing lexer token_lexer signals parser utils_parser \
 							utils_lexer lexer_parse utils1 get_next_token \
 							utils_del_lst \
 							to_delete_later \
