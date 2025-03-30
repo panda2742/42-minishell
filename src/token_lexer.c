@@ -1,15 +1,25 @@
 
 #include "minishell.h"
 
+void free_fragments(t_fragment *frag)
+{
+	t_fragment *tmp;
+	while (frag)
+	{
+		tmp = frag->next;
+		free(frag->text);
+		free(frag);
+		frag = tmp;
+	}
+}
+
 void del_token(void *content)
 {
-	t_token *token;
-
-	token = (t_token *)content;
-	if (token->value)
-		free(token->value);
+	t_token *token = (t_token *)content;
+	free_fragments(token->fragments);
 	free(token);
 }
+
 
 void token_clear(t_token **lst, void (*del)(void *))
 {
@@ -26,41 +36,34 @@ void token_clear(t_token **lst, void (*del)(void *))
 	*lst = NULL;
 }
 
-t_token *ft_create_token(t_token_type type, char *value, int quote_type,
-						 t_token **head)
+void ft_create_token(t_token_type type, t_fragment *fragments, t_token **head)
 {
-	t_token *new;
-	t_token *tmp;
-	static int i;
-
-	new = malloc(sizeof(t_token));
+	t_token *new = malloc(sizeof(t_token));
 	if (!new)
-		return (NULL);
+		return;
 	new->type = type;
-	new->value = ft_strdup(value);
-	new->index = i;
-	new->quote_type = quote_type;
+	new->fragments = fragments;
+	new->index = 0;
 	new->next = NULL;
-	i++;
-	// si head pointait vers NULL on l assigne au nouveau pointeur
+
 	if (!*head)
 		*head = new;
-	// sinon on parcourt la liste et on ajoute new a la fin
 	else
 	{
-		tmp = *head;
+		t_token *tmp = *head;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
 	}
-	return (new);
 }
+
+
 
 void ft_print_tokens(t_token *head)
 {
 	while (head)
 	{
-		ft_printf("Token: Type = %d, Value = %s \n", head->type, head->value);
+		ft_printf("Token: Type = %d, Value = %s \n", head->type, head->fragments);
 		head = head->next;
 	}
 }

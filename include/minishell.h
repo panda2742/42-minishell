@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/30 18:04:03 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/30 20:06:04 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,8 @@ typedef struct s_fragment
 typedef struct s_token
 {
 	t_token_type type;
-	char *value;
-	int quote_type;
-	int index;
 	t_fragment *fragments;
+	int index;
 	struct s_token *next;
 } t_token;
 
@@ -181,9 +179,10 @@ typedef struct s_cmds
 // Lexer
 t_token *ft_input(char *string);
 void ft_print_tokens(t_token *head);
-t_token *ft_create_token(t_token_type type, char *value, int quote_type, t_token **head);
+void ft_create_token(t_token_type type, t_fragment *fragments, t_token **head);
 void token_clear(t_token **lst, void (*del)(void *));
 void del_token(void *content);
+char *token_to_string(t_token *token);
 
 // Lexer parser
 int lexer_parse(t_token *token);
@@ -204,7 +203,6 @@ int is_separator(char c);
 int is_token(char c);
 
 // Utils 1
-void *get_next_cmds(void *node);
 void *get_next_word(void *node);
 void *get_next_redir(void *node);
 void lst_clear(void **lst, void *(*get_next)(void *), void (*del)(void *));

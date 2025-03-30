@@ -73,15 +73,16 @@ void create_word(t_cmds *cmd, t_token *token)
 		cmd->leak_flag = 1;
 		return (perror("Malloc failed")); // return Success mais normal, il faut faire echouer avec -1
 	} //
-	new->word = ft_strdup(token->value);
+	ft_memset(new, 0, sizeof(t_word));
+	new->word = token_to_string(token);
 	if (!new->word)
 	{
 		cmd->leak_flag = 1;
 		free(new);
 		return (perror("Malloc failed")); //
 	}
-	new->quote_type = token->quote_type; // $ ou pas
-	new->next = NULL;
+	t_fragment *first = token->fragments;
+	new->quote_type = (first ? first->quote_type : NO_QUOTE);
 	append_word(&cmd->words, new);
 	// ft_printf("Create word: %s quote_type %i\n", new->word, new->quote_type);
 }
@@ -115,16 +116,18 @@ void create_redir(t_cmds *cmd, t_token *head)
 		cmd->leak_flag = 1;
 		return (perror("Malloc failed")); // return Success mais normal, il faut faire echouer avec -1
 	}
+	ft_memset(new, 0, sizeof(t_redir));
+
 	// on dup ce qu'il y a apres la redir
-	new->filename = ft_strdup(head->next->value);
+	new->filename = token_to_string(head->next);
 	if (!new->filename)
 	{
 		free(new);
 		cmd->leak_flag = 1;
 		return (perror("Malloc failed")); //
 	}
-	new->type = head->type;					  // redir type
-	new->quote_type = head->next->quote_type; // $ ou pas
+	t_fragment *first = head->next->fragments;
+	new->quote_type = (first ? first->quote_type : NO_QUOTE);
 	new->next = NULL;
 	append_redir(&cmd->redir, new);
 }

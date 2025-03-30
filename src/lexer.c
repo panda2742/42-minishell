@@ -5,73 +5,103 @@
 #include "minishell.h"
 #include <unistd.h>
 
-char *join_and_free(char *s1, const char *s2)
-{
-    char *result;
 
-    result = ft_strjoin(s1, s2);
-    free(s1);
-    return result;
+t_fragment *create_fragment(char *text, int quote_type)
+{
+	t_fragment *new = malloc(sizeof(t_fragment));
+	if (!new)
+		return (NULL);
+	new->text = text;
+	new->quote_type = quote_type;
+	new->next = NULL;
+	return (new);
 }
 
-char *build_word(const char *string, int *i, int *quote_type)
+void append_fragment(t_fragment **head, t_fragment *new)
 {
-	char *word = ft_strdup(""); // chaîne a construire
+	t_fragment *tmp;
+
+	if (!*head)
+	{
+		*head = new;
+		return;
+	}
+	tmp = *head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+t_fragment *build_word(const char *str, int *i)
+{
+	t_fragment *frags = NULL;
 	char *segment;
 	int start;
+	int qt;
 
-	while (string[*i] && !is_separator(string[*i])) // tant qu on n est pas sur un vrai separateur
+	while (str[*i] && !is_separator(str[*i]))
 	{
-		if (string[*i] == '"')
+		qt = NO_QUOTE;
+		if (str[*i] == '"')
 		{
+			qt = DOUBLE_QUOTE;
 			(*i)++;
 			start = *i;
-			while (string[*i] && string[*i] != '"')
+			while (str[*i] && str[*i] != '"')
 				(*i)++;
-			if (string[*i] == '\0')
-				return (free(word), NULL); // quote non fermee
-			segment = ft_substr(string, start, *i - start);
-			*quote_type = DOUBLE_QUOTE;
-			(*i)++; // skip closing quote
+			segment = ft_substr(str, start, *i - start);
+			if (str[*i]) (*i)++;
 		}
-		else if (string[*i] == '\'')
+		else if (str[*i] == '\'')
 		{
+			qt = SINGLE_QUOTE;
 			(*i)++;
 			start = *i;
-			while (string[*i] && string[*i] != '\'')
+			while (str[*i] && str[*i] != '\'')
 				(*i)++;
-			if (string[*i] == '\0')
-				return (free(word), NULL); // quote non fermee
-			segment = ft_substr(string, start, *i - start);
-			*quote_type = SINGLE_QUOTE;
-			(*i)++; // skip closing quote
+			segment = ft_substr(str, start, *i - start);
+			if (str[*i]) (*i)++;
 		}
 		else
 		{
 			start = *i;
-			while (string[*i] && !is_separator(string[*i]) && string[*i] != '\'' && string[*i] != '"')
+			while (str[*i] && !is_separator(str[*i]) && str[*i] != '"' && str[*i] != '\'')
 				(*i)++;
-			segment = ft_substr(string, start, *i - start);
-			*quote_type = NO_QUOTE;
+			segment = ft_substr(str, start, *i - start);
 		}
-		word = join_and_free(word, segment); // concatene tout
-		free(segment);
+		append_fragment(&frags, create_fragment(segment, qt));
 	}
-	return word;
+	return frags;
 }
+
+
+
 
 int is_word_start(char c)
 {
     return (c && !is_separator(c));
 }
 
+char *token_to_string(t_token *token)
+{
+	t_fragment *frag = token->fragments;
+	char *result = ft_strdup("");
+	char *tmp;
+
+	while (frag)
+	{
+		tmp = result;
+		result = ft_strjoin(result, frag->text);
+		free(tmp);
+		frag = frag->next;
+	}
+	return result;
+}
 
 t_token	*ft_input(char *string)
 {
 	int i = 0;
-	char *word = NULL;
 	t_token *head = NULL;
-	int	quote_type = 0;
 
 	while (string[i])
 	{
@@ -80,36 +110,43 @@ t_token	*ft_input(char *string)
 			i++;
 		// Gere "" et '' et les enchainements
 		if (is_word_start(string[i]))
-			{
-				word = build_word(string, &i, &quote_type);
-				if (!word)
-					return (NULL); // error
-				ft_create_token(WORD, word, quote_type, &head);
-				free(word);
-			}
+		{
+			t_fragment *frags = build_word(string, &i);
+			if (!frags)
+				return (NULL);
+			ft_create_token(WORD, frags, &head);
+		}
 		else if (string[i] == '|')
 		{
-			ft_create_token(PIPE, "|", NO_QUOTE, &head);
+			t_fragment *frag = create_fragment(ft_strdup("|"), NO_QUOTE);
+
+			ft_create_token(PIPE, frag, &head);
 			i++;
 		}
 		else if (string[i] == '>' && string[i + 1] == '>')
 		{
-			ft_create_token(APPEND, ">>", NO_QUOTE, &head);
+			t_fragment *frag = create_fragment(ft_strdup(">>"), NO_QUOTE);
+			ft_create_token(APPEND, frag, &head);
 			i += 2;
 		}
 		else if (string[i] == '<' && string[i + 1] == '<')
 		{
-			ft_create_token(HEREDOC, "<<", NO_QUOTE, &head);
+			t_fragment *frag = create_fragment(ft_strdup("<<"), NO_QUOTE);
+
+			ft_create_token(HEREDOC, frag, &head);
 			i += 2;
 		}
 		else if (string[i] == '<')
 		{
-			ft_create_token(REDIR_IN, "<", NO_QUOTE, &head);
+			t_fragment *frag = create_fragment(ft_strdup("<"), NO_QUOTE);
+
+			ft_create_token(REDIR_IN, frag, &head);
 			i++;
 		}
 		else if (string[i] == '>')
 		{
-			ft_create_token(REDIR_OUT, ">", NO_QUOTE, &head);
+			t_fragment *frag = create_fragment(ft_strdup(">"), NO_QUOTE);
+			ft_create_token(REDIR_OUT, frag, &head);
 			i++;
 		}
 	}

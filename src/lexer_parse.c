@@ -15,7 +15,10 @@ int ft_strcmp(char *s1, char *s2)
 
 int return_empty(t_token *token)
 {
-	return (!ft_strcmp(token->value, ":") || !ft_strcmp(token->value, "!"));
+	char *value = token_to_string(token);
+	int result = (!ft_strcmp(value, ":") || !ft_strcmp(value, "!"));
+	free(value);
+	return result;
 }
 
 int lexer_parse(t_token *token)
@@ -66,8 +69,11 @@ int lexer_parse(t_token *token)
 				return (0);
 			}
 		}
-		ft_printf("Type is: %d, value is %s, index is %i, quote_type %i\n",
-				  token->type, token->value, token->index, token->quote_type);
+		char *val = token_to_string(token);
+		ft_printf("Type is: %d, value is %s, index is %i\n",
+			token->type, val, token->index);
+		free(val);
+
 		token = token->next;
 	}
 	return (1);
