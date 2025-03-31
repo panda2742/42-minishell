@@ -25,8 +25,8 @@ t_exit	builtins_cd(t_excmd *c)
 
 static void	_update_vars(t_env_manager *env)
 {
-	t_env	*pwd;
-	t_env	*old_pwd;
+	t_env_var	*pwd;
+	t_env_var	*old_pwd;
 	char	*cwd;
 
 	pwd = get_var(env, "PWD");
@@ -51,7 +51,7 @@ static void	_update_vars(t_env_manager *env)
 
 static t_exit	_set_home(t_excmd *c)
 {
-	t_env	*home;
+	t_env_var	*home;
 
 	home = get_var(c->env, "HOME");
 	if (!home || !home->value)

@@ -1,14 +1,14 @@
 #include "minishell.h"
 
-static char	*_get_name(char *env_var);
-static char	*_get_value(char *env_var);
+static char	*_get_name(t_env_var *var, char *env_var);
+static char	*_get_value(t_env_var *var, char *env_var);
 static void	_init_manager(char **envp, t_env_manager *env);
 
-t_env	**create_env(char **envp, t_env_manager *env)
+t_env_var	**create_env(char **envp, t_env_manager *env)
 {
 	size_t	i;
-	t_env	*elt;
-	t_env	*prev;
+	t_env_var	*elt;
+	t_env_var	*prev;
 
 	_init_manager(envp, env);
 	i = -1;
@@ -18,11 +18,11 @@ t_env	**create_env(char **envp, t_env_manager *env)
 	prev = NULL;
 	while (++i < env->env_size)
 	{
-		elt = malloc(sizeof(t_env));
+		elt = malloc(sizeof(t_env_var));
 		if (elt == NULL)
 			return (handle_env_mem_alloc(env));
-		elt->name = _get_name(envp[i]);
-		elt->value = _get_value(envp[i]);
+		elt->name = _get_name(elt, envp[i]);
+		elt->value = _get_value(elt, envp[i]);
 		elt->next = NULL;
 		if (env->vars[0] == NULL)
 			env->vars[0] = elt;
@@ -33,7 +33,7 @@ t_env	**create_env(char **envp, t_env_manager *env)
 	return (env->vars);
 }
 
-static char	*_get_name(char *env_var)
+static char	*_get_name(t_env_var *var, char *env_var)
 {
 	size_t	len;
 	char	*res;
@@ -41,6 +41,7 @@ static char	*_get_name(char *env_var)
 	len = 0;
 	while (env_var[len] && env_var[len] != '=')
 		len++;
+	var->name_length = len;
 	res = malloc(sizeof(char) * (len + 1));
 	if (res == NULL)
 		return (NULL);
@@ -48,19 +49,21 @@ static char	*_get_name(char *env_var)
 	return (res);
 }
 
-static char	*_get_value(char *env_var)
+static char	*_get_value(t_env_var *var, char *env_var)
 {
 	size_t	len;
 	char	*res;
 
 	while (*env_var && *env_var != '=')
 		env_var++;
+	var->value_length = 0;
 	if (!*env_var)
 		return (NULL);
 	env_var++;
 	len = 0;
 	while (env_var[len])
 		len++;
+	var->value_length = len;
 	res = malloc(sizeof(char) * (len + 1));
 	if (res == NULL)
 		return (NULL);
@@ -73,5 +76,5 @@ static void	_init_manager(char **envp, t_env_manager *env)
 	env->env_size = 0;
 	while (envp[env->env_size])
 		env->env_size += 1;
-	env->vars = malloc(sizeof(t_env *));
+	env->vars = malloc(sizeof(t_env_var *));
 }

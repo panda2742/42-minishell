@@ -22,8 +22,8 @@ t_exit	builtins_unset(t_excmd *c)
 
 static void	_unset_var(t_excmd *c)
 {
-	t_env	*var;
-	t_env	*prev;
+	t_env_var	*var;
+	t_env_var	*prev;
 
 	var = *c->env->vars;
 	prev = NULL;

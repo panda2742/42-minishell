@@ -3,8 +3,8 @@
 void	free_env(t_env_manager *env)
 {
 	size_t	i;
-	t_env	*var;
-	t_env	*next;
+	t_env_var	*var;
+	t_env_var	*next;
 
 	i = -1;
 	var = *env->vars;

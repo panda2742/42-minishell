@@ -1,11 +1,11 @@
 #include "minishell.h"
 
-static t_bool	_write_var(t_env *var);
+static t_bool	_write_var(t_env_var *var);
 
 t_exit	builtins_env(t_excmd *c)
 {
 	size_t	i;
-	t_env	*var;
+	t_env_var	*var;
 
 	i = -1;
 	var = *c->env->vars;
@@ -26,7 +26,7 @@ t_exit	builtins_env(t_excmd *c)
 	return (c->status);
 }
 
-static t_bool	_write_var(t_env *var)
+static t_bool	_write_var(t_env_var *var)
 {
 	if (write(1, BLUE, 6) == -1)
 		return (false);

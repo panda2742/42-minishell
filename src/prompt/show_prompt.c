@@ -2,7 +2,7 @@
 
 static char	*_get_user(t_env_manager *env);
 static char	*_get_path(t_env_manager *env);
-static char	*_replace_by_home(t_env *home_var, char *cwd);
+static char	*_replace_by_home(t_env_var *home_var, char *cwd);
 
 char	*show_prompt(t_env_manager *env)
 {
@@ -11,7 +11,7 @@ char	*show_prompt(t_env_manager *env)
 	char		*res;
 
 	res = ft_sprintf(
-			"%sMinishell%s::%s%s%s @ %s%s%s %s>%s ",
+			"\001%s\002Minishell\001%s\002::\001%s\002%s\001%s\002 @ \001%s\002%s\001%s\002 \001%s\002>\001%s\002 ",
 			B_MAGENTA, RESET,
 			B_BLUE, user, RESET,
 			B_CYAN, path, RESET,
@@ -24,7 +24,7 @@ char	*show_prompt(t_env_manager *env)
 static char	*_get_user(t_env_manager *env)
 {
 	static char	default_user[8] = "unknown";
-	t_env		*user_var;
+	t_env_var		*user_var;
 	char		*user;
 
 	user_var = get_var(env, "USER");
@@ -39,7 +39,7 @@ static char	*_get_path(t_env_manager *env)
 {
 	static char	default_path[6] = "?/?";
 	char		*cwd;
-	t_env		*home_var;
+	t_env_var	*home_var;
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
@@ -50,7 +50,7 @@ static char	*_get_path(t_env_manager *env)
 	return (_replace_by_home(home_var, cwd));
 }
 
-static char	*_replace_by_home(t_env *home_var, char *cwd)
+static char	*_replace_by_home(t_env_var *home_var, char *cwd)
 {
 	const size_t	home_len = ft_strlen(home_var->value);
 	size_t			i;

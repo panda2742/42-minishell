@@ -12,12 +12,14 @@
  */
 typedef unsigned char	t_exit;
 
-typedef struct s_env
+typedef struct s_env_var
 {
-	char			*name;
-	char			*value;
-	struct s_env	*next;
-}					t_env;
+	char				*name;
+	char				*value;
+	size_t				name_length;
+	size_t				value_length;
+	struct s_env_var	*next;
+}						t_env_var;
 
 typedef struct s_env_manager
 {
@@ -25,7 +27,7 @@ typedef struct s_env_manager
 	 * Containing all the environment variables, duplicated in a linked list.
 	 * You can edit, delete or add some and everything will be fine.
 	 */
-	t_env	**vars;
+	t_env_var	**vars;
 	/**
 	 * The amount of environment variables.
 	 */
@@ -163,10 +165,12 @@ t_exit	heredoc(char *del, char *buffer);
 
 // ENV -----------------------------
 
-t_env	**create_env(char **envp, t_env_manager *env);
-void	debug_display_env(t_env_manager *env);
-void	free_env(t_env_manager *env);
-t_env	*get_var(t_env_manager *env, const char *name);
+t_env_var	**create_env(char **envp, t_env_manager *env);
+char		**env_to_strlst(t_env_manager *env);
+void		free_env(t_env_manager *env);
+t_env_var	*get_var(t_env_manager *env, const char *name);
+void		nb_by_name(t_env_manager *env, const char *section, size_t *ressize);
+char		*extend_str(t_env_manager *env, const char *str, size_t bytes);
 
 // ERRORS --------------------------
 
