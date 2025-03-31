@@ -1,69 +1,75 @@
 
 #include "minishell.h"
 
-void free_fragments(t_fragment *frag)
+void	free_tokens(t_token *tokens)
 {
-	t_fragment *tmp;
-	while (frag)
+	t_token		*tmp_token;
+	t_fragment	*tmp_frag;
+	t_fragment	*next_frag;
+
+	while (tokens)
 	{
-		tmp = frag->next;
-		free(frag->text);
-		free(frag);
-		frag = tmp;
+		tmp_token = tokens;
+		tokens = tokens->next;
+		tmp_frag = tmp_token->fragments;
+		while (tmp_frag)
+		{
+			next_frag = tmp_frag->next;
+			free(tmp_frag->text);
+			free(tmp_frag);
+			tmp_frag = next_frag;
+		}
+		free(tmp_token);
 	}
 }
 
-void del_token(void *content)
+
+t_token *ft_create_token(t_token_type type, int index)
 {
-	t_token *token = (t_token *)content;
-	free_fragments(token->fragments);
-	free(token);
-}
-
-
-void token_clear(t_token **lst, void (*del)(void *))
-{
-	t_token *tmp;
-
-	if (!lst || !del)
-		return;
-	while (*lst)
-	{
-		tmp = (*lst)->next;
-		del(*lst);
-		*lst = tmp;
-	}
-	*lst = NULL;
-}
-
-void ft_create_token(t_token_type type, t_fragment *fragments, t_token **head)
-{
-	t_token *new = malloc(sizeof(t_token));
+	t_token *new;
+	
+	new = malloc(sizeof(t_token));
 	if (!new)
-		return;
+		return (NULL);
 	new->type = type;
-	new->fragments = fragments;
-	new->index = 0;
+	new->fragments = NULL;
+	new->index = index;
 	new->next = NULL;
+	return (new);
+}
 
-	if (!*head)
-		*head = new;
+void	append_token(t_token **token_list, t_token *token)
+{
+	t_token	*tmp;
+
+	if (!(*token_list))
+		*token_list = token;
 	else
 	{
-		t_token *tmp = *head;
+		tmp = *token_list;
 		while (tmp->next)
 			tmp = tmp->next;
-		tmp->next = new;
+		tmp->next = token;
 	}
 }
 
 
-
-void ft_print_tokens(t_token *head)
+void	print_tokens(t_token *tokens)
 {
-	while (head)
+	t_token		*tmp_token;
+	t_fragment	*tmp_frag;
+
+	tmp_token = tokens;
+	while (tmp_token)
 	{
-		ft_printf("Token: Type = %d, Value = %s \n", head->type, head->fragments);
-		head = head->next;
+		printf("Token %d (type %d): ", tmp_token->index, tmp_token->type);
+		tmp_frag = tmp_token->fragments;
+		while (tmp_frag)
+		{
+			printf("[\"%s\", quote %d] ", tmp_frag->text, tmp_frag->quote_type);
+			tmp_frag = tmp_frag->next;
+		}
+		printf("\n");
+		tmp_token = tmp_token->next;
 	}
 }

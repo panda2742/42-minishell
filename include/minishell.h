@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/30 20:06:04 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/31 12:12:35 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 #define MINISHELL_H
 
 #include "libft.h"
+
+typedef enum e_qtype
+{
+	NONE,
+	SINGLE,
+	DOUBLE
+}	t_qtype;
 
 typedef enum e_token_type
 {
@@ -27,48 +34,46 @@ typedef enum e_token_type
 
 typedef struct s_fragment
 {
-	char	*text;
-	int		quote_type;
-	struct	s_fragment *next;
+	char				*text;
+	t_qtype		quote_type;
+	struct	s_fragment 	*next;
 } t_fragment;
 
 
 typedef struct s_token
 {
-	t_token_type type;
-	t_fragment *fragments;
-	int index;
+	t_token_type 	type;
+	t_fragment 		*fragments;
+	int 			index;
 	struct s_token *next;
 } t_token;
 
 typedef struct s_redir
 {
-	int type;
-	char *filename;
-	int quote_type;
-	struct s_redir *next;
+	int 			type;
+	char 			*filename;
+	int 			quote_type;
+	struct s_redir 	*next;
 } t_redir;
 
 typedef struct s_word
 {
-	int quote_type;
-	char *word;
-	struct s_word *next;
+	int 			quote_type;
+	char 			*word;
+	struct s_word 	*next;
 } t_word;
 
 typedef struct s_cmds
 {
-	t_word *words;
-	t_redir *redir;
-	int leak_flag;
-	struct s_cmds *next;
+	t_word 			*words;
+	t_redir 		*redir;
+	int 			leak_flag;
+	struct s_cmds 	*next;
 } t_cmds;
 
 // $VAR
 
-#define NO_QUOTE 0
-#define SINGLE_QUOTE 1
-#define DOUBLE_QUOTE 2
+
 
 // typedef struct s_excmd
 // {
@@ -176,13 +181,20 @@ typedef struct s_cmds
 // 	struct s_excmd	*next;
 // }					t_excmd;
 
+// Fragment 
+t_fragment *new_fragment(const char *start, size_t len, t_qtype quote_type);
+void	append_fragment(t_token *token, t_fragment *frag);
+
+
 // Lexer
-t_token *ft_input(char *string);
-void ft_print_tokens(t_token *head);
-void ft_create_token(t_token_type type, t_fragment *fragments, t_token **head);
-void token_clear(t_token **lst, void (*del)(void *));
-void del_token(void *content);
+t_token	*ft_input(const char *input);
+void	print_tokens(t_token *tokens);
+t_token *ft_create_token(t_token_type type, int index);
+void	free_tokens(t_token *tokens);
 char *token_to_string(t_token *token);
+
+// Token lexer
+void	append_token(t_token **token_list, t_token *token);
 
 // Lexer parser
 int lexer_parse(t_token *token);

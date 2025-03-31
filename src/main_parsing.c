@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/30 17:22:50 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/31 12:15:57 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,19 @@ int	main(void)
 			break ;
 		}
 		token = ft_input(line);
-		if (!lexer_parse(token))
-		{
-			free(line);
-			token_clear(&token, del_token);
-		}
-		else
-		{
-			parser(token);
-			free(line);
-			token_clear(&token, del_token);
-		}
+		// if (!lexer_parse(token))
+		// {
+		// 	free(line);
+		// 	free_tokens(token);
+		// }
+		print_tokens(token);
+		free_tokens(token);
+		// else
+		// {
+		// 	parser(token);
+		// 	free(line);
+		// 	token_clear(&token, del_token);
+		// }
 		// lst_clear((void **)head, get_next_cmds, del_cmds);
 	}
 	return (0);
