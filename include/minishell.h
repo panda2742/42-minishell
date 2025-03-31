@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/31 12:12:35 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/03/31 14:28:32 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef enum e_token_type
 typedef struct s_fragment
 {
 	char				*text;
-	t_qtype		quote_type;
+	t_qtype				quote_type;
 	struct	s_fragment 	*next;
 } t_fragment;
 

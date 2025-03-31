@@ -47,15 +47,43 @@ t_token	*ft_input(const char *input)
 				if (input[i] == '\"')
 					i++; /* Passer la quote de fermeture */
 			}
-			else /* Traitement d'un fragment sans quotes */
+			else if (input[i] == '|')
+			{
+				append_fragment(curr_token, new_fragment("|", 1, NONE));
+				curr_token->type = PIPE;
+				i++;
+			}
+			else if (input[i] == '>' && input[i + 1] == '>')
+			{
+				append_fragment(curr_token, new_fragment(">>", 2, NONE));
+				curr_token->type = APPEND;
+				i += 2;
+			}
+			else if (input[i] == '<' && input[i + 1] == '<')
+			{
+				append_fragment(curr_token, new_fragment("<<", 2, NONE));
+				curr_token->type = HEREDOC;
+				i += 2;
+			}
+			else if (input[i] == '<')
+			{
+				append_fragment(curr_token, new_fragment("<", 1, NONE));
+				curr_token->type = REDIR_IN;
+				i++;
+			}
+			else if (input[i] == '>')
+			{
+				append_fragment(curr_token, new_fragment(">", 1, NONE));
+				curr_token->type = REDIR_OUT;
+				i++;
+			}
+			else /* frag sans quotes */
 			{
 				start = i;
-				int j = i;  /* variable temporaire pour parcourir le fragment */
-				while (input[j] && input[j] != ' ' && input[j] != '\'' && input[j] != '\"')
-					j++;
+				while (input[i] && input[i] != ' ' && input[i] != '\'' && input[i] != '\"')
+					i++;
 				append_fragment(curr_token,
-					new_fragment(input + start, j - start, NONE));
-				i = j;
+					new_fragment(input + start, i - start, NONE));
 			}
 		}
 		append_token(&token_list, curr_token);

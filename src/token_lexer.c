@@ -54,22 +54,4 @@ void	append_token(t_token **token_list, t_token *token)
 }
 
 
-void	print_tokens(t_token *tokens)
-{
-	t_token		*tmp_token;
-	t_fragment	*tmp_frag;
 
-	tmp_token = tokens;
-	while (tmp_token)
-	{
-		printf("Token %d (type %d): ", tmp_token->index, tmp_token->type);
-		tmp_frag = tmp_token->fragments;
-		while (tmp_frag)
-		{
-			printf("[\"%s\", quote %d] ", tmp_frag->text, tmp_frag->quote_type);
-			tmp_frag = tmp_frag->next;
-		}
-		printf("\n");
-		tmp_token = tmp_token->next;
-	}
-}
