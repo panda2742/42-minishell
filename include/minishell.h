@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/01 11:11:54 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/01 11:15:11 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,12 @@ typedef struct s_env_manager
 	 */
 	size_t	env_size;
 }			t_env_manager;
+
+
+typedef struct s_minishell
+{
+	t_env_manager	env;
+}			t_minishell;
 
 
 // $VAR
@@ -220,6 +226,7 @@ char *token_to_string(t_token *token);
 
 // Get var
 t_env_var	*get_var(t_env_manager *env, const char *name);
+t_env_var	**create_env(char **envp, t_env_manager *env);
 
 
 // Token lexer
