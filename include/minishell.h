@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/31 14:28:32 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/01 11:08:01 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,17 @@ typedef struct s_cmds
 	int 			leak_flag;
 	struct s_cmds 	*next;
 } t_cmds;
+
+typedef struct s_env_var
+{
+	char				*name;
+	char				*value;
+	size_t				name_length;
+	size_t				value_length;
+	struct s_env_var	*next;
+}						t_env_var;
+
+
 
 // $VAR
 
