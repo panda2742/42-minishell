@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/01 11:08:01 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/01 11:11:54 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,19 @@ typedef struct s_env_var
 	struct s_env_var	*next;
 }						t_env_var;
 
+
+typedef struct s_env_manager
+{
+	/**
+	 * Containing all the environment variables, duplicated in a linked list.
+	 * You can edit, delete or add some and everything will be fine.
+	 */
+	t_env_var	**vars;
+	/**
+	 * The amount of environment variables.
+	 */
+	size_t	env_size;
+}			t_env_manager;
 
 
 // $VAR
@@ -203,6 +216,11 @@ void	print_tokens(t_token *tokens);
 t_token *ft_create_token(t_token_type type, int index);
 void	free_tokens(t_token *tokens);
 char *token_to_string(t_token *token);
+
+
+// Get var
+t_env_var	*get_var(t_env_manager *env, const char *name);
+
 
 // Token lexer
 void	append_token(t_token **token_list, t_token *token);

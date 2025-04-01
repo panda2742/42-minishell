@@ -9,7 +9,8 @@ override	HDRS	:=	minishell
 override	SRCS	:=	main_parsing \
 							fragments \
 							lexer token_lexer signals \
-							utils_lexer lexer_parse utils1 get_next_token utils_parser	
+							utils_lexer lexer_parse utils1 get_next_token utils_parser \
+							get_var.c \
 #							utils_del_lst \#
 #							to_delete_later \#
 #							parser utils_parser \ #
