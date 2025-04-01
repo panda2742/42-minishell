@@ -1,5 +1,3 @@
-/*
-*/
 
 #include "libft.h"
 #include "minishell.h"
@@ -15,72 +13,106 @@ t_token	*ft_input(const char *input)
 
 	while (input[i])
 	{
-		/* Sauter les espaces initiaux */
-		while (input[i] && input[i] == ' ')
+		/* skip spaces */
+		while (input[i] && (input[i] == ' ' || input[i] == '\t'))
 			i++;
 		if (!input[i])
 			break ;
-		/* Création d'un nouveau token de type WORD */
-		curr_token = ft_create_token(WORD, index++);
-		/* Traitement du token jusqu'au prochain espace */
-		while (input[i] && input[i] != ' ')
+		
+		// handle types, if types new loop starts
+		if (input[i] == '|')
 		{
-			if (input[i] == '\'') /* Gestion des quotes simples */
+			curr_token = ft_create_token(PIPE, index++);
+			append_token(&token_list, curr_token);
+			i++;
+			continue ;
+		}
+		else if (input[i] == '<')
+		{
+			if (input[i + 1] && input[i + 1] == '<')
 			{
-				i++; /* Passer la quote d'ouverture */
+				curr_token = ft_create_token(HEREDOC, index++);
+				append_token(&token_list, curr_token);
+				i += 2;
+				continue ;
+			}
+			else
+			{
+				curr_token = ft_create_token(REDIR_IN, index++);
+				append_token(&token_list, curr_token);
+				i++;
+				continue ;
+			}
+		}
+		else if (input[i] == '>')
+		{
+			if (input[i + 1] && input[i + 1] == '>')
+			{
+				curr_token = ft_create_token(APPEND, index++);
+				append_token(&token_list, curr_token);
+				i += 2;
+				continue ;
+			}
+			else
+			{
+				curr_token = ft_create_token(REDIR_OUT, index++);
+				append_token(&token_list, curr_token);
+				i++;
+				continue ;
+			}
+		}
+
+		/* new token word */
+		curr_token = ft_create_token(WORD, index++);
+		if (!curr_token)
+			return (NULL);
+
+		/* working on the toke till next space */
+		while (input[i] && input[i] != ' ' && input[i] != '\t' && input[i] != '|' && input[i] != '<' && input[i] != '>')
+		{
+			if (input[i] == '\'') /* simple quotes */
+			{
+				i++; /* skip quotes */
 				start = i;
 				while (input[i] && input[i] != '\'')
 					i++;
 				append_fragment(curr_token,
 					new_fragment(input + start, i - start, SINGLE));
 				if (input[i] == '\'')
-					i++; /* Passer la quote de fermeture */
+					i++; /* skip last quote */
+				else
+				{
+					free(curr_token->fragments->text);
+					free(curr_token->fragments);
+					free(curr_token);
+					ft_printf("Quotes not closed\n");
+					return NULL;
+				}
 			}
-			else if (input[i] == '\"') /* Gestion des quotes doubles */
+			else if (input[i] == '\"') /* double quotes*/
 			{
-				i++; /* Passer la quote d'ouverture */
+				i++; /* skip quotes */
 				start = i;
 				while (input[i] && input[i] != '\"')
 					i++;
 				append_fragment(curr_token,
 					new_fragment(input + start, i - start, DOUBLE));
 				if (input[i] == '\"')
-					i++; /* Passer la quote de fermeture */
-			}
-			else if (input[i] == '|')
-			{
-				append_fragment(curr_token, new_fragment("|", 1, NONE));
-				curr_token->type = PIPE;
-				i++;
-			}
-			else if (input[i] == '>' && input[i + 1] == '>')
-			{
-				append_fragment(curr_token, new_fragment(">>", 2, NONE));
-				curr_token->type = APPEND;
-				i += 2;
-			}
-			else if (input[i] == '<' && input[i + 1] == '<')
-			{
-				append_fragment(curr_token, new_fragment("<<", 2, NONE));
-				curr_token->type = HEREDOC;
-				i += 2;
-			}
-			else if (input[i] == '<')
-			{
-				append_fragment(curr_token, new_fragment("<", 1, NONE));
-				curr_token->type = REDIR_IN;
-				i++;
-			}
-			else if (input[i] == '>')
-			{
-				append_fragment(curr_token, new_fragment(">", 1, NONE));
-				curr_token->type = REDIR_OUT;
-				i++;
+					i++; /* skip last quote */
+				else
+				{
+					free(curr_token->fragments->text);
+					free(curr_token->fragments);
+					free(curr_token);
+					ft_printf("Quotes not closed\n");
+					return NULL;
+				}
 			}
 			else /* frag sans quotes */
 			{
 				start = i;
-				while (input[i] && input[i] != ' ' && input[i] != '\'' && input[i] != '\"')
+				while (input[i] && input[i] != ' ' && input[i] != '|' && input[i] != '<' && input[i] != '>' &&
+					input[i] != '\'' && input[i] != '\"')
 					i++;
 				append_fragment(curr_token,
 					new_fragment(input + start, i - start, NONE));
@@ -90,5 +122,3 @@ t_token	*ft_input(const char *input)
 	}
 	return (token_list);
 }
-
-

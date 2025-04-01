@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/01 10:57:25 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/01 17:54:29 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,17 @@
 #include <stdio.h>
 #include <strings.h>
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	char	*line;
 	t_token	*token;
+	t_minishell	minishell;
+	(void)env;
+	(void)argc;
+	(void)argv;
+
+	if (create_env(env, &minishell.env) == NULL)
+		return (EXIT_FAILURE);
 
 	token = NULL;
 	// char	**map;
@@ -34,22 +41,30 @@ int	main(void)
 			break ;
 		}
 		token = ft_input(line);
-		// if (!lexer_parse(token))
-		// {
-		// 	free(line);
-		// 	free_tokens(token);
-		// }
-		// else
-		// {
-			
-			print_tokens(token);
+		if (token == NULL)
+		{
+			free(line);
 			free_tokens(token);
-		// }
+		}
+		// t_env_var *test = get_var(&minishell.env, "USER");
+		// printf("%s %s\n", test->name, test->value);
+		else if (!lexer_parse(token))
+		{
+			free_tokens(token);
+			free(line);
+		}
+		else
+		{
+			print_tokens(token);
+			parser(token, &minishell);
+			free_tokens(token);
+			free(line);
+		}
 		// else
 		// {
 		// 	parser(token);
-		// 	free(line);
-		// 	token_clear(&token, del_token);
+			// free(line);
+		// free_tokens(token);
 		// }
 		// lst_clear((void **)head, get_next_cmds, del_cmds);
 	}

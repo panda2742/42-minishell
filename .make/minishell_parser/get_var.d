@@ -1,4 +1,4 @@
-.make/minishell_parser/parser.o: src/parser.c include/minishell.h \
+.make/minishell_parser/get_var.o: src/get_var.c include/minishell.h \
   lib//include/libft.h lib//include/ft_array.h lib//include/ft_base.h \
   lib//include/ft_free.h lib//include/ft_math.h lib//include/ft_misc.h \
   lib//include/ft_printf.h lib//include/ft_fd.h lib//include/ft_str.h \

@@ -37,7 +37,7 @@ t_env_var	**create_env(char **envp, t_env_manager *env)
 	{
 		elt = malloc(sizeof(t_env_var));
 		if (elt == NULL)
-			return (handle_env_mem_alloc(env));
+			return (NULL); //
 		elt->name = _get_name(elt, envp[i]);
 		elt->value = _get_value(elt, envp[i]);
 		elt->next = NULL;
