@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/03/31 14:33:14 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/01 10:57:25 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ int	main(void)
 			break ;
 		}
 		token = ft_input(line);
-		if (!lexer_parse(token))
-		{
-			free(line);
-			free_tokens(token);
-		}
-		else
-		{
+		// if (!lexer_parse(token))
+		// {
+		// 	free(line);
+		// 	free_tokens(token);
+		// }
+		// else
+		// {
 			
 			print_tokens(token);
 			free_tokens(token);
-		}
+		// }
 		// else
 		// {
 		// 	parser(token);
