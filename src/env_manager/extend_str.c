@@ -15,8 +15,6 @@ char	*extend_str(t_env_manager *env, const char *str, size_t bytes)
 	size_t		i;
 	t_env_var	*var_content;
 
-	t_bool	in_extend;
-
 	p = 0;
 	len = 0;
 	dollar_mode = false;
