@@ -74,7 +74,7 @@ void create_word(t_cmds *cmd, t_token *token, t_minishell *minishell)
 		return (perror("Malloc failed")); // return Success mais normal, il faut faire echouer avec -1
 	} //
 	ft_memset(new, 0, sizeof(t_word));
-	new->word = token_to_string(token, minishell);
+	new->word = token_to_string(token, minishell, cmd);
 	if (!new->word)
 	{
 		cmd->leak_flag = 1;
@@ -101,67 +101,119 @@ void append_redir(t_redir **head, t_redir *new)
 	tmp->next = new;
 }
 
-
-
-
-
-char *token_to_string(t_token *token, t_minishell *minishell)
+char *expand_var_in_string(char *str, t_minishell *minishell)
 {
-	t_fragment *frag = token->fragments;
-	t_env_var *var = NULL;
-	char *result = ft_strdup("");
-	int x = 0;
-	int *ptr_x = &x;
-	if (!result)
-		return NULL; //
+	char *expanded;
 	char *tmp;
-	while (frag)
+	t_env_var *var = NULL;
+	int i;
+	int start;
+
+	expanded = ft_strdup("");
+	if (!expanded)
+		return NULL;
+	i = 0;
+	if (ft_strchr(str, '$') == 0)
+		return (expanded = ft_strdup(str));
+	else
 	{
-		tmp = result;
-		if (frag->quote_type == SINGLE)
-			result = ft_strjoin(result, frag->text);
-		else
+		while (str[i])
 		{
-			char *final_txt = NULL;
-			int i = 0;
-			const char *tmp_txt = frag->text;
-			if (ft_strchr(tmp_txt, '$') != 0)
+			if (str[i] == '$')
 			{
-				while (frag->text[i] != '\0')
+				i++; // skip le $
+				start = i;
+				while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+					i++;
+				if (start == i) // means there is nothing else than a $
 				{
-					if (frag->text[i] == '$')
-					{
-						i++;
-						int pos = i;
-						while (frag->text[i] && frag->text[i] != ' ' && frag->text[i] != '$')
-							i++;
-						// final_txt = ft_substr(frag->text, 0, i);
-						// ft_printf("subst value %s\n", ft_substr(frag->text, pos, i));
-						var = get_var(&minishell->env, ft_substr(frag->text, pos, i));
-						ft_printf("var value %s\n", var->value);
-						final_txt = ft_strjoin(final_txt, var->value);
-						ft_printf("final text = %s\n", final_txt);
-						*ptr_x = i;
-						// final_txt = ft_strjoin(final_txt, )
-					}
-					else
-						i++;
+					tmp = ft_strjoin(expanded, "$");
+					free(expanded);
+					expanded = tmp;
+					continue;
 				}
+				char *tmp_var = ft_substr(str, start, i - start);
+				var = get_var(&minishell->env, tmp_var);
+				free(tmp_var); // the part after $
+				const char *value = "";
+				if (var && var->value)
+					value = var->value;
+				char *tmp = ft_strjoin(expanded, value);
+				free(expanded);
+				expanded = tmp;
 			}
 			else
 			{
-
-				final_txt = ft_strdup(frag->text);
-				ft_printf("final text = %s\n", final_txt);
-				result = ft_strjoin(result, final_txt);
-				free(final_txt);
+				char tmp_char[2];
+				tmp_char[0] = str[i];
+				tmp_char[1] = '\0';
+				char *tmp = ft_strjoin(expanded, tmp_char);
+				free(expanded);
+				expanded = tmp;
+				i++;
 			}
 		}
-		free(tmp);
+	}
+	return (expanded);
+}
+
+void split_unquote_words(char *str, t_word **head)
+{
+	char **tab;
+	int i;
+	t_word *new_word;
+
+	i = 0;
+	tab = ft_split(str, " ");
+	new_word = malloc(sizeof(t_word));
+	if (!new_word)
+	{
+		free(tab); // // //
+		return ;
+	}
+	while (tab[i])
+	{
+		new_word->word = tab[i];
+		new_word->quote_type = NONE;
+		new_word->next = NULL;
+		i++;
+	}
+	append_word(head, new_word);
+}
+
+char *token_to_string(t_token *token, t_minishell *minishell, t_cmds *cmd)
+{
+	t_fragment *frag;
+	char *result;
+	char *tmp;
+	char *expanded;
+
+	frag = token->fragments;
+	result = ft_strdup("");
+	if (!result)
+		return NULL;
+	while (frag)
+	{
+		if (frag->quote_type == SINGLE)
+			expanded = ft_strdup((const char *)frag->next);
+		else
+		{
+			expanded = expand_var_in_string(token->fragments->text, minishell);
+			if (frag->quote_type == NONE && ft_strchr(expanded, ' '))
+			{
+				split_unquote_words(expanded, &cmd->words);
+			}
+		}
+		tmp = ft_strjoin(result, expanded);
+		free(result);
+		free(expanded);
+		result = tmp;
 		frag = frag->next;
 	}
-	return result;
+	ft_printf("Token to string result: %s \n", result);
+	return (result);
 }
+
 void create_redir(t_cmds *cmd, t_token *head, t_minishell *minishell)
 {
 	t_redir *new;
@@ -179,14 +231,14 @@ void create_redir(t_cmds *cmd, t_token *head, t_minishell *minishell)
 	ft_memset(new, 0, sizeof(t_redir));
 
 	// on dup ce qu'il y a apres la redir
-	new->filename = token_to_string(head->next, minishell);
+	new->filename = token_to_string(head->next, minishell, cmd);
 	if (!new->filename)
 	{
 		free(new);
 		cmd->leak_flag = 1;
 		return (perror("Malloc failed")); //
 	}
-	//t_fragment *first = head->next->fragments;
+	// t_fragment *first = head->next->fragments;
 	new->next = NULL;
 	append_redir(&cmd->redir, new);
 }
@@ -199,7 +251,7 @@ void lst_clear_cmds(t_word **head_w, t_redir **head_r, t_cmds **head)
 	lst_clear((void **)head, get_next_cmds, del_cmds);
 }
 
-void add_word_and_redir(t_token *head_token, t_token *end, t_cmds *cmd, t_minishell	*minishell)
+void add_word_and_redir(t_token *head_token, t_token *end, t_cmds *cmd, t_minishell *minishell)
 {
 	while (head_token != end->next)
 	{
@@ -222,7 +274,6 @@ void create_cmds(t_token *head_token, t_token *end, t_cmds **head, t_minishell *
 {
 	t_cmds *new;
 	t_cmds *tmp;
-
 
 	new = malloc(sizeof(t_cmds));
 	if (!new)

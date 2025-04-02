@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/01 17:56:47 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/02 18:59:49 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ t_token	*ft_input(const char *input);
 void	print_tokens(t_token *tokens);
 t_token *ft_create_token(t_token_type type, int index);
 void	free_tokens(t_token *tokens);
-char *token_to_string(t_token *token, t_minishell *minishell);
+char *token_to_string(t_token *token, t_minishell *minishell, t_cmds *cmd);
 
 
 // Get var
