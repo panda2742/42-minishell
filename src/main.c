@@ -36,8 +36,6 @@ int	main(int argc, char **argv, char **env)
 		line = readline(prompt);
 		free(prompt);
 		map = test_parsing(&minishell, line);
-		char *extended = extend_str(&minishell.env, line, ft_strlen(line));
-		printf("\nextended: %s\n", extended);
 		free(line);
 	}
 	(void)argc;

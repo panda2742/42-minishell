@@ -7,7 +7,7 @@ MAKE_DIR				:=	.make/
 override	HDRS		:=	minishell
 # The C source code files of the project
 override	BUILTINS	:=	cd echo env exit export pwd unset
-override	ENV			:=	create_env env_to_strlst extend_str free_env get_var
+override	ENV			:=	create_env env_to_strlst free_env get_var
 override	ERRORS		:=	error_handler puterr
 override	EXEC		:=	exec heredoc process tokens_to_cmds
 override	PROMPT		:=	show_prompt

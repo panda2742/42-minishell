@@ -31,7 +31,7 @@ typedef struct s_env_manager
 	/**
 	 * The amount of environment variables.
 	 */
-	size_t	env_size;
+	size_t		env_size;
 }			t_env_manager;
 
 /**
@@ -43,13 +43,13 @@ typedef struct s_env_manager
 typedef struct s_excmd
 {
 	/**
+	 * The id of the command (executed in the order);
+	 */
+	size_t			_id;
+	/**
 	 * The name of the command.
 	 */
 	char			*name;
-	/**
-	 * If it is a builtin command or not. Default to false.
-	 */
-	t_bool			is_builtin;
 	/**
 	 * If the command is a builtin, it is not necessarely executed into a
 	 * child process. Default to true.
@@ -146,6 +146,12 @@ typedef struct s_excmd
 	struct s_excmd	*next;
 }					t_excmd;
 
+typedef struct s_execparams
+{
+	size_t	nb_cmd;
+	t_excmd	**cmds;
+}			t_execparams;
+
 /**
  * Represents a prototype of a command function (used for builtins commands).
  * The parameter is a pointer to a s_command structure, defined above.
@@ -158,6 +164,7 @@ typedef t_exit (*		t_cmdproto)(t_excmd *);
 typedef struct s_minishell
 {
 	t_env_manager	env;
+	t_exit			last_status;
 }			t_minishell;
 
 t_cmdproto	*load_builtin(const char *command_name, t_cmdproto *proto);
@@ -169,14 +176,16 @@ t_env_var	**create_env(char **envp, t_env_manager *env);
 char		**env_to_strlst(t_env_manager *env);
 void		free_env(t_env_manager *env);
 t_env_var	*get_var(t_env_manager *env, const char *name);
-void		nb_by_name(t_env_manager *env, const char *section, size_t *ressize);
-char		*extend_str(t_env_manager *env, const char *str, size_t bytes);
 
 // ERRORS --------------------------
 
 void	*handle_env_mem_alloc(t_env_manager *env);
 void	puterr(char *message, t_bool call_perror);
 t_exit	command_failure(t_excmd *c, char *message, t_bool call_perror);
+
+// EXEC ----------------------------
+
+t_exit	launch_process(t_excmd *cmd);
 
 // BUILTINS ------------------------
 
