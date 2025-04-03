@@ -99,6 +99,7 @@ static t_bool	_is_in_charset(char c, const char *charset)
 	{
 		if (*charset == c)
 			return (true);
+		charset++;
 	}
 	return (false);
 }

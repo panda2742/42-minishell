@@ -58,7 +58,7 @@ $(NAME): $(OBJ) $(HDR) $(LIBFT) Makefile
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline
 
 $(BUILD_DIR)%.o: $(SRC_DIR)%.c | $(DIRS)
-	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR)/include -I$(HDR_DIR) $< -o $@ 
+	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR)include -I$(HDR_DIR) $< -o $@ 
 
 $(LIBFT): libft
 
