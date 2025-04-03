@@ -1,5 +1,6 @@
 
 #include "minishell.h"
+#include <string.h> // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 t_env_var	*get_var(t_env_manager *env, const char *name)
 {
@@ -10,7 +11,7 @@ t_env_var	*get_var(t_env_manager *env, const char *name)
 	var = *env->vars;
 	while (++i < env->env_size && var->next)
 	{
-		if (ft_strncmp(name, var->name, ft_strlen(var->name)) == 0)
+		if (strcmp(name, var->name) == 0) // !!!!!!!!!!!!!!!!!!!!!!!!!! //
 			return (var);
 		var = var->next;
 	}

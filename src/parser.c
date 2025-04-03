@@ -133,9 +133,9 @@ int parser(t_token *head, t_minishell *minishell)
 void create_word(t_cmds *cmd, t_token *token, t_minishell *minishell)
 {
 	t_word *new_word;
-	t_word *tmp;
+	// t_word *tmp;
 
-	tmp = cmd->words;
+	// tmp = cmd->words;
 	new_word = malloc(sizeof(t_word));
 	if (!new_word)
 	{
@@ -229,6 +229,10 @@ char *expand_var_in_string(char *str, t_minishell *minishell)
 				}
 				char *tmp_var = ft_substr(str, start, i - start);
 				var = get_var(&minishell->env, tmp_var);
+				if (var == NULL)
+				{
+					ft_printf("Var is NULL need to be handle or notd\n");
+				}
 				free(tmp_var); // the part after $
 				const char *value = "";
 				if (var && var->value)
@@ -312,11 +316,11 @@ void append_redir(t_redir **head, t_redir *new)
 void create_redir(t_cmds *cmd, t_token *head, t_minishell *minishell)
 {
 	t_redir *new;
-	t_redir *tmp;
+	// t_redir *tmp;
 
 	if (!head->next || !head)
 		return;
-	tmp = cmd->redir;
+	// tmp = cmd->redir;
 	new = malloc(sizeof(t_redir));
 	if (!new)
 	{
