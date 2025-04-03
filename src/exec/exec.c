@@ -45,14 +45,43 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 			break ;
 		}
 
+		// ouverture de la pipe
 		if (cmd->_id != i)
 			pipe(cmd->pipe);
 
+		// ouverture des fichiers d'entree et de sortie
+		cmd->in_fd = STDIN_FILENO;
+		if (cmd->infile != NULL)
+			cmd->in_fd = open(cmd->infile, O_RDONLY);
+
+		cmd->out_fd = STDOUT_FILENO;
+		if (cmd->outfile != NULL)
+		{
+			if (cmd->out_append_mode)
+				cmd->out_fd = open(cmd->infile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			else
+				cmd->out_fd = open(cmd->infile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		}
+
+		// creation du process
 		fork_id = fork();
 		if (fork_id || fork_id < 0)
+		{	
+			cmd = cmd->next;
 			continue ;
-		
-		cmd = cmd->next;
+		}
+
+		// creation de la duplication
+		dup2(cmd->in_fd, STDIN_FILENO);
+		dup2(cmd->out_fd, STDOUT_FILENO);
+
+		// on close la pipe de la commande precedente apres l'avoir lue
+		if (cmd->_id != 0)
+		{
+			close(cmd->prev->pipe[0]);
+			close(cmd->prev->pipe[1]);
+		}
+		break ;
 	}
 	return (minishell->last_status);
 }

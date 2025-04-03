@@ -3,6 +3,7 @@
 
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
 # include "libft.h"
 
 # define PROJECT_NAME "Minishell"
@@ -107,8 +108,8 @@ typedef struct s_excmd
 	 */
 	char			*infile;
 	/**
-	 * The file descriptor for the input file, if there is one. Set to 0 as
-	 * default.
+	 * The file descriptor for the input file, if there is one. Set to
+	 * STDIN_FILENO as default.
 	 */
 	int				in_fd;
 	/**
@@ -116,10 +117,15 @@ typedef struct s_excmd
 	 */
 	char			*outfile;
 	/**
-	 * The file descriptor for the ouput filem if there is one. Set to 1 as
-	 * default.
+	 * The file descriptor for the ouput filem if there is one. Set to
+	 * STDOUT_FILENO as default.
 	 */
 	int				out_fd;
+	/**
+	 * Represents the open mode for the outfile. If this boolean is set to true,
+	 * it means the file is in append mode. Otherwise, it truncates.
+	 */
+	t_bool			out_append_mode;
 	/**
 	 * @brief The pipe of the command. Creates a stream between the input and
 	 * the output of the command.
