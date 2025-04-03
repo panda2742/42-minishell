@@ -127,6 +127,20 @@ int parser(t_token *head, t_minishell *minishell)
 	}
 	return (0);
 }
+/*
+ * token_has_unquoted : Renvoie 1 s'il existe au moins un fragment avec quote_type NONE.
+ */
+int token_has_unquoted(t_token *token)
+{
+    t_fragment *frag = token->fragments;
+    while (frag)
+    {
+        if (frag->quote_type == NONE)
+            return (1);
+        frag = frag->next;
+    }
+    return (0);
+}
 
 
 
@@ -151,6 +165,15 @@ void create_word(t_cmds *cmd, t_token *token, t_minishell *minishell)
 		return (perror("Malloc failed")); //
 	}
 	// t_fragment *first = token->fragments;
+	    /* Si le token contient au moins un fragment non cité
+       et que le résultat accumulé est vide (car le split a déjà fait son boulot),
+       alors on ne l'ajoute pas */
+	if (token_has_unquoted(token) && new_word->word[0] == '\0')
+    {
+        free(new_word->word);
+        free(new_word);
+        return;
+    }
 	append_word(&cmd->words, new_word);
 	// ft_printf("Create word: %s quote_type %i\n", new->word, new->quote_type);
 }
@@ -267,16 +290,20 @@ void split_and_append_words(char *str, t_cmds *cmd)
 	while (tab[i])
 	{
 		ft_printf("tab[%i] = %s\n", i, tab[i]);
-		t_word *new_word = malloc(sizeof(t_word));
-		if (!new_word)
+		if (tab[i][0] != '\0')
 		{
-			//free(tab); // ajouter une fonction qui free tab
-			return ;
+
+			t_word *new_word = malloc(sizeof(t_word));
+			if (!new_word)
+			{
+				//free(tab); // ajouter une fonction qui free tab
+				return ;
+			}
+			new_word->word = ft_strdup(tab[i]);
+			new_word->quote_type = NONE;
+			new_word->next = NULL;
+			append_word(&cmd->words, new_word);
 		}
-		new_word->word = ft_strdup(tab[i]);
-		new_word->quote_type = NONE;
-		new_word->next = NULL;
-		append_word(&cmd->words, new_word);
 		i++;
 	}
 	//free(tab); //
