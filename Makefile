@@ -9,16 +9,18 @@ override	HDRS		:=	minishell
 override	BUILTINS	:=	cd echo env exit export pwd unset
 override	ENV			:=	create_env env_to_strlst free_env get_var
 override	ERRORS		:=	error_handler puterr
-override	EXEC		:=	exec heredoc process tokens_to_cmds
+override	EXEC		:=	exec heredoc process tokens_to_cmds free_cmds
 override	PROMPT		:=	show_prompt
-override	UTILS		:=	ft_sprintf
+override	UTILS		:=	empty_tab ft_sprintf
+override	TEST		:=	exec_test
 override	SRCS		:=	main \
 							$(addprefix builtins/builtins_,$(BUILTINS)) \
 							$(addprefix env_manager/,$(ENV)) \
 							$(addprefix errors/,$(ERRORS)) \
 							$(addprefix exec/,$(EXEC)) \
 							$(addprefix prompt/,$(PROMPT)) \
-							$(addprefix utils/,$(UTILS))
+							$(addprefix utils/,$(UTILS)) \
+							$(addprefix test/,$(TEST))
 
 # The subdirectory where the built objects will be, for example ./make/minishell_develop/
 override	BUILD_DIR	:=	$(MAKE_DIR)$(NAME)_$(shell git branch --show-current)/

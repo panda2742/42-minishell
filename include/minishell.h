@@ -192,6 +192,8 @@ t_exit	command_failure(t_excmd *c, char *message, t_bool call_perror);
 // EXEC ----------------------------
 
 t_exit	launch_process(t_excmd *cmd);
+t_exit	exec_command(t_minishell *minishell, t_excmd **cmds);
+void	free_cmds(t_excmd **cmds);
 
 // BUILTINS ------------------------
 
@@ -210,5 +212,10 @@ char	*show_prompt(t_env_manager *env);
 // UTILS ---------------------------
 
 char	*ft_sprintf(const char *format, ...);
+void	*empty_tab(void);
+
+// TESTS ---------------------------
+
+t_excmd	**exec_test(t_minishell *minishell, char ***envlst);
 
 #endif

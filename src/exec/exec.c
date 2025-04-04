@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+static char	*_get_full_path(char *path, char *cmd_name);
+
 t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 {
 	t_cmdproto		*proto;
@@ -21,12 +23,14 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	i = 0;
 	while (cmd)
 	{
+		printf("%s\n", cmd->raw);
 		if (cmd->has_heredoc)
 			heredoc(cmd->heredoc_del, cmd->heredoc_content);
 		params.nb_cmd++;
 		cmd->_id = i;
 		load_builtin(cmd->name, &cmd->proto);
 		i++;
+		cmd = cmd->next;
 	}
 
 	// exec
@@ -65,7 +69,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 
 		// creation du process
 		fork_id = fork();
-		if (fork_id || fork_id < 0)
+		if (fork_id > 0 || fork_id < 0)
 		{	
 			cmd = cmd->next;
 			continue ;
@@ -74,6 +78,35 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		// creation de la duplication
 		dup2(cmd->in_fd, STDIN_FILENO);
 		dup2(cmd->out_fd, STDOUT_FILENO);
+
+		// fermeture des file descriptors inutiles
+		if (cmd->in_fd > STDIN_FILENO)
+			close(cmd->in_fd);
+		if (cmd->out_fd > STDOUT_FILENO)
+			close(cmd->out_fd);
+
+		// recuperation des paths si c'est pas un builtin
+		if (cmd->proto == NULL)
+		{
+			t_env_var	*path_var = get_var(&minishell->env, "PATH");
+			if (path_var != NULL)
+				cmd->paths = ft_split(path_var->value, ":");
+			else
+				cmd->paths = empty_tab();
+	
+			// test de l'access et de l'execve
+			while (*cmd->paths)
+			{
+				char *fullpath = _get_full_path(*cmd->paths, cmd->name);
+				if (access(fullpath, X_OK) != 0)
+					continue ;
+				if (execve(fullpath, cmd->argv, cmd->envp) == -1)
+					break ;
+				cmd->paths++;
+			}
+		}
+		else
+			(*cmd->proto)(cmd);
 
 		// on close la pipe de la commande precedente apres l'avoir lue
 		if (cmd->_id != 0)
@@ -84,6 +117,17 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		break ;
 	}
 	return (minishell->last_status);
+}
+
+static char	*_get_full_path(char *path, char *cmd_name)
+{
+	char	*tmp;
+	char	*tmp2;
+
+	tmp = ft_strjoin("/", path);
+	tmp2 = ft_strjoin(tmp, "/");
+	tmp = ft_strjoin(tmp2, cmd_name);
+	return (tmp);
 }
 
 t_cmdproto	*load_builtin(const char *command_name, t_cmdproto *proto)
@@ -99,6 +143,7 @@ t_cmdproto	*load_builtin(const char *command_name, t_cmdproto *proto)
 	int					i;
 
 	i = -1;
+	*proto = NULL;
 	while (++i < 7)
 	{
 		len = ft_strlen(builtins[i]);

@@ -30,6 +30,15 @@ int	main(int argc, char **argv, char **env)
 
 	if (create_env(env, &minishell.env) == NULL)
 		return (EXIT_FAILURE);
+	char **envlst = NULL;
+	t_excmd	**tests = exec_test(&minishell, &envlst);
+	exec_command(&minishell, tests);
+	free_env(&minishell.env);
+	ft_free_strtab(envlst);
+	free_cmds(tests);
+	(void)argc;
+	(void)argv;
+	(void)env;
 	while (1)
 	{
 		prompt = show_prompt(&minishell.env);
