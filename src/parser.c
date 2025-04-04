@@ -15,6 +15,11 @@
 // Si tu tombes sur un pipe : tu vérifies que t’as bien eu une commande avant : tu passes à la suite
 // Si la liste se termine : tu vérifies que la dernière commande était valide
 
+
+// A gerer:
+// export abc="    a     b   "
+// echo "$abc"'$abc'$abc
+
 #include "minishell.h"
 #include "libft.h"
 
@@ -25,81 +30,7 @@ void append_word(t_word **head, t_word *new);
 char *expand_var_in_string(char *str, t_minishell *minishell);
 void split_and_append_words(char *str, t_cmds *cmd);
 
-static int	is_c(char c, char s)
-{
-	if (s == c)
-		return (1);
-	else
-		return (0);
-}
 
-static size_t	ft_word(char *s, char c)
-{
-	size_t	i;
-	size_t	w_count;
-
-	w_count = 0;
-	i = 0;
-	while (s[i])
-	{
-		if (is_c(c, s[i]))
-			i++;
-		else if (!is_c(c, s[i]))
-		{
-			w_count++;
-			while (!is_c(c, s[i]) && s[i])
-				i++;
-		}
-	}
-	return (w_count);
-}
-
-static void	to_free(char **tab, int word)
-{
-	while (word >= 0)
-		free(tab[word--]);
-	free(tab);
-}
-
-static char	**tab_malloc(char c, char const *s, char **tab, size_t i)
-{
-	size_t	word;
-	size_t	pos;
-
-	word = 0;
-	while (s[i])
-	{
-		pos = i;
-		if (is_c(c, s[i]))
-			i++;
-		else if (!is_c(c, s[i]))
-		{
-			while (!is_c(c, s[i]) && s[i])
-				i++;
-			tab[word] = ft_substr(s, pos, i - pos);
-			if (!tab[word])
-			{
-				to_free(tab, word);
-				return (NULL);
-			}
-			word++;
-		}
-	}
-	tab[word] = NULL;
-	return (tab);
-}
-
-char	**ft_split_a(char const *s, char c)
-{
-	char	**tab;
-	size_t	i;
-
-	i = 0;
-	tab = malloc((ft_word((char *)s, c) + 1) * sizeof(char *));
-	if (tab == NULL)
-		return (NULL);
-	return (tab_malloc(c, s, tab, i));
-}
 
 int parser(t_token *head, t_minishell *minishell)
 {
@@ -114,7 +45,7 @@ int parser(t_token *head, t_minishell *minishell)
 		return (0); //
 	// permet de retourner en arriere pour lire du debut jusqu au | ou NULL
 	start = head;
-	// on parcourt la liste
+	// on parcourt la liste token
 	while (tmp != NULL)
 	{
 		// on cree une commande entre start et end
@@ -422,12 +353,132 @@ void create_cmds(t_token *head_token, t_token *end, t_cmds **head, t_minishell *
 		tmp->next = new;
 	}
 
-	t_word *tmp_word = (*head)->words;
-	while (tmp_word)
+	t_cmds *tmp_word = (*head);
+	while (tmp_word->words)
 	{
-		ft_printf("Word : %s\n", tmp_word->word);
-		tmp_word = tmp_word->next;
+		ft_printf("Word : %s\n", tmp_word->words->word);
+		tmp_word->words = tmp_word->words->next;
 	}
+	*head = (*head)->next;
 	// print_elements_cmds(new->words, new->redir); // a supprimer plus tard
 	// lst_clear_cmds(&new->words, &new->redir, head);
+	// cmd_to_arg(head);
 }
+
+void	cmd_to_arg(t_cmds **head)
+{
+	t_cmds *tmp_cmd = (*head);
+	t_excmd ex_cmd;
+
+	ft_memset(ex_cmd, 0, sizeof(t_excmd));
+
+	while (tmp_cmd)
+	{
+		tmp_cmd = tmp_cmd->next;
+	}
+}
+// typedef struct s_excmd
+// {
+// 	/**
+// 	 * The name of the command.
+// 	 */
+// 	char			*name;
+// 	/**
+// 	 * If it is a builtin command or not. Default to false.
+// 	 */
+// 	t_bool			is_builtin;
+// 	/**
+// 	 * If the command is a builtin, it is not necessarely executed into a
+// 	 * child process. Default to true.
+// 	 */
+// 	t_bool			in_a_child;
+// 	/**
+// 	 * The prototype of the command if it is a builtin. Default to NULL.
+// 	 */
+// 	t_exit 			(*proto)(struct s_excmd *);
+// 	/**
+// 	 * The number of arguments. Default to 0.
+// 	 */
+// 	int				argc;
+// 	/**
+// 	 * The string list of each arguments. Does NOT include the command name.
+// 	 * If empty, the list includes only a NULL element.
+// 	 */
+// 	char			**argv;
+// 	/**
+// 	 * The environment manager. Musts exist.
+// 	 */
+// 	t_env_manager	*env;
+// 	/**
+// 	 * The string list of each arguments. Created from the environment managers.
+// 	 * Terminates with a NULL element. If empty, only contains a NULL element.
+// 	 */
+// 	char			**envp;
+// 	/**
+// 	 * The raw string of the command. It includes every arguments, as it was
+// 	 * written in the prompt. It includes a copy of the command name as default.
+// 	 */
+// 	char			*raw;
+// 	/**
+// 	 * The PATH environment variable splitted into a string list, used for the
+// 	 * execve loop. If empty, only contains a NULL element.
+// 	 */
+// 	char			**paths;
+// 	/**
+// 	 * If it includes an Here Document, this boolean is set to true. Otherwise
+// 	 * it is set to false.
+// 	 */
+// 	t_bool			has_heredoc;
+// 	/**
+// 	 * The delimiter used for a Here Document. Set to NULL as default.
+// 	 */
+// 	char			*heredoc_del;
+// 	/**
+// 	 * If there is an Here Document, the content is firstly written into the
+// 	 * memory, and then put into a pipe's output file descriptor when it has to
+// 	 * be used. Set to NULL as default.
+// 	 */
+// 	char			*heredoc_content;
+// 	/**
+// 	 * The input file if a '<' redirect is specified. Set to NULL as default.
+// 	 */
+// 	char			*infile;
+// 	/**
+// 	 * The file descriptor for the input file, if there is one. Set to 0 as
+// 	 * default.
+// 	 */
+// 	int				in_fd;
+// 	/**
+// 	 * The output file if a '>' redirect is specified. Set to NULL as default.
+// 	 */
+// 	char			*outfile;
+// 	/**
+// 	 * The file descriptor for the ouput filem if there is one. Set to 1 as
+// 	 * default.
+// 	 */
+// 	int				out_fd;
+// 	/**
+// 	 * @brief The pipe of the command. Creates a stream between the input and
+// 	 * the output of the command.
+// 	 *
+// 	 * How does it work? The scenario that occur is:
+// 	 * - The command is instanced, the pipe is created.
+// 	 * - Reads: stdin if first command, s_excmd::pipe[0] otherwise.
+// 	 * - Writes into: stdout if the last command, s_excmd::pipe[1] otherwise.
+// 	 */
+// 	int				pipe[2];
+// 	/**
+// 	 * The status of the executed command.
+// 	 */
+// 	t_exit			status;
+// 	/**
+// 	 * The previous element of the command list. If it is the first element or
+// 	 * if there is no other element, default value is NULL.
+// 	 */
+// 	struct s_excmd	*prev;
+// 	/**
+// 	 * The next element of the command list. If it is the last element or if
+// 	 * there is no other element, default value is NULL.
+// 	 */
+// 	struct s_excmd	*next;
+// }					t_excmd;

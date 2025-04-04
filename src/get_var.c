@@ -11,7 +11,7 @@ t_env_var	*get_var(t_env_manager *env, const char *name)
 	var = *env->vars;
 	while (++i < env->env_size && var->next)
 	{
-		if (strcmp(name, var->name) == 0) // !!!!!!!!!!!!!!!!!!!!!!!!!! //
+		if (ft_strcmp((char *)name, var->name) == 0) // !!!!!!!!!!!!!!!!!!!!!!!!!! //
 			return (var);
 		var = var->next;
 	}

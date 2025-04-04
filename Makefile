@@ -7,6 +7,7 @@ MAKE_DIR			:=	.make/
 override	HDRS	:=	minishell
 # The C source code files of the project
 override	SRCS	:=	fragments \
+							ft_split_parser \
 							get_next_token \
 							get_var \
 							lexer_parse \
