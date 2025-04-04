@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/04 15:00:20 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/04 15:51:32 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,7 @@ typedef struct s_minishell
 
 
 // $VAR
-
-typedef t_exit (*		t_cmdproto)(t_excmd *);
-
+typedef unsigned char	t_exit;
 
 typedef struct s_excmd
 {
@@ -212,9 +210,14 @@ typedef struct s_excmd
 	struct s_excmd	*next;
 }					t_excmd;
 
+typedef t_exit (*		t_cmdproto)(t_excmd *);
+
 // Fragment 
 t_fragment *new_fragment(const char *start, size_t len, t_qtype quote_type);
 void	append_fragment(t_token *token, t_fragment *frag);
+
+// ft_cmd_list_size
+int	ft_cmd_lstsize(t_word *cmd);
 
 // Ft_split_parser.c
 char	**ft_split_a(char const *s, char c);

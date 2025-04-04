@@ -86,8 +86,9 @@ void create_word(t_cmds *cmd, t_token *token, t_minishell *minishell)
 	{
 		cmd->leak_flag = 1;
 		return (perror("Malloc failed")); // return Success mais normal, il faut faire echouer avec -1
-	} //
+	} 
 	ft_memset(new_word, 0, sizeof(t_word));
+	new_word->next =  NULL;
 	build_token_string(token, minishell, cmd, &new_word->word);
 	if (!new_word->word)
 	{
@@ -95,7 +96,6 @@ void create_word(t_cmds *cmd, t_token *token, t_minishell *minishell)
 		free(new_word);
 		return (perror("Malloc failed")); //
 	}
-	// t_fragment *first = token->fragments;
 	    /* Si le token contient au moins un fragment non cité
        et que le résultat accumulé est vide (car le split a déjà fait son boulot),
        alors on ne l'ajoute pas */
@@ -163,7 +163,10 @@ char *expand_var_in_string(char *str, t_minishell *minishell)
 		return NULL;
 	i = 0;
 	if (ft_strchr(str, '$') == 0)
+	{
+		free(expanded);
 		return (expanded = ft_strdup(str));
+	}
 	else
 	{
 		while (str[i])
@@ -250,6 +253,7 @@ void append_word(t_word **head, t_word *new)
 		return;
 	}
 	tmp = *head;
+	tmp->next = NULL;
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new;
@@ -326,6 +330,8 @@ void add_word_and_redir(t_token *head_token, t_token *end, t_cmds *cmd, t_minish
 	}
 }
 
+t_excmd	*cmd_to_arg(t_cmds *head);
+
 void create_cmds(t_token *head_token, t_token *end, t_cmds **head, t_minishell *minishell)
 {
 	t_cmds *new;
@@ -353,30 +359,77 @@ void create_cmds(t_token *head_token, t_token *end, t_cmds **head, t_minishell *
 		tmp->next = new;
 	}
 
-	t_cmds *tmp_word = (*head);
-	while (tmp_word->words)
-	{
-		ft_printf("Word : %s\n", tmp_word->words->word);
-		tmp_word->words = tmp_word->words->next;
-	}
-	*head = (*head)->next;
+	// t_cmds *tmp_word = (*head);
+	// while (tmp_word->words)
+	// {
+	// 	ft_printf("Word : %s\n", tmp_word->words->word);
+	// 	tmp_word->words = tmp_word->words->next;
+	// }
+	// *head = (*head)->next;
 	// print_elements_cmds(new->words, new->redir); // a supprimer plus tard
-	// lst_clear_cmds(&new->words, &new->redir, head);
-	// cmd_to_arg(head);
+	t_excmd *ex_cmd = cmd_to_arg((*head));
+	ft_printf("excmd %s\n", ex_cmd->name);
+	lst_clear_cmds(&new->words, &new->redir, head);
 }
 
-void	cmd_to_arg(t_cmds **head)
+t_excmd	*cmd_to_arg(t_cmds *head)
 {
-	t_cmds *tmp_cmd = (*head);
-	t_excmd ex_cmd;
+	t_cmds *tmp_cmd;
+	t_word *tmp_word;
+	t_excmd *ex_new;
+	t_excmd *ex_tail;
+	t_excmd *ex_head;
 
-	ft_memset(ex_cmd, 0, sizeof(t_excmd));
-
+	ex_head = NULL;
+	ex_tail = NULL;
+	tmp_cmd = head;
+	
 	while (tmp_cmd)
 	{
-		tmp_cmd = tmp_cmd->next;
-	}
+		// Not so useful, just in case
+		if (tmp_cmd->words == NULL)
+		{
+			tmp_cmd = tmp_cmd->next;
+			continue ;
+		}
+		tmp_word = tmp_cmd->words;
+		ex_new = malloc(sizeof(t_excmd));
+		if (!ex_new)
+			return (NULL); //
+		ft_memset(ex_new, 0, sizeof(t_excmd));
+		ex_new->argc = ft_cmd_lstsize(tmp_word);
+		ex_new->argv = malloc(sizeof(char *) * (ex_new->argc + 1));
+		if (!ex_new->argv)
+		{
+			free(ex_new);
+			return (NULL);
+		}
+		ex_new->name = ft_strdup(tmp_word->word); // verif malloc
+		int i = 0;
+		while (tmp_word)
+		{
+			ex_new->argv[i] = ft_strdup(tmp_word->word);
+			i++;
+			tmp_word = tmp_word->next;
+		}
+		ex_new->argv[i] = NULL;
+		ex_new->next = NULL;
+		if (ex_head == NULL)
+		{
+			ex_head = ex_new;
+			ex_tail = ex_new;
+		}
+		else
+		{
+			ex_tail->next = ex_new;
+			ex_tail = ex_new;
+		}
+
+	tmp_cmd = tmp_cmd->next;
+	}	
+	return (ex_head);
 }
+
 // typedef struct s_excmd
 // {
 // 	/**
