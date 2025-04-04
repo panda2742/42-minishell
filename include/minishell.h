@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/04 14:58:34 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/04 15:00:20 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ typedef struct s_minishell
 
 // $VAR
 
+typedef t_exit (*		t_cmdproto)(t_excmd *);
 
 
 typedef struct s_excmd
