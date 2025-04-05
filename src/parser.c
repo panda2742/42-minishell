@@ -1,19 +1,19 @@
 
 
 // Si je commence par un pipe : erreur
-// Si je trouve une redirection : il faut que je trouve un mot juste après
+// Si je trouve une redirection : il faut que je trouve un mot juste apres
 // Deux pipes qui se suivent : erreur
 // Si je termine par un pipe : erreur
-// Les quotes fermées : déjà gérées dans le lexer normalement,
+// Les quotes fermees : dejà gerees dans le lexer normalement,
 // donc le parser est clean là-dessus
 
-// Tu pars du début de la liste des tokens
+// Tu pars du debut de la liste des tokens
 // Tant que ce n’est pas un pipe ou la fin :
 // Si c’est un WORD et que t’as pas de commande : c’est ta commande
 // Si c’est un WORD et que la commande est là : c’est un argument
-// Si c’est une redirection : tu vérifies qu’il y a un WORD derrière : sinon erreur
-// Si tu tombes sur un pipe : tu vérifies que t’as bien eu une commande avant : tu passes à la suite
-// Si la liste se termine : tu vérifies que la dernière commande était valide
+// Si c’est une redirection : tu verifies qu’il y a un WORD derriere : sinon erreur
+// Si tu tombes sur un pipe : tu verifies que t’as bien eu une commande avant : tu passes à la suite
+// Si la liste se termine : tu verifies que la derniere commande etait valide
 
 
 // A gerer:
@@ -32,34 +32,113 @@ void split_and_append_words(char *str, t_cmds *cmd);
 
 
 
-int parser(t_token *head, t_minishell *minishell)
-{
-	t_token *tmp;
-	t_cmds *head_cmd;
-	t_token *start;
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
-	tmp = head;
-	head_cmd = NULL;
-	// si on fait entrer renvoie le prompt
-	if (tmp == NULL)
-		return (0); //
-	// permet de retourner en arriere pour lire du debut jusqu au | ou NULL
-	start = head;
-	// on parcourt la liste token
-	while (tmp != NULL)
-	{
-		// on cree une commande entre start et end
-		if (tmp->type == PIPE || tmp->next == NULL)
-		{
-			create_cmds(start, tmp, &head_cmd, minishell);
-			start = tmp->next;
-		}
-		tmp = tmp->next;
-	}
-	return (0);
-}
+
 /*
- * token_has_unquoted : Renvoie 1 s'il existe au moins un fragment avec quote_type NONE.
+ * La fonction commune d’expansion qui traite une chaîne.
+ * Elle effectue l’expansion des variables (suppression des quotes dejà gerees en amont)
+ * sans field splitting.
+ *
+ * Pour chaque '$', on lit le nom maximal (caracteres alphanumeriques et '_')
+ * et on recherche la variable dans l’environnement. Si elle n’existe pas,
+ * on renvoie une chaîne vide (conformement au comportement POSIX).
+ */
+char *expand_token_str(const char *str, t_minishell *minishell)
+{
+    char    *result;
+    char    *tmp;
+    int     i = 0;
+    int     start, var_len;
+    char    *var_name;
+    t_env_var *var;
+    const char *value;
+
+    result = ft_strdup("");
+    if (!result)
+        return (NULL);
+    while (str[i])
+    {
+        if (str[i] == '$')
+        {
+            i++;  // saute le '$'
+            start = i;
+            while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+                i++;
+            var_len = i - start;
+            if (var_len <= 0)
+            {
+                tmp = ft_strjoin(result, "$");
+                free(result);
+                result = tmp;
+                continue;
+            }
+            var_name = ft_substr(str, start, var_len);
+            var = get_var(&minishell->env, var_name);
+            free(var_name);
+            value = "";
+            if (var && var->value)
+                value = var->value;
+            tmp = ft_strjoin(result, value);
+            free(result);
+            result = tmp;
+        }
+        else
+        {
+            char tmp_char[2];
+            tmp_char[0] = str[i];
+            tmp_char[1] = '\0';
+            tmp = ft_strjoin(result, tmp_char);
+            free(result);
+            result = tmp;
+            i++;
+        }
+    }
+    return (result);
+}
+
+/*
+ * Accumule les fragments d’un token en appelant expand_token_str pour les fragments
+ * dont le quote_type n'est pas SINGLE (pour lesquels on se contente d'un strdup).
+ * Le resultat est une chaune allouee.
+ */
+char *accumulate_token_fragments(t_token *token, t_minishell *minishell)
+{
+    char        *accum;
+    char        *tmp;
+    char        *expanded;
+    t_fragment  *frag;
+
+    accum = ft_strdup("");
+    if (!accum)
+        return (NULL);
+    frag = token->fragments;
+    while (frag)
+    {
+        if (frag->quote_type == SINGLE)
+            expanded = ft_strdup(frag->text);
+        else
+            expanded = expand_token_str(frag->text, minishell);
+        if (!expanded)
+        {
+            free(accum);
+            return (NULL);
+        }
+        tmp = ft_strjoin(accum, expanded);
+        free(expanded);
+        free(accum);
+        if (!tmp)
+            return (NULL);
+        accum = tmp;
+        frag = frag->next;
+    }
+    return (accum);
+}
+
+/*
+ * token_has_unquoted : renvoie 1 s'il existe au moins un fragment dont le quote_type est NONE.
  */
 int token_has_unquoted(t_token *token)
 {
@@ -73,192 +152,191 @@ int token_has_unquoted(t_token *token)
     return (0);
 }
 
-
-
+/*
+ * create_word : pour un token de type WORD, on accumule l’ensemble des fragments,
+ * puis si necessaire (cas d’un field splitting) on decoupe la chaîne.
+ *
+ * Ici, si le token contient un fragment non cite ET un espace, on fait le split.
+ * Sinon, on cree un unique t_word.
+ */
 void create_word(t_cmds *cmd, t_token *token, t_minishell *minishell)
 {
-	t_word *new_word;
-	// t_word *tmp;
+    char    *accum;
+    char    **split_words;
+    int     i;
 
-	// tmp = cmd->words;
-	new_word = malloc(sizeof(t_word));
-	if (!new_word)
-	{
-		cmd->leak_flag = 1;
-		return (perror("Malloc failed")); // return Success mais normal, il faut faire echouer avec -1
-	} 
-	ft_memset(new_word, 0, sizeof(t_word));
-	new_word->next =  NULL;
-	build_token_string(token, minishell, cmd, &new_word->word);
-	if (!new_word->word)
-	{
-		cmd->leak_flag = 1;
-		free(new_word);
-		return (perror("Malloc failed")); //
-	}
-	    /* Si le token contient au moins un fragment non cité
-       et que le résultat accumulé est vide (car le split a déjà fait son boulot),
-       alors on ne l'ajoute pas */
-	if (token_has_unquoted(token) && new_word->word[0] == '\0')
+    accum = accumulate_token_fragments(token, minishell);
+    if (!accum)
     {
-        free(new_word->word);
-        free(new_word);
+        cmd->leak_flag = 1;
+        perror("Accumulation failed");
         return;
     }
-	append_word(&cmd->words, new_word);
-	// ft_printf("Create word: %s quote_type %i\n", new->word, new->quote_type);
+    /* Field splitting uniquement pour les WORD tokens */
+    if (token_has_unquoted(token) && strchr(accum, ' '))
+    {
+        split_words = ft_split_a(accum, ' ');
+        free(accum);
+        if (!split_words)
+        {
+            cmd->leak_flag = 1;
+            perror("Split failed");
+            return;
+        }
+        i = 0;
+        while (split_words[i])
+        {
+            if (split_words[i][0] != '\0')
+            {
+                t_word *new_word = malloc(sizeof(t_word));
+                if (!new_word)
+                {
+                    cmd->leak_flag = 1;
+                    perror("Malloc failed for new word");
+                    // Ici, penser à liberer split_words et ses elements.
+                    return;
+                }
+                new_word->word = ft_strdup(split_words[i]);
+                new_word->quote_type = NONE;
+                new_word->next = NULL;
+                append_word(&cmd->words, new_word);
+            }
+            i++;
+        }
+        // Liberation de split_words
+        i = 0;
+        while (split_words[i])
+        {
+            free(split_words[i]);
+            i++;
+        }
+        free(split_words);
+    }
+    else
+    {
+        t_word *new_word = malloc(sizeof(t_word));
+        if (!new_word)
+        {
+            free(accum);
+            cmd->leak_flag = 1;
+            perror("Malloc failed for new word");
+            return;
+        }
+        new_word->word = accum;
+        new_word->quote_type = NONE;
+        new_word->next = NULL;
+        /* Si le token etait compose de fragments non cites et l'accumulation est vide,
+           on ne cree pas le mot (dejà traite par le split). */
+        if (token_has_unquoted(token) && new_word->word[0] == '\0')
+        {
+            free(new_word->word);
+            free(new_word);
+            return;
+        }
+        append_word(&cmd->words, new_word);
+    }
 }
 
-void build_token_string(t_token *token, t_minishell *minishell, t_cmds *cmd, char **result)
+/*
+ * create_redir_arg : pour un token servant d’argument de redirection (type REDIR_ARG),
+ * on accumule l’ensemble des fragments ET on applique l’expansion sans field splitting.
+ */
+void create_redir_arg(t_cmds *cmd, t_token *token, t_minishell *minishell)
 {
-	t_fragment *frag;
+    char *accum;
 
-	frag = token->fragments;
-	*result = ft_strdup("");
-	if (!*result)
-		return ;
-	while (frag)
-	{
-		process_fragment(frag, cmd, minishell, result);
-		frag = frag->next;
-	}
-	ft_printf("Token to string result: %s\n", *result);
+    accum = accumulate_token_fragments(token, minishell);
+    if (!accum)
+    {
+        cmd->leak_flag = 1;
+        perror("Accumulation failed");
+        return;
+    }
+    // Ici, on ne fait PAS de field splitting meme si des espaces sont presents.
+    t_word *new_word = malloc(sizeof(t_word));
+    if (!new_word)
+    {
+        free(accum);
+        cmd->leak_flag = 1;
+        perror("Malloc failed for redir arg");
+        return;
+    }
+    new_word->word = accum;
+    new_word->quote_type = REDIR_ARG; // On marque differemment
+    new_word->next = NULL;
+    append_word(&cmd->words, new_word);
 }
 
-void process_fragment(t_fragment *frag, t_cmds *cmd, t_minishell *minishell, char **accumulated)
-{
-	char *tmp;
-	char *expanded;
-
-		if (frag->quote_type == SINGLE)
-			expanded = ft_strdup((const char *)frag->text);
-		else
-		{
-			expanded = expand_var_in_string(frag->text, minishell);
-			if (frag->quote_type == NONE && ft_strchr(expanded, ' '))
-			{
-				split_and_append_words(expanded, cmd);
-				free(expanded);
-				return ;
-			}
-		}
-		tmp = ft_strjoin(*accumulated, expanded);
-		free(expanded);
-		free(*accumulated);
-		*accumulated = tmp;
-	// ft_printf("Token to string result:%s\n", result);
-}
-
-
-char *expand_var_in_string(char *str, t_minishell *minishell)
-{
-	char *expanded;
-	char *tmp;
-	t_env_var *var = NULL;
-	int i;
-	int start;
-
-	expanded = ft_strdup("");
-	if (!expanded)
-		return NULL;
-	i = 0;
-	if (ft_strchr(str, '$') == 0)
-	{
-		free(expanded);
-		return (expanded = ft_strdup(str));
-	}
-	else
-	{
-		while (str[i])
-		{
-			if (str[i] == '$')
-			{
-				i++; // skip le $
-				start = i;
-				while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-					i++;
-				if (start == i) // means there is nothing else than a $
-				{
-					tmp = ft_strjoin(expanded, "$");
-					free(expanded);
-					expanded = tmp;
-					continue;
-				}
-				char *tmp_var = ft_substr(str, start, i - start);
-				var = get_var(&minishell->env, tmp_var);
-				if (var == NULL)
-				{
-					ft_printf("Var is NULL need to be handle or notd\n");
-				}
-				free(tmp_var); // the part after $
-				const char *value = "";
-				if (var && var->value)
-					value = var->value;
-				char *tmp = ft_strjoin(expanded, value);
-				free(expanded);
-				expanded = tmp;
-			}
-			else
-			{
-				char tmp_char[2];
-				tmp_char[0] = str[i];
-				tmp_char[1] = '\0';
-				char *tmp = ft_strjoin(expanded, tmp_char);
-				free(expanded);
-				expanded = tmp;
-				i++;
-			}
-		}
-	}
-	return (expanded);
-}
-
-void split_and_append_words(char *str, t_cmds *cmd)
-{
-	char **tab;
-	int i;
-
-	i = 0;
-	ft_printf("Str at split %s\n", str);
-	tab = ft_split_a(str, ' ');
-	while (tab[i])
-	{
-		ft_printf("tab[%i] = %s\n", i, tab[i]);
-		if (tab[i][0] != '\0')
-		{
-
-			t_word *new_word = malloc(sizeof(t_word));
-			if (!new_word)
-			{
-				//free(tab); // ajouter une fonction qui free tab
-				return ;
-			}
-			new_word->word = ft_strdup(tab[i]);
-			new_word->quote_type = NONE;
-			new_word->next = NULL;
-			append_word(&cmd->words, new_word);
-		}
-		i++;
-	}
-	//free(tab); //
-}
-
+/*
+ * append_word : Ajoute un t_word à la fin de la liste.
+ */
 void append_word(t_word **head, t_word *new)
 {
-	t_word *tmp;
+    t_word *tmp;
 
-	if (!*head)
-	{
-		*head = new;
-		return;
-	}
-	tmp = *head;
-	tmp->next = NULL;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
+    if (!*head)
+    {
+        *head = new;
+        return;
+    }
+    tmp = *head;
+    while (tmp->next)
+        tmp = tmp->next;
+    tmp->next = new;
 }
 
+/*
+ * Dans add_word_and_redir, on parcourt la liste des tokens.
+ * Lorsqu'un token de redirection est rencontre (is_redir),
+ * on verifie que le token suivant existe et on change son type en REDIR_ARG,
+ * puis on appelle create_redir_arg.
+ * Pour les tokens de type WORD, on appelle create_word.
+ */
+void add_word_and_redir(t_token *head_token, t_token *end, t_cmds *cmd, t_minishell *minishell)
+{
+    while (head_token != end->next)
+    {
+        if (head_token->type == WORD)
+        {
+            create_word(cmd, head_token, minishell);
+        }
+        else if (is_redir(head_token))
+        {
+            head_token = head_token->next;
+            if (!head_token)
+            {
+                // Erreur de syntaxe : redirection sans argument.
+                return;
+            }
+            head_token->type = REDIR_ARG;
+            create_redir_arg(cmd, head_token, minishell);
+        }
+        head_token = head_token->next;
+    }
+}
+
+int parser(t_token *head, t_minishell *minishell)
+{
+    t_token *tmp;
+    t_cmds *head_cmd;
+    t_token *start;
+
+    tmp = head;
+    head_cmd = NULL;
+    if (tmp == NULL)
+        return (0);
+    start = head;
+    while (tmp != NULL)
+    {
+        if (tmp->type == PIPE || tmp->next == NULL)
+        {
+            create_cmds(start, tmp, &head_cmd, minishell);
+            start = tmp->next;
+        }
+        tmp = tmp->next;
+    }
+    return (0);
+}
 
 void lst_clear_cmds(t_word **head_w, t_redir **head_r, t_cmds **head)
 {
@@ -267,127 +345,66 @@ void lst_clear_cmds(t_word **head_w, t_redir **head_r, t_cmds **head)
 	lst_clear((void **)head, get_next_cmds, del_cmds);
 }
 
-void add_word_and_redir(t_token *head_token, t_token *end, t_cmds *cmd, t_minishell *minishell)
+void    process_cmds(t_cmds *head)
 {
-	while (head_token != end->next)
-	{
-		// cree la liste de mot
-		if (head_token->type == WORD)
-		{
-			create_word(cmd, head_token, minishell);
-		}
-		// cree la liste de redir
-		// else if (is_redir(head_token))
-		// {
-		// 	create_redir(cmd, head_token, minishell);
-		// 	head_token = head_token->next;
-		// }
-		head_token = head_token->next;
-	}
+    t_cmds  *tmp_cmd;
+    t_word  *tmp_word;
+
+    if (!head)
+        return;
+    tmp_cmd = head;
+    while (tmp_cmd)
+    {
+        tmp_word = tmp_cmd->words;
+        while (tmp_word)
+        {
+            ft_printf("Word exec: %s\n", tmp_word->word);
+            tmp_word = tmp_word->next;
+        }
+        tmp_cmd = tmp_cmd->next;
+    }
 }
-
-t_excmd	*cmd_to_arg(t_cmds *head);
-
 void create_cmds(t_token *head_token, t_token *end, t_cmds **head, t_minishell *minishell)
 {
-	t_cmds *new;
-	t_cmds *tmp;
+    t_cmds *new;
+    t_cmds *tmp;
 
-	new = malloc(sizeof(t_cmds));
-	if (!new)
+    new = malloc(sizeof(t_cmds));
+    if (!new)
+    {
+        perror("Malloc failed");
+        return;
+    }
+    ft_memset(new, 0, sizeof(t_cmds));
+    new->leak_flag = 1;
+    add_word_and_redir(head_token, end, new, minishell);
+    if (!*head)
+        *head = new;
+    else
+    {
+        tmp = *head;
+        while (tmp->next)
+            tmp = tmp->next;
+        tmp->next = new;
+    }
+    // Conversion de t_cmds en t_excmd
+	t_word *tmp_word = new->words;
+	while (tmp_word)
 	{
-		return (perror("Malloc failed")); // return Success mais normal, il faut faire echouer avec -1
-	}
-	// initialise les pointeurs de cmds a NULL
-	ft_memset(new, 0, sizeof(t_cmds));
-	new->leak_flag = 1;
-	// parcourt la chaine de la fin du precedent pipe au suivant
-	add_word_and_redir(head_token, end, new, minishell);
-	// initialise head
-	if (!*head)
-		*head = new;
-	// parcourt la liste jusqu au dernier element, ajoute a la fin
-	else
-	{
-		tmp = *head;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
+		ft_printf("Word cmd : %s\n", tmp_word->word);
+		tmp_word = tmp_word->next;
 	}
 
-	// t_cmds *tmp_word = (*head);
-	// while (tmp_word->words)
-	// {
-	// 	ft_printf("Word : %s\n", tmp_word->words->word);
-	// 	tmp_word->words = tmp_word->words->next;
-	// }
-	// *head = (*head)->next;
-	// print_elements_cmds(new->words, new->redir); // a supprimer plus tard
 	t_excmd *ex_cmd = cmd_to_arg((*head));
 	(void)ex_cmd;
-	ft_printf("excmd %s\n", ex_cmd->name);
+	// ft_printf("excmd %s\n", ex_cmd->name);
+	process_cmds(*head);
 	lst_clear_cmds(&new->words, &new->redir, head);
+
 }
 
-t_excmd	*cmd_to_arg(t_cmds *head)
-{
-	t_cmds *tmp_cmd;
-	t_word *tmp_word;
-	t_excmd *ex_new;
-	t_excmd *ex_tail;
-	t_excmd *ex_head;
 
-	if (head == NULL)
-		return NULL;
-	ex_head = NULL;
-	ex_tail = NULL;
-	tmp_cmd = head;
-	
-	while (tmp_cmd)
-	{
-		// Not so useful, just in case
-		if (tmp_cmd->words == NULL)
-		{
-			tmp_cmd = tmp_cmd->next;
-			continue ;
-		}
-		tmp_word = tmp_cmd->words;
-		ex_new = malloc(sizeof(t_excmd));
-		if (!ex_new)
-			return (NULL); //
-		ft_memset(ex_new, 0, sizeof(t_excmd));
-		ex_new->argc = ft_cmd_lstsize(tmp_word);
-		ex_new->argv = malloc(sizeof(char *) * (ex_new->argc + 1));
-		if (!ex_new->argv)
-		{
-			free(ex_new);
-			return (NULL);
-		}
-		ex_new->name = ft_strdup(tmp_word->word); // verif malloc
-		int i = 0;
-		while (tmp_word)
-		{
-			ex_new->argv[i] = ft_strdup(tmp_word->word);
-			i++;
-			tmp_word = tmp_word->next;
-		}
-		ex_new->argv[i] = NULL;
-		ex_new->next = NULL;
-		if (ex_head == NULL)
-		{
-			ex_head = ex_new;
-			ex_tail = ex_new;
-		}
-		else
-		{
-			ex_tail->next = ex_new;
-			ex_tail = ex_new;
-		}
 
-	tmp_cmd = tmp_cmd->next;
-	}	
-	return (ex_head);
-}
 
 // typedef struct s_excmd
 // {

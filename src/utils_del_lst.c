@@ -3,24 +3,24 @@
 
 void	del_word(void *content)
 {
-	t_word	*token;
+	t_word	*word;
 
-	token = (t_word *)content;
-	if (token->word)
-		free(token->word);
-	free(token);
+	word = (t_word *)content;
+	if (word->word)
+		free(word->word);
+	free(word);
 }
 
 void	del_redir(void *content)
 {
-	t_redir	*token;
+	t_redir	*redir;
 
-	token = (t_redir *)content;
-	if (token->filename)
+	redir = (t_redir *)content;
+	if (redir->filename)
 	{
-		free(token->filename);
+		free(redir->filename);
 	}
-	free(token);
+	free(redir);
 }
 
 void	del_cmds(void *content)

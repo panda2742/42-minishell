@@ -14,7 +14,7 @@ t_token	*ft_input(const char *input)
 	while (input[i])
 	{
 		/* skip spaces */
-		while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+		while (input[i] && (input[i] == ' ' || input[i] == '\t' || input[i] == '\n'))
 			i++;
 		if (!input[i])
 			break ;

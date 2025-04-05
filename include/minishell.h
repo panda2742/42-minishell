@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/05 11:16:11 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/05 19:49:57 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ typedef enum e_token_type
 	REDIR_IN,
 	REDIR_OUT,
 	APPEND,
-	HEREDOC
+	HEREDOC,
+	REDIR_ARG
 } t_token_type;
 
 typedef struct s_fragment
@@ -211,6 +212,9 @@ typedef struct s_excmd
 }					t_excmd;
 
 typedef t_exit (*		t_cmdproto)(t_excmd *);
+
+// Arg
+t_excmd	*cmd_to_arg(t_cmds *head);
 
 // Fragment 
 t_fragment *new_fragment(const char *start, size_t len, t_qtype quote_type);

@@ -14,8 +14,11 @@ int ft_strcmp(char *s1, char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-int	lexer_parse(t_token *list)
+int	lexer_parse(t_token *token)
 {
+
+	t_token *list = token;
+	// t_token *tmp = token;
 	if (list == NULL)
 	{
 		return (0);
@@ -40,21 +43,30 @@ int	lexer_parse(t_token *list)
 			}
 		}
 		// ne peut pas terminer par un |
-		else if (list->type == PIPE && list->next == NULL)
+		if (list->type == PIPE && list->next == NULL)
 		{
 			ft_printf("Syntax error end with a | not allowed\n");
 			return (0);
 		}
-		else if (is_redir(list))
+		if (is_redir(list) != 0)
 		{
-			if (list->next->type != WORD)
+			if (list->next == NULL)
 			{
 				ft_printf("syntax error near unexpected token `newline'\n");
 				return (0);
 			}
-			
+			else if (list->next->type != WORD)
+			{
+				ft_printf("syntax error near unexpected token `newline'\n");
+				return (0);
+			}
+			else
+			{
+				list->next->type = REDIR_ARG;
+			}
 		}
-		list = list->next;
+		if (list != NULL)
+			list = list->next;
 	}
 	return (1);
 }
