@@ -53,7 +53,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		if (cmd->_id != i)
 			pipe(cmd->pipe);
 
-		// ouverture des fichiers d'entree et de sortie
+		// ouverture des fichiers d’entrée et de sortie
 		cmd->in_fd = STDIN_FILENO;
 		if (cmd->infile != NULL)
 			cmd->in_fd = open(cmd->infile, O_RDONLY);
@@ -85,7 +85,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		if (cmd->out_fd > STDOUT_FILENO)
 			close(cmd->out_fd);
 
-		// recuperation des paths si c'est pas un builtin
+		// récupération des paths si c'est pas un builtin
 		if (cmd->proto == NULL)
 		{
 			t_env_var	*path_var = get_var(&minishell->env, "PATH");
@@ -108,13 +108,13 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		else
 			(*cmd->proto)(cmd);
 
-		// on close la pipe de la commande precedente apres l'avoir lue
+		// on close la pipe de la commande précédente apres l'avoir lue
 		if (cmd->_id != 0)
 		{
 			close(cmd->prev->pipe[0]);
 			close(cmd->prev->pipe[1]);
 		}
-		break ;
+		exit(0);
 	}
 	return (minishell->last_status);
 }
