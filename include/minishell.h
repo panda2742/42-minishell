@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/04 15:51:32 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/05 11:16:11 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ t_token	*ft_input(const char *input);
 void	print_tokens(t_token *tokens);
 t_token *ft_create_token(t_token_type type, int index);
 void	free_tokens(t_token *tokens);
-char *token_to_string(t_token *token, t_minishell *minishell, t_cmds *cmd);
+char *token_to_string(t_token *token, t_minishell *minishell);
 
 
 // Get var
@@ -248,6 +248,9 @@ void sigint_handler(int signal);
 
 // Parser
 int parser(t_token *head, t_minishell *minishell);
+
+// Redir parsing
+void create_redir(t_cmds *cmd, t_token *head, t_minishell *minishell);
 
 // Utils parser
 const char *get_token_type_str(t_token_type type); // pour print les noms des redir

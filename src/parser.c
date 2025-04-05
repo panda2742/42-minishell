@@ -259,50 +259,6 @@ void append_word(t_word **head, t_word *new)
 	tmp->next = new;
 }
 
-void append_redir(t_redir **head, t_redir *new)
-{
-	t_redir *tmp;
-
-	if (!*head)
-	{
-		*head = new;
-		return;
-	}
-	tmp = *head;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-}
-
-
-void create_redir(t_cmds *cmd, t_token *head, t_minishell *minishell)
-{
-	t_redir *new;
-	// t_redir *tmp;
-
-	if (!head->next || !head)
-		return;
-	// tmp = cmd->redir;
-	new = malloc(sizeof(t_redir));
-	if (!new)
-	{
-		cmd->leak_flag = 1;
-		return (perror("Malloc failed")); // return Success mais normal, il faut faire echouer avec -1
-	}
-	ft_memset(new, 0, sizeof(t_redir));
-	// on dup ce qu'il y a apres la redir
-	(void)minishell;
-	// new->filename = token_to_string(head->next, minishell, cmd);
-	if (!new->filename)
-	{
-		free(new);
-		cmd->leak_flag = 1;
-		return (perror("Malloc failed")); //
-	}
-	// t_fragment *first = head->next->fragments;
-	new->next = NULL;
-	append_redir(&cmd->redir, new);
-}
 
 void lst_clear_cmds(t_word **head_w, t_redir **head_r, t_cmds **head)
 {
@@ -321,11 +277,11 @@ void add_word_and_redir(t_token *head_token, t_token *end, t_cmds *cmd, t_minish
 			create_word(cmd, head_token, minishell);
 		}
 		// cree la liste de redir
-		else if (is_redir(head_token))
-		{
-			create_redir(cmd, head_token, minishell);
-			head_token = head_token->next;
-		}
+		// else if (is_redir(head_token))
+		// {
+		// 	create_redir(cmd, head_token, minishell);
+		// 	head_token = head_token->next;
+		// }
 		head_token = head_token->next;
 	}
 }
@@ -368,6 +324,7 @@ void create_cmds(t_token *head_token, t_token *end, t_cmds **head, t_minishell *
 	// *head = (*head)->next;
 	// print_elements_cmds(new->words, new->redir); // a supprimer plus tard
 	t_excmd *ex_cmd = cmd_to_arg((*head));
+	(void)ex_cmd;
 	ft_printf("excmd %s\n", ex_cmd->name);
 	lst_clear_cmds(&new->words, &new->redir, head);
 }
@@ -380,6 +337,8 @@ t_excmd	*cmd_to_arg(t_cmds *head)
 	t_excmd *ex_tail;
 	t_excmd *ex_head;
 
+	if (head == NULL)
+		return NULL;
 	ex_head = NULL;
 	ex_tail = NULL;
 	tmp_cmd = head;

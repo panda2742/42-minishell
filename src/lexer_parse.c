@@ -39,20 +39,20 @@ int	lexer_parse(t_token *list)
 				return (0); //
 			}
 		}
-		// check si |	|
-		// else if (list->next != NULL)
-		// {
-		// 	if (list->fragments->text[0] == '|' && list->next->fragments->text[0] == '|')
-		// 	{
-		// 		ft_printf("Syntax error || detected\n");
-		// 		return (0); //
-		// 	}
-		// }
 		// ne peut pas terminer par un |
 		else if (list->type == PIPE && list->next == NULL)
 		{
 			ft_printf("Syntax error end with a | not allowed\n");
 			return (0);
+		}
+		else if (is_redir(list))
+		{
+			if (list->next->type != WORD)
+			{
+				ft_printf("syntax error near unexpected token `newline'\n");
+				return (0);
+			}
+			
 		}
 		list = list->next;
 	}
