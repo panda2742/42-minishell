@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/07 12:25:25 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/07 19:46:45 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,23 @@ char *join_token_exp(t_token_exp *tokens)
     return result;
 }
 
+void	free_expandeds(t_token_exp *tokens)
+{
+	t_token_exp *head;
+	t_token_exp	*tmp;
+	
+	head = tokens;
+	if (!tokens)
+		return ;
+	while (tokens)
+	{
+		free(tokens->str);
+		tmp = tokens;
+		tokens = tmp->next;
+		free(tmp);
+	}
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	char	*line;
@@ -90,12 +107,16 @@ int	main(int argc, char **argv, char **env)
 		}
 		else
 		{
+			print_tokens(token);
 			t_token_exp *expanded_tokens;
 			expanded_tokens = create_expanded_tokens(token, &minishell);
 			print_token_exp(expanded_tokens);
-			ft_printf("Token expandeds:%s\n",join_token_exp(expanded_tokens));
+			char *join_expanded_tokens = join_token_exp(expanded_tokens);
+			ft_printf("Token expandeds:%s\n",join_expanded_tokens);
+			free(join_expanded_tokens);
 			// parser(token, &minishell);
-			// free_tokens(token);
+			free_tokens(token);
+			free_expandeds(expanded_tokens);
 			// free(line);
 		}
 		// else

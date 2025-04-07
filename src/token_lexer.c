@@ -24,7 +24,7 @@ void	free_tokens(t_token *tokens)
 }
 
 
-t_token *ft_create_token(t_token_type type, int index)
+t_token *ft_create_token(t_token_type type)
 {
 	t_token *new;
 	
@@ -33,7 +33,6 @@ t_token *ft_create_token(t_token_type type, int index)
 		return (NULL);
 	new->type = type;
 	new->fragments = NULL;
-	new->index = index;
 	new->next = NULL;
 	return (new);
 }

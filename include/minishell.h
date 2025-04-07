@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/07 11:19:27 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/07 19:09:44 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_token
 {
 	t_token_type 	type;
 	t_fragment 		*fragments;
+	char			*txt;
 	int 			index;
 	struct s_token *next;
 } t_token;
@@ -238,7 +239,7 @@ char	**ft_split_a(char const *s, char c);
 // Lexer
 t_token	*ft_input(const char *input);
 void	print_tokens(t_token *tokens);
-t_token *ft_create_token(t_token_type type, int index);
+t_token *ft_create_token(t_token_type type);
 void	free_tokens(t_token *tokens);
 char *token_to_string(t_token *token, t_minishell *minishell);
 

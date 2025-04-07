@@ -3,119 +3,160 @@
 #include "minishell.h"
 #include <unistd.h>
 
+
+
+static void skip_spaces(const char *input, int *i)
+{
+	while (input[*i] && (input[*i] == ' ' || input[*i] == '\t' || input[*i] == '\n'))
+		(*i)++;
+}
+static void	handle_redir_in(const char *input, int *i, t_token **token_list)
+{
+	t_token *token;
+
+	if (input[(*i) + 1] && input[(*i) + 1] == '<')
+	{
+		token = ft_create_token(HEREDOC);
+		if (!token)
+			return ; /// gestion d erreur
+		append_fragment(token, new_fragment("<<", 2, SINGLE));;
+		(*i) += 2;
+	}
+	else
+	{
+		token = ft_create_token(REDIR_IN);
+		if (!token)
+			return ; /// gestion d erreur
+		append_fragment(token, new_fragment("<", 1, SINGLE));
+		(*i)++;
+	}
+	append_token(token_list, token);
+}
+
+void	handle_redir_out(const char *input, int *i, t_token **token_list)
+{
+	t_token *token;
+
+	if (input[(*i) + 1] && input[(*i) + 1] == '>')
+	{
+		token = ft_create_token(HEREDOC);
+		if (!token)
+			return ; /// gestion d erreur
+		append_fragment(token, new_fragment(">>", 2, SINGLE));
+		
+		(*i) += 2;
+	}
+	else
+	{
+		token = ft_create_token(REDIR_IN);
+		if (!token)
+			return ; /// gestion d erreur
+		append_fragment(token, new_fragment(">", 1, SINGLE));
+		(*i)++;
+	}
+	append_token(token_list, token);
+}
+
+void	handle_pipe(int *i, t_token **token_list)
+{
+	t_token *token;
+
+	token = ft_create_token(PIPE);
+	if (!token)
+		return ; // gestion d erreur
+	append_fragment(token, new_fragment("|", 1, SINGLE));
+	append_token(token_list, token);
+	(*i)++;
+}
+
 t_token	*ft_input(const char *input)
 {
-	t_token	*token_list = NULL;
-	t_token	*curr_token = NULL;
-	int		index = 0;
-	int		i = 0;
+	t_token	*token_list;
+	t_token	*curr_token;
+	int		i;
 	int		start;
 
+	token_list = NULL;
+	i = 0;
 	while (input[i])
 	{
-		/* skip spaces */
-		while (input[i] && (input[i] == ' ' || input[i] == '\t' || input[i] == '\n'))
-			i++;
+		skip_spaces(input, &i);
 		if (!input[i])
 			break ;
-		
-		// handle types, if types new loop starts
+		// Gestion du PIPE
 		if (input[i] == '|')
 		{
-			curr_token = ft_create_token(PIPE, index++);
-			append_token(&token_list, curr_token);
-			i++;
+			handle_pipe(&i, &token_list);
 			continue ;
 		}
-		else if (input[i] == '<')
+		// Gestion des redirections d'entrée et de sortie
+		if (input[i] == '<')
 		{
-			if (input[i + 1] && input[i + 1] == '<')
-			{
-				curr_token = ft_create_token(HEREDOC, index++);
-				append_token(&token_list, curr_token);
-				i += 2;
-				continue ;
-			}
-			else
-			{
-				curr_token = ft_create_token(REDIR_IN, index++);
-				append_token(&token_list, curr_token);
-				i++;
-				continue ;
-			}
+			handle_redir_in(input, &i, &token_list);
+			continue ;
 		}
-		else if (input[i] == '>')
+		if (input[i] == '>')
 		{
-			if (input[i + 1] && input[i + 1] == '>')
-			{
-				curr_token = ft_create_token(APPEND, index++);
-				append_token(&token_list, curr_token);
-				i += 2;
-				continue ;
-			}
-			else
-			{
-				curr_token = ft_create_token(REDIR_OUT, index++);
-				append_token(&token_list, curr_token);
-				i++;
-				continue ;
-			}
+			handle_redir_out(input, &i, &token_list);
+			continue ;
 		}
-
-		/* new token word */
-		curr_token = ft_create_token(WORD, index++);
+		// Création d'un token WORD
+		curr_token = ft_create_token(WORD);
 		if (!curr_token)
 			return (NULL);
-
-		/* working on the toke till next space */
-		while (input[i] && input[i] != ' ' && input[i] != '\t' && input[i] != '|' && input[i] != '<' && input[i] != '>')
+		/*
+		** On accumule dans le token WORD tous les caractères jusqu'à rencontrer un délimiteur.
+		** Les délimiteurs sont : espace, tabulation, saut de ligne, pipe et redirections.
+		*/
+		while (input[i] && input[i] != ' ' && input[i] != '\t' && input[i] != '\n' &&
+			input[i] != '|' && input[i] != '<' && input[i] != '>')
 		{
-			if (input[i] == '\'') /* simple quotes */
+			if (input[i] == '\'') // Traitement des quotes simples
 			{
-				i++; /* skip quotes */
+				i++; // On saute l'apostrophe ouvrante
 				start = i;
 				while (input[i] && input[i] != '\'')
 					i++;
-				append_fragment(curr_token,
-					new_fragment(input + start, i - start, SINGLE));
 				if (input[i] == '\'')
-					i++; /* skip last quote */
+				{
+					append_fragment(curr_token,
+						new_fragment((char *)(input + start), i - start, SINGLE));
+					i++; // On saute l'apostrophe fermante
+				}
 				else
 				{
-					free(curr_token->fragments->text);
-					free(curr_token->fragments);
-					free(curr_token);
-					ft_printf("Quotes not closed\n");
-					return NULL;
+					ft_printf("Quotes not closed\n"); /* Quotes not closed */
+					// Ici, il faudrait libérer curr_token et ses fragments
+					return (NULL);
 				}
 			}
-			else if (input[i] == '\"') /* double quotes*/
+			else if (input[i] == '\"') // Traitement des quotes doubles
 			{
-				i++; /* skip quotes */
+				i++; // On saute la quote ouvrante
 				start = i;
 				while (input[i] && input[i] != '\"')
 					i++;
-				append_fragment(curr_token,
-					new_fragment(input + start, i - start, DOUBLE));
 				if (input[i] == '\"')
-					i++; /* skip last quote */
+				{
+					append_fragment(curr_token,
+						new_fragment((char *)(input + start), i - start, DOUBLE));
+					i++; // On saute la quote fermante
+				}
 				else
 				{
-					free(curr_token->fragments->text);
-					free(curr_token->fragments);
-					free(curr_token);
-					ft_printf("Quotes not closed\n");
-					return NULL;
+					ft_printf("Quotes not closed\n"); /* Quotes not closed */
+					return (NULL);
 				}
 			}
-			else /* frag sans quotes */
+			else // Traitement d'une partie non citée
 			{
 				start = i;
-				while (input[i] && input[i] != ' ' && input[i] != '|' && input[i] != '<' && input[i] != '>' &&
+				while (input[i] && input[i] != ' ' && input[i] != '\t' &&
+					input[i] != '\n' && input[i] != '|' && input[i] != '<' && input[i] != '>' &&
 					input[i] != '\'' && input[i] != '\"')
 					i++;
 				append_fragment(curr_token,
-					new_fragment(input + start, i - start, NONE));
+					new_fragment((char *)(input + start), i - start, NONE));
 			}
 		}
 		append_token(&token_list, curr_token);

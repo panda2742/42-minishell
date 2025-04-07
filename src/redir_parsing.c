@@ -60,7 +60,7 @@ char *token_to_string(t_token *token, t_minishell *minishell)
 	return result;
 }
 
-void append_redir(t_redir **head, t_redir *new)
+void append_redir_parse(t_redir **head, t_redir *new)
 {
 	t_redir *tmp;
 
@@ -99,5 +99,5 @@ void create_redir(t_cmds *cmd, t_token *head, t_minishell *minishell)
 	}
 	// t_fragment *first = head->next->fragments;
 	new->next = NULL;
-	append_redir(&cmd->redir, new);
+	append_redir_parse(&cmd->redir, new);
 }

@@ -22,7 +22,7 @@ void	print_tokens(t_token *tokens)
 	tmp_token = tokens;
 	while (tmp_token)
 	{
-		printf("Token %d (type %d): ", tmp_token->index, tmp_token->type);
+		printf("Token (type %d): ",tmp_token->type);
 		tmp_frag = tmp_token->fragments;
 		while (tmp_frag)
 		{

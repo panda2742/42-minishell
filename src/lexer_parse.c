@@ -62,7 +62,13 @@ int	lexer_parse(t_token *token)
 			}
 			else
 			{
+				t_fragment *tmp = list->next->fragments;
 				list->next->type = REDIR_ARG;
+				while (tmp)
+				{
+					tmp->quote_type = DOUBLE;
+					tmp = tmp->next;
+				}
 			}
 		}
 		if (list != NULL)
