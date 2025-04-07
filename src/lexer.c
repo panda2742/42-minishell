@@ -3,8 +3,6 @@
 #include "minishell.h"
 #include <unistd.h>
 
-
-
 static void skip_spaces(const char *input, int *i)
 {
 	while (input[*i] && (input[*i] == ' ' || input[*i] == '\t' || input[*i] == '\n'))
@@ -39,7 +37,7 @@ void	handle_redir_out(const char *input, int *i, t_token **token_list)
 
 	if (input[(*i) + 1] && input[(*i) + 1] == '>')
 	{
-		token = ft_create_token(HEREDOC);
+		token = ft_create_token(APPEND);
 		if (!token)
 			return ; /// gestion d erreur
 		append_fragment(token, new_fragment(">>", 2, SINGLE));
@@ -48,7 +46,7 @@ void	handle_redir_out(const char *input, int *i, t_token **token_list)
 	}
 	else
 	{
-		token = ft_create_token(REDIR_IN);
+		token = ft_create_token(REDIR_OUT);
 		if (!token)
 			return ; /// gestion d erreur
 		append_fragment(token, new_fragment(">", 1, SINGLE));
@@ -69,12 +67,114 @@ void	handle_pipe(int *i, t_token **token_list)
 	(*i)++;
 }
 
+void	handle_redir_pipe(int *i, t_token **token_list, const char *input)
+{
+	if (input[*i] == '|')
+	{
+		handle_pipe(i, token_list);
+	}
+	// Gestion des redirections d'entree et de sortie
+	else if (input[*i] == '<')
+	{
+		handle_redir_in(input, i, token_list);
+	}
+	else if (input[*i] == '>')
+	{
+		handle_redir_out(input, i, token_list);
+	}
+}
+
+static int	parse_single_quote(t_token *token, const char *input, int *i)
+{
+	int	start;
+
+	(*i)++; // skip quote
+	start = *i;
+	while (input[*i] && input[*i] != '\'')
+		(*i)++;
+	if (input[*i] != '\'')
+	{
+		ft_printf("Quotes not closed\n");
+		return (0);
+	}
+	append_fragment(token, new_fragment(input + start, *i - start, SINGLE));
+	(*i)++; // skip quote
+	return (1);
+}
+
+static int	parse_double_quote(t_token *token, const char *input, int *i)
+{
+	int	start;
+
+	(*i)++; // skip quote
+	start = *i;
+	while (input[*i] && input[*i] != '\"')
+		(*i)++;
+	if (input[*i] != '\"')
+	{
+		ft_printf("Quotes not closed\n");
+		return (0);
+	}
+	append_fragment(token, new_fragment(input + start, *i - start, DOUBLE));
+	(*i)++; // skip quote
+	return (1);
+}
+
+static int	parse_unquoted(t_token *token, const char *input, int *i)
+{
+	int	start;
+
+	start = *i;
+	while (input[*i] && !ft_isspace(input[*i]) && !is_token(input[*i]) &&
+			input[*i] != '\'' && input[*i] != '\"')
+	{
+		(*i)++;
+	}
+	append_fragment(token, new_fragment(input + start, *i - start, NONE));
+	return (1);
+}
+
+/*
+** Construit un token WORD en accumulant ses fragments jusqu'à rencontrer un delimiteur.
+*/
+static t_token	*parse_word_token(const char *input, int *i)
+{
+	t_token	*token;
+	
+	token = ft_create_token(WORD);
+	if (token == NULL)
+		return (NULL);
+	while (input[*i] && !ft_isspace(input[*i]) && !is_token(input[*i]))
+	{
+		if (input[*i] == '\'')
+		{
+			if (parse_single_quote(token, input, i) == 0)
+				return (NULL);
+		}
+		else if (input[*i] == '\"')
+		{
+			if (parse_double_quote(token, input, i) == 0)
+				return (NULL);
+		}
+		else
+		{
+			if (parse_unquoted(token, input, i) == 0)
+				return (NULL);
+		}
+	}
+	return (token);
+}
+
+/*
+** Pour chaque element de la chaîne d'entree, on saute les espaces,
+** on gere les tokens de redirection/pipe via handle_redir_pipe, ou on construit
+** un token WORD en accumulant ses fragments.
+*/
 t_token	*ft_input(const char *input)
 {
 	t_token	*token_list;
 	t_token	*curr_token;
 	int		i;
-	int		start;
 
 	token_list = NULL;
 	i = 0;
@@ -82,83 +182,15 @@ t_token	*ft_input(const char *input)
 	{
 		skip_spaces(input, &i);
 		if (!input[i])
-			break ;
-		// Gestion du PIPE
-		if (input[i] == '|')
+			break;
+		if (is_token(input[i]))
 		{
-			handle_pipe(&i, &token_list);
-			continue ;
+			handle_redir_pipe(&i, &token_list, input);
+			continue;
 		}
-		// Gestion des redirections d'entrée et de sortie
-		if (input[i] == '<')
-		{
-			handle_redir_in(input, &i, &token_list);
-			continue ;
-		}
-		if (input[i] == '>')
-		{
-			handle_redir_out(input, &i, &token_list);
-			continue ;
-		}
-		// Création d'un token WORD
-		curr_token = ft_create_token(WORD);
-		if (!curr_token)
+		curr_token = parse_word_token(input, &i);
+		if (curr_token == NULL)
 			return (NULL);
-		/*
-		** On accumule dans le token WORD tous les caractères jusqu'à rencontrer un délimiteur.
-		** Les délimiteurs sont : espace, tabulation, saut de ligne, pipe et redirections.
-		*/
-		while (input[i] && input[i] != ' ' && input[i] != '\t' && input[i] != '\n' &&
-			input[i] != '|' && input[i] != '<' && input[i] != '>')
-		{
-			if (input[i] == '\'') // Traitement des quotes simples
-			{
-				i++; // On saute l'apostrophe ouvrante
-				start = i;
-				while (input[i] && input[i] != '\'')
-					i++;
-				if (input[i] == '\'')
-				{
-					append_fragment(curr_token,
-						new_fragment((char *)(input + start), i - start, SINGLE));
-					i++; // On saute l'apostrophe fermante
-				}
-				else
-				{
-					ft_printf("Quotes not closed\n"); /* Quotes not closed */
-					// Ici, il faudrait libérer curr_token et ses fragments
-					return (NULL);
-				}
-			}
-			else if (input[i] == '\"') // Traitement des quotes doubles
-			{
-				i++; // On saute la quote ouvrante
-				start = i;
-				while (input[i] && input[i] != '\"')
-					i++;
-				if (input[i] == '\"')
-				{
-					append_fragment(curr_token,
-						new_fragment((char *)(input + start), i - start, DOUBLE));
-					i++; // On saute la quote fermante
-				}
-				else
-				{
-					ft_printf("Quotes not closed\n"); /* Quotes not closed */
-					return (NULL);
-				}
-			}
-			else // Traitement d'une partie non citée
-			{
-				start = i;
-				while (input[i] && input[i] != ' ' && input[i] != '\t' &&
-					input[i] != '\n' && input[i] != '|' && input[i] != '<' && input[i] != '>' &&
-					input[i] != '\'' && input[i] != '\"')
-					i++;
-				append_fragment(curr_token,
-					new_fragment((char *)(input + start), i - start, NONE));
-			}
-		}
 		append_token(&token_list, curr_token);
 	}
 	return (token_list);
