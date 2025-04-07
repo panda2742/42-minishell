@@ -6,7 +6,9 @@
 # include <fcntl.h>
 # include "libft.h"
 
-# define PROJECT_NAME "Minishell"
+# ifndef PROJECT_NAME
+#  define PROJECT_NAME "Minishell"
+# endif
 
 /**
  * An alias to the unsigned char type, just to set the code more readable.
@@ -36,10 +38,66 @@ typedef struct s_env_manager
 }			t_env_manager;
 
 /**
+ * Represents a structure for a file descriptor. Include its path and then its
+ * file descriptor once it is open.
+ */
+typedef struct s_redir
+{
+	/**
+	 * The path of the file (absolute or relative). NULL if not set.
+	 */
+	char		*filepath;
+	/**
+	 * The file descriptor, given when the file is open. STD[IN/OUT]_FILENO
+	 * as default.
+	 */
+	int			fd;
+	/**
+	 * If it includes an Here Document, this boolean is set to true. Otherwise
+	 * it is set to false.
+	 */
+	t_bool		is_heredoc;
+	/**
+	 * The delimiter used for a Here Document. Set to NULL as default. 
+	 */
+	char		*heredoc_del;
+	/**
+	 * If there is an Here Document, the content is firstly written into the
+	 * memory, and then put into a pipe's output file descriptor when it has to 
+	 * be used. Set to NULL as default.
+	 */
+	char		*heredoc_content;
+	/**
+	 * Represents the open mode for the outfile. If this boolean is set to true,
+	 * it means the file is in append mode. Otherwise, it truncates.
+	 */
+	t_bool		out_append_mode;
+	/**
+	 * A pointer to the next file descriptor, used when there is multiple
+	 * redirects (for example out1 > out2 > out3 > out4).
+	 */
+	struct s_fd	*next;
+}				t_redir;
+
+typedef enum e_redir_type
+{
+	IN_REDIR,
+	OUT_REDIR,
+}	t_redir_type;
+
+typedef struct s_redir_manager
+{
+	size_t			size;
+	t_redir_type	type;
+	t_redir			**redirects;
+}			t_redir_manager;
+
+
+/**
  * @brief The data of a command executed in the execution program.
  * 
  * The data of a command executed in the execution program. It is a linked list
- * who contains all the required informations, including pipes, heredoc, etc.
+ * who contains all the required informations, like pipes, heredoc, etc.
  */
 typedef struct s_excmd
 {
@@ -52,7 +110,7 @@ typedef struct s_excmd
 	 */
 	char			*name;
 	/**
-	 * If the command is a builtin, it is not necessarely executed into a
+	 * If the command is a builtin, it is not necessarily executed into a
 	 * child process. Default to true.
 	 */
 	t_bool			in_a_child;
@@ -89,43 +147,15 @@ typedef struct s_excmd
 	 */
 	char			**paths;
 	/**
-	 * If it includes an Here Document, this boolean is set to true. Otherwise
-	 * it is set to false.
+	 * The successive input stream file descriptors. Per default, set the
+	 * file descriptor to STDIN_FILENO.
 	 */
-	t_bool			has_heredoc;
+	t_redir_manager		in_redirects;
 	/**
-	 * The delimiter used for a Here Document. Set to NULL as default. 
+	 * The successive input stream file descriptors. Per default, set the
+	 * file descriptor to STDOUT_FILENO.
 	 */
-	char			*heredoc_del;
-	/**
-	 * If there is an Here Document, the content is firstly written into the
-	 * memory, and then put into a pipe's output file descriptor when it has to 
-	 * be used. Set to NULL as default.
-	 */
-	char			*heredoc_content;
-	/**
-	 * The input file if a '<' redirect is specified. Set to NULL as default.
-	 */
-	char			*infile;
-	/**
-	 * The file descriptor for the input file, if there is one. Set to
-	 * STDIN_FILENO as default.
-	 */
-	int				in_fd;
-	/**
-	 * The output file if a '>' redirect is specified. Set to NULL as default.
-	 */
-	char			*outfile;
-	/**
-	 * The file descriptor for the ouput filem if there is one. Set to
-	 * STDOUT_FILENO as default.
-	 */
-	int				out_fd;
-	/**
-	 * Represents the open mode for the outfile. If this boolean is set to true,
-	 * it means the file is in append mode. Otherwise, it truncates.
-	 */
-	t_bool			out_append_mode;
+	t_redir_manager		out_redirects;
 	/**
 	 * @brief The pipe of the command. Creates a stream between the input and
 	 * the output of the command.
@@ -194,6 +224,14 @@ t_exit	command_failure(t_excmd *c, char *message, t_bool call_perror);
 t_exit	launch_process(t_excmd *cmd);
 t_exit	exec_command(t_minishell *minishell, t_excmd **cmds);
 void	free_cmds(t_excmd **cmds);
+t_excmd	*create_cmd(char *cmd_name, t_env_manager *env);
+
+// FILE DESCRIPTORS ----------------
+
+t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect);
+t_redir	*create_in_redirect(char *filepath);
+t_redir	*create_out_redirect(char *filepath, t_bool append_mode);
+t_redir	*create_heredoc_redirect(char *delimiter);
 
 // BUILTINS ------------------------
 

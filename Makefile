@@ -44,7 +44,7 @@ override	DEPS		:=	$(patsubst %.o,%.d,$(OBJ))
 override	DIRS		:=	$(sort $(dir $(NAME) $(OBJ) $(LIBFT) $(DEPS)))
 
 # The C compilation flags
-CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP -g3
+CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP -g3 -D PROJECT_NAME=$(NAME)
 # The Makefile flags to hide the current directory on compilation
 MAKEFLAGS	:=	--no-print-directory
 # The compiler binary 

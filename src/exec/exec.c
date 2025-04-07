@@ -18,7 +18,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	size_t			i;
 
 	(void)minishell;
-	// loading params and heredocs
+	// loading params and heredoc
 	cmd = *cmds;
 	i = 0;
 	while (cmd)
@@ -58,13 +58,13 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		if (cmd->infile != NULL)
 			cmd->in_fd = open(cmd->infile, O_RDONLY);
 
-		cmd->out_fd = STDOUT_FILENO;
+		cmd->out_redir = STDOUT_FILENO;
 		if (cmd->outfile != NULL)
 		{
 			if (cmd->out_append_mode)
-				cmd->out_fd = open(cmd->infile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+				cmd->out_redir = open(cmd->infile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			else
-				cmd->out_fd = open(cmd->infile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				cmd->out_redir = open(cmd->infile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		}
 
 		// creation du process
@@ -77,13 +77,13 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 
 		// creation de la duplication
 		dup2(cmd->in_fd, STDIN_FILENO);
-		dup2(cmd->out_fd, STDOUT_FILENO);
+		dup2(cmd->out_redir, STDOUT_FILENO);
 
 		// fermeture des file descriptors inutiles
 		if (cmd->in_fd > STDIN_FILENO)
 			close(cmd->in_fd);
-		if (cmd->out_fd > STDOUT_FILENO)
-			close(cmd->out_fd);
+		if (cmd->out_redir > STDOUT_FILENO)
+			close(cmd->out_redir);
 
 		// récupération des paths si c'est pas un builtin
 		if (cmd->proto == NULL)
