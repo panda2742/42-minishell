@@ -7,6 +7,7 @@ MAKE_DIR			:=	.make/
 override	HDRS	:=	minishell
 # The C source code files of the project
 override	SRCS	:=	arg \
+							expand_tokens \
 							fragments \
 							ft_cmd_lstsize \
 							ft_split_parser \

@@ -46,7 +46,7 @@ void split_and_append_words(char *str, t_cmds *cmd);
  * et on recherche la variable dans l’environnement. Si elle n’existe pas,
  * on renvoie une chaîne vide (conformement au comportement POSIX).
  */
-char *expand_token_str(const char *str, t_minishell *minishell)
+char *expand_token_str_a(const char *str, t_minishell *minishell)
 {
     char    *result;
     char    *tmp;
@@ -120,7 +120,7 @@ char *accumulate_token_fragments(t_token *token, t_minishell *minishell)
         if (frag->quote_type == SINGLE)
             expanded = ft_strdup(frag->text);
         else
-            expanded = expand_token_str(frag->text, minishell);
+            expanded = expand_token_str_a(frag->text, minishell);
         if (!expanded)
         {
             free(accum);

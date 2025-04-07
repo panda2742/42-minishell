@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/03 16:46:34 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/07 12:25:25 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,41 @@
 #include <readline/readline.h>
 #include <stdio.h>
 #include <strings.h>
+
+void print_token_exp(t_token_exp *tokens)
+{
+    while (tokens)
+    {
+        printf("Expanded token: '%s'\n", tokens->str);
+        tokens = tokens->next;
+    }
+}
+
+char *join_token_exp(t_token_exp *tokens)
+{
+    char *result;
+    char *tmp;
+    t_token_exp *cur;
+
+    result = ft_strdup(""); /* On initialise result avec une chaîne vide */
+    if (!result)
+        return (NULL);
+    cur = tokens;
+    while (cur)
+    {
+        tmp = ft_strjoin(result, cur->str);
+        free(result);
+        result = tmp;
+        if (cur->next)
+        {
+            tmp = ft_strjoin(result, " ");
+            free(result);
+            result = tmp;
+        }
+        cur = cur->next;
+    }
+    return result;
+}
 
 int	main(int argc, char **argv, char **env)
 {
@@ -55,10 +90,13 @@ int	main(int argc, char **argv, char **env)
 		}
 		else
 		{
-			print_tokens(token);
-			parser(token, &minishell);
-			free_tokens(token);
-			free(line);
+			t_token_exp *expanded_tokens;
+			expanded_tokens = create_expanded_tokens(token, &minishell);
+			print_token_exp(expanded_tokens);
+			ft_printf("Token expandeds:%s\n",join_token_exp(expanded_tokens));
+			// parser(token, &minishell);
+			// free_tokens(token);
+			// free(line);
 		}
 		// else
 		// {

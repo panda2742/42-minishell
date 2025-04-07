@@ -1,4 +1,4 @@
-.make/minishell_parser/lexer_parse.o: src/lexer_parse.c \
+.make/minishell_parser/expand_tokens.o: src/expand_tokens.c \
  include/minishell.h lib/include/libft.h lib/include/ft_array.h \
  lib/include/ft_base.h lib/include/ft_free.h lib/include/ft_math.h \
  lib/include/ft_misc.h lib/include/ft_printf.h lib/include/ft_fd.h \
