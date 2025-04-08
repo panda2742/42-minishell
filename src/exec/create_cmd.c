@@ -49,6 +49,7 @@ t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect)
 	while (last->next)
 		last = last->next;
 	last->next = redirect;
+	manager->size += 1;
 	return (redirect);
 }
 
@@ -62,6 +63,7 @@ t_redir	*create_in_redirect(char *filepath)
 	res->filepath = filepath;
 	res->fd = STDIN_FILENO;
 	res->is_heredoc = false;
+	res->heredoc_id = -1;
 	res->heredoc_del = NULL;
 	res->heredoc_content = NULL;
 	res->out_append_mode = false;
@@ -79,6 +81,7 @@ t_redir	*create_out_redirect(char *filepath, t_bool append_mode)
 	res->filepath = filepath;
 	res->fd = STDOUT_FILENO;
 	res->is_heredoc = false;
+	res->heredoc_id = -1;
 	res->heredoc_del = NULL;
 	res->heredoc_content = NULL;
 	res->out_append_mode = append_mode;
@@ -96,6 +99,7 @@ t_redir	*create_heredoc_redirect(char *delimiter)
 	res->filepath = NULL;
 	res->fd = -1;
 	res->is_heredoc = true;
+	res->heredoc_id = -1;
 	res->heredoc_del = delimiter;
 	res->heredoc_content = NULL;
 	res->out_append_mode = false;

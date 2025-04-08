@@ -58,6 +58,10 @@ typedef struct s_redir
 	 */
 	t_bool		is_heredoc;
 	/**
+	 * The id of the heredoc.
+	 */
+	size_t		heredoc_id;
+	/**
 	 * The delimiter used for a Here Document. Set to NULL as default. 
 	 */
 	char		*heredoc_del;
@@ -91,7 +95,6 @@ typedef struct s_redir_manager
 	t_redir_type	type;
 	t_redir			**redirects;
 }			t_redir_manager;
-
 
 /**
  * @brief The data of a command executed in the execution program.
@@ -188,6 +191,14 @@ typedef struct s_execparams
 	t_excmd	**cmds;
 }			t_execparams;
 
+typedef struct s_strvec
+{
+	char			*s;
+	size_t			len;
+	size_t			total_len;
+	struct s_strvec	*next;
+}					t_strvec;
+
 /**
  * Represents a prototype of a command function (used for builtins commands).
  * The parameter is a pointer to a s_command structure, defined above.
@@ -204,7 +215,7 @@ typedef struct s_minishell
 }			t_minishell;
 
 t_cmdproto	*load_builtin(const char *command_name, t_cmdproto *proto);
-t_exit	heredoc(char *del, char *buffer);
+t_exit		heredoc(char *del, char *buffer, t_bool skip_writing);
 
 // ENV -----------------------------
 
@@ -225,6 +236,7 @@ t_exit	launch_process(t_excmd *cmd);
 t_exit	exec_command(t_minishell *minishell, t_excmd **cmds);
 void	free_cmds(t_excmd **cmds);
 t_excmd	*create_cmd(char *cmd_name, t_env_manager *env);
+t_redir	*get_last_redirect(t_redir_manager *redirects_manager);
 
 // FILE DESCRIPTORS ----------------
 
