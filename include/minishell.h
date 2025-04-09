@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/07 19:09:44 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:34:10 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef struct s_token
 {
 	t_token_type 	type;
 	t_fragment 		*fragments;
-	char			*txt;
 	int 			index;
 	struct s_token *next;
 } t_token;
@@ -223,8 +222,9 @@ typedef t_exit (*		t_cmdproto)(t_excmd *);
 t_excmd	*cmd_to_arg(t_cmds *head);
 
 // Expand_tokens
-void	expand_var_tokens(t_token *head, t_minishell *minishell);
-t_token_exp *create_expanded_tokens(t_token *tokens, t_minishell *minishell);
+char *expand_token(t_token *token, t_env_manager *env);
+t_token *word_split_token(t_token *token, t_env_manager *env);
+char *str_join_free(char *s1, const char *s2);
 
 // Fragment 
 t_fragment *new_fragment(const char *start, size_t len, t_qtype quote_type);

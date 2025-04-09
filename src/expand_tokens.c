@@ -1,379 +1,225 @@
-
-
 #include "minishell.h"
-#include <string.h>
 
-void append_token_exp(t_token_exp **head, t_token_exp *new_node)
+typedef struct s_utils
 {
-    t_token_exp *tmp;
+	int i;
+	int j;
+	int	k;
+	int len1;
+	int len2;
+} t_utils;
 
-    if (!*head)
+static void set_len(t_utils *vars, char *s1, const char *s2)
+{
+	if (s1)
+		vars->len1 = ft_strlen(s1);
+	if (s2)
+		vars->len2 = ft_strlen(s2);
+}
+
+char *str_join_free(char *s1, const char *s2)
+{
+	char *new;
+	t_utils vars;
+
+	ft_memset(&vars, 0, sizeof(t_utils));
+	set_len(&vars, s1, s2);
+    new = malloc(vars.len1 + vars.len2 + 1);
+    if (!new) 
+	{ 
+		free(s1); 
+		return NULL; 
+	}
+    while (vars.i < vars.len1)
     {
-		*head = new_node;
-        return;
+        new[vars.i] = s1[vars.i];
+        vars.i++;
     }
-    tmp = *head;
-	tmp->next = NULL;
-    while (tmp->next)
-        tmp = tmp->next;
-    tmp->next = new_node;
-}
-
-char *append_char(char c, char *string)
-{
-	char tmp_char[2];
-	char *tmp;
-
-	tmp_char[0] = c;
-	tmp_char[1] = '\0';
-	tmp = ft_strjoin(string, tmp_char);
-	return (tmp);
-}
-
-char *join_and_free(char *str)
-{
-	char *tmp;
-
-	tmp = ft_strjoin(str, "$");
-	free(str);
-	return (tmp);
-}
-
-char *free_str_and_return(char *str)
-{
-	free(str);
-	return (NULL);
-}
-
-static char *get_expansion(const char *var_name, t_minishell *minishell)
-{
-	char	*expansion;
-	t_env_var	*var;
-
-	var = get_var(&minishell->env, var_name);
-	while (var)
-	{
-		if (ft_strcmp(var->name, (char *)var_name) == 0)
-			break ;
-		var = var->next;
-	}
-	if (var && var->value)
-		expansion = ft_strdup(var->value);
-	else
-		expansion = ft_strdup("");
-	return (expansion);
-}
-
-static char *process_dollar(const char *str, int *i, t_minishell *minishell)
-{
-	int	start;
-	char	*var_name;
-	char	*expansion;
-
-	(*i)++;
-	start = *i;
-	while (str[*i] && (ft_isalnum(str[*i]) || ft_isspace(str[*i])) && str[*i] !=  '$')
-	{
-		(*i)++;
-	}
-	if ((*i - start) <= 0)
-		return (ft_strdup("$"));
-	var_name = ft_substr(str, start, (*i) - start);
-	if (!var_name)
-		return (NULL);
-	expansion = get_expansion(var_name, minishell);
-	free(var_name);
-	return (expansion);
-}
-
-static char	*get_next_segment(const char *str, int *i, t_minishell *minishell)
-{
-	char *segment;
-
-	if (str[*i] == '$')
-	{
-		segment = process_dollar(str, i, minishell);
-		return (segment);
-	}
-	else
-	{
-		segment = malloc(sizeof(char) * 2);
-		if (!segment)
-			return NULL;
-		segment[0] = str[*i];
-		segment[1] = '\0';
-		(*i)++;
-		return (segment);
-	}
-}
-
-char *expand_token_str(const char *str, t_minishell *minishell)
-{
-	char *result;
-	char *tmp;
-	char *seg;
-	int	i;
-
-	result = ft_strdup("");
-	if (!result)
-		return (NULL);
-	i = 0;
-	while (str[i])
-	{
-		seg = get_next_segment(str, &i, minishell);
-		if (!seg)
-		{
-			return(free_str_and_return((char *)result));
-		}
-		tmp = result;
-		result = ft_strjoin(result, seg);
-		free(tmp);
-		free(seg);
-	}
-	return (result);
-}
-
-t_token_exp *accumulate_token_fragments_expansion(t_token *token, t_minishell *minishell)
-{
-
-    t_token_exp *exp_tokens = NULL;
-    char *current = ft_strdup("");
-    if (!current)
-        return (NULL);
-    t_fragment *frag = token->fragments;
-    while (frag)
+    while (vars.j < vars.len2)
     {
-        char *expanded = NULL;
-        if (frag->quote_type == 1)  /* SINGLE : pas d'expansion */
-            expanded = ft_strdup(frag->text);
+        new[vars.i++] = s2[vars.j];
+        vars.j++;
+    }
+    new[vars.i] = '\0';
+    free(s1);
+    return new;
+}
 
-        else
-            expanded = expand_token_str(frag->text, minishell);
-        if (!expanded)
+char *expand_fragment(const char *input, int quote, t_env_manager *env)
+{
+    char *result = ft_strdup("");
+    int i = 0;
+    while (input[i])
+    {
+        if (input[i] == '$' && quote != SINGLE) // Si pas entre quotes simples.
         {
-            free(current);
-            return (NULL);
-        }
-        if (frag->quote_type == 0)  /* NON cité : on split sur les espaces */
-        {
-            int ends_with_space = 0;
-            int len = strlen(expanded);
-            if (len > 0 && expanded[len - 1] == ' ')
-                ends_with_space = 1;
-            /* ft_split ici doit découper sur ' ' en ignorant les délimiteurs multiples,
-               mais ne renvoyer que des chaînes non vides */
-            char **parts = ft_split_a(expanded, ' ');
-            free(expanded);
-            if (!parts)
-            {
-                free(current);
-                return (NULL);
-            }
-            int count = 0;
-            while (parts[count] != NULL)
-                count++;
-            if (count == 0)
-            {
-                /* Si la chaîne est uniquement composée d'espaces, rien à concaténer */
-                if (ends_with_space)
-                {
-                    /* Flush le buffer pour marquer la séparation */
-                    t_token_exp *new_node = malloc(sizeof(t_token_exp));
-                    if (!new_node)
-                    {
-                        // libérer parts et current…
-                        int j = 0;
-                        while (parts[j])
-                        {
-                            free(parts[j]);
-                            j++;
-                        }
-                        free(parts);
-                        free(current);
-                        return (NULL);
-                    }
-                    new_node->str = ft_strdup(current);
-                    new_node->next = NULL;
-                    append_token_exp(&exp_tokens, new_node);
-                    free(current);
-                    current = ft_strdup("");
-                }
-            }
-            else if (count == 1)
-            {
-                char *tmp = ft_strjoin(current, parts[0]);
-                free(current);
-                current = tmp;
-                if (ends_with_space)
-                {
-                    /* Si la partie se terminait par un espace, flush le buffer */
-                    t_token_exp *new_node = malloc(sizeof(t_token_exp));
-                    if (!new_node)
-                    {
-                        int j = 0;
-                        while (parts[j])
-                        {
-                            free(parts[j]);
-                            j++;
-                        }
-                        free(parts);
-                        free(current);
-                        return (NULL);
-                    }
-                    new_node->str = ft_strdup(current);
-                    new_node->next = NULL;
-                    append_token_exp(&exp_tokens, new_node);
-                    free(current);
-                    current = ft_strdup("");
-                }
-            }
-            else
-            {
-                /* Plusieurs segments */
-                /* 1) Concaténer le premier segment au buffer courant */
-                {
-                    char *tmp = ft_strjoin(current, parts[0]);
-                    free(current);
-                    current = tmp;
-                }
-                /* 2) Flush le buffer courant dans un node */
-                {
-                    t_token_exp *new_node = malloc(sizeof(t_token_exp));
-                    if (!new_node)
-                    {
-                        int j = 0;
-                        while (parts[j])
-                        {
-                            free(parts[j]);
-                            j++;
-                        }
-                        free(parts);
-                        free(current);
-                        return (NULL);
-                    }
-                    new_node->str = ft_strdup(current);
-                    new_node->next = NULL;
-                    append_token_exp(&exp_tokens, new_node);
-                }
-                /* 3) Pour chaque segment intermédiaire (de 1 à count - 2), créer un node */
-                int i = 1;
-                while (i < count - 1)
-                {
-                    t_token_exp *node = malloc(sizeof(t_token_exp));
-                    if (!node)
-                    {
-                        int j = i;
-                        while (parts[j])
-                        {
-                            free(parts[j]);
-                            j++;
-                        }
-                        free(parts);
-                        free(current);
-                        return (NULL);
-                    }
-                    node->str = ft_strdup(parts[i]);
-                    node->next = NULL;
-                    append_token_exp(&exp_tokens, node);
-                    i++;
-                }
-                /* 4) Le dernier segment devient le nouveau buffer */
-                free(current);
-                current = ft_strdup(parts[count - 1]);
-                if (ends_with_space)
-                {
-                    /* Si la chaîne se terminait par un espace, flush aussi */
-                    t_token_exp *node = malloc(sizeof(t_token_exp));
-                    if (!node)
-                    {
-                        int j = 0;
-                        while (parts[j])
-                        {
-                            free(parts[j]);
-                            j++;
-                        }
-                        free(parts);
-                        free(current);
-                        return (NULL);
-                    }
-                    node->str = ft_strdup(current);
-                    node->next = NULL;
-                    append_token_exp(&exp_tokens, node);
-                    free(current);
-                    current = ft_strdup("");
-                }
-            }
-            int j = 0;
-            while (parts[j])
-            {
-                free(parts[j]);
+            int j = i + 1;
+            while (input[j] && ((ft_isalnum(input[j]) || input[j] == '_')))
                 j++;
+            if (j > i + 1)
+            {
+                int var_len = j - i - 1;
+                char *var_name = malloc(var_len + 1);
+                int k = 0;
+                while (k < var_len)
+                {
+                    var_name[k] = input[i + 1 + k];
+                    k++;
+                }
+                var_name[k] = '\0';
+                /* Ici on récupère la variable dans notre env manager */
+                t_env_var *env_var = get_var(env, var_name);
+                char *value;
+                if (env_var)
+                    value = ft_strdup(env_var->value);
+                else
+                    value = ft_strdup("");
+                free(var_name);
+                result = str_join_free(result, value);
+                free(value);
+                i = j;
+                continue;
             }
-            free(parts);
         }
-        else
         {
-            /* Fragment cité (SINGLE ou DOUBLE) : concatène simplement */
-            char *tmp = ft_strjoin(current, expanded);
-            free(expanded);
-            free(current);
-            current = tmp;
+            char tmp[2];
+            tmp[0] = input[i];
+            tmp[1] = '\0';
+            result = str_join_free(result, tmp);
         }
-        frag = frag->next;
-    }
-	if (is_redir(token))
-	{
-		t_token_exp *new_node = malloc(sizeof(t_token_exp));
-        if (!new_node)
-        {
-            free(current);
-            return (NULL);
-        }
-        new_node->str = "redir";
-        new_node->next = NULL;
-		append_token_exp(&exp_tokens, new_node);
-	}
-    else if (current && current[0] != '\0')
-    {
-        t_token_exp *new_node = malloc(sizeof(t_token_exp));
-        if (!new_node)
-        {
-            free(current);
-            return (NULL);
-        }
-        new_node->str = current;
-        new_node->next = NULL;
-        append_token_exp(&exp_tokens, new_node);
-    }
-    else
-        free(current);
-    return exp_tokens;
-}
-
-
-
-t_token_exp *create_expanded_tokens(t_token *tokens, t_minishell *minishell)
-{
-    t_token_exp *result = NULL;
-    t_token *cur = tokens;
-    while (cur)
-    {
-
-			t_token_exp *expanded = accumulate_token_fragments_expansion(cur, minishell);
-			if (expanded)
-			{
-				if (!result)
-                	result = expanded;
-				else
-				{
-					t_token_exp *tmp = result;
-					while (tmp->next)
-                    	tmp = tmp->next;
-					tmp->next = expanded;
-				}
-			}
-        cur = cur->next;
+        i++;
     }
     return result;
 }
 
+char *expand_token(t_token *token, t_env_manager *env)
+{
+    char *result = ft_strdup("");
+    if (!result)
+        return NULL;
+    t_fragment *frag = token->fragments;
+    while (frag)
+    {
+        char *expanded;
+        if (frag->quote_type == 1) /* SINGLE quotes : aucun expansion */
+            expanded = ft_strdup(frag->text);
+        else
+            expanded = expand_fragment(frag->text, frag->quote_type, env);
+        if (!expanded) { free(result); return NULL; }
+        result = str_join_free(result, expanded);
+        free(expanded);
+        frag = frag->next;
+    }
+    return result;
+}
+void expand_all_tokens(t_token *tokens, t_env_manager *env)
+{
+    t_token *t = tokens;
+    while (t)
+    {
+        char *exp = expand_token(t, env);
+        printf("Expanded token: %s\n", exp); // Exemple de sortie : a b a      b     a b
+        free(exp);
+        t = t->next;
+    }
+}
+
+static t_token *create_new_token_from_word(const char *word)
+{
+    t_token *token = malloc(sizeof(t_token));
+    if (!token)
+        return (NULL);
+    token->type = WORD;
+    token->index = 0;
+    token->fragments = malloc(sizeof(t_fragment));
+    if (!token->fragments)
+    {
+        free(token);
+        return (NULL);
+    }
+    token->fragments->text = ft_strdup(word);
+    token->fragments->quote_type = NONE;
+    token->fragments->next = NULL;
+    token->next = NULL;
+    return (token);
+}
+
+static void process_unquoted_fragment(const char *expanded, char **current, t_token **new_head, t_token **new_last)
+{
+    int i = 0;
+    while (expanded[i])
+    {
+        if (expanded[i] == ' ' || expanded[i] == '\t' || expanded[i] == '\n')
+        {
+            /* Si current n'est pas vide, on le finalise */
+            if ((*current)[0] != '\0')
+            {
+                t_token *nt = create_new_token_from_word(*current);
+                if (!*new_head)
+                {
+                    *new_head = nt;
+                    *new_last = nt;
+                }
+                else
+                {
+                    (*new_last)->next = nt;
+                    *new_last = nt;
+                }
+                free(*current);
+                *current = ft_strdup("");
+            }
+            /* Sauter tous les séparateurs */
+            while (expanded[i] && (expanded[i] == ' ' || expanded[i] == '\t' || expanded[i] == '\n'))
+                i++;
+        }
+        else
+        {
+            char tmp[2];
+            tmp[0] = expanded[i];
+            tmp[1] = '\0';
+            *current = str_join_free(*current, tmp);
+            i++;
+        }
+    }
+}
+
+t_token *word_split_token(t_token *token, t_env_manager *env)
+{
+    t_token *new_head = NULL;
+    t_token *new_last = NULL;
+    char *current = ft_strdup("");
+    t_fragment *frag = token->fragments;
+    while (frag)
+    {
+        char *expanded;
+        if (frag->quote_type == NONE)
+        {
+            expanded = expand_fragment(frag->text, frag->quote_type, env);
+            if (!expanded) { free(current); return (NULL); }
+            process_unquoted_fragment(expanded, &current, &new_head, &new_last);
+            free(expanded);
+        }
+        else
+        {
+            /* Pour DOUBLE quotes, on effectue quand même l'expansion,
+               et pour SINGLE, on fait un strdup */
+            if (frag->quote_type == DOUBLE)
+                expanded = expand_fragment(frag->text, frag->quote_type, env);
+            else
+                expanded = ft_strdup(frag->text);
+            if (!expanded) { free(current); return (NULL); }
+            /* Simple concaténation pour les fragments cités */
+            current = str_join_free(current, expanded);
+            free(expanded);
+        }
+        frag = frag->next;
+    }
+    t_token *nt = create_new_token_from_word(current);
+    if (!nt) { free(current); return (new_head); }
+    if (!new_head)
+        new_head = nt;
+    else
+        new_last->next = nt;
+    free(current);
+    return (new_head);
+}
