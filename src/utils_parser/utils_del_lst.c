@@ -30,3 +30,4 @@ void	del_cmds(void *content)
 	node = (t_cmds *)content;
 	free(node);
 }
+

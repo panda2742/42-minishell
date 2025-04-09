@@ -5,12 +5,19 @@ MAKE_DIR			:=	.make/
 
 # The header files of the project
 override	HDRS	:=	minishell
+override	UTILS_PARSER := free_str_return_null \
+							ft_str_join_free \
+							ft_split_parser \
+							ft_strcmp \
+							is_redir \
+							skip_spaces \
+							utils_del_lst \
+
 # The C source code files of the project
 override	SRCS	:=	arg \
 							expand_tokens \
 							fragments \
 							ft_cmd_lstsize \
-							ft_split_parser \
 							get_next_token \
 							get_var \
 							lexer_parse \
@@ -21,10 +28,10 @@ override	SRCS	:=	arg \
 							signals \
 							to_delete_later \
 							token_lexer \
-							utils_del_lst \
 							utils_lexer \
 							utils_parser \
 							utils1 \
+							$(addprefix utils_parser/,$(UTILS_PARSER)) \
 
 # The subdirectory where the built objects will be, for example ./make/minishell_develop/
 override	BUILD_DIR	:=	$(MAKE_DIR)$(NAME)_$(shell git branch --show-current)/

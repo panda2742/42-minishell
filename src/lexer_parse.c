@@ -2,18 +2,6 @@
 
 #include "minishell.h"
 
-int ft_strcmp(char *s1, char *s2)
-{
-	int i;
-
-	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i])
-	{
-		i++;
-	}
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
 void	update_token_redir(t_token *list)
 {
 	t_fragment *tmp;
@@ -22,7 +10,8 @@ void	update_token_redir(t_token *list)
 	list->next->type = REDIR_ARG;
 	while (tmp)
 	{
-		tmp->quote_type = DOUBLE;
+		if (tmp->quote_type == NONE)
+			tmp->quote_type = DOUBLE;
 		tmp = tmp->next;
 	}
 }
@@ -54,8 +43,9 @@ static int	check_pipe_error(t_token *token)
 
 int	lexer_parse(t_token *token)
 {
-	t_token *list = token;
-	// t_token *tmp = token;
+	t_token *list;
+	
+	list = token;
 	if (list == NULL)
 		return (0);
 	if (list->type == PIPE)
@@ -76,3 +66,6 @@ int	lexer_parse(t_token *token)
 	}
 	return (1);
 }
+
+
+

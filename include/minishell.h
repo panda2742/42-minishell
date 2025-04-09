@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:32:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/08 14:34:10 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/09 19:53:36 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_token
 {
 	t_token_type 	type;
 	t_fragment 		*fragments;
+	t_qtype			quote_type;
 	int 			index;
 	struct s_token *next;
 } t_token;
@@ -86,6 +87,16 @@ typedef struct s_env_var
 	struct s_env_var	*next;
 }						t_env_var;
 
+typedef struct s_utils
+{
+	int i;
+	int j;
+	int	k;
+	int len1;
+	int len2;
+	char	*s1;
+	char	*s2;
+} t_utils;
 
 typedef struct s_env_manager
 {
@@ -218,23 +229,33 @@ typedef struct s_excmd
 
 typedef t_exit (*		t_cmdproto)(t_excmd *);
 
+// utiles parser
+char *free_str_return_null(char *str);
+char	**ft_split_a(char const *s, char c);
+char *str_join_free(char *s1, const char *s2);
+int ft_strcmp(char *s1, char *s2);
+int is_redir(t_token *head_token);				   // return 1 si c est une redir
+void skip_spaces(const char *input, int *i);
+void	del_cmds(void *content);
+void	del_redir(void *content);
+void	del_word(void *content);
+
 // Arg
 t_excmd	*cmd_to_arg(t_cmds *head);
 
 // Expand_tokens
 char *expand_token(t_token *token, t_env_manager *env);
 t_token *word_split_token(t_token *token, t_env_manager *env);
-char *str_join_free(char *s1, const char *s2);
 
 // Fragment 
 t_fragment *new_fragment(const char *start, size_t len, t_qtype quote_type);
 void	append_fragment(t_token *token, t_fragment *frag);
 
+// free str return null
+
 // ft_cmd_list_size
 int	ft_cmd_lstsize(t_word *cmd);
 
-// Ft_split_parser.c
-char	**ft_split_a(char const *s, char c);
 
 // Lexer
 t_token	*ft_input(const char *input);
@@ -268,11 +289,10 @@ void create_redir(t_cmds *cmd, t_token *head, t_minishell *minishell);
 
 // Utils parser
 const char *get_token_type_str(t_token_type type); // pour print les noms des redir
-int is_redir(t_token *head_token);				   // return 1 si c est une redir
 
 // Utils lexer
 int is_separator(char c);
-int is_token(char c);
+int is_char_redir_or_pipe(char c);
 
 // Utils 1
 void *get_next_word(void *node);
@@ -285,10 +305,7 @@ void *get_next_cmds(void *node);
 void *get_next_word(void *node);
 void *get_next_redir(void *node);
 
-// Utils del lst
-void del_cmds(void *content);
-void del_redir(void *content);
-void del_word(void *content);
+
 
 // To delete later
 void print_elements_cmds(t_word *head_w, t_redir *head_r);

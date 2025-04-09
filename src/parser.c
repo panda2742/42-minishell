@@ -1,5 +1,4 @@
 
-
 // Si je commence par un pipe : erreur
 // Si je trouve une redirection : il faut que je trouve un mot juste apres
 // Deux pipes qui se suivent : erreur

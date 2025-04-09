@@ -3,14 +3,14 @@
 #include "minishell.h"
 
 // renvoie  positif si c == quelque chose
-int	is_token(char c)
+int	is_char_redir_or_pipe(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
 }
 
 int	is_separator(char c)
 {
-	return (ft_isspace(c) || is_token(c));
+	return (ft_isspace(c) || is_char_redir_or_pipe(c));
 }
 
 
@@ -33,3 +33,4 @@ void	print_tokens(t_token *tokens)
 		tmp_token = tmp_token->next;
 	}
 }
+
