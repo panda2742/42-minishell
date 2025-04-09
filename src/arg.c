@@ -10,11 +10,11 @@ t_excmd	*cmd_to_arg(t_cmds *head)
 	t_excmd *ex_head;
 
 	if (head == NULL)
-		return NULL;
+		return (NULL);
 	ex_head = NULL;
 	ex_tail = NULL;
 	tmp_cmd = head;
-	
+
 	while (tmp_cmd)
 	{
 		// Not so useful, just in case
@@ -56,7 +56,7 @@ t_excmd	*cmd_to_arg(t_cmds *head)
 			ex_tail = ex_new;
 		}
 
-	tmp_cmd = tmp_cmd->next;
-	}	
+		tmp_cmd = tmp_cmd->next;
+	}
 	return (ex_head);
 }

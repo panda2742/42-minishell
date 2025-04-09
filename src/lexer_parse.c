@@ -4,8 +4,8 @@
 
 void	update_token_redir(t_token *list)
 {
-	t_fragment *tmp;
-	
+	t_fragment	*tmp;
+
 	tmp = list->next->fragments;
 	list->next->type = REDIR_ARG;
 	while (tmp)
@@ -43,13 +43,14 @@ static int	check_pipe_error(t_token *token)
 
 int	lexer_parse(t_token *token)
 {
-	t_token *list;
-	
+	t_token	*list;
+
 	list = token;
 	if (list == NULL)
 		return (0);
 	if (list->type == PIPE)
-		return ft_printf_error("Error: syntax error near unexpected token `|'\n"); //
+		return (ft_printf_error("Error: syntax error near unexpected token `|'\n"));
+			//
 	while (list != NULL)
 	{
 		if (list->type == PIPE)
@@ -66,6 +67,3 @@ int	lexer_parse(t_token *token)
 	}
 	return (1);
 }
-
-
-

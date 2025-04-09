@@ -4,14 +4,15 @@
 
 t_env_var	*get_var(t_env_manager *env, const char *name)
 {
-	size_t	i;
+	size_t		i;
 	t_env_var	*var;
 
 	i = -1;
 	var = *env->vars;
 	while (++i < env->env_size && var->next)
 	{
-		if (ft_strcmp((char *)name, var->name) == 0) // !!!!!!!!!!!!!!!!!!!!!!!!!! //
+		if (ft_strcmp((char *)name, var->name) == 0)
+			// !!!!!!!!!!!!!!!!!!!!!!!!!! //
 			return (var);
 		var = var->next;
 	}
@@ -24,7 +25,7 @@ static void	_init_manager(char **envp, t_env_manager *env);
 
 t_env_var	**create_env(char **envp, t_env_manager *env)
 {
-	size_t	i;
+	size_t		i;
 	t_env_var	*elt;
 	t_env_var	*prev;
 

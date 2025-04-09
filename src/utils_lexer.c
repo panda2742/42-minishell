@@ -13,7 +13,6 @@ int	is_separator(char c)
 	return (ft_isspace(c) || is_char_redir_or_pipe(c));
 }
 
-
 void	print_tokens(t_token *tokens)
 {
 	t_token		*tmp_token;
@@ -22,7 +21,7 @@ void	print_tokens(t_token *tokens)
 	tmp_token = tokens;
 	while (tmp_token)
 	{
-		printf("Token (type %d): ",tmp_token->type);
+		printf("Token (type %d): ", tmp_token->type);
 		tmp_frag = tmp_token->fragments;
 		while (tmp_frag)
 		{
@@ -33,4 +32,3 @@ void	print_tokens(t_token *tokens)
 		tmp_token = tmp_token->next;
 	}
 }
-

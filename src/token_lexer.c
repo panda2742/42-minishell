@@ -23,11 +23,10 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
-
-t_token *ft_create_token(t_token_type type)
+t_token	*ft_create_token(t_token_type type)
 {
-	t_token *new;
-	
+	t_token	*new;
+
 	new = malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
@@ -51,6 +50,3 @@ void	append_token(t_token **token_list, t_token *token)
 		tmp->next = token;
 	}
 }
-
-
-

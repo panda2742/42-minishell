@@ -2,13 +2,13 @@
 #include "minishell.h"
 
 /*
-* Create a fragment.
-* Fragments are multiple quotes one after the other
-* ex: $USER$PATH 
-* USER is frag 1, PATH is frag 2
-*/
+ * Create a fragment.
+ * Fragments are multiple quotes one after the other
+ * ex: $USER$PATH
+ * USER is frag 1, PATH is frag 2
+ */
 
-t_fragment *new_fragment(const char *start, size_t len, t_qtype quote_type)
+t_fragment	*new_fragment(const char *start, size_t len, t_qtype quote_type)
 {
 	t_fragment	*new;
 
@@ -29,11 +29,11 @@ t_fragment *new_fragment(const char *start, size_t len, t_qtype quote_type)
 }
 
 /*
-* Add frag at the end of the list
-*/
+ * Add frag at the end of the list
+ */
 void	append_fragment(t_token *token, t_fragment *frag)
 {
-	t_fragment *tmp;
+	t_fragment	*tmp;
 
 	if (!token->fragments)
 		token->fragments = frag;

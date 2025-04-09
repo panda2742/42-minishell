@@ -3,15 +3,15 @@
 #include "minishell.h"
 #include <unistd.h>
 
-static void handle_redir_in(const char *input, int *i, t_token **token_list)
+static void	handle_redir_in(const char *input, int *i, t_token **token_list)
 {
-	t_token *token;
+	t_token	*token;
 
 	if (input[(*i) + 1] && input[(*i) + 1] == '<')
 	{
 		token = ft_create_token(HEREDOC);
 		if (!token)
-			return; /// gestion d erreur
+			return ; /// gestion d erreur
 		append_fragment(token, new_fragment("<<", 2, SINGLE));
 		;
 		(*i) += 2;
@@ -20,44 +20,43 @@ static void handle_redir_in(const char *input, int *i, t_token **token_list)
 	{
 		token = ft_create_token(REDIR_IN);
 		if (!token)
-			return; /// gestion d erreur
+			return ; /// gestion d erreur
 		append_fragment(token, new_fragment("<", 1, SINGLE));
 		(*i)++;
 	}
 	append_token(token_list, token);
 }
 
-void handle_redir_out(const char *input, int *i, t_token **token_list)
+void	handle_redir_out(const char *input, int *i, t_token **token_list)
 {
-	t_token *token;
+	t_token	*token;
 
 	if (input[(*i) + 1] && input[(*i) + 1] == '>')
 	{
 		token = ft_create_token(APPEND);
 		if (!token)
-			return; /// gestion d erreur
+			return ; /// gestion d erreur
 		append_fragment(token, new_fragment(">>", 2, SINGLE));
-
 		(*i) += 2;
 	}
 	else
 	{
 		token = ft_create_token(REDIR_OUT);
 		if (!token)
-			return; /// gestion d erreur
+			return ; /// gestion d erreur
 		append_fragment(token, new_fragment(">", 1, SINGLE));
 		(*i)++;
 	}
 	append_token(token_list, token);
 }
 
-void handle_pipe(int *i, t_token **token_list)
+void	handle_pipe(int *i, t_token **token_list)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = ft_create_token(PIPE);
 	if (!token)
-		return; // gestion d erreur
+		return ; // gestion d erreur
 	append_fragment(token, new_fragment("|", 1, SINGLE));
 	append_token(token_list, token);
 	(*i)++;
@@ -66,7 +65,7 @@ void handle_pipe(int *i, t_token **token_list)
 /*
  * Handle | and every kind of redir
  */
-void handle_redir_pipe(int *i, t_token **token_list, const char *input)
+void	handle_redir_pipe(int *i, t_token **token_list, const char *input)
 {
 	if (input[*i] == '|')
 	{
@@ -82,9 +81,9 @@ void handle_redir_pipe(int *i, t_token **token_list, const char *input)
 	}
 }
 
-static int parse_single_quote(t_token *token, const char *input, int *i)
+static int	parse_single_quote(t_token *token, const char *input, int *i)
 {
-	int start;
+	int	start;
 
 	(*i)++; // skip quote
 	start = *i;
@@ -100,9 +99,9 @@ static int parse_single_quote(t_token *token, const char *input, int *i)
 	return (1);
 }
 
-static int parse_double_quote(t_token *token, const char *input, int *i)
+static int	parse_double_quote(t_token *token, const char *input, int *i)
 {
-	int start;
+	int	start;
 
 	(*i)++; // skip quote
 	start = *i;
@@ -118,13 +117,14 @@ static int parse_double_quote(t_token *token, const char *input, int *i)
 	return (1);
 }
 
-static int parse_unquoted(t_token *token, const char *input, int *i)
+static int	parse_unquoted(t_token *token, const char *input, int *i)
 {
-	int start;
+	int	start;
 
 	start = *i;
-	while (input[*i] && !ft_isspace(input[*i]) && !is_char_redir_or_pipe(input[*i]) &&
-		   input[*i] != '\'' && input[*i] != '\"')
+	while (input[*i] && !ft_isspace(input[*i])
+		&& !is_char_redir_or_pipe(input[*i]) && input[*i] != '\''
+		&& input[*i] != '\"')
 	{
 		(*i)++;
 	}
@@ -135,14 +135,15 @@ static int parse_unquoted(t_token *token, const char *input, int *i)
 /*
 ** Construit un token WORD en accumulant ses fragments jusqu'a rencontrer un delimiteur.
 */
-static t_token *parse_word_token(const char *input, int *i)
+static t_token	*parse_word_token(const char *input, int *i)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = ft_create_token(WORD);
 	if (token == NULL)
 		return (NULL);
-	while (input[*i] && !ft_isspace(input[*i]) && !is_char_redir_or_pipe(input[*i]))
+	while (input[*i] && !ft_isspace(input[*i])
+		&& !is_char_redir_or_pipe(input[*i]))
 	{
 		if (input[*i] == '\'')
 		{
@@ -168,11 +169,11 @@ static t_token *parse_word_token(const char *input, int *i)
 ** on gere les tokens de redirection/pipe via handle_redir_pipe, ou on construit
 ** un token WORD en accumulant ses fragments.
 */
-t_token *ft_input(const char *input)
+t_token	*ft_input(const char *input)
 {
-	t_token *token_list;
-	t_token *curr_token;
-	int i;
+	t_token	*token_list;
+	t_token	*curr_token;
+	int		i;
 
 	token_list = NULL;
 	i = 0;
@@ -180,11 +181,11 @@ t_token *ft_input(const char *input)
 	{
 		skip_spaces(input, &i);
 		if (!input[i])
-			break;
+			break ;
 		if (is_char_redir_or_pipe(input[i]))
 		{
 			handle_redir_pipe(&i, &token_list, input);
-			continue;
+			continue ;
 		}
 		curr_token = parse_word_token(input, &i);
 		if (curr_token == NULL)

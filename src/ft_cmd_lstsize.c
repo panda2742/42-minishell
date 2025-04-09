@@ -7,7 +7,7 @@ int	ft_cmd_lstsize(t_word *cmd)
 
 	i = 0;
 	if (!cmd)
-		return 0;
+		return (0);
 	while (cmd)
 	{
 		cmd = cmd->next;
