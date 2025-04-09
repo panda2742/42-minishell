@@ -32,7 +32,7 @@ t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 	if (redirects_manager->size == 0)
 		return (NULL);
 	last = *redirects_manager->redirects;
-	while (last->next)
+	while (last)
 	{
 		last->fd = -1;
 		if (!last->filepath)
@@ -40,12 +40,23 @@ t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 		if (redirects_manager->type == IN_REDIR)
 			last->fd = open(last->filepath, O_RDONLY);
 		else if (redirects_manager->type == OUT_REDIR)
-			last->fd = open(last->filepath, O_RDWR | O_CREAT | ((last->out_append_mode * O_APPEND) + (!last->out_append_mode * O_TRUNC)));
+		{
+			if (last->out_append_mode)
+				last->fd = open(last->filepath, O_RDWR | O_CREAT | O_APPEND, 0644);
+			else
+				last->fd = open(last->filepath, O_RDWR | O_CREAT | O_TRUNC, 0644);
+		}
 		if (last->fd == -1)
 			return (NULL);
 		if (last->next)
+		{	
 			close(last->fd);
-		last = last->next;
+			last = last->next;
+			continue ;
+		}
+		break ;
 	}
+	redirects_manager->last = last;
+	redirects_manager->final_fd = last->fd;
 	return (last);
 }

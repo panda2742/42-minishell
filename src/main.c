@@ -36,17 +36,19 @@ int	main(int argc, char **argv, char **env)
 	free_env(&minishell.env);
 	ft_free_strtab(envlst);
 	free_cmds(tests);
-	(void)argc;
-	(void)argv;
-	(void)env;
-	while (1)
-	{
-		prompt = show_prompt(&minishell.env);
-		line = readline(prompt);
-		free(prompt);
-		map = test_parsing(&minishell, line);
-		free(line);
-	}
+	// (void)argc;
+	// (void)argv;
+	// (void)env;
+	// while (1)
+	// {
+	// 	prompt = show_prompt(&minishell.env);
+	// 	line = readline(prompt);
+	// 	free(prompt);
+	// 	map = test_parsing(&minishell, line);
+	// 	free(line);
+	// }
+	(void)prompt;
+	(void)line;
 	(void)argc;
 	(void)argv;
 	(void)map;

@@ -8,7 +8,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	t_excmd			*cmd;
 	t_execparams	params;
 
-	int				fork_id;
+	int				forkid;
 
 	minishell->last_status = EXIT_SUCCESS;
 	proto = NULL;
@@ -23,12 +23,10 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	i = 0;
 	while (cmd)
 	{
-		printf("%s\n", cmd->raw);
-		if (cmd->has_heredoc)
-			heredoc(cmd->heredoc_del, cmd->heredoc_content);
 		params.nb_cmd++;
-		cmd->_id = i;
+		cmd->id = i;
 		load_builtin(cmd->name, &cmd->proto);
+		printf("[%s%s%s|%s%zu%s]\n", B_BLUE, cmd->raw, RESET, B_RED, cmd->id, RESET);
 		i++;
 		cmd = cmd->next;
 	}
@@ -37,7 +35,6 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	cmd = *cmds;
 	while (cmd)
 	{
-		cmd->in_a_child = true;
 		if (cmd->proto != NULL && params.nb_cmd == 1)
 			cmd->in_a_child = false;
 
@@ -50,40 +47,33 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		}
 
 		// ouverture de la pipe
-		if (cmd->_id != i)
-			pipe(cmd->pipe);
-
-		// ouverture des fichiers d’entrée et de sortie
-		cmd->in_fd = STDIN_FILENO;
-		if (cmd->infile != NULL)
-			cmd->in_fd = open(cmd->infile, O_RDONLY);
-
-		cmd->out_redir = STDOUT_FILENO;
-		if (cmd->outfile != NULL)
+		if (cmd->id != i)
 		{
-			if (cmd->out_append_mode)
-				cmd->out_redir = open(cmd->infile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			else
-				cmd->out_redir = open(cmd->infile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			cmd->pipe_open = true;
+			pipe(cmd->pipe);
 		}
 
+		// mettre l'ouverture ici
+		get_last_redirect(&cmd->in_redirects);
+		get_last_redirect(&cmd->out_redirects);
+
 		// creation du process
-		fork_id = fork();
-		if (fork_id > 0 || fork_id < 0)
+		forkid = fork();
+		if (forkid > 0 || forkid < 0)
 		{	
 			cmd = cmd->next;
 			continue ;
 		}
 
 		// creation de la duplication
-		dup2(cmd->in_fd, STDIN_FILENO);
-		dup2(cmd->out_redir, STDOUT_FILENO);
+		dup2(cmd->in_redirects.final_fd, STDIN_FILENO);
+		dup2(cmd->out_redirects.final_fd, STDOUT_FILENO);
 
 		// fermeture des file descriptors inutiles
-		if (cmd->in_fd > STDIN_FILENO)
-			close(cmd->in_fd);
-		if (cmd->out_redir > STDOUT_FILENO)
-			close(cmd->out_redir);
+		if (cmd->in_redirects.final_fd > STDIN_FILENO)
+			close(cmd->in_redirects.final_fd);
+		if (cmd->out_redirects.final_fd > STDOUT_FILENO)
+			close(cmd->out_redirects.final_fd);
 
 		// récupération des paths si c'est pas un builtin
 		if (cmd->proto == NULL)
@@ -108,14 +98,12 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		else
 			(*cmd->proto)(cmd);
 
-		// on close la pipe de la commande précédente apres l'avoir lue
-		if (cmd->_id != 0)
-		{
-			close(cmd->prev->pipe[0]);
-			close(cmd->prev->pipe[1]);
-		}
+		free_env(cmd->env);
+		ft_free_strtab(cmd->envp);
+		free_cmds(cmds);
 		exit(0);
 	}
+	waitpid(-1, NULL, 0);
 	return (minishell->last_status);
 }
 

@@ -9,7 +9,7 @@ override	HDRS		:=	minishell
 override	BUILTINS	:=	cd echo env exit export pwd unset
 override	ENV			:=	create_env env_to_strlst free_env get_var
 override	ERRORS		:=	error_handler puterr
-override	EXEC		:=	exec heredoc process tokens_to_cmds free_cmds
+override	EXEC		:=	create_cmd exec free_cmds heredoc process redirect_manager tokens_to_cmds
 override	PROMPT		:=	show_prompt
 override	UTILS		:=	empty_tab ft_sprintf
 override	TEST		:=	exec_test
@@ -44,7 +44,7 @@ override	DEPS		:=	$(patsubst %.o,%.d,$(OBJ))
 override	DIRS		:=	$(sort $(dir $(NAME) $(OBJ) $(LIBFT) $(DEPS)))
 
 # The C compilation flags
-CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP -g3 -D PROJECT_NAME=$(NAME)
+CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP -g3 -D PROJECT_NAME=\"$(NAME)\"
 # The Makefile flags to hide the current directory on compilation
 MAKEFLAGS	:=	--no-print-directory
 # The compiler binary 

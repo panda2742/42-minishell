@@ -14,9 +14,9 @@ void	puterr(char *message, t_bool call_perror)
 	else
 	{
 		if (call_perror)
-			perror(": An error occured");
+			perror(": An error occurred");
 		else
-			ft_putstr_fd(": An error occured\n", 2);
+			ft_putstr_fd(": An error occurred\n", 2);
 	}
 	ft_putstr_fd(RESET, 2);
 }

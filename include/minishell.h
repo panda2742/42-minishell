@@ -4,6 +4,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
+# include <wait.h>
 # include "libft.h"
 
 # ifndef PROJECT_NAME
@@ -46,41 +47,41 @@ typedef struct s_redir
 	/**
 	 * The path of the file (absolute or relative). NULL if not set.
 	 */
-	char		*filepath;
+	char			*filepath;
 	/**
 	 * The file descriptor, given when the file is open. STD[IN/OUT]_FILENO
 	 * as default.
 	 */
-	int			fd;
+	int				fd;
 	/**
 	 * If it includes an Here Document, this boolean is set to true. Otherwise
 	 * it is set to false.
 	 */
-	t_bool		is_heredoc;
+	t_bool			is_heredoc;
 	/**
 	 * The id of the heredoc.
 	 */
-	size_t		heredoc_id;
+	size_t			heredoc_id;
 	/**
 	 * The delimiter used for a Here Document. Set to NULL as default. 
 	 */
-	char		*heredoc_del;
+	char			*heredoc_del;
 	/**
 	 * If there is an Here Document, the content is firstly written into the
 	 * memory, and then put into a pipe's output file descriptor when it has to 
 	 * be used. Set to NULL as default.
 	 */
-	char		*heredoc_content;
+	char			*heredoc_content;
 	/**
 	 * Represents the open mode for the outfile. If this boolean is set to true,
 	 * it means the file is in append mode. Otherwise, it truncates.
 	 */
-	t_bool		out_append_mode;
+	t_bool			out_append_mode;
 	/**
 	 * A pointer to the next file descriptor, used when there is multiple
 	 * redirects (for example out1 > out2 > out3 > out4).
 	 */
-	struct s_fd	*next;
+	struct s_redir	*next;
 }				t_redir;
 
 typedef enum e_redir_type
@@ -94,6 +95,9 @@ typedef struct s_redir_manager
 	size_t			size;
 	t_redir_type	type;
 	t_redir			**redirects;
+	t_redir			*last;
+	t_bool			has_heredoc;
+	int				final_fd;
 }			t_redir_manager;
 
 /**
@@ -105,9 +109,9 @@ typedef struct s_redir_manager
 typedef struct s_excmd
 {
 	/**
-	 * The id of the command (executed in the order);
+	 * The id of the command (executed in the order).
 	 */
-	size_t			_id;
+	size_t			id;
 	/**
 	 * The name of the command.
 	 */
@@ -169,6 +173,10 @@ typedef struct s_excmd
 	 * - Writes into: stdout if the last command, s_excmd::pipe[1] otherwise.
 	 */
 	int				pipe[2];
+	/**
+	 * If the pipe has been opened or not.
+	 */
+	t_bool			pipe_open;
 	/**
 	 * The status of the executed command.
 	 */
@@ -235,6 +243,8 @@ t_exit	command_failure(t_excmd *c, char *message, t_bool call_perror);
 t_exit	launch_process(t_excmd *cmd);
 t_exit	exec_command(t_minishell *minishell, t_excmd **cmds);
 void	free_cmds(t_excmd **cmds);
+void	free_one_cmd(t_excmd *cmd);
+
 t_excmd	*create_cmd(char *cmd_name, t_env_manager *env);
 t_redir	*get_last_redirect(t_redir_manager *redirects_manager);
 
