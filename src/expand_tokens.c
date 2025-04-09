@@ -1,3 +1,4 @@
+
 #include "minishell.h"
 
 char	*expand_fragment(const char *input, int quote, t_env_manager *env)
@@ -5,15 +6,15 @@ char	*expand_fragment(const char *input, int quote, t_env_manager *env)
 	t_utils		utils;
 	t_env_var	*env_var;
 	char		*var_name;
-				char *value;
-			char tmp[2];
+	char		*value;
+	char		tmp[2];
 
 	ft_memset(&utils, 0, sizeof(t_utils));
 	utils.s1 = ft_strdup("");
 	while (input[utils.i])
 	{
 		if (input[utils.i] == '$' && quote != SINGLE)
-			// Si pas entre quotes simple
+		// Si pas entre quotes simple
 		{
 			utils.j = utils.i + 1;
 			while (input[utils.j] && ((ft_isalnum(input[utils.j])
@@ -132,7 +133,7 @@ static void	process_unquoted_fragment(const char *expanded, char **current,
 {
 	int		i;
 	t_token	*new_token;
-			char tmp[2];
+	char	tmp[2];
 
 	i = 0;
 	while (expanded[i])
@@ -176,7 +177,7 @@ t_token	*word_split_token(t_token *token, t_env_manager *env)
 	t_token		*new_last;
 	t_fragment	*frag;
 	char		*current;
-		char *expanded;
+	char		*expanded;
 	t_token		*new_token;
 
 	new_head = NULL;

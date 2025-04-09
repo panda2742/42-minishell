@@ -2,7 +2,7 @@
 #include "libft.h"
 #include "minishell.h"
 
-// renvoie  positif si c == quelque chose
+/* renvoie  positif si c == quelque chose */
 int	is_char_redir_or_pipe(char c)
 {
 	return (c == '|' || c == '<' || c == '>');

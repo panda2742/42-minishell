@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/09 22:11:01 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/09 23:16:30 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 #include <stdio.h>
 #include <strings.h>
 
-char	*join_tokens_to_string(t_token *tokens)
+char *join_tokens_to_string(t_token *tokens)
 {
-	char	*result;
-	t_token	*tmp;
+	char *result;
+	t_token *tmp;
 
 	result = ft_strdup("");
 	tmp = tokens;
@@ -38,18 +38,18 @@ char	*join_tokens_to_string(t_token *tokens)
 
 #include "minishell.h"
 
-int	main(int argc, char **argv, char **env)
+int main(int argc, char **argv, char **env)
 {
-	char	*line;
-	t_token	*token;
-	t_token	*tmp;
-	t_token	*last_new;
-	t_token	*split_token;
-	char	*final_cmd;
-
-	t_token *new_tokens;     // Pour stocker le resultat du word splitting
+	char *line;
+	t_token *token;
+	t_token *tmp;
+	t_token *last_new;
+	t_token *split_token;
+	char *final_cmd;
 	t_env_manager minishell;
-		// Gestionnaire d'environnement (alloue et initialise via create_env)
+
+	t_token *new_tokens; // Pour stocker le resultat du word splitting
+	// Gestionnaire d'environnement (alloue et initialise via create_env)
 	(void)argc;
 	(void)argv;
 	if (create_env(env, &minishell) == NULL)
@@ -64,21 +64,21 @@ int	main(int argc, char **argv, char **env)
 		if (!line || !ft_strcmp(line, "exit")) // CTRL+D || "exit"
 		{
 			ft_printf("exit\n");
-			break ;
+			break;
 		}
 		token = ft_input(line);
 		if (token == NULL)
 		{
 			free(line);
-			continue ;
+			continue;
 		}
 		if (!lexer_parse(token))
 		{
 			free_tokens(token);
 			free(line);
-			continue ;
+			continue;
 		}
-		/*Ici, on a dejà la phase d'expansion dans chaque token,
+		/*Ici, on a deja la phase d'expansion dans chaque token,
 			et on affiche le resultat d'expansion
 		// On applique ensuite le word splitting sur chaque token.
 		// Ici, word_split_token() reçoit un token et son environnement,

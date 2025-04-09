@@ -1,7 +1,5 @@
 
 #include "minishell.h"
-
-
 /*
 * Seulement pour les printf
 */

@@ -50,7 +50,7 @@ int	lexer_parse(t_token *token)
 		return (0);
 	if (list->type == PIPE)
 		return (ft_printf_error("Error: syntax error near unexpected token `|'\n"));
-			//
+	//
 	while (list != NULL)
 	{
 		if (list->type == PIPE)
