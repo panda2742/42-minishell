@@ -13,6 +13,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	minishell->last_status = EXIT_SUCCESS;
 	proto = NULL;
 	params.nb_cmd = 0;
+	params.nb_launched = 0;
 	params.cmds = cmds;
 
 	size_t			i;
@@ -59,10 +60,13 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		}
 		get_last_redirect(&cmd->out_redirects);
 
+		params.nb_launched++;
 		// creation du process
 		forkid = fork();
 		if (forkid > 0 || forkid < 0)
-		{	
+		{
+			if (forkid == -1)
+				params.nb_launched--;
 			cmd = cmd->next;
 			continue ;
 		}
@@ -106,7 +110,11 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		free_cmds(cmds);
 		exit(0);
 	}
-	waitpid(-1, NULL, 0);
+	while (params.nb_launched)
+	{
+		waitpid(-1, NULL, 0);
+		params.nb_launched--;
+	}
 	return (minishell->last_status);
 }
 

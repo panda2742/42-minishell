@@ -24,10 +24,8 @@ t_excmd	**exec_test(t_minishell *minishell, char ***envlst)
 	/*
 	4. Creation des redirections.
 	*/
-	// add_redirect(cmd_a, IN_REDIR, create_heredoc_redirect("EOF"));
-	add_redirect(cmd_a, OUT_REDIR, create_heredoc_redirect("EOF"));
-	add_redirect(cmd_a, OUT_REDIR, create_out_redirect("out1", false));
-	add_redirect(cmd_a, OUT_REDIR, create_out_redirect("out2", false));
+	add_redirect(cmd_a, IN_REDIR, create_heredoc_redirect("EOF"));
+	// add_redirect(cmd_a, OUT_REDIR, create_out_redirect("out2", false));
 
 	res[0] = cmd_a;
 	return (res);

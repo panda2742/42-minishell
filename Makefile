@@ -20,19 +20,19 @@ override	UTILS_PARSER := free_str_return_null \
 							is_redir \
 							skip_spaces \
 							utils_del_lst \
-override	SRCS		:=	main \
-							$(addprefix builtins/builtins_,$(BUILTINS)) \
+							token_lstsize
+override	SRCS		:=	$(addprefix builtins/builtins_,$(BUILTINS)) \
 							$(addprefix env_manager/,$(ENV)) \
 							$(addprefix errors/,$(ERRORS)) \
 							$(addprefix exec/,$(EXEC)) \
 							$(addprefix prompt/,$(PROMPT)) \
 							$(addprefix utils/,$(UTILS)) \
-							$(addprefix test/,$(TEST))arg \
+							$(addprefix test/,$(TEST)) \
+							arg \
 							expand_tokens \
 							fragments \
 							ft_cmd_lstsize \
 							get_next_token \
-							get_var \
 							lexer_parse \
 							lexer \
 							main_parsing \
@@ -126,8 +126,10 @@ run:
 
 .PHONY: runv
 runv:
-	$(MAKE) bonus
-	valgrind --leak-check=full --suppressions=readline.supp ./$(NAME)
+	clear
+	$(MAKE)
+	clear
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=.valgrind_suppress.txt ./$(NAME)
 
 
 -include $(DEPS)

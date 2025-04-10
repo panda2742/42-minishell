@@ -7,73 +7,6 @@
 # include <wait.h>
 # include "libft.h"
 
-typedef enum e_qtype
-{
-	NONE,
-	SINGLE,
-	DOUBLE
-}						t_qtype;
-
-typedef enum e_token_type
-{
-	WORD,
-	PIPE,
-	REDIR_IN,
-	REDIR_OUT,
-	APPEND,
-	HEREDOC,
-	REDIR_ARG
-}						t_token_type;
-
-typedef struct s_fragment
-{
-	char				*text;
-	t_qtype				quote_type;
-	struct s_fragment	*next;
-}						t_fragment;
-
-typedef struct s_token
-{
-	t_token_type		type;
-	t_fragment			*fragments;
-	t_qtype				quote_type;
-	int					index;
-	struct s_token		*next;
-}						t_token;
-
-typedef struct s_token_exp
-{
-	char				*str;
-	struct s_token_exp	*next;
-}						t_token_exp;
-
-typedef struct s_redir
-{
-	int					type;
-	char				*filename;
-	int					quote_type;
-	struct s_redir		*next;
-}						t_redir;
-
-typedef struct s_word
-{
-	int					quote_type;
-	char				*word;
-	struct s_word		*next;
-}						t_word;
-
-typedef struct s_cmds
-{
-	t_word				*words;
-	t_redir				*redir;
-	int					leak_flag;
-	struct s_cmds		*next;
-}						t_cmds;
-
-# ifndef PROJECT_NAME
-#  define PROJECT_NAME "Minishell"
-# endif
-
 /**
  * An alias to the unsigned char type, just to set the code more readable.
  */
@@ -87,97 +20,6 @@ typedef struct s_env_var
 	size_t				value_length;
 	struct s_env_var	*next;
 }						t_env_var;
-typedef struct s_utils
-{
-	int					i;
-	int					j;
-	int					k;
-	int					len1;
-	int					len2;
-	char				*s1;
-	char				*s2;
-}						t_utils;
-
-// utiles parser
-char					*free_str_return_null(char *str);
-char					**ft_split_a(char const *s, char c);
-char					*str_join_free(char *s1, const char *s2);
-int						ft_strcmp(char *s1, char *s2);
-int	is_redir(t_token *head_token); // return 1 si c est une redir
-void					skip_spaces(const char *input, int *i);
-void					del_cmds(void *content);
-void					del_redir(void *content);
-void					del_word(void *content);
-
-// Arg
-t_excmd					*cmd_to_arg(t_cmds *head);
-
-// Expand_tokens
-char					*expand_token(t_token *token, t_env_manager *env);
-t_token					*word_split_token(t_token *token, t_env_manager *env);
-
-// Fragment
-t_fragment				*new_fragment(const char *start, size_t len,
-							t_qtype quote_type);
-void					append_fragment(t_token *token, t_fragment *frag);
-
-// free str return null
-
-// ft_cmd_list_size
-int						ft_cmd_lstsize(t_word *cmd);
-
-// Lexer
-t_token					*ft_input(const char *input);
-void					print_tokens(t_token *tokens);
-t_token					*ft_create_token(t_token_type type);
-void					free_tokens(t_token *tokens);
-char					*token_to_string(t_token *token,
-							t_minishell *minishell);
-
-// Get var
-t_env_var				*get_var(t_env_manager *env, const char *name);
-t_env_var				**create_env(char **envp, t_env_manager *env);
-
-// Token lexer
-void					append_token(t_token **token_list, t_token *token);
-
-// Lexer parser
-int						lexer_parse(t_token *token);
-int						ft_strcmp(char *s1, char *s2);
-
-// Signals
-void					set_sig_action(void);
-void					sigint_handler(int signal);
-
-// Parser
-int						parser(t_token *head, t_minishell *minishell);
-
-// Redir parsing
-void					create_redir(t_cmds *cmd, t_token *head,
-							t_minishell *minishell);
-
-// Utils parser
-const char	*get_token_type_str(t_token_type type);
-		// pour print les noms des redir
-
-// Utils lexer
-int						is_separator(char c);
-int						is_char_redir_or_pipe(char c);
-
-// Utils 1
-void					*get_next_word(void *node);
-void					*get_next_redir(void *node);
-void					lst_clear(void **lst, void *(*get_next)(void *),
-							void (*del)(void *));
-
-// Get next token
-void					*get_next_token(void *node);
-void					*get_next_cmds(void *node);
-void					*get_next_word(void *node);
-void					*get_next_redir(void *node);
-
-// To delete later
-void					print_elements_cmds(t_word *head_w, t_redir *head_r);
 
 typedef struct s_env_manager
 {
@@ -350,6 +192,7 @@ typedef struct s_excmd
 typedef struct s_execparams
 {
 	size_t	nb_cmd;
+	size_t	nb_launched;
 	t_excmd	**cmds;
 }			t_execparams;
 
@@ -375,6 +218,163 @@ typedef struct s_minishell
 	t_env_manager	env;
 	t_exit			last_status;
 }			t_minishell;
+
+typedef enum e_qtype
+{
+	NONE,
+	SINGLE,
+	DOUBLE
+}						t_qtype;
+
+typedef enum e_token_type
+{
+	WORD,
+	PIPE,
+	REDIR_IN,
+	REDIR_OUT,
+	APPEND,
+	HEREDOC,
+	REDIR_ARG
+}						t_token_type;
+
+typedef struct s_fragment
+{
+	char				*text;
+	t_qtype				quote_type;
+	struct s_fragment	*next;
+}						t_fragment;
+
+typedef struct s_token
+{
+	t_token_type		type;
+	t_fragment			*fragments;
+	t_qtype				quote_type;
+	int					index;
+	struct s_token		*next;
+}						t_token;
+
+// typedef struct s_token_exp
+// {
+// 	char				*str;
+// 	struct s_token_exp	*next;
+// }						t_token_exp;
+
+// typedef struct s_redir
+// {
+// 	int					type;
+// 	char				*filename;
+// 	int					quote_type;
+// 	struct s_redir		*next;
+// }						t_redir;
+
+// typedef struct s_word
+// {
+// 	int					quote_type;
+// 	char				*word;
+// 	struct s_word		*next;
+// }						t_word;
+
+// typedef struct s_cmds
+// {
+// 	t_word				*words;
+// 	t_redir				*redir;
+// 	int					leak_flag;
+// 	struct s_cmds		*next;
+// }						t_cmds;
+
+# ifndef PROJECT_NAME
+#  define PROJECT_NAME "Minishell"
+# endif
+
+
+typedef struct s_utils
+{
+	int					i;
+	int					j;
+	int					k;
+	int					len1;
+	int					len2;
+	char				*s1;
+	char				*s2;
+}						t_utils;
+
+// utiles parser
+char					*free_str_return_null(char *str);
+char					**ft_split_a(char const *s, char c);
+char					*str_join_free(char *s1, const char *s2);
+int						ft_strcmp(char *s1, char *s2);
+int						is_redir(t_token *head_token); // return 1 si c est une redir
+void					skip_spaces(const char *input, int *i);
+void					del_cmds(void *content);
+void					del_redir(void *content);
+size_t					token_lstsize(t_token *head);
+void					del_word(void *content);
+
+// Arg
+// t_excmd					*cmd_to_arg(t_cmds *head);
+
+// Expand_tokens
+char					*expand_token(t_token *token, t_env_manager *env);
+t_token					*word_split_token(t_token *token, t_env_manager *env);
+
+// Fragment
+t_fragment				*new_fragment(const char *start, size_t len,
+							t_qtype quote_type);
+void					append_fragment(t_token *token, t_fragment *frag);
+
+// free str return null
+
+// ft_cmd_list_size
+// int						ft_cmd_lstsize(t_word *cmd);
+
+// Lexer
+t_token					*ft_input(const char *input);
+void					print_tokens(t_token *tokens);
+t_token					*ft_create_token(t_token_type type);
+void					free_tokens(t_token *tokens);
+char					*token_to_string(t_token *token,
+							t_minishell *minishell);
+
+// Token lexer
+void					append_token(t_token **token_list, t_token *token);
+
+// Lexer parser
+int						lexer_parse(t_token *token);
+int						ft_strcmp(char *s1, char *s2);
+
+// Signals
+void					set_sig_action(void);
+void					sigint_handler(int signal);
+
+// Parser
+int						parser(t_token *head, t_minishell *minishell);
+
+// Redir parsing
+// void					create_redir(t_cmds *cmd, t_token *head,
+// 							t_minishell *minishell);
+
+// Utils parser
+const char	*get_token_type_str(t_token_type type);
+		// pour print les noms des redir
+
+// Utils lexer
+int						is_separator(char c);
+int						is_char_redir_or_pipe(char c);
+
+// Utils 1
+void					*get_next_word(void *node);
+void					*get_next_redir(void *node);
+void					lst_clear(void **lst, void *(*get_next)(void *),
+							void (*del)(void *));
+
+// Get next token
+void					*get_next_token(void *node);
+void					*get_next_cmds(void *node);
+void					*get_next_word(void *node);
+void					*get_next_redir(void *node);
+
+// To delete later
+// void					print_elements_cmds(t_word *head_w, t_redir *head_r);
 
 t_cmdproto	*load_builtin(const char *command_name, t_cmdproto *proto);
 t_exit		heredoc(char *del, char *buffer, t_bool skip_writing);
