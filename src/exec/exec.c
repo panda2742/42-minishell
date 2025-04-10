@@ -26,7 +26,6 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		params.nb_cmd++;
 		cmd->id = i;
 		load_builtin(cmd->name, &cmd->proto);
-		printf("[%s%s%s|%s%zu%s]\n", B_BLUE, cmd->raw, RESET, B_RED, cmd->id, RESET);
 		i++;
 		cmd = cmd->next;
 	}
@@ -54,7 +53,10 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		}
 
 		// mettre l'ouverture ici
-		get_last_redirect(&cmd->in_redirects);
+		if (get_last_redirect(&cmd->in_redirects) == NULL && cmd->in_redirects.size > 0)
+		{
+			break ;
+		}
 		get_last_redirect(&cmd->out_redirects);
 
 		// creation du process
@@ -84,15 +86,16 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 			else
 				cmd->paths = empty_tab();
 	
+			size_t i = 0;
 			// test de l'access et de l'execve
-			while (*cmd->paths)
+			while (cmd->paths[i])
 			{
-				char *fullpath = _get_full_path(*cmd->paths, cmd->name);
+				char *fullpath = _get_full_path(cmd->paths[i], cmd->name);
+				i++;
 				if (access(fullpath, X_OK) != 0)
 					continue ;
 				if (execve(fullpath, cmd->argv, cmd->envp) == -1)
 					break ;
-				cmd->paths++;
 			}
 		}
 		else
@@ -112,8 +115,7 @@ static char	*_get_full_path(char *path, char *cmd_name)
 	char	*tmp;
 	char	*tmp2;
 
-	tmp = ft_strjoin("/", path);
-	tmp2 = ft_strjoin(tmp, "/");
+	tmp2 = ft_strjoin(path, "/");
 	tmp = ft_strjoin(tmp2, cmd_name);
 	return (tmp);
 }

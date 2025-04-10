@@ -20,38 +20,14 @@ t_excmd	**exec_test(t_minishell *minishell, char ***envlst)
 	/*
 	3. Remplissage du raw.
 	*/
-	cmd_a->raw = ft_strdup("ls -l -a > out.txt >> out_append1.txt >> out_append2.txt >> out_append3.txt >> out_append4.txt");
+	cmd_a->raw = ft_strdup("");
 	/*
 	4. Creation des redirections.
-
-	Dans notre example, on fait 'ls -l -a > out.txt >> out_append1.txt >> out_append2.txt >> out_append3.txt >> out_append4.txt'.
-	On crée d'abord les redirect, et on les ajoute a la commande.
 	*/
-	add_redirect(cmd_a, OUT_REDIR, create_out_redirect("out.txt", false));
-	add_redirect(cmd_a, OUT_REDIR, create_out_redirect("out_append1.txt", true));
-	add_redirect(cmd_a, OUT_REDIR, create_out_redirect("out_append2.txt", true));
-	add_redirect(cmd_a, OUT_REDIR, create_out_redirect("out_append3.txt", true));
-	add_redirect(cmd_a, OUT_REDIR, create_out_redirect("out_append4.txt", true));
-
-	/*
-	On va créer une autre commande simple pour voir comment ajouter aussi
-	des redirections d’entrée.
-	*/
-	t_excmd *cmd_b = create_cmd("cat", &minishell->env);
-	cmd_b->envp = *envlst;
-	/*
-	On va lui ajouter des redirections en entrée et en sortie. On va
-	en gros faire ca : ' << EOF < Makefile cat > out >> out_append'.
-	*/
-	add_redirect(cmd_b, IN_REDIR, create_heredoc_redirect("EOF"));
-	add_redirect(cmd_b, IN_REDIR, create_in_redirect("Makefile"));
-	add_redirect(cmd_b, OUT_REDIR, create_out_redirect("out.txt", false));
-	add_redirect(cmd_b, OUT_REDIR, create_out_redirect("out_append.txt", true));
-
-	cmd_a->next = cmd_b;
-	cmd_b->prev = cmd_a;
-
-	cmd_b->raw = ft_strdup("<< EOF < Makefile cat > out >> out_append");
+	// add_redirect(cmd_a, IN_REDIR, create_heredoc_redirect("EOF"));
+	add_redirect(cmd_a, OUT_REDIR, create_heredoc_redirect("EOF"));
+	add_redirect(cmd_a, OUT_REDIR, create_out_redirect("out1", false));
+	add_redirect(cmd_a, OUT_REDIR, create_out_redirect("out2", false));
 
 	res[0] = cmd_a;
 	return (res);
