@@ -1,10 +1,18 @@
 # The name of the built executable
-NAME				:=	minishell
+NAME					:=	minishell
 # The directory where the built files will be
-MAKE_DIR			:=	.make/
+MAKE_DIR				:=	.make/
 
 # The header files of the project
-override	HDRS	:=	minishell
+override	HDRS		:=	minishell
+# The C source code files of the project
+override	BUILTINS	:=	cd echo env exit export pwd unset
+override	ENV			:=	create_env env_to_strlst free_env get_var
+override	ERRORS		:=	error_handler puterr
+override	EXEC		:=	create_cmd exec free_cmds heredoc process redirect_manager tokens_to_cmds
+override	PROMPT		:=	show_prompt
+override	UTILS		:=	empty_tab ft_sprintf
+override	TEST		:=	exec_test
 override	UTILS_PARSER := free_str_return_null \
 							ft_str_join_free \
 							ft_split_parser \
@@ -12,9 +20,14 @@ override	UTILS_PARSER := free_str_return_null \
 							is_redir \
 							skip_spaces \
 							utils_del_lst \
-
-# The C source code files of the project
-override	SRCS	:=	arg \
+override	SRCS		:=	main \
+							$(addprefix builtins/builtins_,$(BUILTINS)) \
+							$(addprefix env_manager/,$(ENV)) \
+							$(addprefix errors/,$(ERRORS)) \
+							$(addprefix exec/,$(EXEC)) \
+							$(addprefix prompt/,$(PROMPT)) \
+							$(addprefix utils/,$(UTILS)) \
+							$(addprefix test/,$(TEST))arg \
 							expand_tokens \
 							fragments \
 							ft_cmd_lstsize \
@@ -31,7 +44,7 @@ override	SRCS	:=	arg \
 							utils_lexer \
 							utils_parser \
 							utils1 \
-							$(addprefix utils_parser/,$(UTILS_PARSER)) \
+							$(addprefix utils_parser/,$(UTILS_PARSER))
 
 # The subdirectory where the built objects will be, for example ./make/minishell_develop/
 override	BUILD_DIR	:=	$(MAKE_DIR)$(NAME)_$(shell git branch --show-current)/
@@ -55,7 +68,7 @@ override	DEPS		:=	$(patsubst %.o,%.d,$(OBJ))
 override	DIRS		:=	$(sort $(dir $(NAME) $(OBJ) $(LIBFT) $(DEPS)))
 
 # The C compilation flags
-CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP -g3
+CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP -g3 -D PROJECT_NAME=\"$(NAME)\"
 # The Makefile flags to hide the current directory on compilation
 MAKEFLAGS	:=	--no-print-directory
 # The compiler binary 
@@ -66,11 +79,11 @@ RM			:=	rm -r
 .PHONY: all
 all: $(NAME)
 
-$(NAME): $(OBJ) $(HDR) $(LIBFT) Makefile
+$(NAME): $(OBJ) $(LIBFT) 
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline
 
-$(BUILD_DIR)%.o: $(SRC_DIR)%.c | $(DIRS)
-	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR)include -I$(HDR_DIR) $< -o $@ 
+$(BUILD_DIR)%.o: $(SRC_DIR)%.c Makefile $(HDR) | $(DIRS)
+	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR)/include -I$(HDR_DIR) $< -o $@
 
 $(LIBFT): libft
 
@@ -104,7 +117,7 @@ $(DIRS):
 
 .PHONY: norm
 norm:
-	norminette $(SRC_DIR) include/ $(LIBFT_DIR)/
+	@norminette $(SRC_DIR) include/ $(LIBFT_DIR)/ | grep "Error"
 
 .PHONY: run
 run:

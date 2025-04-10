@@ -70,8 +70,7 @@ override	SRC_MEM		:=	ft_bzero \
 							ft_memmove \
 							ft_memset
 override	SRC_MISC	:=	ft_selection_sort
-override	SRC_PRINTF	:=	ft_eprintf \
-							ft_printf
+override	SRC_PRINTF	:=	ft_printf
 override	SRC_STR		:=	ft_split \
 							ft_strchr \
 							ft_strdup \
