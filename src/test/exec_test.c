@@ -1,32 +1,46 @@
 #include "minishell.h"
 
-t_excmd	**exec_test(t_minishell *minishell, char ***envlst)
+static t_excmd	*_cat_cat_ls(t_minishell *minishell)
 {
-	*envlst = env_to_strlst(&minishell->env);
+	t_excmd	*cat1 = create_cmd("cat", &minishell->env);
+	t_excmd	*cat2 = create_cmd("cat", &minishell->env);
+	t_excmd	*ls = create_cmd("ls", &minishell->env);
+
+	link_commands(cat1, cat2);
+	link_commands(cat2, ls);
+
+	return (cat1);
+}
+
+static t_excmd	*_cat_urandom_head(t_minishell *minishell)
+{
+	t_excmd *cat = create_cmd("cat", &minishell->env);
+	t_excmd *head = create_cmd("head", &minishell->env);
+
+	add_redirect(cat, IN_REDIR, create_in_redirect("/dev/urandom"));
+
+	link_commands(cat, head);
+
+	return (cat);
+}
+
+static t_excmd	*_casual_test(t_minishell *minishell)
+{
+	t_excmd *cat = create_cmd("env", &minishell->env);
+
+	add_redirect(cat, IN_REDIR, create_in_redirect("Makefile"));
+
+	return (cat);
+}
+
+t_excmd	**exec_test(t_minishell *minishell)
+{
 	t_excmd **res = malloc(sizeof(t_excmd *));
 
-	/*
-	Creation d'une commande par défaut
-	1. Nom de la commande : ls
-	*/
-	t_excmd *cmd_a = create_cmd("ls", &minishell->env);
-	cmd_a->envp = *envlst;
-	/* 
-	2. Pour ajouter des arguments, il suffit de remplir argv et de définir argc
-	en consequences. Exemple ici avec un split.
-	*/
-	cmd_a->argv = ft_split("-l -a", " ");
-	cmd_a->argc = 2; // on a deux arguments.
-	/*
-	3. Remplissage du raw.
-	*/
-	cmd_a->raw = ft_strdup("");
-	/*
-	4. Creation des redirections.
-	*/
-	add_redirect(cmd_a, IN_REDIR, create_heredoc_redirect("EOF"));
-	// add_redirect(cmd_a, OUT_REDIR, create_out_redirect("out2", false));
-
-	res[0] = cmd_a;
+	(void)_cat_cat_ls;
+	(void)_cat_urandom_head;
+	(void)_casual_test;
+	res[0] = _casual_test(minishell);
 	return (res);
 }
+

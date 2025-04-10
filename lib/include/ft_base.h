@@ -32,6 +32,15 @@
 # define B_CYAN "\033[1;36m"
 # define B_WHITE "\033[1;37m"
 
+# define U_BLACK "\033[4;30m"
+# define U_RED "\033[4;31m"
+# define U_GREEN "\033[4;32m"
+# define U_YELLOW "\033[4;33m"
+# define U_BLUE "\033[4;34m"
+# define U_MAGENTA "\033[4;35m"
+# define U_CYAN "\033[4;36m"
+# define U_WHITE "\033[4;37m"
+
 typedef enum e_bool
 {
 	false,

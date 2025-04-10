@@ -32,6 +32,7 @@ typedef struct s_env_manager
 	 * The amount of environment variables.
 	 */
 	size_t		env_size;
+	char		**envlst;
 }			t_env_manager;
 
 /**
@@ -92,6 +93,7 @@ typedef struct s_redir_manager
 	t_redir_type	type;
 	t_redir			**redirects;
 	t_redir			*last;
+	t_redir			*problematic;
 	t_bool			has_heredoc;
 	int				final_fd;
 }			t_redir_manager;
@@ -105,20 +107,20 @@ typedef struct s_redir_manager
 typedef struct s_excmd
 {
 	/**
-	 * The id of the command (executed in the order).
+	 * The id of the command (executed in the order). // E
 	 */
 	size_t			id;
 	/**
-	 * The name of the command.
+	 * The name of the command. 
 	 */
 	char			*name;
 	/**
 	 * If the command is a builtin, it is not necessarily executed into a
-	 * child process. Default to true.
+	 * child process. Default to true. // E
 	 */
 	t_bool			in_a_child;
 	/**
-	 * The prototype of the command if it is a builtin. Default to NULL.
+	 * The prototype of the command if it is a builtin. Default to NULL. // E
 	 */
 	t_exit 			(*proto)(struct s_excmd *);
 	/**
@@ -131,12 +133,12 @@ typedef struct s_excmd
 	 */
 	char			**argv;
 	/**
-	 * The environment manager. Musts exist.
+	 * The environment manager. Musts exist. // E
 	 */
 	t_env_manager	*env;
 	/**
 	 * The string list of each arguments. Created from the environment managers.
-	 * Terminates with a NULL element. If empty, only contains a NULL element.
+	 * Terminates with a NULL element. If empty, only contains a NULL element. // E
 	 */
 	char			**envp;
 	/**
@@ -146,17 +148,17 @@ typedef struct s_excmd
 	char			*raw;
 	/**
 	 * The PATH environment variable splitted into a string list, used for the
-	 * execve loop. If empty, only contains a NULL element.
+	 * execve loop. If empty, only contains a NULL element. // E
 	 */
 	char			**paths;
 	/**
 	 * The successive input stream file descriptors. Per default, set the
-	 * file descriptor to STDIN_FILENO.
+	 * file descriptor to STDIN_FILENO. // E
 	 */
 	t_redir_manager		in_redirects;
 	/**
 	 * The successive input stream file descriptors. Per default, set the
-	 * file descriptor to STDOUT_FILENO.
+	 * file descriptor to STDOUT_FILENO. //E
 	 */
 	t_redir_manager		out_redirects;
 	/**
@@ -166,20 +168,20 @@ typedef struct s_excmd
 	 * How does it work? The scenario that occur is:
 	 * - The command is instanced, the pipe is created.
 	 * - Reads: stdin if first command, s_excmd::pipe[0] otherwise.
-	 * - Writes into: stdout if the last command, s_excmd::pipe[1] otherwise.
+	 * - Writes into: stdout if the last command, s_excmd::pipe[1] otherwise. // E
 	 */
 	int				pipe[2];
 	/**
-	 * If the pipe has been opened or not.
+	 * If the pipe has been opened or not. // E
 	 */
 	t_bool			pipe_open;
 	/**
-	 * The status of the executed command.
+	 * The status of the executed command. // E
 	 */
 	t_exit			status;
 	/**
 	 * The previous element of the command list. If it is the first element or 
-	 * if there is no other element, default value is NULL.
+	 * if there is no other element, default value is NULL. 
 	 */
 	struct s_excmd	*prev;
 	/**
@@ -252,6 +254,12 @@ typedef struct s_token
 	int					index;
 	struct s_token		*next;
 }						t_token;
+
+typedef struct s_token_list
+{
+	t_token				*tokens;
+	struct s_token_list *next;
+}						t_token_list;
 
 // typedef struct s_token_exp
 // {
@@ -376,7 +384,7 @@ void					*get_next_redir(void *node);
 // To delete later
 // void					print_elements_cmds(t_word *head_w, t_redir *head_r);
 
-t_cmdproto	*load_builtin(const char *command_name, t_cmdproto *proto);
+t_cmdproto	load_builtin(const char *command_name, t_cmdproto *proto);
 t_exit		heredoc(char *del, char *buffer, t_bool skip_writing);
 
 // ENV -----------------------------
@@ -430,6 +438,7 @@ void	*empty_tab(void);
 
 // TESTS ---------------------------
 
-t_excmd	**exec_test(t_minishell *minishell, char ***envlst);
+t_excmd	**exec_test(t_minishell *minishell);
+void	link_commands(t_excmd *cmd1, t_excmd *cmd2);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/10 12:01:37 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/10 17:57:57 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,61 @@ void	handle_is_redir_tokens(t_excmd *cmd, t_token *token)
 			add_redirect(cmd, IN_REDIR, create_heredoc_redirect(token->next->fragments->text));
 }
 
+size_t	count_arg_words(t_token *token)
+{
+	t_token *tmp = token;
+	size_t	nb_of_words;
+	
+	nb_of_words = 0;
+	if (!token)
+		return (0);
+	while (tmp)
+	{
+		if (tmp->type == WORD)
+		nb_of_words++;
+		tmp = tmp->next;
+	}
+	return (0);
+}
+/*
+void	create_token_list(t_token *end, t_token *start, t_token_list **head)
+{
+	t_token_list *list;
+	t_token_list *tmp;
+	
+	tmp = *head;
+	list = malloc(sizeof(t_token_list));
+	list->next = NULL;
+	if (head == NULL)
+	{
+		head = list;
+	}
+	else
+	{
+		while (tmp)
+			tmp = tmp->next;
+		tmp->next = list;
+	}
+	list->tokens = start;
+}
+
+void	token_list(t_token *head)
+{
+	t_token *curent = head;
+	t_token	*start = head;
+	
+	while (curent)
+	{
+		if (curent->next->type == PIPE)
+		{
+			create_token_list;
+			start = curent;
+			tmp = current;
+			
+		}
+		curent = curent->next;
+	}
+} */
 #include "minishell.h"
 
 int main(int argc, char **argv, char **env)
@@ -69,11 +124,9 @@ int main(int argc, char **argv, char **env)
 		ft_printf("Error initializing environment\n");
 		return (EXIT_FAILURE);
 	}
-	char **envlst = NULL;
-	t_excmd **cmds = exec_test(&minishell, &envlst);
+	t_excmd **cmds = exec_test(&minishell);
 	exec_command(&minishell, cmds);
 	free_cmds(cmds);
-	ft_free_strtab(envlst);
 	while (1)
 	{
 		set_sig_action();
@@ -83,6 +136,7 @@ int main(int argc, char **argv, char **env)
 		if (!line || !ft_strcmp(line, "exit")) // CTRL+D || "exit"
 		{
 			ft_printf("exit\n");
+			free_env(&minishell.env);
 			break;
 		}
 		token = ft_input(line);
@@ -126,29 +180,35 @@ int main(int argc, char **argv, char **env)
 			tmp = tmp->next;
 		}
 		
-		
-		tmp = new_tokens;
-		char *cmd_name = tmp->fragments->text;
-		t_excmd *cmd = create_cmd(cmd_name, &minishell.env);
-		cmd->argc = token_lstsize(new_tokens) - 1;
-		tmp = tmp->next;
-		ft_printf("cmd name: %s\n", tmp->fragments->text);
-		while (tmp)
+		if (tmp != NULL)
 		{
-			if (is_redir(tmp))
-			{
-				handle_is_redir_tokens(cmd, token);
-			}
-			if (tmp->type == WORD)
-			{
-				
-			}
-			ft_printf("test cmd: %s\n", tmp->fragments->text);
+			tmp = new_tokens;
+			char *cmd_name = tmp->fragments->text;
+			t_excmd *cmd = create_cmd(cmd_name, &minishell.env); // cmd doit etre le premier WORD rencontre, a changer
+			cmd->argc = token_lstsize(new_tokens) - 1;
 			tmp = tmp->next;
+			ft_printf("cmd name: %s\n", tmp->fragments->text);
+			int count_args = count_arg_words(tmp);
+			cmd->raw = join_tokens_to_string(new_tokens);
+			cmd->argv = malloc(sizeof(char *) * count_args + 1);
+			cmd->argv[count_args] = NULL;
+			int i = 0;
+			
+			while(tmp || (tmp->type != PIPE))
+			{
+				if (is_redir(tmp))
+				{
+					handle_is_redir_tokens(cmd, token);
+				}
+				if (tmp->type == WORD)
+				{
+					cmd->argv[i] = tmp->fragments->text;
+					i++;
+				}
+				ft_printf("test cmd: %s\n", tmp->fragments->text);
+				tmp = tmp->next;
+			}
 		}
-
-
-
 		
 		// On peut afficher la nouvelle liste de tokens après word splitting
 		final_cmd = join_tokens_to_string(new_tokens);

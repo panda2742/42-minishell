@@ -15,6 +15,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	params.nb_cmd = 0;
 	params.nb_launched = 0;
 	params.cmds = cmds;
+	minishell->env.envlst = env_to_strlst(&minishell->env);
 
 	size_t			i;
 
@@ -26,7 +27,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	{
 		params.nb_cmd++;
 		cmd->id = i;
-		load_builtin(cmd->name, &cmd->proto);
+		cmd->proto = load_builtin(cmd->name, &cmd->proto);
 		i++;
 		cmd = cmd->next;
 	}
@@ -35,6 +36,9 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	cmd = *cmds;
 	while (cmd)
 	{
+		cmd->envp = minishell->env.envlst;
+		printf("%p\n", cmd->proto);
+
 		if (cmd->proto != NULL && params.nb_cmd == 1)
 			cmd->in_a_child = false;
 
@@ -56,9 +60,22 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		// mettre l'ouverture ici
 		if (get_last_redirect(&cmd->in_redirects) == NULL && cmd->in_redirects.size > 0)
 		{
-			break ;
+			if (cmd->in_redirects.problematic && cmd->in_redirects.problematic->filepath)
+				puterr(ft_sprintf(": %s", cmd->in_redirects.problematic->filepath), true);
+			else
+				puterr(ft_sprintf(": input redirecting"), true);
+			cmd = cmd->next;
+			continue ;
 		}
-		get_last_redirect(&cmd->out_redirects);
+		if (get_last_redirect(&cmd->out_redirects) == NULL && cmd->out_redirects.size > 0)
+		{
+			if (cmd->in_redirects.problematic && cmd->in_redirects.problematic->filepath)
+				puterr(ft_sprintf(": %s", cmd->in_redirects.problematic->filepath), true);
+			else
+				puterr(ft_sprintf(": output redirecting"), true);
+			cmd = cmd->next;
+			continue ;
+		}
 
 		params.nb_launched++;
 		// creation du process
@@ -66,7 +83,10 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		if (forkid > 0 || forkid < 0)
 		{
 			if (forkid == -1)
+			{
 				params.nb_launched--;
+				puterr(ft_sprintf(": fork error"), true);
+			}
 			cmd = cmd->next;
 			continue ;
 		}
@@ -80,6 +100,9 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 			close(cmd->in_redirects.final_fd);
 		if (cmd->out_redirects.final_fd > STDOUT_FILENO)
 			close(cmd->out_redirects.final_fd);
+		
+		close(cmd->pipe[0]);
+		close(cmd->pipe[1]);
 
 		// récupération des paths si c'est pas un builtin
 		if (cmd->proto == NULL)
@@ -96,11 +119,22 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 			{
 				char *fullpath = _get_full_path(cmd->paths[i], cmd->name);
 				i++;
-				if (access(fullpath, X_OK) != 0)
+				if (access(fullpath, F_OK | X_OK) != 0)
 					continue ;
 				if (execve(fullpath, cmd->argv, cmd->envp) == -1)
 					break ;
 			}
+			if (access(cmd->name, F_OK | X_OK) == 0)
+			{
+				if (execve(cmd->name, cmd->argv, cmd->envp) == 0)
+				{
+					free_env(cmd->env);
+					ft_free_strtab(cmd->envp);
+					free_cmds(cmds);
+					exit(0);
+				}
+			}
+			puterr(ft_sprintf(": %s", cmd->name), true);
 		}
 		else
 			(*cmd->proto)(cmd);
@@ -115,6 +149,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		waitpid(-1, NULL, 0);
 		params.nb_launched--;
 	}
+	ft_free_strtab(minishell->env.envlst);
 	return (minishell->last_status);
 }
 
@@ -128,7 +163,7 @@ static char	*_get_full_path(char *path, char *cmd_name)
 	return (tmp);
 }
 
-t_cmdproto	*load_builtin(const char *command_name, t_cmdproto *proto)
+t_cmdproto	load_builtin(const char *command_name, t_cmdproto *proto)
 {
 	static char			*builtins[7] = {
 		"cd", "echo", "env", "exit", "export", "pwd", "unset"
@@ -145,11 +180,12 @@ t_cmdproto	*load_builtin(const char *command_name, t_cmdproto *proto)
 	while (++i < 7)
 	{
 		len = ft_strlen(builtins[i]);
+		printf("%s=%d\n", builtins[i], ft_strncmp(command_name, builtins[i], len));
 		if (ft_strncmp(command_name, builtins[i], len) == 0)
 		{
-			proto = &command_prototypes[i];
+			*proto = command_prototypes[i];
 			break ;
 		}
 	}
-	return (proto);
+	return (*proto);
 }

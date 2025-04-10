@@ -11,8 +11,8 @@ char	*show_prompt(t_env_manager *env)
 	char		*res;
 
 	res = ft_sprintf(
-			"\001%s\002Minishell\001%s\002::\001%s\002%s\001%s\002 @ \001%s\002%s\001%s\002 \001%s\002>\001%s\002 ",
-			B_MAGENTA, RESET,
+			"\001%s\002%s\001%s\002::\001%s\002%s\001%s\002 @ \001%s\002%s\001%s\002 \001%s\002>\001%s\002 ",
+			B_MAGENTA, PROJECT_NAME, RESET,
 			B_BLUE, user, RESET,
 			B_CYAN, path, RESET,
 			B_MAGENTA, RESET

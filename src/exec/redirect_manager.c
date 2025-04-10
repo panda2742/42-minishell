@@ -31,14 +31,22 @@ t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 
 	if (redirects_manager->size == 0)
 		return (NULL);
+	if (redirects_manager->type == IN_REDIR)
+		read_heredocs(redirects_manager);
 	last = *redirects_manager->redirects;
 	while (last)
 	{
 		last->fd = -1;
-		if (!last->filepath)
+		if (!last->filepath && !last->is_heredoc)
+		{
+			redirects_manager->problematic = last;
 			return (NULL);
+		}
 		if (redirects_manager->type == IN_REDIR)
-			last->fd = open(last->filepath, O_RDONLY);
+		{
+			if (!last->is_heredoc)
+				last->fd = open(last->filepath, O_RDONLY);
+		}
 		else if (redirects_manager->type == OUT_REDIR)
 		{
 			if (last->out_append_mode)
@@ -46,8 +54,11 @@ t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 			else
 				last->fd = open(last->filepath, O_RDWR | O_CREAT | O_TRUNC, 0644);
 		}
-		if (last->fd == -1)
+		if (last->fd == -1 && !last->is_heredoc)
+		{
+			redirects_manager->problematic = last;
 			return (NULL);
+		}
 		if (last->next)
 		{	
 			close(last->fd);

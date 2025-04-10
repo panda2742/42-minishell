@@ -16,7 +16,7 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	res->argc = 0;
 	res->argv = empty_tab();
 	res->env = env;
-	res->envp = NULL;
+	res->envp = env->envlst;
 	res->raw = NULL;
 	res->paths = empty_tab();
 	res->status = EXIT_SUCCESS;
@@ -41,6 +41,8 @@ static void	_init_redirects(t_excmd *cmd)
 	cmd->out_redirects.last = NULL;
 	cmd->in_redirects.final_fd = STDIN_FILENO;
 	cmd->out_redirects.final_fd = STDOUT_FILENO;
+	cmd->in_redirects.problematic = NULL;
+	cmd->out_redirects.problematic = NULL;
 }
 
 t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect)
@@ -126,3 +128,8 @@ t_redir	*create_heredoc_redirect(char *delimiter)
 	return (res);
 }
 
+void	link_commands(t_excmd *cmd1, t_excmd *cmd2)
+{
+	cmd1->next = cmd2;
+	cmd2->prev = cmd1;
+}
