@@ -56,4 +56,6 @@ t_bool	ft_isprint(int c);
 
 t_bool	ft_issorted(int *tab, int size);
 
+t_bool	ft_isspace(char c);
+
 #endif

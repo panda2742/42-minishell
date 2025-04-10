@@ -13,6 +13,13 @@ override	EXEC		:=	create_cmd exec free_cmds heredoc process redirect_manager tok
 override	PROMPT		:=	show_prompt
 override	UTILS		:=	empty_tab ft_sprintf
 override	TEST		:=	exec_test
+override	UTILS_PARSER := free_str_return_null \
+							ft_str_join_free \
+							ft_split_parser \
+							ft_strcmp \
+							is_redir \
+							skip_spaces \
+							utils_del_lst \
 override	SRCS		:=	main \
 							$(addprefix builtins/builtins_,$(BUILTINS)) \
 							$(addprefix env_manager/,$(ENV)) \
@@ -20,7 +27,24 @@ override	SRCS		:=	main \
 							$(addprefix exec/,$(EXEC)) \
 							$(addprefix prompt/,$(PROMPT)) \
 							$(addprefix utils/,$(UTILS)) \
-							$(addprefix test/,$(TEST))
+							$(addprefix test/,$(TEST))arg \
+							expand_tokens \
+							fragments \
+							ft_cmd_lstsize \
+							get_next_token \
+							get_var \
+							lexer_parse \
+							lexer \
+							main_parsing \
+							parser \
+							redir_parsing \
+							signals \
+							to_delete_later \
+							token_lexer \
+							utils_lexer \
+							utils_parser \
+							utils1 \
+							$(addprefix utils_parser/,$(UTILS_PARSER))
 
 # The subdirectory where the built objects will be, for example ./make/minishell_develop/
 override	BUILD_DIR	:=	$(MAKE_DIR)$(NAME)_$(shell git branch --show-current)/
@@ -103,7 +127,7 @@ run:
 .PHONY: runv
 runv:
 	$(MAKE) bonus
-	valgrind --leak-check=full ./$(NAME)
+	valgrind --leak-check=full --suppressions=readline.supp ./$(NAME)
 
 
 -include $(DEPS)
