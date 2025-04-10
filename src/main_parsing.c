@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/10 18:45:02 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:51:27 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,26 @@ void	token_list(t_token *head_token, t_token_list **head_list)
 			current = current->next;
 	}
 }
+
+void	print_token_list(t_token_list *list)
+{
+	t_token_list	*tmp_list;
+	t_token			*tmp_token;
+
+	tmp_list = list;
+	while (tmp_list)
+	{
+		tmp_token = tmp_list->tokens;
+		while (tmp_token)
+		{
+			printf("%s ", tmp_token->fragments->text); // Affiche l'index du token
+			tmp_token = tmp_token->next;
+		}
+		printf("\n"); // Saut de ligne après chaque groupe
+		tmp_list = tmp_list->next;
+	}
+}
+
 #include "minishell.h"
 
 int main(int argc, char **argv, char **env)
@@ -137,9 +157,9 @@ int main(int argc, char **argv, char **env)
 		ft_printf("Error initializing environment\n");
 		return (EXIT_FAILURE);
 	}
-	t_excmd **cmds = exec_test(&minishell);
-	exec_command(&minishell, cmds);
-	free_cmds(cmds);
+	// t_excmd **cmds = exec_test(&minishell);
+	// exec_command(&minishell, cmds);
+	// free_cmds(cmds);
 	while (1)
 	{
 		set_sig_action();
@@ -195,6 +215,7 @@ int main(int argc, char **argv, char **env)
 		
 		t_token_list *head_list = NULL;
 		token_list(new_tokens, &head_list);
+		print_token_list(head_list);
 		if (tmp != NULL)
 		{
 			tmp = new_tokens;
