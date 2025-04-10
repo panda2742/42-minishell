@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/10 17:57:57 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:45:02 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,45 +64,58 @@ size_t	count_arg_words(t_token *token)
 	}
 	return (0);
 }
-/*
-void	create_token_list(t_token *end, t_token *start, t_token_list **head)
+
+t_token_list	*add_token_list_node(t_token *start, t_token_list **head_list)
 {
 	t_token_list *list;
 	t_token_list *tmp;
 	
-	tmp = *head;
 	list = malloc(sizeof(t_token_list));
+	if (!list)
+		return (NULL);
+	list->tokens = start;
 	list->next = NULL;
-	if (head == NULL)
-	{
-		head = list;
-	}
+	if (*head_list == NULL)
+		*head_list = list;
 	else
 	{
-		while (tmp)
+		tmp = *head_list;
+		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = list;
 	}
-	list->tokens = start;
+	return (list);
 }
-
-void	token_list(t_token *head)
+/*
+ * Cut the token list at each PIPE and return the new struct for the command
+*/
+void	token_list(t_token *head_token, t_token_list **head_list)
 {
-	t_token *curent = head;
-	t_token	*start = head;
+	t_token *current;
+	t_token	*start;
+	t_token *prev;
 	
-	while (curent)
+	*head_list = NULL;
+	current = head_token;
+	while (current)
 	{
-		if (curent->next->type == PIPE)
+		start = current;
+		prev = NULL;
+		while (current && current->type != PIPE)
 		{
-			create_token_list;
-			start = curent;
-			tmp = current;
-			
+			prev = current;
+			current = current->next;
 		}
-		curent = curent->next;
+		if(prev)
+			prev->next = NULL;
+		if (add_token_list_node(start, head_list) == NULL)
+		{
+			return ; // rajouter free
+		}
+		if (current && current->type == PIPE)
+			current = current->next;
 	}
-} */
+}
 #include "minishell.h"
 
 int main(int argc, char **argv, char **env)
@@ -180,6 +193,8 @@ int main(int argc, char **argv, char **env)
 			tmp = tmp->next;
 		}
 		
+		t_token_list *head_list = NULL;
+		token_list(new_tokens, &head_list);
 		if (tmp != NULL)
 		{
 			tmp = new_tokens;
