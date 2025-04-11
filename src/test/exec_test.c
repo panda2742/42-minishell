@@ -33,6 +33,18 @@ static t_excmd	*_casual_test(t_minishell *minishell)
 	return (cat);
 }
 
+static t_excmd	*_complete_test_1(t_minishell *minishell)
+{
+	t_excmd *cat1 = create_cmd("cat", &minishell->env);
+
+	add_redirect(cat1, IN_REDIR, create_in_redirect("Makefile"));
+
+	cat1->argc = 1;
+	cat1->argv = ft_split("-e", "");
+
+	return (cat1);
+}
+
 t_excmd	**exec_test(t_minishell *minishell)
 {
 	t_excmd **res = malloc(sizeof(t_excmd *));
@@ -40,7 +52,7 @@ t_excmd	**exec_test(t_minishell *minishell)
 	(void)_cat_cat_ls;
 	(void)_cat_urandom_head;
 	(void)_casual_test;
-	res[0] = _casual_test(minishell);
+	(void)_complete_test_1;
+	res[0] = _complete_test_1(minishell);
 	return (res);
 }
-

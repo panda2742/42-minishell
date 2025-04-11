@@ -12,7 +12,7 @@ override	ERRORS		:=	error_handler puterr
 override	EXEC		:=	create_cmd exec free_cmds heredoc process redirect_manager tokens_to_cmds
 override	PROMPT		:=	show_prompt
 override	UTILS		:=	empty_tab ft_sprintf
-override	TEST		:=	exec_test
+override	TEST		:=	exec_test print_cmds
 override	UTILS_PARSER := free_str_return_null \
 							ft_str_join_free \
 							ft_split_parser \

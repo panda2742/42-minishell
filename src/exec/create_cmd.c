@@ -16,7 +16,7 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	res->argc = 0;
 	res->argv = empty_tab();
 	res->env = env;
-	res->envp = env->envlst;
+	res->envp = empty_tab();
 	res->raw = NULL;
 	res->paths = empty_tab();
 	res->status = EXIT_SUCCESS;

@@ -440,5 +440,7 @@ void	*empty_tab(void);
 
 t_excmd	**exec_test(t_minishell *minishell);
 void	link_commands(t_excmd *cmd1, t_excmd *cmd2);
+void	print_cmds(t_excmd *cmd);
+void	print_cmd(t_excmd *cmd);
 
 #endif
