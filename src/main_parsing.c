@@ -157,10 +157,10 @@ int main(int argc, char **argv, char **env)
 		ft_printf("Error initializing environment\n");
 		return (EXIT_FAILURE);
 	}
-	t_excmd **cmds = exec_test(&minishell);
-	print_cmds(*cmds);
+	// t_excmd **cmds = exec_test(&minishell);
+	// print_cmds(*cmds);
 	// exec_command(&minishell, cmds);
-	free_cmds(cmds);
+	// free_cmds(cmds);
 	while (1)
 	{
 		set_sig_action();
