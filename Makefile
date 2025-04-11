@@ -13,11 +13,13 @@ override	EXEC		:=	create_cmd exec free_cmds heredoc process redirect_manager tok
 override	PROMPT		:=	show_prompt
 override	UTILS		:=	empty_tab ft_sprintf
 override	TEST		:=	exec_test print_cmds
-override	UTILS_PARSER := free_str_return_null \
+override	UTILS_PARSER := count_arg_words \
+							free_str_return_null \
 							ft_str_join_free \
 							ft_split_parser \
 							ft_strcmp \
 							is_redir \
+							print_t_token_list \
 							skip_spaces \
 							utils_del_lst \
 							token_lstsize
@@ -41,6 +43,7 @@ override	SRCS		:=	$(addprefix builtins/builtins_,$(BUILTINS)) \
 							signals \
 							to_delete_later \
 							token_lexer \
+							token_list \
 							utils_lexer \
 							utils_parser \
 							utils1 \

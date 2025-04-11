@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/10 18:51:27 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/11 20:06:24 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,103 +39,54 @@ char *join_tokens_to_string(t_token *tokens)
 void	handle_is_redir_tokens(t_excmd *cmd, t_token *token)
 {
 		if (token->type == REDIR_IN)
-			add_redirect(cmd, IN_REDIR, create_in_redirect(token->next->fragments->text));
+			add_redirect(cmd, IN_REDIR, create_in_redirect(token->next->text));
 		else if (token->type == REDIR_OUT)
-			add_redirect (cmd, OUT_REDIR, create_out_redirect(token->next->fragments->text, false));
+			add_redirect (cmd, OUT_REDIR, create_out_redirect(token->next->text, false));
 		else if (token->type == APPEND)
-			add_redirect(cmd, OUT_REDIR, create_out_redirect(token->next->fragments->text, true));
+			add_redirect(cmd, OUT_REDIR, create_out_redirect(token->next->text, true));
 		else if (token->type == HEREDOC)
-			add_redirect(cmd, IN_REDIR, create_heredoc_redirect(token->next->fragments->text));
+			add_redirect(cmd, IN_REDIR, create_heredoc_redirect(token->next->text));
 }
 
-size_t	count_arg_words(t_token *token)
+void	free_dom_help(t_token *token, t_token *new_tokens, t_token_list *token_list, char *line, char *final_cmd) // to delete
 {
-	t_token *tmp = token;
-	size_t	nb_of_words;
+	free_tokens(token);
+	free_tokens(new_tokens);
+	free_tokens_in_list(token_list->tokens, token_list);
+	free(line);
+	free(final_cmd);
+}
+
+void	expand_caller(t_token *token, t_token **new_tokens, t_token *return_value, t_minishell *minishell)
+{
+	t_token	*last_new;
+	t_token	*split_token;
 	
-	nb_of_words = 0;
-	if (!token)
-		return (0);
-	while (tmp)
+	split_token = NULL;
+	return_value = token;
+	*new_tokens = NULL;
+	last_new = NULL;
+	while (return_value)
 	{
-		if (tmp->type == WORD)
-		nb_of_words++;
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
-t_token_list	*add_token_list_node(t_token *start, t_token_list **head_list)
-{
-	t_token_list *list;
-	t_token_list *tmp;
-	
-	list = malloc(sizeof(t_token_list));
-	if (!list)
-		return (NULL);
-	list->tokens = start;
-	list->next = NULL;
-	if (*head_list == NULL)
-		*head_list = list;
-	else
-	{
-		tmp = *head_list;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = list;
-	}
-	return (list);
-}
-/*
- * Cut the token list at each PIPE and return the new struct for the command
-*/
-void	token_list(t_token *head_token, t_token_list **head_list)
-{
-	t_token *current;
-	t_token	*start;
-	t_token *prev;
-	
-	*head_list = NULL;
-	current = head_token;
-	while (current)
-	{
-		start = current;
-		prev = NULL;
-		while (current && current->type != PIPE)
+		split_token = word_split_token(return_value, &minishell->env);
+		if (split_token)
 		{
-			prev = current;
-			current = current->next;
+			// Concatene la chaine de tokens obtenue via le word splitting
+			if (!*new_tokens)
+			{
+				*new_tokens = split_token;
+				last_new = *new_tokens;
+			}
+			else
+			{
+				while (last_new->next)
+					last_new = last_new->next;
+				last_new->next = split_token;
+			}
 		}
-		if(prev)
-			prev->next = NULL;
-		if (add_token_list_node(start, head_list) == NULL)
-		{
-			return ; // rajouter free
-		}
-		if (current && current->type == PIPE)
-			current = current->next;
+		return_value = return_value->next;
 	}
 }
-
-void	print_token_list(t_token_list *list)
-{
-	t_token_list	*tmp_list;
-	t_token			*tmp_token;
-
-	tmp_list = list;
-	while (tmp_list)
-	{
-		tmp_token = tmp_list->tokens;
-		while (tmp_token)
-		{
-			printf("%s ", tmp_token->fragments->text); // Affiche l'index du token
-			tmp_token = tmp_token->next;
-		}
-		printf("\n"); // Saut de ligne après chaque groupe
-		tmp_list = tmp_list->next;
-	}
-}
-
 #include "minishell.h"
 
 int main(int argc, char **argv, char **env)
@@ -143,13 +94,12 @@ int main(int argc, char **argv, char **env)
 	char *line;
 	t_token *token;
 	t_token *tmp;
-	t_token *last_new;
-	t_token *split_token;
+	// t_token *last_new;
+	// t_token *split_token;
 	char *final_cmd;
 	t_minishell minishell;
 
-	t_token *new_tokens; // Pour stocker le resultat du word splitting
-	// Gestionnaire d'environnement (alloue et initialise via create_env)
+	t_token *new_tokens;
 	(void)argc;
 	(void)argv;
 	if (create_env(env, &minishell.env) == NULL)
@@ -157,10 +107,6 @@ int main(int argc, char **argv, char **env)
 		ft_printf("Error initializing environment\n");
 		return (EXIT_FAILURE);
 	}
-	// t_excmd **cmds = exec_test(&minishell);
-	// print_cmds(*cmds);
-	// exec_command(&minishell, cmds);
-	// free_cmds(cmds);
 	while (1)
 	{
 		set_sig_action();
@@ -185,79 +131,68 @@ int main(int argc, char **argv, char **env)
 			free(line);
 			continue;
 		}
-		/*Ici, on a deja la phase d'expansion dans chaque token,
-			et on affiche le resultat d'expansion
+		/*
 		// On applique ensuite le word splitting sur chaque token.
 		// Ici, word_split_token() reçoit un token et son environnement,
 			et retourne une nouvelle chaine de tokens */
-		tmp = token;
-		new_tokens = NULL;
-		last_new = NULL;
-		while (tmp)
-		{
-			split_token = word_split_token(tmp, &minishell.env);
-			if (split_token)
-			{
-				// Concatene la chaine de tokens obtenue via le word splitting
-				if (!new_tokens)
-				{
-					new_tokens = split_token;
-					last_new = new_tokens;
-				}
-				else
-				{
-					while (last_new->next)
-						last_new = last_new->next;
-					last_new->next = split_token;
-				}
-			}
-			tmp = tmp->next;
-		}
+		print_tokens(token);
+
+		expand_caller(token, &new_tokens, tmp, &minishell);
+		final_cmd = join_tokens_to_string(new_tokens);
+		ft_printf("Final command line: %s\n", final_cmd);
 		
+		tmp = NULL;
 		t_token_list *head_list = NULL;
+
 		token_list(new_tokens, &head_list);
 		print_token_list(head_list);
-		if (tmp != NULL)
+		
+		t_token_list *tmp_list = head_list;
+		while(tmp_list)
 		{
-			tmp = new_tokens;
-			char *cmd_name = tmp->fragments->text;
-			t_excmd *cmd = create_cmd(cmd_name, &minishell.env); // cmd doit etre le premier WORD rencontre, a changer
-			cmd->argc = token_lstsize(new_tokens) - 1;
-			tmp = tmp->next;
-			ft_printf("cmd name: %s\n", tmp->fragments->text);
-			int count_args = count_arg_words(tmp);
-			cmd->raw = join_tokens_to_string(new_tokens);
-			cmd->argv = malloc(sizeof(char *) * count_args + 1);
-			cmd->argv[count_args] = NULL;
-			int i = 0;
 			
-			while(tmp || (tmp->type != PIPE))
+			if (tmp_list != NULL)
 			{
-				if (is_redir(tmp))
+				tmp = tmp_list->tokens;
+				char *cmd_name = tmp->text;
+				t_excmd *cmd = create_cmd(cmd_name, &minishell.env); // cmd doit etre le premier WORD rencontre, a changer
+				cmd->argc = token_lstsize(tmp) - 1;
+				tmp = tmp->next;
+				ft_printf("cmd name: %s\n", cmd_name);
+				int count_args = count_arg_words(tmp);
+				cmd->raw = join_tokens_to_string(new_tokens);
+				cmd->argv = malloc(sizeof(char *) *( count_args + 1));
+				cmd->argv[count_args] = NULL;
+				int i = 0;
+				
+				while(tmp && (tmp->type != PIPE))
 				{
-					handle_is_redir_tokens(cmd, token);
+					if (is_redir(tmp))
+					{
+						handle_is_redir_tokens(cmd, tmp);
+					}
+					if (tmp->type == WORD)
+					{
+						cmd->argv[i] = tmp->text;
+						i++;
+					}
+					tmp = tmp->next;
 				}
-				if (tmp->type == WORD)
+				i = 0;
+				while (cmd->argv[i])
 				{
-					cmd->argv[i] = tmp->fragments->text;
+					ft_printf("cmd argv: %s\n", cmd->argv[i]);
 					i++;
 				}
-				ft_printf("test cmd: %s\n", tmp->fragments->text);
-				tmp = tmp->next;
+				i = 0;
+
 			}
+			tmp_list = tmp_list->next;
 		}
-		
-		// On peut afficher la nouvelle liste de tokens après word splitting
-		final_cmd = join_tokens_to_string(new_tokens);
-		// print_tokens(token);
-		ft_printf("Final command line: %s\n", final_cmd);
-		print_tokens(new_tokens);
-		free_tokens(token);
-		free_tokens(new_tokens);
-		free(line);
-		free(final_cmd);
+
+		free_dom_help(token, new_tokens, head_list, line, final_cmd);
+
 	}
-	// free_env_manager(&minishell);
 	return (0);
 }
 

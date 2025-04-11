@@ -251,6 +251,7 @@ typedef struct s_token
 	t_token_type		type;
 	t_fragment			*fragments;
 	t_qtype				quote_type;
+	char				*text;
 	int					index;
 	struct s_token		*next;
 }						t_token;
@@ -307,11 +308,13 @@ typedef struct s_utils
 }						t_utils;
 
 // utiles parser
+size_t					count_arg_words(t_token *token);
 char					*free_str_return_null(char *str);
 char					**ft_split_a(char const *s, char c);
 char					*str_join_free(char *s1, const char *s2);
 int						ft_strcmp(char *s1, char *s2);
 int						is_redir(t_token *head_token); // return 1 si c est une redir
+void					print_token_list(t_token_list *list);
 void					skip_spaces(const char *input, int *i);
 void					del_cmds(void *content);
 void					del_redir(void *content);
@@ -345,6 +348,10 @@ char					*token_to_string(t_token *token,
 
 // Token lexer
 void					append_token(t_token **token_list, t_token *token);
+
+// Token list
+void	token_list(t_token *head_token, t_token_list **head_list);
+void	free_tokens_in_list(t_token *tokens, t_token_list *list);
 
 // Lexer parser
 int						lexer_parse(t_token *token);
@@ -443,4 +450,4 @@ void	link_commands(t_excmd *cmd1, t_excmd *cmd2);
 void	print_cmds(t_excmd *cmd);
 void	print_cmd(t_excmd *cmd);
 
-#endif
+# endif
