@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/11 20:28:48 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/11 20:30:49 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ int main(int argc, char **argv, char **env)
 					if (is_redir(tmp))
 					{
 						handle_is_redir_tokens(cmd, tmp);
-						printf("redir file: %s\n", cmd->out_redirects->last->filepath);
+						printf("redir file: %s\n", cmd->out_redirects->last->filepath); ////////////////////////// Comment le print???
 					}
 					if (tmp->type == WORD)
 					{
