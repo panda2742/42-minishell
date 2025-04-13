@@ -81,7 +81,10 @@ void	token_list(t_token *head_token, t_token_list **head_list)
 	t_token *end;
 	t_token_list *token_list;
 	
+	(void)token_list;
 	*head_list = NULL;
+	if (head_token == NULL)
+		return ;
 	current = head_token;
 	while (current)
 	{

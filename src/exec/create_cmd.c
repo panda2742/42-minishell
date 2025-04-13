@@ -81,7 +81,7 @@ t_redir	*create_in_redirect(char *filepath)
 	res = malloc(sizeof(t_redir));
 	if (!res)
 		return (NULL);
-	res->filepath = ft_strdup(filepath);
+	res->filepath = ft_strdup(filepath); // malloc
 	res->fd = STDIN_FILENO;
 	res->is_heredoc = false;
 	res->heredoc_id = -1;
@@ -99,7 +99,7 @@ t_redir	*create_out_redirect(char *filepath, t_bool append_mode)
 	res = malloc(sizeof(t_redir));
 	if (!res)
 		return (NULL);
-	res->filepath = ft_strdup(filepath);
+	res->filepath = ft_strdup(filepath); // mallox 
 	res->fd = STDOUT_FILENO;
 	res->is_heredoc = false;
 	res->heredoc_id = -1;
@@ -121,7 +121,7 @@ t_redir	*create_heredoc_redirect(char *delimiter)
 	res->fd = -1;
 	res->is_heredoc = true;
 	res->heredoc_id = -1;
-	res->heredoc_del = ft_strdup(delimiter);
+	res->heredoc_del = ft_strdup(delimiter); // malloc
 	res->heredoc_content = NULL;
 	res->out_append_mode = false;
 	res->next = NULL;

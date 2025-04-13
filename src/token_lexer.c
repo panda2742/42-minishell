@@ -30,6 +30,7 @@ t_token	*ft_create_token(t_token_type type)
 	new = malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
+	new->is_first_word = false;
 	new->type = type;
 	new->fragments = NULL;
 	new->next = NULL;

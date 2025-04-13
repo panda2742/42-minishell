@@ -253,6 +253,7 @@ typedef struct s_token
 	t_qtype				quote_type;
 	char				*text;
 	int					index;
+	t_bool				is_first_word;
 	struct s_token		*next;
 }						t_token;
 

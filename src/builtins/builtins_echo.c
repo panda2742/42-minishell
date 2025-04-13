@@ -7,6 +7,7 @@ t_exit	builtins_echo(t_excmd *c)
 	size_t			i;
 	t_bool			continue_nl;
 	char			current_quote;
+	(void)current_quote;
 
 	i = -1;
 	(void)s;

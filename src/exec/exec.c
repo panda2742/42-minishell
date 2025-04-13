@@ -5,6 +5,7 @@ static char	*_get_full_path(char *path, char *cmd_name);
 t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 {
 	t_cmdproto		*proto;
+	(void)proto;
 	t_excmd			*cmd;
 	t_execparams	params;
 

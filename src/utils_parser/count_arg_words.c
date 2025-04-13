@@ -11,7 +11,7 @@ size_t	count_arg_words(t_token *token)
 		return (0);
 	while (tmp)
 	{
-		if (tmp->type == WORD)
+		if (tmp->type == WORD && tmp->is_first_word == false)
 			nb_of_words++;
 		tmp = tmp->next;
 	}
