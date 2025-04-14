@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:25 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:00:26 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/14 15:47:14 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	_unset_var(t_excmd *c);
 
-t_exit	builtins_unset(t_excmd *c)
+t_exit	builtin_unset(t_excmd *c)
 {
 	if (c->argc > 2)
 		return (

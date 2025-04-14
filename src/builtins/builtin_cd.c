@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:11 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:00:56 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/14 15:47:14 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static t_exit	_set_home(t_excmd *c);
 static void		_update_vars(t_env_manager *env);
 
-t_exit	builtins_cd(t_excmd *c)
+t_exit	builtin_cd(t_excmd *c)
 {
 	if (c->argc > 2)
 		return (

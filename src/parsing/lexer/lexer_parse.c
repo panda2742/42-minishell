@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:45 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 13:42:49 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/14 15:54:57 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	lexer_parse(t_token *token)
 		return (0);
 	if (list->type == PIPE)
 		return (ft_printf_error("Error: syntax error near unexpected token `|'\n"));
-	//
 	while (list != NULL)
 	{
 		if (list->type == PIPE)

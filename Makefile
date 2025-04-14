@@ -16,21 +16,20 @@ override	HEADER_FILES	:=	minishell
 # The C source code files of the project
 override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export pwd unset)
 override	SRC_ENV_MANAGER	:=	create_env env_to_strlst get_var
-override	SRC_ERROR		:=	error_handler puterr
+override	SRC_ERRORS		:=	error_handler puterr
 override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
 								$(addprefix init/, create_cmd create_redirect redirect_manager) \
 								$(addprefix process/, exec process)
 override	SRC_MEMORY		:=	free_cmds free_env
-override	SRC_MISC		:=	show_prompt signals
+override	SRC_MISC		:=	print_cmds show_prompt signals
 override	SRC_PARSING		:=	$(addprefix lexer/, lexer_parse lexer lexer_utils) \
 								$(addprefix tokenizer/, expand_tokens fragments token_lexer token_list)
-override	SRC_TEST		:=	exec_test print_cmds
 override	SRC_UTILS		:=	$(addprefix parsing/, count_arg_words free_str_return_null ft_split_parser ft_str_join_free ft_strcmp is_redir print_t_token_list skip_spaces token_lstsize) \
 								empty_tab \
 								ft_sprintf
 override	SOURCE_FILES	:=	$(addprefix builtins/, $(SRC_BUILTINS)) \
 								$(addprefix env_manager/, $(SRC_ENV_MANAGER)) \
-								$(addprefix errors/, $(SRC_ERROR)) \
+								$(addprefix errors/, $(SRC_ERRORS)) \
 								$(addprefix exec/, $(SRC_EXEC)) \
 								$(addprefix memory/, $(SRC_MEMORY)) \
 								$(addprefix misc/, $(SRC_MISC)) \

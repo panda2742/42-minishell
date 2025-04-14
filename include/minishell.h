@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/14 16:05:20 by ehosta           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -7,7 +19,9 @@
 # include <wait.h>
 # include "libft.h"
 
-#define _XOPEN_SOURCE 700
+# ifndef PROJECT_NAME
+#  define PROJECT_NAME "Minishell"
+# endif
 
 /**
  * An alias to the unsigned char type, just to set the code more readable.
@@ -124,7 +138,7 @@ typedef struct s_excmd
 	/**
 	 * The prototype of the command if it is a builtin. Default to NULL. // E
 	 */
-	t_exit 			(*proto)(struct s_excmd *);
+	t_exit			(*proto)(struct s_excmd *);
 	/**
 	 * The number of arguments. Default to 0.
 	 */
@@ -140,7 +154,8 @@ typedef struct s_excmd
 	t_env_manager	*env;
 	/**
 	 * The string list of each arguments. Created from the environment managers.
-	 * Terminates with a NULL element. If empty, only contains a NULL element. // E
+	 * Terminates with a NULL element. If empty, only contains a NULL element.
+	 * // E
 	 */
 	char			**envp;
 	/**
@@ -157,12 +172,12 @@ typedef struct s_excmd
 	 * The successive input stream file descriptors. Per default, set the
 	 * file descriptor to STDIN_FILENO. // E
 	 */
-	t_redir_manager		in_redirects;
+	t_redir_manager	in_redirects;
 	/**
 	 * The successive input stream file descriptors. Per default, set the
 	 * file descriptor to STDOUT_FILENO. //E
 	 */
-	t_redir_manager		out_redirects;
+	t_redir_manager	out_redirects;
 	/**
 	 * @brief The pipe of the command. Creates a stream between the input and
 	 * the output of the command.
@@ -170,7 +185,8 @@ typedef struct s_excmd
 	 * How does it work? The scenario that occur is:
 	 * - The command is instanced, the pipe is created.
 	 * - Reads: stdin if first command, s_excmd::pipe[0] otherwise.
-	 * - Writes into: stdout if the last command, s_excmd::pipe[1] otherwise. // E
+	 * - Writes into: stdout if the last command, s_excmd::pipe[1] otherwise.
+	 * // E
 	 */
 	int				pipe[2];
 	/**
@@ -262,42 +278,8 @@ typedef struct s_token
 typedef struct s_token_list
 {
 	t_token				*tokens;
-	struct s_token_list *next;
+	struct s_token_list	*next;
 }						t_token_list;
-
-// typedef struct s_token_exp
-// {
-// 	char				*str;
-// 	struct s_token_exp	*next;
-// }						t_token_exp;
-
-// typedef struct s_redir
-// {
-// 	int					type;
-// 	char				*filename;
-// 	int					quote_type;
-// 	struct s_redir		*next;
-// }						t_redir;
-
-// typedef struct s_word
-// {
-// 	int					quote_type;
-// 	char				*word;
-// 	struct s_word		*next;
-// }						t_word;
-
-// typedef struct s_cmds
-// {
-// 	t_word				*words;
-// 	t_redir				*redir;
-// 	int					leak_flag;
-// 	struct s_cmds		*next;
-// }						t_cmds;
-
-# ifndef PROJECT_NAME
-#  define PROJECT_NAME "Minishell"
-# endif
-
 
 typedef struct s_utils
 {
@@ -310,147 +292,98 @@ typedef struct s_utils
 	char				*s2;
 }						t_utils;
 
-// utiles parser
-size_t					count_arg_words(t_token *token);
-char					*free_str_return_null(char *str);
-char					**ft_split_a(char const *s, char c);
-char					*str_join_free(char *s1, const char *s2);
-int						ft_strcmp(char *s1, char *s2);
-int						is_redir(t_token *head_token); // return 1 si c est une redir
-void					print_token_list(t_token_list *list);
-void					skip_spaces(const char *input, int *i);
-void					del_cmds(void *content);
-void					del_redir(void *content);
-size_t					token_lstsize(t_token *head);
-void					del_word(void *content);
+// BUILTINS --------------------------------------------------------------------
 
-// Arg
-// t_excmd					*cmd_to_arg(t_cmds *head);
+t_exit			builtin_cd(t_excmd *c);
+t_exit			builtin_echo(t_excmd *c);
+t_exit			builtin_env(t_excmd *c);
+t_exit			builtin_exit(t_excmd *c);
+t_exit			builtin_export(t_excmd *c);
+t_exit			builtin_pwd(t_excmd *c);
+t_exit			builtin_unset(t_excmd *c);
 
-// Expand_tokens
-char					*expand_token(t_token *token, t_env_manager *env);
-t_token					*word_split_token(t_token *token, t_env_manager *env);
+// ENV_MANAGER -----------------------------------------------------------------
 
-// Fragment
-t_fragment				*new_fragment(const char *start, size_t len,
-							t_qtype quote_type);
-void					append_fragment(t_token *token, t_fragment *frag);
+t_env_var		**create_env(char **envp, t_env_manager *env);
+char			**env_to_strlst(t_env_manager *env);
+t_env_var		*get_var(t_env_manager *env, const char *name);
 
-// free str return null
+// ERRORS ----------------------------------------------------------------------
 
-// ft_cmd_list_size
-// int						ft_cmd_lstsize(t_word *cmd);
+void			*handle_env_mem_alloc(t_env_manager *env);
+t_exit			command_failure(t_excmd *c, char *message, t_bool call_perror);
+void			puterr(char *message, t_bool call_perror);
 
-// Lexer
-t_token					*ft_input(const char *input);
-void					print_tokens(t_token *tokens);
-t_token					*ft_create_token(t_token_type type);
-void					free_tokens(t_token *tokens);
-char					*token_to_string(t_token *token,
-							t_minishell *minishell);
+// EXEC ------------------------------------------------------------------------
 
-// Token lexer
-void					append_token(t_token **token_list, t_token *token);
+t_exit			heredoc(char *buffer, char *del, t_bool skip_writing);
+t_excmd			*create_cmd(char *cmd_name, t_env_manager *env);
+t_redir			*add_redirect(t_excmd *cmd, t_redir_type type,
+					t_redir *redirect);
+void			link_commands(t_excmd *cmd1, t_excmd *cmd2);
+t_redir			*create_in_redirect(char *filepath);
+t_redir			*create_out_redirect(char *filepath, t_bool append_mode);
+t_redir			*create_heredoc_redirect(char *delimiter);
+void			read_heredocs(t_redir_manager *redirects_manager);
+t_redir			*get_last_redirect(t_redir_manager *redirects_manager);
+t_exit			exec_command(t_minishell *minishell, t_excmd **cmds);
+t_cmdproto		load_builtin(const char *command_name, t_cmdproto *proto);
 
-// Token list
-void	token_list(t_token *head_token, t_token_list **head_list);
-void	free_tokens_in_list(t_token *tokens, t_token_list *list);
+// MEMORY ----------------------------------------------------------------------
 
-// Lexer parser
-int						lexer_parse(t_token *token);
-int						ft_strcmp(char *s1, char *s2);
+void			free_cmds(t_excmd **cmds);
+void			free_one_cmd(t_excmd *cmd);
+void			free_env(t_env_manager *env);
 
-// Signals
-void					set_sig_action(void);
-void					sigint_handler(int signal);
+// MISC ------------------------------------------------------------------------
 
-// Parser
-int						parser(t_token *head, t_minishell *minishell);
+char			*show_prompt(t_env_manager *env);
+void			sigint_handler(int signal);
+void			set_sig_action(void);
+void			print_cmds(t_excmd *cmd);
+void			print_cmd(t_excmd *cmd);
 
-// Redir parsing
-// void					create_redir(t_cmds *cmd, t_token *head,
-// 							t_minishell *minishell);
+// PARSING ---------------------------------------------------------------------
 
-// Utils parser
-const char	*get_token_type_str(t_token_type type);
-		// pour print les noms des redir
+void			update_token_redir(t_token *list);
+int				ft_printf_error(char *str);
+int				lexer_parse(t_token *token);
+int				is_char_redir_or_pipe(char c);
+void			print_tokens(t_token *tokens);
+void			handle_redir_out(const char *input, int *i,
+					t_token **token_list);
+void			handle_pipe(int *i, t_token **token_list);
+void			handle_redir_pipe(int *i, t_token **token_list,
+					const char *input);
+t_token			*ft_input(const char *input);
 
-// Utils lexer
-int						is_separator(char c);
-int						is_char_redir_or_pipe(char c);
+char			*expand_fragment(const char *input, int quote,
+					t_env_manager *env);
+t_qtype			set_qtype_fragment(t_token *token_head);
+t_token			*word_split_token(t_token *token, t_env_manager *env);
+t_fragment		*new_fragment(const char *start, size_t len,
+					t_qtype quote_type);
+void			append_fragment(t_token *token, t_fragment *frag);
+void			free_tokens(t_token *tokens);
+t_token			*ft_create_token(t_token_type type);
+void			append_token(t_token **token_list, t_token *token);
+void			free_tokens_in_list(t_token *tokens, t_token_list *list);
+t_token_list	*add_token_list_node(t_token *start, t_token *end,
+					t_token_list **head_list, t_token **head_tokens);
+void			token_list(t_token *head_token, t_token_list **head_list);
 
-// Utils 1
-void					*get_next_word(void *node);
-void					*get_next_redir(void *node);
-void					lst_clear(void **lst, void *(*get_next)(void *),
-							void (*del)(void *));
+// UTILS -----------------------------------------------------------------------
 
-// Get next token
-void					*get_next_token(void *node);
-void					*get_next_cmds(void *node);
-void					*get_next_word(void *node);
-void					*get_next_redir(void *node);
+size_t			count_arg_words(t_token *token);
+char			*free_str_return_null(char *str);
+char			**ft_split_a(char const *s, char c);
+char			*str_join_free(char *s1, const char *s2);
+int				ft_strcmp(char *s1, char *s2);
+int				is_redir(t_token *head_token);
+char			*ft_sprintf(const char *format, ...);
+void			*empty_tab(void);
+size_t			token_lstsize(t_token *head);
+void			skip_spaces(const char *input, int *i);
+void			print_token_list(t_token_list *list);
 
-// To delete later
-// void					print_elements_cmds(t_word *head_w, t_redir *head_r);
-
-t_cmdproto	load_builtin(const char *command_name, t_cmdproto *proto);
-t_exit		heredoc(char *del, char *buffer, t_bool skip_writing);
-
-// ENV -----------------------------
-
-t_env_var	**create_env(char **envp, t_env_manager *env);
-char		**env_to_strlst(t_env_manager *env);
-void		free_env(t_env_manager *env);
-t_env_var	*get_var(t_env_manager *env, const char *name);
-
-// ERRORS --------------------------
-
-void	*handle_env_mem_alloc(t_env_manager *env);
-void	puterr(char *message, t_bool call_perror);
-t_exit	command_failure(t_excmd *c, char *message, t_bool call_perror);
-
-// EXEC ----------------------------
-
-t_exit	launch_process(t_excmd *cmd);
-t_exit	exec_command(t_minishell *minishell, t_excmd **cmds);
-void	free_cmds(t_excmd **cmds);
-void	free_one_cmd(t_excmd *cmd);
-
-t_excmd	*create_cmd(char *cmd_name, t_env_manager *env);
-t_redir	*get_last_redirect(t_redir_manager *redirects_manager);
-
-// FILE DESCRIPTORS ----------------
-
-t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect);
-t_redir	*create_in_redirect(char *filepath);
-t_redir	*create_out_redirect(char *filepath, t_bool append_mode);
-t_redir	*create_heredoc_redirect(char *delimiter);
-
-// BUILTINS ------------------------
-
-t_exit	builtins_cd(t_excmd *c);
-t_exit	builtins_echo(t_excmd *c);
-t_exit	builtins_env(t_excmd *c);
-t_exit	builtins_exit(t_excmd *c);
-t_exit	builtins_export(t_excmd *c);
-t_exit	builtins_pwd(t_excmd	*c);
-t_exit	builtins_unset(t_excmd *c);
-
-// PROMPT --------------------------
-
-char	*show_prompt(t_env_manager *env);
-
-// UTILS ---------------------------
-
-char	*ft_sprintf(const char *format, ...);
-void	*empty_tab(void);
-
-// TESTS ---------------------------
-
-t_excmd	**exec_test(t_minishell *minishell);
-void	link_commands(t_excmd *cmd1, t_excmd *cmd2);
-void	print_cmds(t_excmd *cmd);
-void	print_cmd(t_excmd *cmd);
-
-# endif
+#endif

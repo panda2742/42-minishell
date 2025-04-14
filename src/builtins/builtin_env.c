@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:16 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:01:43 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/14 15:47:14 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static t_bool	_write_var(t_env_var *var);
 
-t_exit	builtins_env(t_excmd *c)
+t_exit	builtin_env(t_excmd *c)
 {
 	size_t		i;
 	t_env_var	*var;

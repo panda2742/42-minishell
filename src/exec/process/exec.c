@@ -172,8 +172,8 @@ t_cmdproto	load_builtin(const char *command_name, t_cmdproto *proto)
 		"cd", "echo", "env", "exit", "export", "pwd", "unset"
 	};
 	static t_cmdproto	command_prototypes[7] = {
-		builtins_cd, builtins_echo, builtins_env, builtins_exit,
-		builtins_export, builtins_pwd, builtins_unset
+		builtin_cd, builtin_echo, builtin_env, builtin_exit,
+		builtin_export, builtin_pwd, builtin_unset
 	};
 	size_t				len;
 	int					i;

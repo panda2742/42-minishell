@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:30:25 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/14 16:13:03 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 #include <stdio.h>
 #include <strings.h>
 
-char *join_tokens_to_string(t_token *tokens)
+char	*join_tokens_to_string(t_token *tokens)
 {
-	char *result;
-	t_token *tmp;
+	char	*result;
+	t_token	*tmp;
 
 	result = ft_strdup("");
 	tmp = tokens;
@@ -41,14 +41,18 @@ void	handle_is_redir_tokens(t_excmd *cmd, t_token *token)
 	if (token->type == REDIR_IN)
 		add_redirect(cmd, IN_REDIR, create_in_redirect(token->next->text));
 	else if (token->type == REDIR_OUT)
-		add_redirect (cmd, OUT_REDIR, create_out_redirect(token->next->text, false));
+		add_redirect (cmd, OUT_REDIR,
+			create_out_redirect(token->next->text, false));
 	else if (token->type == APPEND)
-		add_redirect(cmd, OUT_REDIR, create_out_redirect(token->next->text, true));
+		add_redirect(cmd, OUT_REDIR,
+			create_out_redirect(token->next->text, true));
 	else if (token->type == HEREDOC)
-		add_redirect(cmd, IN_REDIR, create_heredoc_redirect(token->next->text));
+		add_redirect(cmd, IN_REDIR,
+			create_heredoc_redirect(token->next->text));
 }
 
-void	free_dom_help(t_token *token, t_token *new_tokens, t_token_list *token_list, char *line, char *final_cmd) // to delete
+void	free_dom_help(t_token *token, t_token *new_tokens,
+			t_token_list *token_list, char *line, char *final_cmd) // to delete
 {
 	free_tokens(token);
 	free_tokens(new_tokens);
@@ -57,11 +61,12 @@ void	free_dom_help(t_token *token, t_token *new_tokens, t_token_list *token_list
 	free(final_cmd);
 }
 
-void	expand_caller(t_token *token, t_token **new_tokens, t_token *return_value, t_minishell *minishell)
+void	expand_caller(t_token *token, t_token **new_tokens,
+			t_token *return_value, t_minishell *minishell)
 {
 	t_token	*last_new;
 	t_token	*split_token;
-	
+
 	split_token = NULL;
 	return_value = token;
 	*new_tokens = NULL;
@@ -88,9 +93,11 @@ void	expand_caller(t_token *token, t_token **new_tokens, t_token *return_value, 
 	}
 }
 
-char *get_first_word(t_token *token)
+char	*get_first_word(t_token *token)
 {
-	t_token *tmp = token;
+	t_token	*tmp;
+
+	tmp = token;
 	while (tmp)
 	{
 		if (tmp->type == WORD)
@@ -103,19 +110,19 @@ char *get_first_word(t_token *token)
 	return (NULL);
 }
 
-#include "minishell.h"
-
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-	char *line;
-	t_token *token;
-	t_token *tmp;
-	// t_token *last_new;
-	// t_token *split_token;
-	char *final_cmd;
+	char		*line;
+	t_token		*token;
+	t_token		*tmp;
+	char		*final_cmd;
+	t_excmd		*prev;
+	t_excmd		*cmd;
+	t_excmd		*first;
 	t_minishell minishell;
+	t_token		*new_tokens;
+	char 		*prompt;
 
-	t_token *new_tokens;
 	(void)argc;
 	(void)argv;
 	if (create_env(env, &minishell.env) == NULL)
@@ -126,10 +133,10 @@ int main(int argc, char **argv, char **env)
 	while (1)
 	{
 		set_sig_action();
-		char *prompt = show_prompt(&minishell.env);
+		prompt = show_prompt(&minishell.env);
 		line = readline(prompt);
 		free(prompt);
-		if (!line) // CTRL+D || "exit"
+		if (!line)
 		{
 			ft_printf("exit\n");
 			free_env(&minishell.env);
@@ -152,20 +159,11 @@ int main(int argc, char **argv, char **env)
 		// Ici, word_split_token() reçoit un token et son environnement,
 			et retourne une nouvelle chaine de tokens */
 		// print_tokens(token);
-
 		expand_caller(token, &new_tokens, tmp, &minishell);
 		final_cmd = join_tokens_to_string(new_tokens);
-		// ft_printf("Final command line: %s\n", final_cmd);
-
 		tmp = NULL;
 		t_token_list *head_list = NULL;
-
 		token_list(new_tokens, &head_list);
-		// print_token_list(head_list);
-
-		t_excmd	*prev;
-		t_excmd	*cmd;
-		t_excmd	*first;
 		prev = NULL;
 		cmd = NULL;
 		t_token_list *tmp_list = head_list;
@@ -176,14 +174,15 @@ int main(int argc, char **argv, char **env)
 			{
 				tmp = tmp_list->tokens;
 				char *cmd_name = get_first_word(tmp);
-				cmd = create_cmd(cmd_name, &minishell.env); // cmd doit etre le premier WORD rencontre, a changer
+				 // cmd doit etre le premier WORD rencontre, a changer
+				cmd = create_cmd(cmd_name, &minishell.env);
 				cmd->argc = token_lstsize(tmp);
 				int count_args = count_arg_words(tmp);
 				cmd->raw = join_tokens_to_string(new_tokens);
 				cmd->argv = malloc(sizeof(char *) *( count_args + 1));
 				cmd->argv[count_args] = NULL;
 				int i = 0;
-				while(tmp && (tmp->type != PIPE))
+				while (tmp && (tmp->type != PIPE))
 				{
 					if (is_redir(tmp))
 					{
@@ -203,12 +202,10 @@ int main(int argc, char **argv, char **env)
 					first = cmd;
 				prev = cmd;
 			}
-
 			tmp_list = tmp_list->next;
 		}
 		exec_command(&minishell, &first);
 		free_dom_help(token, new_tokens, head_list, line, final_cmd);
-
 	}
 	return (0);
 }
