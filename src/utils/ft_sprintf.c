@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_sprintf.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 15:29:51 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/14 15:32:39 by ehosta           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static size_t	_total_len(const char *format, va_list args);
 static char		*_write_res(const char *format, va_list args, char *buffer);
+static void		_handle_string(va_list args, size_t i, char *buffer);
 
 char	*ft_sprintf(const char *format, ...)
 {
@@ -46,23 +59,13 @@ static size_t	_total_len(const char *format, va_list args)
 static char	*_write_res(const char *format, va_list args, char *buffer)
 {
 	size_t	i;
-	size_t	j;
-	size_t	len;
-	char	*str;
 
 	i = 0;
 	while (*format)
 	{
 		if (*format == '%' && *(format + 1) == 's')
 		{
-			str = va_arg(args, char *);
-			len = ft_strlen(str);
-			j = -1;
-			while (++j < len)
-			{
-				buffer[i] = str[j];
-				i++;
-			}
+			_handle_string(args, i, buffer);
 			format++;
 		}
 		else
@@ -73,4 +76,20 @@ static char	*_write_res(const char *format, va_list args, char *buffer)
 		format++;
 	}
 	return (buffer);
+}
+
+static void	_handle_string(va_list args, size_t i, char *buffer)
+{
+	char	*str;
+	size_t	len;
+	size_t	j;
+
+	str = va_arg(args, char *);
+	len = ft_strlen(str);
+	j = -1;
+	while (++j < len)
+	{
+		buffer[i] = str[j];
+		i++;
+	}
 }

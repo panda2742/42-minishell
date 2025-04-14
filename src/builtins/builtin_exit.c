@@ -1,34 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   puterr.c                                           :+:      :+:    :+:   */
+/*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 15:00:38 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:00:39 by ehosta           ###   ########.fr       */
+/*   Created: 2025/04/14 15:00:19 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/14 15:00:20 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	puterr(char *message, t_bool call_perror)
+t_exit	builtins_exit(t_excmd *c)
 {
-	ft_putstr_fd(B_RED PROJECT_NAME, 2);
-	if (message)
-	{
-		if (call_perror)
-			perror(message);
-		else
-			ft_putstr_fd(message, 2);
-		free(message);
-	}
-	else
-	{
-		if (call_perror)
-			perror(": An error occurred");
-		else
-			ft_putstr_fd(": An error occurred\n", 2);
-	}
-	ft_putstr_fd(RESET, 2);
+	(void)c;
+	free_env(c->env);
+	ft_free_strtab(c->argv);
+	exit(c->status);
 }

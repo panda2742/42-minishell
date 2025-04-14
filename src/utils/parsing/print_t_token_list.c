@@ -1,34 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   puterr.c                                           :+:      :+:    :+:   */
+/*   print_t_token_list.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 15:00:38 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:00:39 by ehosta           ###   ########.fr       */
+/*   Created: 2025/04/14 15:30:13 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/14 15:30:15 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	puterr(char *message, t_bool call_perror)
+/*
+ * Print each chunk between pipes 
+*/
+void	print_token_list(t_token_list *list)
 {
-	ft_putstr_fd(B_RED PROJECT_NAME, 2);
-	if (message)
+	t_token_list	*tmp_list;
+	t_token			*tmp_token;
+
+	tmp_list = list;
+	while (tmp_list)
 	{
-		if (call_perror)
-			perror(message);
-		else
-			ft_putstr_fd(message, 2);
-		free(message);
+		tmp_token = tmp_list->tokens;
+		ft_printf("Token list: ");
+		while (tmp_token)
+		{
+			printf("%s/", tmp_token->text);
+			tmp_token = tmp_token->next;
+		}
+		printf("\n");
+		tmp_list = tmp_list->next;
 	}
-	else
-	{
-		if (call_perror)
-			perror(": An error occurred");
-		else
-			ft_putstr_fd(": An error occurred\n", 2);
-	}
-	ft_putstr_fd(RESET, 2);
 }

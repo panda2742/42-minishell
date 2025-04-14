@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_env.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 15:00:29 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/14 15:01:59 by ehosta           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static char	*_get_name(t_env_var *var, char *env_var);
@@ -6,7 +18,7 @@ static void	_init_manager(char **envp, t_env_manager *env);
 
 t_env_var	**create_env(char **envp, t_env_manager *env)
 {
-	size_t	i;
+	size_t		i;
 	t_env_var	*elt;
 	t_env_var	*prev;
 

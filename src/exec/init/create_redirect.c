@@ -1,0 +1,67 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_redirect.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 15:04:48 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/14 15:06:43 by ehosta           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+t_redir	*create_in_redirect(char *filepath)
+{
+	t_redir	*res;
+
+	res = malloc(sizeof(t_redir));
+	if (!res)
+		return (NULL);
+	res->filepath = ft_strdup(filepath);
+	res->fd = STDIN_FILENO;
+	res->is_heredoc = false;
+	res->heredoc_id = -1;
+	res->heredoc_del = NULL;
+	res->heredoc_content = NULL;
+	res->out_append_mode = false;
+	res->next = NULL;
+	return (res);
+}
+
+t_redir	*create_out_redirect(char *filepath, t_bool append_mode)
+{
+	t_redir	*res;
+
+	res = malloc(sizeof(t_redir));
+	if (!res)
+		return (NULL);
+	res->filepath = ft_strdup(filepath);
+	res->fd = STDOUT_FILENO;
+	res->is_heredoc = false;
+	res->heredoc_id = -1;
+	res->heredoc_del = NULL;
+	res->heredoc_content = NULL;
+	res->out_append_mode = append_mode;
+	res->next = NULL;
+	return (res);
+}
+
+t_redir	*create_heredoc_redirect(char *delimiter)
+{
+	t_redir	*res;
+
+	res = malloc(sizeof(t_redir));
+	if (!res)
+		return (NULL);
+	res->filepath = NULL;
+	res->fd = -2;
+	res->is_heredoc = true;
+	res->heredoc_id = -1;
+	res->heredoc_del = ft_strdup(delimiter);
+	res->heredoc_content = NULL;
+	res->out_append_mode = false;
+	res->next = NULL;
+	return (res);
+}

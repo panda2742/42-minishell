@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   puterr.c                                           :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 15:00:38 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:00:39 by ehosta           ###   ########.fr       */
+/*   Created: 2025/04/14 15:04:40 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/14 15:04:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	puterr(char *message, t_bool call_perror)
+t_exit	heredoc(char *buffer, char *del, t_bool skip_writing)
 {
-	ft_putstr_fd(B_RED PROJECT_NAME, 2);
-	if (message)
+	char	*line;
+
+	(void)del;
+	while (1)
 	{
-		if (call_perror)
-			perror(message);
-		else
-			ft_putstr_fd(message, 2);
-		free(message);
+		line = readline("> ");
+		if (buffer && !skip_writing)
+			buffer = line;
+		break ;
 	}
-	else
-	{
-		if (call_perror)
-			perror(": An error occurred");
-		else
-			ft_putstr_fd(": An error occurred\n", 2);
-	}
-	ft_putstr_fd(RESET, 2);
+	return (EXIT_SUCCESS);
 }

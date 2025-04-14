@@ -1,74 +1,62 @@
-# The name of the built executable
-NAME					:=	minishell
-# The directory where the built files will be
-MAKE_DIR				:=	.make/
-
-# The header files of the project
-override	HDRS		:=	minishell
-# The C source code files of the project
-override	BUILTINS	:=	cd echo env exit export pwd unset
-override	ENV			:=	create_env env_to_strlst free_env get_var
-override	ERRORS		:=	error_handler puterr
-override	EXEC		:=	create_cmd exec free_cmds heredoc process redirect_manager tokens_to_cmds
-override	PROMPT		:=	show_prompt
-override	UTILS		:=	empty_tab ft_sprintf
-override	TEST		:=	exec_test print_cmds
-override	UTILS_PARSER := count_arg_words \
-							free_str_return_null \
-							ft_str_join_free \
-							ft_split_parser \
-							ft_strcmp \
-							is_redir \
-							print_t_token_list \
-							skip_spaces \
-							utils_del_lst \
-							token_lstsize
-override	SRCS		:=	$(addprefix builtins/builtins_,$(BUILTINS)) \
-							$(addprefix env_manager/,$(ENV)) \
-							$(addprefix errors/,$(ERRORS)) \
-							$(addprefix exec/,$(EXEC)) \
-							$(addprefix prompt/,$(PROMPT)) \
-							$(addprefix utils/,$(UTILS)) \
-							$(addprefix test/,$(TEST)) \
-							arg \
-							expand_tokens \
-							fragments \
-							ft_cmd_lstsize \
-							get_next_token \
-							lexer_parse \
-							lexer \
-							main_parsing \
-							parser \
-							redir_parsing \
-							signals \
-							to_delete_later \
-							token_lexer \
-							token_list \
-							utils_lexer \
-							utils_parser \
-							utils1 \
-							$(addprefix utils_parser/,$(UTILS_PARSER))
-
+# The name of the executable
+NAME		:=	minishell
+# The directory where the object files will stand
+MAKE_DIR	:=	.make/
 # The subdirectory where the built objects will be, for example ./make/minishell_develop/
-override	BUILD_DIR	:=	$(MAKE_DIR)$(NAME)_$(shell git branch --show-current)/
+BUILD_DIR	:=	$(MAKE_DIR)$(NAME)_$(shell git branch --show-current)/
+
+
 # The header files directory
-override	HDR_DIR		:=	include/
-# The formatted version of the headers (with directory and extension), for example include/minishell.h
-override	HDR			:=	$(addprefix $(HDR_DIR),$(addsuffix .h,$(HDRS)))
+override	INCLUDE_DIR		:=	include/
 # The C source code files directory
-override	SRC_DIR		:=	src/
-# The formatted version of the C source code files (with directory and extension), for example src/main.c
-override	SRC			:=	$(addprefix $(SRC_DIR),$(addsuffix .c,$(SRCS)))
+override	SOURCE_DIR		:=	src/
+# The header files of the project
+override	HEADER_FILES	:=	minishell
+
+# The C source code files of the project
+override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export pwd unset)
+override	SRC_ENV_MANAGER	:=	create_env env_to_strlst get_var
+override	SRC_ERROR		:=	error_handler puterr
+override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
+								$(addprefix init/, create_cmd create_redirect redirect_manager) \
+								$(addprefix process/, exec process)
+override	SRC_MEMORY		:=	free_cmds free_env
+override	SRC_MISC		:=	show_prompt signals
+override	SRC_PARSING		:=	$(addprefix lexer/, lexer_parse lexer lexer_utils) \
+								$(addprefix tokenizer/, expand_tokens fragments token_lexer token_list)
+override	SRC_TEST		:=	exec_test print_cmds
+override	SRC_UTILS		:=	$(addprefix parsing/, count_arg_words free_str_return_null ft_split_parser ft_str_join_free ft_strcmp is_redir print_t_token_list skip_spaces token_lstsize) \
+								empty_tab \
+								ft_sprintf
+override	SOURCE_FILES	:=	$(addprefix builtins/, $(SRC_BUILTINS)) \
+								$(addprefix env_manager/, $(SRC_ENV_MANAGER)) \
+								$(addprefix errors/, $(SRC_ERROR)) \
+								$(addprefix exec/, $(SRC_EXEC)) \
+								$(addprefix memory/, $(SRC_MEMORY)) \
+								$(addprefix misc/, $(SRC_MISC)) \
+								$(addprefix parsing/, $(SRC_PARSING)) \
+								$(addprefix test/, $(SRC_TEST)) \
+								$(addprefix utils/, $(SRC_UTILS)) \
+								main
+
+
 # The libft submodule directory
 override	LIBFT_DIR	:=	lib/
 # The libft executable path
 override	LIBFT		:=	$(LIBFT_DIR)libft.a
+
+
+# The formatted version of the headers (with directory and extension), for example include/minishell.h
+override	HEADER		:=	$(addprefix $(INCLUDE_DIR), $(addsuffix .h, $(HEADER_FILES)))
+# The formatted version of the C source code files (with directory and extension), for example src/main.c
+override	SOURCE		:=	$(addprefix $(SOURCE_DIR), $(addsuffix .c, $(SOURCE_FILES)))
 # Every object for each C source code file
-override	OBJ			:=	$(patsubst $(SRC_DIR)%.c,$(BUILD_DIR)%.o,$(SRC))
+override	OBJ			:=	$(patsubst $(SOURCE_DIR)%.c, $(BUILD_DIR)%.o, $(SOURCE))
 # Every dep file (.d) for each C source code file
 override	DEPS		:=	$(patsubst %.o,%.d,$(OBJ))
 # All the required directories for the build of the project
 override	DIRS		:=	$(sort $(dir $(NAME) $(OBJ) $(LIBFT) $(DEPS)))
+
 
 # The C compilation flags
 CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP -g3 -D PROJECT_NAME=\"$(NAME)\"
@@ -79,53 +67,67 @@ GCC			:=	cc
 # The rm command used to remove some things
 RM			:=	rm -r
 
+
 .PHONY: all
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT) 
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline
 
-$(BUILD_DIR)%.o: $(SRC_DIR)%.c Makefile $(HDR) | $(DIRS)
-	$(CC) $(CFLAGS) -c -I$(LIBFT_DIR)/include -I$(HDR_DIR) $< -o $@
+$(NAME): $(OBJ) $(LIBFT) 
+	$(GCC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) -lreadline
+
+
+$(BUILD_DIR)%.o: $(SOURCE_DIR)%.c Makefile $(HEADER) | $(DIRS)
+	$(GCC) $(CFLAGS) -c -I$(LIBFT_DIR)/include -I$(INCLUDE_DIR) $< -o $@
+
 
 $(LIBFT): libft
+
 
 .PHONY: libft
 libft: force
 	$(MAKE) -C $(LIBFT_DIR) all
 
+
 .PHONY: force
 force:
 	@true
 
+
 .PHONY: bonus
 bonus: all
+
 
 .PHONY: clean
 clean:
 	$(RM) $(MAKE_DIR)
 	$(MAKE) -C $(LIBFT_DIR) clean
 
+
 .PHONY: fclean
 fclean: clean
 	$(RM) $(NAME)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
+
 .PHONY: re
 re:	 fclean
 	$(MAKE)
 
+
 $(DIRS):
 	@mkdir -p $@
 
+
 .PHONY: norm
 norm:
-	@norminette $(SRC_DIR) include/ $(LIBFT_DIR)/ | grep "Error"
+	@norminette $(SOURCE_DIR) $(INCLUDE_DIR) $(LIBFT_DIR) | grep "Error"
+
 
 .PHONY: run
 run:
 	$(MAKE) bonus
-	 ./$(NAME)
+	./$(NAME)
+
 
 .PHONY: runv
 runv:

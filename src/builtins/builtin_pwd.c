@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   puterr.c                                           :+:      :+:    :+:   */
+/*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 15:00:38 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:00:39 by ehosta           ###   ########.fr       */
+/*   Created: 2025/04/14 15:00:23 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/14 15:00:24 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	puterr(char *message, t_bool call_perror)
+t_exit	builtins_pwd(t_excmd	*c)
 {
-	ft_putstr_fd(B_RED PROJECT_NAME, 2);
-	if (message)
+	char	*buffer;
+
+	buffer = getcwd(NULL, 0);
+	if (buffer == NULL)
 	{
-		if (call_perror)
-			perror(message);
-		else
-			ft_putstr_fd(message, 2);
-		free(message);
+		c->status = EXIT_FAILURE;
+		return (c->status);
 	}
-	else
+	if (ft_putstr_fd(buffer, 1) == -1)
 	{
-		if (call_perror)
-			perror(": An error occurred");
-		else
-			ft_putstr_fd(": An error occurred\n", 2);
+		free(buffer);
+		c->status = EXIT_FAILURE;
+		return (c->status);
 	}
-	ft_putstr_fd(RESET, 2);
+	free(buffer);
+	if (ft_putstr_fd("\n", 1) == -1)
+		c->status = EXIT_FAILURE;
+	return (c->status);
 }

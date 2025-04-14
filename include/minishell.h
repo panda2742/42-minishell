@@ -7,6 +7,8 @@
 # include <wait.h>
 # include "libft.h"
 
+#define _XOPEN_SOURCE 700
+
 /**
  * An alias to the unsigned char type, just to set the code more readable.
  */

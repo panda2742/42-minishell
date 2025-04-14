@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   puterr.c                                           :+:      :+:    :+:   */
+/*   free_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 15:00:38 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:00:39 by ehosta           ###   ########.fr       */
+/*   Created: 2025/04/14 15:19:39 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/14 15:19:43 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	puterr(char *message, t_bool call_perror)
+void	free_env(t_env_manager *env)
 {
-	ft_putstr_fd(B_RED PROJECT_NAME, 2);
-	if (message)
+	size_t		i;
+	t_env_var	*var;
+	t_env_var	*next;
+
+	i = -1;
+	var = *env->vars;
+	while (++i < env->env_size && var->next)
 	{
-		if (call_perror)
-			perror(message);
-		else
-			ft_putstr_fd(message, 2);
-		free(message);
+		next = var->next;
+		free(var->name);
+		free(var->value);
+		free(var);
+		var = next;
 	}
-	else
-	{
-		if (call_perror)
-			perror(": An error occurred");
-		else
-			ft_putstr_fd(": An error occurred\n", 2);
-	}
-	ft_putstr_fd(RESET, 2);
+	free(var->name);
+	free(var->value);
+	free(var);
+	free(env->vars);
 }

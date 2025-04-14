@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_to_strlst.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 15:00:31 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/14 15:02:12 by ehosta           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static char	*_fill_var(t_env_var *var, char *res, size_t len);
@@ -44,4 +56,3 @@ static char	*_fill_var(t_env_var *var, char *res, size_t len)
 	res[len] = 0;
 	return (res);
 }
-
