@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:19:34 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:19:35 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/15 15:36:08 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,15 @@ void	free_one_cmd(t_excmd *cmd)
 		ft_free_strtab(cmd->argv);
 	if (cmd->in_redirects.size)
 	{
-		close(cmd->in_redirects.final_fd);
-		cmd->in_redirects.final_fd = -1;
+		close(cmd->in_redirects.final_fd.fd);
+		cmd->in_redirects.final_fd.fd = -1;
 		_free_redirect_manager(&cmd->in_redirects);
 	}
 	if (cmd->out_redirects.size)
 	{
-		close(cmd->out_redirects.final_fd);
+		close(cmd->out_redirects.final_fd.fd);
+		cmd->out_redirects.final_fd.fd = -1;
 		_free_redirect_manager(&cmd->out_redirects);
-	}
-	if (cmd->pipe_open)
-	{
-		close(cmd->pipe[0]);
-		close(cmd->pipe[1]);
 	}
 	free(cmd);
 }

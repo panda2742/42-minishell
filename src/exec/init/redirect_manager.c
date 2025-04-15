@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:51 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:49:24 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/15 15:31:16 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 	last = *redirects_manager->redirects;
 	while (last)
 	{
-		last->fd = -1;
+		last->fd.fd = -1;
 		if (!last->filepath && !last->is_heredoc)
 			redirects_manager->problematic = last;
 		if (!last->filepath && !last->is_heredoc)
@@ -75,15 +75,15 @@ t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 static t_bool	_try_open(t_redir *last, t_redir_manager *redirects_manager)
 {
 	if (redirects_manager->type == IN_REDIR && !last->is_heredoc)
-		last->fd = open(last->filepath, O_RDONLY);
+		last->fd.fd = open(last->filepath, O_RDONLY);
 	else if (redirects_manager->type == OUT_REDIR)
 	{
 		if (last->out_append_mode)
-			last->fd = open(last->filepath, O_RDWR | O_CREAT | O_APPEND, 0644);
+			last->fd.fd = open(last->filepath, O_RDWR | O_CREAT | O_APPEND, 0644);
 		else
-			last->fd = open(last->filepath, O_RDWR | O_CREAT | O_TRUNC, 0644);
+			last->fd.fd = open(last->filepath, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	}
-	if (last->fd == -1 && !last->is_heredoc)
+	if (last->fd.fd == -1 && !last->is_heredoc)
 	{
 		redirects_manager->problematic = last;
 		return (false);
@@ -93,7 +93,7 @@ static t_bool	_try_open(t_redir *last, t_redir_manager *redirects_manager)
 
 static void	_continue_loop(t_redir *last)
 {
-	close(last->fd);
-	last->fd = -1;
+	close(last->fd.fd);
+	last->fd.fd = -1;
 	last = last->next;
 }

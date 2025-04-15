@@ -19,7 +19,7 @@ override	SRC_ENV_MANAGER	:=	create_env env_to_strlst get_var
 override	SRC_ERRORS		:=	error_handler puterr
 override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
 								$(addprefix init/, create_cmd create_redirect redirect_manager) \
-								$(addprefix process/, exec process)
+								$(addprefix process/, exec_child exec_init_cmd exec_utils exec)
 override	SRC_MEMORY		:=	free_cmds free_env
 override	SRC_MISC		:=	print_cmds show_prompt signals
 override	SRC_PARSING		:=	$(addprefix lexer/, lexer_parse lexer lexer_utils) \
@@ -124,14 +124,16 @@ norm:
 
 .PHONY: run
 run:
+	clear
 	$(MAKE) bonus
-	./$(NAME)
+	clear
+	@./$(NAME)
 
 
 .PHONY: runv
 runv:
 	clear
-	$(MAKE)
+	$(MAKE) bonus
 	clear
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=.valgrind_suppress.txt ./$(NAME)
 

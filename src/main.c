@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 16:13:03 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/15 15:57:43 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ int	main(int argc, char **argv, char **env)
 			free_env(&minishell.env);
 			break;
 		}
+		add_history(line);
 		token = ft_input(line);
 		if (token == NULL)
 		{

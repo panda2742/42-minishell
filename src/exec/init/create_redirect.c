@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:48 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:49:23 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/15 15:31:33 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ t_redir	*create_in_redirect(char *filepath)
 	if (!res)
 		return (NULL);
 	res->filepath = ft_strdup(filepath);
-	res->fd = STDIN_FILENO;
+	res->fd.fd = -2;
+	res->fd.type = STREAM_STD;
 	res->is_heredoc = false;
 	res->heredoc_id = -1;
 	res->heredoc_del = NULL;
@@ -38,7 +39,8 @@ t_redir	*create_out_redirect(char *filepath, t_bool append_mode)
 	if (!res)
 		return (NULL);
 	res->filepath = ft_strdup(filepath);
-	res->fd = STDOUT_FILENO;
+	res->fd.fd = -2;
+	res->fd.type = STREAM_STD;
 	res->is_heredoc = false;
 	res->heredoc_id = -1;
 	res->heredoc_del = NULL;
@@ -56,7 +58,8 @@ t_redir	*create_heredoc_redirect(char *delimiter)
 	if (!res)
 		return (NULL);
 	res->filepath = NULL;
-	res->fd = -2;
+	res->fd.fd = -2;
+	res->fd.type = STREAM_STD;
 	res->is_heredoc = true;
 	res->heredoc_id = -1;
 	res->heredoc_del = ft_strdup(delimiter);

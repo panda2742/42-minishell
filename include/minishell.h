@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 16:05:20 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/15 15:48:54 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,19 @@ typedef struct s_env_manager
 	char		**envlst;
 }			t_env_manager;
 
+typedef enum e_stream_type
+{
+	STREAM_STD,
+	STREAM_PIPE,
+	STREAM_REDIR,
+}	t_stream_type;
+
+typedef struct s_streamfd
+{
+	int				fd;
+	t_stream_type	type;
+}					t_streamfd;
+
 /**
  * Represents a structure for a file descriptor. Include its path and then its
  * file descriptor once it is open.
@@ -65,7 +78,7 @@ typedef struct s_redir
 	 * The file descriptor, given when the file is open. STD[IN/OUT]_FILENO
 	 * as default.
 	 */
-	int				fd;
+	t_streamfd		fd;
 	/**
 	 * If it includes an Here Document, this boolean is set to true. Otherwise
 	 * it is set to false.
@@ -111,7 +124,7 @@ typedef struct s_redir_manager
 	t_redir			*last;
 	t_redir			*problematic;
 	t_bool			has_heredoc;
-	int				final_fd;
+	t_streamfd		final_fd;
 }			t_redir_manager;
 
 /**
@@ -192,7 +205,7 @@ typedef struct s_excmd
 	/**
 	 * If the pipe has been opened or not. // E
 	 */
-	t_bool			pipe_open;
+	t_bool			pipe_open[2];
 	/**
 	 * The status of the executed command. // E
 	 */
@@ -328,6 +341,12 @@ void			read_heredocs(t_redir_manager *redirects_manager);
 t_redir			*get_last_redirect(t_redir_manager *redirects_manager);
 t_exit			exec_command(t_minishell *minishell, t_excmd **cmds);
 t_cmdproto		load_builtin(const char *command_name, t_cmdproto *proto);
+void			close_pipe(int sfd, t_bool *door);
+t_bool			exec_init_cmd(t_excmd *cmd, t_execparams *params);
+char			*get_full_path(char *path, char *cmd_name);
+t_bool			create_streams(t_excmd *cmd);
+t_bool			execute_from_path(t_minishell *minishell, t_excmd *cmd,
+					t_excmd **cmds);
 
 // MEMORY ----------------------------------------------------------------------
 

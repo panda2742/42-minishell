@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:23:02 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:25:53 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/15 15:40:24 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	print_cmd(t_excmd *cmd)
 	else
 		printf("     %-12s %sfalse%s\n", "has_heredoc", B_RED, RESET);
 	printf("     %-12s %s%d%s\n", "final_fd", B_YELLOW,
-		cmd->in_redirects.final_fd, RESET);
+		cmd->in_redirects.final_fd.fd, RESET);
 	if (cmd->in_redirects.size)
 	{
 		printf("     list:\n");
@@ -92,14 +92,14 @@ void	print_cmd(t_excmd *cmd)
 				printf(" \"%s<< %s%s\"", B_BLUE, redir->heredoc_del, RESET);
 			else
 				printf(" \"%s< %s%s\"", B_BLUE, redir->filepath, RESET);
-			printf(" | fd %s%d%s", B_YELLOW, redir->fd, RESET);
-			if (redir->fd == -2)
+			printf(" | fd %s%d%s", B_YELLOW, redir->fd.fd, RESET);
+			if (redir->fd.fd == -2)
 				printf(" %sHEREDOC%s", B_RED, RESET);
-			else if (redir->fd == -1)
+			else if (redir->fd.fd == -1)
 				printf(" %sCLOSED%s", B_RED, RESET);
-			else if (redir->fd == 0)
+			else if (redir->fd.fd == 0)
 				printf(" %sSTDIN (default)%s", B_BLUE, RESET);
-			else if (redir->fd == 1)
+			else if (redir->fd.fd == 1)
 				printf(" %sSTDOUT (default)%s", B_BLUE, RESET);
 			else
 				printf(" %sOPEN%s", B_GREEN, RESET);
@@ -117,7 +117,7 @@ void	print_cmd(t_excmd *cmd)
 	else
 		printf("     %-12s %sfalse%s\n", "has_heredoc", B_RED, RESET);
 	printf("     %-12s %s%d%s\n", "final_fd", B_YELLOW,
-		cmd->out_redirects.final_fd, RESET);
+		cmd->out_redirects.final_fd.fd, RESET);
 	if (cmd->out_redirects.size)
 	{
 		printf("     list:\n");
@@ -129,14 +129,14 @@ void	print_cmd(t_excmd *cmd)
 				printf(" \"%s>> %s%s\"", B_BLUE, redir->filepath, RESET);
 			else
 				printf(" \"%s> %s%s\"", B_BLUE, redir->filepath, RESET);
-			printf(" | fd %s%d%s", B_YELLOW, redir->fd, RESET);
-			if (redir->fd == -2)
+			printf(" | fd %s%d%s", B_YELLOW, redir->fd.fd, RESET);
+			if (redir->fd.fd == -2)
 				printf(" %sHEREDOC%s", B_RED, RESET);
-			else if (redir->fd == -1)
+			else if (redir->fd.fd == -1)
 				printf(" %sCLOSED%s", B_RED, RESET);
-			else if (redir->fd == 0)
+			else if (redir->fd.fd == 0)
 				printf(" %sSTDIN (default)%s", B_BLUE, RESET);
-			else if (redir->fd == 1)
+			else if (redir->fd.fd == 1)
 				printf(" %sSTDOUT (default)%s", B_BLUE, RESET);
 			else
 				printf(" %sOPEN%s", B_GREEN, RESET);
@@ -145,12 +145,16 @@ void	print_cmd(t_excmd *cmd)
 		}
 	}
 	printf("   -\n   %-12s ", "pipe");
-	if (cmd->pipe_open)
-		printf("%sOPEN%s [%s%d%s, %s%d%s]\n", B_GREEN, RESET, B_YELLOW,
-			cmd->pipe[0], RESET, B_YELLOW, cmd->pipe[1], RESET);
+	if (cmd->pipe_open[0])
+		printf("[%sOPEN%s, ", B_GREEN, RESET);
 	else
-		printf("%sCLOSED%s [%s0%s, %s0%s]\n", B_RED, RESET, B_YELLOW, RESET,
-			B_YELLOW, RESET);
+		printf("[%sCLOSED%s, ", B_RED, RESET);
+	if (cmd->pipe_open[1])
+		printf("%sOPEN%s]", B_GREEN, RESET);
+	else
+		printf("%sCLOSED%s]", B_RED, RESET);
+	printf(" [%s%d%s, %s%d%s]\n", B_YELLOW, cmd->pipe[0], RESET, B_YELLOW,
+		cmd->pipe[1], RESET);
 	printf("   %-12s %s%d%s\n", "status", B_YELLOW, cmd->status, RESET);
 	printf("   -\n   %s%p%s <= %s%p%s => %s%p%s\n", WHITE, cmd->prev, RESET,
 		U_MAGENTA, cmd, RESET, WHITE, cmd->next, RESET);
