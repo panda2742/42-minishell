@@ -31,6 +31,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 			execute_from_path(minishell, cmd, cmds);
 		(*cmd->proto)(cmd);
 
+		exit(0);
 		free_env(cmd->env);
 		ft_free_strtab(cmd->envp);
 		free_cmds(cmds);
