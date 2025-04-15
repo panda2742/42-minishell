@@ -22,13 +22,11 @@ void	free_tokens_in_list(t_token *tokens, t_token_list *list)
 	}
 	
 }
-
-
-// Je veux creer une nouvelle liste chainee de type t_token_list
-// elle contiendra un pointeur vers next 
-// et un pointeur vers une nouvelle liste chainee t_token
-// pour chaque liste de t_token je dois redefinir sa head, faire pointer son dernier element vers NULL
-// donc je vais boucler depuis start jusqu a end pour recopier chaque node un a un
+/*
+ * Add a new token list node to the linked list of token lists
+ * The new node contains a list of tokens from start to end
+ * The function returns the new token list node
+*/
 
 t_token_list	*add_token_list_node(t_token *start, t_token *end, t_token_list **head_list, t_token **head_tokens)
 {
@@ -73,13 +71,14 @@ t_token_list	*add_token_list_node(t_token *start, t_token *end, t_token_list **h
 }
 /*
  * Cut the token list at each PIPE and return the new struct for the command
+ * End when PIPE or NULL is found
 */
 void	token_list(t_token *head_token, t_token_list **head_list)
 {
 	t_token *current;
 	t_token	*start;
 	t_token *end;
-	t_token_list *token_list;
+	t_token *head_tokens;
 
 	*head_list = NULL;
 	if (head_token == NULL)
@@ -94,8 +93,8 @@ void	token_list(t_token *head_token, t_token_list **head_list)
 			current = current->next;
 			end = current;
 		}
-		t_token *head_tokens = NULL;
-		token_list = add_token_list_node(start, end, head_list, &head_tokens);
+		head_tokens = NULL;
+		add_token_list_node(start, end, head_list, &head_tokens);
 		if (current && current->type == PIPE)
 			current = current->next;
 	}

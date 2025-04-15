@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/15 15:57:43 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 00:16:01 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,64 +16,36 @@
 #include <stdio.h>
 #include <strings.h>
 
-char	*join_tokens_to_string(t_token *tokens)
-{
-	char	*result;
-	t_token	*tmp;
 
-	result = ft_strdup("");
-	tmp = tokens;
-	if (!result)
-		return (NULL);
-	while (tmp)
-	{
-		if (tmp->fragments && tmp->fragments->text)
-			result = str_join_free(result, tmp->fragments->text);
-		if (tmp->next)
-			result = str_join_free(result, " ");
-		tmp = tmp->next;
-	}
-	return (result);
-}
-
-void	handle_is_redir_tokens(t_excmd *cmd, t_token *token)
-{
-	if (token->type == REDIR_IN)
-		add_redirect(cmd, IN_REDIR, create_in_redirect(token->next->text));
-	else if (token->type == REDIR_OUT)
-		add_redirect (cmd, OUT_REDIR,
-			create_out_redirect(token->next->text, false));
-	else if (token->type == APPEND)
-		add_redirect(cmd, OUT_REDIR,
-			create_out_redirect(token->next->text, true));
-	else if (token->type == HEREDOC)
-		add_redirect(cmd, IN_REDIR,
-			create_heredoc_redirect(token->next->text));
-}
 
 void	free_dom_help(t_token *token, t_token *new_tokens,
-			t_token_list *token_list, char *line, char *final_cmd) // to delete
+			t_token_list *token_list, char *line, char *final_cmd, t_excmd *cmd) // to delete
 {
-	free_tokens(token);
 	free_tokens(new_tokens);
 	free_tokens_in_list(token_list->tokens, token_list);
-	free(line);
 	free(final_cmd);
+	(void)(cmd);
+	free_tokens(token);
+	free(line);
+	free(cmd->name);
+	free(cmd->raw);
+	free(cmd->argv);
+	free(cmd);
 }
 
-void	expand_caller(t_token *token, t_token **new_tokens,
-			t_token *return_value, t_minishell *minishell)
+void	expand_caller(t_token *token, t_token **new_tokens, t_minishell *minishell)
 {
 	t_token	*last_new;
 	t_token	*split_token;
+	t_token	*tmp;
 
 	split_token = NULL;
-	return_value = token;
+	tmp = token;
 	*new_tokens = NULL;
 	last_new = NULL;
-	while (return_value)
+	while (tmp)
 	{
-		split_token = word_split_token(return_value, &minishell->env);
+		split_token = word_split_token(tmp, &minishell->env);
 		if (split_token)
 		{
 			// Concatene la chaine de tokens obtenue via le word splitting
@@ -89,38 +61,109 @@ void	expand_caller(t_token *token, t_token **new_tokens,
 				last_new->next = split_token;
 			}
 		}
-		return_value = return_value->next;
+		tmp = tmp->next;
 	}
 }
 
-char	*get_first_word(t_token *token)
+t_excmd *set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell, t_token *new_tokens)
 {
-	t_token	*tmp;
+	char *cmd_name = get_first_word(token);
+	cmd = create_cmd(cmd_name, &minishell->env);
+	cmd->argc = token_lstsize(token);
+	int count_args = count_arg_words(token);
+	cmd->raw = join_tokens_to_string(new_tokens);
+	cmd->argv = malloc(sizeof(char *) *( count_args + 1));
+	cmd->argv[count_args] = NULL;
+	return (cmd);
+}
 
-	tmp = token;
-	while (tmp)
+void build_redirs_and_args(t_excmd *cmd, t_token *token)
+{
+	int i = 0;
+	while (token && (token->type != PIPE))
 	{
-		if (tmp->type == WORD)
+		if (is_redir(token))
 		{
-			tmp->is_first_word = true;	
-			return (tmp->text);
+			handle_is_redir_tokens(cmd, token);
 		}
-		tmp = tmp->next;
+		if (token->type == WORD)
+		{
+			cmd->argv[i] = token->text;
+			i++;
+		}
+		token = token->next;
 	}
-	return (NULL);
+}
+
+void	link_prev_cmd(t_excmd **first, t_excmd **prev, t_excmd *cmd)
+{
+	cmd->prev = *prev;
+	if (*prev)
+		(*prev)->next = cmd;
+	else
+		*first = cmd;
+	*prev = cmd;
+}
+t_excmd *create_cmd_list(t_token_list *token_list_head, t_minishell *minishell, t_token *all_tokens)
+{
+	t_excmd		*first;
+	t_excmd		*prev;
+	t_excmd		*cmd;
+	t_token_list	*curr_list;
+
+	first = NULL;
+	prev = NULL;
+	curr_list = token_list_head;
+	while (curr_list)
+	{
+		t_token *cmd_tokens = curr_list->tokens;
+		cmd = set_cmd(cmd, cmd_tokens, minishell, all_tokens);
+		if (!cmd)
+		{
+			return (NULL);
+		}
+		build_redirs_and_args(cmd, cmd_tokens);
+		link_prev_cmd(&first, &prev, cmd);
+		curr_list = curr_list->next;
+	}
+	return (first);
+}
+
+/*
+* Process the tokens after the lexer and parser
+* 1. Expand the tokens
+* 2. Create a new list of tokens fully expanded
+* 3. Create a list of commands
+*/
+t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
+{
+	t_token *new_tokens;
+	t_token_list *head_list;
+	t_excmd *cmd_list;
+	
+	new_tokens = NULL;
+	expand_caller(token, &new_tokens, minishell);
+	head_list = NULL;
+	token_list(new_tokens, &head_list);
+	cmd_list = create_cmd_list(head_list, minishell, new_tokens);
+	print_cmds(cmd_list);
+
+	free_tokens(new_tokens);
+	free_tokens_in_list(head_list->tokens, head_list);
+
+	return (cmd_list);
+	// char *final_cmd;
+	// (void)final_cmd;
+	// final_cmd = join_tokens_to_string(new_tokens);
+	// ft_printf("Final command: %s\n", final_cmd);
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	char		*line;
 	t_token		*token;
-	t_token		*tmp;
-	char		*final_cmd;
-	t_excmd		*prev;
-	t_excmd		*cmd;
-	t_excmd		*first;
+
 	t_minishell minishell;
-	t_token		*new_tokens;
 	char 		*prompt;
 
 	(void)argc;
@@ -155,58 +198,70 @@ int	main(int argc, char **argv, char **env)
 			free(line);
 			continue;
 		}
+		
+		t_excmd *first = NULL;
+		
+		first = process_tokens(token, &minishell);
+
+		(void)first;
+		// exec_command(&minishell, &first);
+
+		free_tokens(token);
+		free(line);
+		free(first->name);
+		free(first->raw);
+		free(first->argv);
+		free(first);
+
+		
+		// print_tokens(token);
+		// t_excmd		*prev;
+		// t_excmd		*cmd;
+		// t_excmd		*first;
+		// t_token		*tmp;
+		// t_token		*new_tokens;
+		// process_tokens(token, &minishell);
 		/*
 		// On applique ensuite le word splitting sur chaque token.
 		// Ici, word_split_token() reçoit un token et son environnement,
 			et retourne une nouvelle chaine de tokens */
-		// print_tokens(token);
-		expand_caller(token, &new_tokens, tmp, &minishell);
-		final_cmd = join_tokens_to_string(new_tokens);
-		tmp = NULL;
-		t_token_list *head_list = NULL;
-		token_list(new_tokens, &head_list);
-		prev = NULL;
-		cmd = NULL;
-		t_token_list *tmp_list = head_list;
-		while(tmp_list)
-		{
+		// expand_caller(token, &new_tokens, &minishell);
+		
+		// final_cmd = join_tokens_to_string(new_tokens);
+		// tmp = NULL;
+		// t_token_list *head_list = NULL;
+		// token_list(new_tokens, &head_list);
+		// prev = NULL;
+		// cmd = NULL;
+		// t_token_list *tmp_list = head_list;
+		// while(tmp_list)
+		// {
 
-			if (tmp_list != NULL)
-			{
-				tmp = tmp_list->tokens;
-				char *cmd_name = get_first_word(tmp);
-				 // cmd doit etre le premier WORD rencontre, a changer
-				cmd = create_cmd(cmd_name, &minishell.env);
-				cmd->argc = token_lstsize(tmp);
-				int count_args = count_arg_words(tmp);
-				cmd->raw = join_tokens_to_string(new_tokens);
-				cmd->argv = malloc(sizeof(char *) *( count_args + 1));
-				cmd->argv[count_args] = NULL;
-				int i = 0;
-				while (tmp && (tmp->type != PIPE))
-				{
-					if (is_redir(tmp))
-					{
-						handle_is_redir_tokens(cmd, tmp);
-					}
-					if (tmp->type == WORD)
-					{
-						cmd->argv[i] = tmp->text;
-						i++;
-					}
-					tmp = tmp->next;
-				}
-				cmd->prev = prev;
-				if (prev)
-					prev->next = cmd;
-				else
-					first = cmd;
-				prev = cmd;
-			}
-			tmp_list = tmp_list->next;
-		}
-		exec_command(&minishell, &first);
-		free_dom_help(token, new_tokens, head_list, line, final_cmd);
+		// 	if (tmp_list != NULL)
+		// 	{
+		// 		tmp = tmp_list->tokens;
+		// 		cmd = set_cmd(cmd, tmp, &minishell, new_tokens);
+
+		// 		// char *cmd_name = get_first_word(tmp);
+		// 		//  // cmd doit etre le premier WORD rencontre, a changer
+		// 		// cmd = create_cmd(cmd_name, &minishell.env);
+		// 		// cmd->argc = token_lstsize(tmp);
+		// 		// int count_args = count_arg_words(tmp);
+		// 		// cmd->raw = join_tokens_to_string(new_tokens);
+		// 		// cmd->argv = malloc(sizeof(char *) *( count_args + 1));
+		// 		// cmd->argv[count_args] = NULL;
+		// 		build_redirs_and_args(cmd, tmp);
+		// 		cmd->prev = prev;
+		// 		if (prev != NULL)
+		// 			prev->next = cmd;
+		// 		else
+		// 			first = cmd;
+		// 		prev = cmd;
+		// 	}
+		// 	tmp_list = tmp_list->next;
+		// }
+		// print_cmds(cmd);
+		
 	}
 	return (0);
 }
