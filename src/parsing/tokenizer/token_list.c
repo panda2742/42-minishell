@@ -44,7 +44,7 @@ t_token_list	*add_token_list_node(t_token *start, t_token *end, t_token_list **h
 		new_token->type = tmp_token->type;
 		if (tmp_token->fragments && tmp_token->fragments->text)
 		{
-			new_token->text = ft_strdup(tmp_token->fragments->text);  // Malloc
+			new_token->text = ft_strdup(tmp_token->fragments->text);  // ft_memalloc
 			if (new_token->text == NULL)
 				return (NULL);
 		}
@@ -53,7 +53,7 @@ t_token_list	*add_token_list_node(t_token *start, t_token *end, t_token_list **h
 		new_token->quote_type = tmp_token->quote_type;
 		tmp_token = tmp_token->next;
 	}
-	list = malloc(sizeof(t_token_list));
+	list = ft_memalloc(sizeof(t_token_list));
 	if (!list)
 		return (NULL);
 	list->tokens = *head_tokens;

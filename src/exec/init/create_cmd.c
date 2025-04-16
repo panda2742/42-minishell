@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/15 15:54:36 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 14:29:05 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 {
 	t_excmd	*res;
 
-	res = malloc(sizeof(t_excmd));
+	res = ft_memalloc(sizeof(t_excmd));
 	if (!res)
 		return (NULL);
 	res->id = -1;
 	res->name = ft_strdup(cmd_name);
+	if (!res->name)
+		return (NULL);
 	res->in_a_child = true;
 	res->proto = NULL;
 	res->argc = 0;
@@ -34,10 +36,6 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	res->status = EXIT_SUCCESS;
 	res->prev = NULL;
 	res->next = NULL;
-	res->pipe_open[0] = false;
-	res->pipe_open[1] = false;
-	res->pipe[0] = 0;
-	res->pipe[1] = 0;
 	_init_redirects(res);
 	return (res);
 }
@@ -60,6 +58,10 @@ static void	_init_redirects(t_excmd *cmd)
 	cmd->out_redirects.final_fd.type = STREAM_STD;
 	cmd->in_redirects.problematic = NULL;
 	cmd->out_redirects.problematic = NULL;
+	cmd->pipe_open[0] = false;
+	cmd->pipe_open[1] = false;
+	cmd->pipe[0] = 0;
+	cmd->pipe[1] = 0;
 }
 
 t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect)
@@ -76,7 +78,7 @@ t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect)
 	}
 	if (manager->size == 0)
 	{
-		manager->redirects = malloc(sizeof(t_redir *));
+		manager->redirects = ft_memalloc(sizeof(t_redir *));
 		if (!manager->redirects)
 			return (NULL);
 		manager->redirects[0] = redirect;

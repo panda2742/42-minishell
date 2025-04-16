@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/15 23:08:04 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/16 10:59:32 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@
 # endif
 
 /**
- * An alias to the unsigned char type, just to set the code more readable.
+ * An alias to the int type, just to set the code more readable.
  */
-typedef unsigned char	t_exit;
+typedef int	t_exit;
 
 typedef struct s_env_var
 {

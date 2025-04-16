@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    variables.mk                                       :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+         #
+#    By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 14:44:31 by ehosta            #+#    #+#              #
-#    Updated: 2025/03/09 18:57:56 by abonifac         ###   ########.fr        #
+#    Updated: 2025/04/16 15:27:06 by ehosta           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,7 @@ override	SRC_MATH	:=	ft_abs \
 							ft_sqrt
 override	SRC_MEM		:=	ft_bzero \
 							ft_calloc \
+							ft_memalloc \
 							ft_memchr \
 							ft_memcmp \
 							ft_memcpy \

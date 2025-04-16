@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:07:18 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/15 15:34:04 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 10:56:24 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	close_pipe(int sfd, t_bool *door)
 {
+	if (sfd == 0 || sfd == 1)
+		return ;
 	close(sfd);
 	if (door)
 		*door = false;

@@ -29,18 +29,25 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 			exit(0);
 		if (cmd->proto == NULL)
 			execute_from_path(minishell, cmd, cmds);
-		(*cmd->proto)(cmd);
-
-		exit(0);
+		else {
+			(*cmd->proto)(cmd);
+			if (cmd->in_a_child)
+				exit(0);
+		}
 		free_env(cmd->env);
 		ft_free_strtab(cmd->envp);
 		free_cmds(cmds);
-		cmd = cmd->next;
+		exit(0);
 	}
+	cmd = *cmds;
 	while (params.nb_launched)
 	{
-		waitpid(-1, NULL, 0);
+		if (cmd->prev)
+			waitpid(-1, NULL, 0);
+		else
+			waitpid(-1, &minishell->last_status, 0);
 		params.nb_launched--;
+		cmd = cmd->next;
 	}
 	ft_free_strtab(minishell->env.envlst);
 	return (minishell->last_status);
@@ -85,7 +92,6 @@ static t_bool	_create_child(t_excmd *cmd, t_execparams *params)
 				puterr(ft_sprintf(": fork error"), true);
 			}
 			close_pipe(cmd->pipe[1], &cmd->pipe_open[1]);
-			cmd = cmd->next;
 			return (false);
 		}
 	}

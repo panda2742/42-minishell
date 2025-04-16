@@ -14,6 +14,7 @@
 # define FT_LST_H
 
 # include <stdlib.h>
+# include "ft_mem.h"
 
 typedef struct s_list
 {

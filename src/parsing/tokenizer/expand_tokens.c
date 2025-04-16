@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:56:56 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char *expand_fragment(const char *input, int quote, t_env_manager *env)
 			if (utils.j > utils.i + 1)
 			{
 				utils.len1 = utils.j - utils.i - 1;
-				var_name = malloc(utils.len1 + 1);
+				var_name = ft_memalloc(utils.len1 + 1);
 				utils.k = 0;
 				while (utils.k < utils.len1)
 				{
@@ -85,12 +85,12 @@ static t_token *create_new_token_from_word(const char *word,
 {
 	t_token *token;
 
-	token = malloc(sizeof(t_token));
+	token = ft_memalloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->type = token_head->type;
 	token->index = 0;
-	token->fragments = malloc(sizeof(t_fragment));
+	token->fragments = ft_memalloc(sizeof(t_fragment));
 	if (!token->fragments)
 	{
 		free(token);

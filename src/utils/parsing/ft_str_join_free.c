@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 22:26:35 by abonifac          #+#    #+#             */
-/*   Updated: 2025/04/14 16:01:14 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*str_join_free(char *s1, const char *s2)
 
 	ft_memset(&vars, 0, sizeof(t_utils));
 	set_len(&vars, s1, s2);
-	new = malloc(vars.len1 + vars.len2 + 1);
+	new = ft_memalloc(vars.len1 + vars.len2 + 1);
 	if (!new)
 		return (free_str_return_null(s1));
 	while (vars.i < vars.len1)

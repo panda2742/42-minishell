@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:29:51 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/15 08:54:15 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_sprintf(const char *format, ...)
 	va_start(args, format);
 	len = _total_len(format, args);
 	va_end(args);
-	res = malloc(sizeof(char) * (len + 1));
+	res = ft_memalloc(sizeof(char) * (len + 1));
 	if (!res)
 		return (NULL);
 	res[len] = 0;

@@ -27,7 +27,7 @@ t_token	*ft_create_token(t_token_type type)
 {
 	t_token	*new;
 
-	new = malloc(sizeof(t_token));
+	new = ft_memalloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
 	new->is_first_word = false;

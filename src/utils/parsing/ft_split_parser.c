@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 22:26:25 by abonifac          #+#    #+#             */
-/*   Updated: 2025/04/14 16:01:02 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	**ft_split_a(char const *s, char c)
 	size_t	i;
 
 	i = 0;
-	tab = malloc((ft_word((char *)s, c) + 1) * sizeof(char *));
+	tab = ft_memalloc((ft_word((char *)s, c) + 1) * sizeof(char *));
 	if (tab == NULL)
 		return (NULL);
 	return (tab_malloc(c, s, tab, i));

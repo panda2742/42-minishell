@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:31 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:02:12 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	**env_to_strlst(t_env_manager *env)
 	size_t		len;
 	t_env_var	*var;
 
-	res = malloc(sizeof(char *) * (env->env_size + 1));
+	res = ft_memalloc(sizeof(char *) * (env->env_size + 1));
 	if (!res)
 		return (NULL);
 	i = -1;
@@ -29,7 +29,7 @@ char	**env_to_strlst(t_env_manager *env)
 	while (++i < env->env_size && var)
 	{
 		len = var->name_length + var->value_length + 1;
-		res[i] = malloc(sizeof(char) * (len + 1));
+		res[i] = ft_memalloc(sizeof(char) * (len + 1));
 		if (!res[i])
 		{
 			ft_free_strtab(res);

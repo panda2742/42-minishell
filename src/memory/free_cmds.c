@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:19:34 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/15 15:36:08 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 15:49:19 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	free_cmds(t_excmd **cmds)
 		free_one_cmd(cmd);
 		cmd = tmp;
 	}
-	free(cmds);
 }
 
 void	free_one_cmd(t_excmd *cmd)

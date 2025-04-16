@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:47:58 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 16:48:37 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,22 @@ t_env_var	**create_env(char **envp, t_env_manager *env)
 	prev = NULL;
 	while (++i < env->env_size)
 	{
-		elt = malloc(sizeof(t_env_var));
+		elt = ft_memalloc(sizeof(t_env_var));
 		if (elt == NULL)
 			return (handle_env_mem_alloc(env));
 		elt->name = _get_name(elt, envp[i]);
+		if (elt->name == NULL)
+		{
+			free(elt);
+			return (handle_env_mem_alloc(env));
+		}
 		elt->value = _get_value(elt, envp[i]);
+		if (elt->value == NULL)
+		{
+			free(elt->name);
+			free(elt);
+			return (handle_env_mem_alloc(env));
+		}
 		elt->next = NULL;
 		if (env->vars[0] == NULL)
 			env->vars[0] = elt;
@@ -54,7 +65,7 @@ static char	*_get_name(t_env_var *var, char *env_var)
 	while (env_var[len] && env_var[len] != '=')
 		len++;
 	var->name_length = len;
-	res = malloc(sizeof(char) * (len + 1));
+	res = ft_memalloc(sizeof(char) * (len + 1));
 	if (res == NULL)
 		return (NULL);
 	ft_strlcpy(res, env_var, len + 1);
@@ -76,7 +87,7 @@ static char	*_get_value(t_env_var *var, char *env_var)
 	while (env_var[len])
 		len++;
 	var->value_length = len;
-	res = malloc(sizeof(char) * (len + 1));
+	res = ft_memalloc(sizeof(char) * (len + 1));
 	if (res == NULL)
 		return (NULL);
 	ft_strlcpy(res, env_var, len + 1);
@@ -88,5 +99,5 @@ static void	_init_manager(char **envp, t_env_manager *env)
 	env->env_size = 0;
 	while (envp[env->env_size])
 		env->env_size += 1;
-	env->vars = malloc(sizeof(t_env_var *));
+	env->vars = ft_memalloc(sizeof(t_env_var *));
 }

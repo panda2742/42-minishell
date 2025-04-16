@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:48 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/15 15:31:33 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_redir	*create_in_redirect(char *filepath)
 {
 	t_redir	*res;
 
-	res = malloc(sizeof(t_redir));
+	res = ft_memalloc(sizeof(t_redir));
 	if (!res)
 		return (NULL);
 	res->filepath = ft_strdup(filepath);
@@ -35,7 +35,7 @@ t_redir	*create_out_redirect(char *filepath, t_bool append_mode)
 {
 	t_redir	*res;
 
-	res = malloc(sizeof(t_redir));
+	res = ft_memalloc(sizeof(t_redir));
 	if (!res)
 		return (NULL);
 	res->filepath = ft_strdup(filepath);
@@ -54,7 +54,7 @@ t_redir	*create_heredoc_redirect(char *delimiter)
 {
 	t_redir	*res;
 
-	res = malloc(sizeof(t_redir));
+	res = ft_memalloc(sizeof(t_redir));
 	if (!res)
 		return (NULL);
 	res->filepath = NULL;

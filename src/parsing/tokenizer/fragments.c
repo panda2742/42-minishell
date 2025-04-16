@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:32 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 13:42:33 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ t_fragment	*new_fragment(const char *start, size_t len, t_qtype quote_type)
 {
 	t_fragment	*new;
 
-	new = malloc(sizeof(t_fragment));
+	new = ft_memalloc(sizeof(t_fragment));
 	if (!new)
 		return (NULL);
-	new->text = malloc(sizeof(char) * (len + 1));
+	new->text = ft_memalloc(sizeof(char) * (len + 1));
 	if (!new->text)
 	{
 		free(new);

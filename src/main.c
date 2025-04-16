@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 00:16:01 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:50:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,14 @@ t_excmd *set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell, t_token *
 {
 	char *cmd_name = get_first_word(token);
 	cmd = create_cmd(cmd_name, &minishell->env);
+	if (!cmd)
+		return (NULL);
 	cmd->argc = token_lstsize(token);
 	int count_args = count_arg_words(token);
 	cmd->raw = join_tokens_to_string(new_tokens);
-	cmd->argv = malloc(sizeof(char *) *( count_args + 1));
+	cmd->argv = ft_memalloc(sizeof(char *) *( count_args + 1));
+	if (!cmd->argv)
+		return (NULL);
 	cmd->argv[count_args] = NULL;
 	return (cmd);
 }
@@ -120,6 +124,8 @@ t_excmd *create_cmd_list(t_token_list *token_list_head, t_minishell *minishell, 
 		cmd = set_cmd(cmd, cmd_tokens, minishell, all_tokens);
 		if (!cmd)
 		{
+			puterr(ft_sprintf(": memory allocation error"), false);
+			free_cmds(&first);
 			return (NULL);
 		}
 		build_redirs_and_args(cmd, cmd_tokens);
@@ -146,10 +152,10 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 	head_list = NULL;
 	token_list(new_tokens, &head_list);
 	cmd_list = create_cmd_list(head_list, minishell, new_tokens);
-	print_cmds(cmd_list);
+	// print_cmds(cmd_list);
 
 	free_tokens(new_tokens);
-	free_tokens_in_list(head_list->tokens, head_list);
+	// free_tokens_in_list(head_list->tokens, head_list);
 
 	return (cmd_list);
 	// char *final_cmd;
@@ -170,7 +176,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	if (create_env(env, &minishell.env) == NULL)
 	{
-		ft_printf("Error initializing environment\n");
+		puterr(ft_sprintf(": memory allocation failed"), false);
 		return (EXIT_FAILURE);
 	}
 	while (1)
@@ -204,66 +210,10 @@ int	main(int argc, char **argv, char **env)
 		first = process_tokens(token, &minishell);
 
 		(void)first;
-		// exec_command(&minishell, &first);
-
-		free_tokens(token);
-		free(line);
-		free(first->name);
-		free(first->raw);
-		free(first->argv);
-		free(first);
-
-		
-		// print_tokens(token);
-		// t_excmd		*prev;
-		// t_excmd		*cmd;
-		// t_excmd		*first;
-		// t_token		*tmp;
-		// t_token		*new_tokens;
-		// process_tokens(token, &minishell);
-		/*
-		// On applique ensuite le word splitting sur chaque token.
-		// Ici, word_split_token() reçoit un token et son environnement,
-			et retourne une nouvelle chaine de tokens */
-		// expand_caller(token, &new_tokens, &minishell);
-		
-		// final_cmd = join_tokens_to_string(new_tokens);
-		// tmp = NULL;
-		// t_token_list *head_list = NULL;
-		// token_list(new_tokens, &head_list);
-		// prev = NULL;
-		// cmd = NULL;
-		// t_token_list *tmp_list = head_list;
-		// while(tmp_list)
-		// {
-
-		// 	if (tmp_list != NULL)
-		// 	{
-		// 		tmp = tmp_list->tokens;
-		// 		cmd = set_cmd(cmd, tmp, &minishell, new_tokens);
-
-		// 		// char *cmd_name = get_first_word(tmp);
-		// 		//  // cmd doit etre le premier WORD rencontre, a changer
-		// 		// cmd = create_cmd(cmd_name, &minishell.env);
-		// 		// cmd->argc = token_lstsize(tmp);
-		// 		// int count_args = count_arg_words(tmp);
-		// 		// cmd->raw = join_tokens_to_string(new_tokens);
-		// 		// cmd->argv = malloc(sizeof(char *) *( count_args + 1));
-		// 		// cmd->argv[count_args] = NULL;
-		// 		build_redirs_and_args(cmd, tmp);
-		// 		cmd->prev = prev;
-		// 		if (prev != NULL)
-		// 			prev->next = cmd;
-		// 		else
-		// 			first = cmd;
-		// 		prev = cmd;
-		// 	}
-		// 	tmp_list = tmp_list->next;
-		// }
-		// print_cmds(cmd);
-		
+		exec_command(&minishell, &first);
 	}
-	return (0);
+	free_env(&minishell.env);
+	return (minishell.last_status);
 }
 
 // cd ls -e "coucou'bon|jour'" 'bonjour"cou>cou"' | > >> < <<

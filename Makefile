@@ -13,6 +13,7 @@ override	SOURCE_DIR		:=	src/
 # The header files of the project
 override	HEADER_FILES	:=	minishell
 
+
 # The C source code files of the project
 override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export pwd unset)
 override	SRC_ENV_MANAGER	:=	create_env env_to_strlst get_var
