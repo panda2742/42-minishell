@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:59:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 14:27:47 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:29:57 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_bool	create_streams(t_excmd *cmd, t_streamfd *in_dup, t_streamfd *out_dup)
 		cmd->out_redirects.final_fd.fd = cmd->pipe[1];
 		cmd->out_redirects.final_fd.type = STREAM_PIPE;
 	}
-	if (_create_dup2(in_dup, out_dup, cmd))
+	if (_create_dup2(in_dup, out_dup, cmd) == false)
 		return (false);
 	if (cmd->prev)
 		close_pipe(cmd->prev->pipe[0], &cmd->pipe_open[0]);
@@ -82,4 +82,5 @@ static t_bool	_create_dup2(t_streamfd *in_dup, t_streamfd *out_dup,
 		puterr(ft_sprintf(": dup2 out-stream error"), true);
 		return (false);
 	}
+	return (true);
 }
