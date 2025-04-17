@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 10:59:32 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 09:02:58 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <readline/history.h>
 # include <fcntl.h>
 # include <wait.h>
+# include <unistd.h>
 # include "libft.h"
 
 # ifndef PROJECT_NAME
@@ -26,7 +27,7 @@
 /**
  * An alias to the int type, just to set the code more readable.
  */
-typedef int	t_exit;
+typedef int			t_exit;
 
 typedef struct s_env_var
 {
@@ -241,7 +242,7 @@ typedef struct s_strvec
  * Represents a prototype of a command function (used for builtins commands).
  * The parameter is a pointer to a s_command structure, defined above.
  */
-typedef t_exit (*		t_cmdproto)(t_excmd *);
+typedef t_exit (*	t_cmdproto)(t_excmd *);
 
 /**
  * The main structure of the project/code.

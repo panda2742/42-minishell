@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:59:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 09:57:40 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 11:46:26 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,26 @@
 
 t_bool	create_streams(t_excmd *cmd)
 {
-	t_streamfd	stream_fd[2];
-
-	stream_fd[0].fd = cmd->in_redirects.final_fd.fd;
-	stream_fd[0].type = STREAM_REDIR;
-	if (stream_fd[0].fd == STDIN_FILENO)
-		stream_fd[0].type = STREAM_STD;
-
-	stream_fd[1].fd = cmd->out_redirects.final_fd.fd;
-	stream_fd[1].type = STREAM_REDIR;
-	if (stream_fd[1].fd == STDOUT_FILENO)
-		stream_fd[1].type = STREAM_STD;
-
+	if (cmd->in_redirects.final_fd.fd == STDIN_FILENO)
+		cmd->in_redirects.final_fd.type = STREAM_STD;
+	if (cmd->out_redirects.final_fd.fd == STDOUT_FILENO)
+		cmd->out_redirects.final_fd.type = STREAM_STD;
 	if (cmd->prev && cmd->in_redirects.size == 0)
 	{
-		stream_fd[0].fd = cmd->prev->pipe[0];
-		stream_fd[0].type = STREAM_PIPE;
+		cmd->in_redirects.final_fd.fd = cmd->prev->pipe[0];
+		cmd->in_redirects.final_fd.type = STREAM_PIPE;
 	}
 	if (cmd->next && cmd->out_redirects.size == 0)
 	{
-		stream_fd[1].fd = cmd->pipe[1];
-		stream_fd[1].type = STREAM_PIPE;
+		cmd->out_redirects.final_fd.fd = cmd->pipe[1];
+		cmd->out_redirects.final_fd.type = STREAM_PIPE;
 	}
-
-	if (dup2(stream_fd[0].fd, STDIN_FILENO) == -1)
+	if (dup2(cmd->in_redirects.final_fd.fd, STDIN_FILENO) == -1)
 	{
 		puterr(ft_sprintf(": dup2 in-stream error"), true);
 		return (false);
 	}
-	if (dup2(stream_fd[1].fd, STDOUT_FILENO) == -1)
+	if (dup2(cmd->in_redirects.final_fd.fd, STDOUT_FILENO) == -1)
 	{
 		puterr(ft_sprintf(": dup2 out-stream error"), true);
 		return (false);
@@ -56,9 +47,11 @@ t_bool	create_streams(t_excmd *cmd)
 
 t_bool	execute_from_path(t_minishell *minishell, t_excmd *cmd, t_excmd **cmds)
 {
-	int	i;
+	int			i;
+	t_env_var	*path_var;
+	char		*fullpath;
 
-	t_env_var	*path_var = get_var(&minishell->env, "PATH");
+	path_var = get_var(&minishell->env, "PATH");
 	if (path_var != NULL)
 		cmd->paths = ft_split(path_var->value, ":");
 	else
@@ -66,7 +59,7 @@ t_bool	execute_from_path(t_minishell *minishell, t_excmd *cmd, t_excmd **cmds)
 	i = 0;
 	while (cmd->paths[i])
 	{
-		char *fullpath = get_full_path(cmd->paths[i], cmd->name);
+		fullpath = get_full_path(cmd->paths[i], cmd->name);
 		i++;
 		if (access(fullpath, F_OK | X_OK) != 0)
 			continue ;
@@ -75,10 +68,19 @@ t_bool	execute_from_path(t_minishell *minishell, t_excmd *cmd, t_excmd **cmds)
 	}
 	if (access(cmd->name, F_OK | X_OK) == 0)
 		execve(cmd->name, cmd->argv, cmd->envp);
+	if (dup2(STDOUT_FILENO, cmd->in_redirects.final_fd.fd) == -1)
+	{
+		puterr(ft_sprintf(": dup2 in-stream error"), true);
+		return (false);
+	}
+	if (dup2(STDOUT_FILENO, cmd->out_redirects.final_fd.fd) == -1)
+	{
+		puterr(ft_sprintf(": dup2 out-stream error"), true);
+		return (false);
+	}
 	free_env(cmd->env);
 	ft_free_strtab(cmd->envp);
 	free_cmds(cmds);
 	puterr(ft_sprintf(": %s", cmd->name), true);
 	return (false);
 }
-

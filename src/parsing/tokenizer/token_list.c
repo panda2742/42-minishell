@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_list.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/17 09:07:43 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/17 09:08:49 by ehosta           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -5,7 +16,6 @@ void	free_tokens_in_list(t_token *tokens, t_token_list *list)
 {
 	t_token			*next_token;
 	t_token_list	*next_list;
-
 
 	while (list)
 	{
@@ -20,7 +30,6 @@ void	free_tokens_in_list(t_token *tokens, t_token_list *list)
 			tokens = next_token;
 		}
 	}
-	
 }
 /*
  * Add a new token list node to the linked list of token lists
@@ -28,13 +37,14 @@ void	free_tokens_in_list(t_token *tokens, t_token_list *list)
  * The function returns the new token list node
 */
 
-t_token_list	*add_token_list_node(t_token *start, t_token *end, t_token_list **head_list, t_token **head_tokens)
+t_token_list	*add_token_list_node(t_token *start, t_token *end,
+					t_token_list **head_list, t_token **head_tokens)
 {
-	t_token_list 	*list;
-	t_token_list 	*tmp;
+	t_token_list	*list;
+	t_token_list	*tmp;
 	t_token			*new_token;
 	t_token			*tmp_token;
-	
+
 	tmp_token = start;
 	while (tmp_token != end)
 	{
@@ -44,7 +54,7 @@ t_token_list	*add_token_list_node(t_token *start, t_token *end, t_token_list **h
 		new_token->type = tmp_token->type;
 		if (tmp_token->fragments && tmp_token->fragments->text)
 		{
-			new_token->text = ft_strdup(tmp_token->fragments->text);  // ft_memalloc
+			new_token->text = ft_strdup(tmp_token->fragments->text);
 			if (new_token->text == NULL)
 				return (NULL);
 		}
@@ -69,16 +79,17 @@ t_token_list	*add_token_list_node(t_token *start, t_token *end, t_token_list **h
 	}
 	return (list);
 }
+
 /*
  * Cut the token list at each PIPE and return the new struct for the command
  * End when PIPE or NULL is found
 */
 void	token_list(t_token *head_token, t_token_list **head_list)
 {
-	t_token *current;
+	t_token	*current;
 	t_token	*start;
-	t_token *end;
-	t_token *head_tokens;
+	t_token	*end;
+	t_token	*head_tokens;
 
 	*head_list = NULL;
 	if (head_token == NULL)

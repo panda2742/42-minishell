@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:51 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/15 15:31:16 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 08:57:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,11 @@ static t_bool	_try_open(t_redir *last, t_redir_manager *redirects_manager)
 	else if (redirects_manager->type == OUT_REDIR)
 	{
 		if (last->out_append_mode)
-			last->fd.fd = open(last->filepath, O_RDWR | O_CREAT | O_APPEND, 0644);
+			last->fd.fd = open(last->filepath, O_RDWR | O_CREAT | O_APPEND,
+					0644);
 		else
-			last->fd.fd = open(last->filepath, O_RDWR | O_CREAT | O_TRUNC, 0644);
+			last->fd.fd = open(last->filepath, O_RDWR | O_CREAT | O_TRUNC,
+					0644);
 	}
 	if (last->fd.fd == -1 && !last->is_heredoc)
 	{

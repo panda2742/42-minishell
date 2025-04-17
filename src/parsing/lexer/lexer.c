@@ -1,7 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/17 08:59:55 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/17 09:03:02 by ehosta           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
-#include <unistd.h>
 
 static void	handle_redir_in(const char *input, int *i, t_token **token_list)
 {
@@ -11,16 +20,15 @@ static void	handle_redir_in(const char *input, int *i, t_token **token_list)
 	{
 		token = ft_create_token(HEREDOC);
 		if (!token)
-			return ; /// gestion d erreur
+			return ;
 		append_fragment(token, new_fragment("<<", 2, SINGLE));
-		;
 		(*i) += 2;
 	}
 	else
 	{
 		token = ft_create_token(REDIR_IN);
 		if (!token)
-			return ; /// gestion d erreur
+			return ;
 		append_fragment(token, new_fragment("<", 1, SINGLE));
 		(*i)++;
 	}
@@ -35,7 +43,7 @@ void	handle_redir_out(const char *input, int *i, t_token **token_list)
 	{
 		token = ft_create_token(APPEND);
 		if (!token)
-			return ; /// gestion d erreur
+			return ;
 		append_fragment(token, new_fragment(">>", 2, SINGLE));
 		(*i) += 2;
 	}
@@ -43,7 +51,7 @@ void	handle_redir_out(const char *input, int *i, t_token **token_list)
 	{
 		token = ft_create_token(REDIR_OUT);
 		if (!token)
-			return ; /// gestion d erreur
+			return ;
 		append_fragment(token, new_fragment(">", 1, SINGLE));
 		(*i)++;
 	}
@@ -56,7 +64,7 @@ void	handle_pipe(int *i, t_token **token_list)
 
 	token = ft_create_token(PIPE);
 	if (!token)
-		return ; // gestion d erreur
+		return ;
 	append_fragment(token, new_fragment("|", 1, SINGLE));
 	append_token(token_list, token);
 	(*i)++;
@@ -68,24 +76,18 @@ void	handle_pipe(int *i, t_token **token_list)
 void	handle_redir_pipe(int *i, t_token **token_list, const char *input)
 {
 	if (input[*i] == '|')
-	{
 		handle_pipe(i, token_list);
-	}
 	else if (input[*i] == '<')
-	{
 		handle_redir_in(input, i, token_list);
-	}
 	else if (input[*i] == '>')
-	{
 		handle_redir_out(input, i, token_list);
-	}
 }
 
 static int	parse_single_quote(t_token *token, const char *input, int *i)
 {
 	int	start;
 
-	(*i)++; // skip quote
+	(*i)++;
 	start = *i;
 	while (input[*i] && input[*i] != '\'')
 		(*i)++;
@@ -95,7 +97,7 @@ static int	parse_single_quote(t_token *token, const char *input, int *i)
 		return (0);
 	}
 	append_fragment(token, new_fragment(input + start, *i - start, SINGLE));
-	(*i)++; // skip quote
+	(*i)++;
 	return (1);
 }
 
@@ -103,7 +105,7 @@ static int	parse_double_quote(t_token *token, const char *input, int *i)
 {
 	int	start;
 
-	(*i)++; // skip quote
+	(*i)++;
 	start = *i;
 	while (input[*i] && input[*i] != '\"')
 		(*i)++;
@@ -113,7 +115,7 @@ static int	parse_double_quote(t_token *token, const char *input, int *i)
 		return (0);
 	}
 	append_fragment(token, new_fragment(input + start, *i - start, DOUBLE));
-	(*i)++; // skip quote
+	(*i)++;
 	return (1);
 }
 
@@ -133,7 +135,8 @@ static int	parse_unquoted(t_token *token, const char *input, int *i)
 }
 
 /*
-** Construit un token WORD en accumulant ses fragments jusqu'a rencontrer un delimiteur.
+* Construit un token WORD en accumulant ses fragments jusqu'a rencontrer un
+* delimiteur.
 */
 static t_token	*parse_word_token(const char *input, int *i)
 {

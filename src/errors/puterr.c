@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:38 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 17:08:33 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 09:31:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void	puterr(char *message, t_bool call_perror)
 	else
 	{
 		if (call_perror)
-			perror(": An error occurred (probably memory)");
+			perror(": An error occurred (heap failure)");
 		else
-			ft_putstr_fd(": An error occurred (probably memory)\n", 2);
+			ft_putstr_fd(": An error occurred (heap failure)\n", 2);
 	}
 	ft_putstr_fd(RESET, 2);
 }

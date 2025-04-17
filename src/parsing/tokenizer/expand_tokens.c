@@ -6,30 +6,29 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 09:30:48 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishell.h"
 
-char *expand_fragment(const char *input, int quote, t_env_manager *env)
+char	*expand_fragment(const char *input, int quote, t_env_manager *env)
 {
-	t_utils utils;
-	t_env_var *env_var;
-	char *var_name;
-	char *value;
-	char tmp[2];
+	t_utils		utils;
+	t_env_var	*env_var;
+	char		*var_name;
+	char		*value;
+	char		tmp[2];
 
 	ft_memset(&utils, 0, sizeof(t_utils));
 	utils.s1 = ft_strdup("");
 	while (input[utils.i])
 	{
 		if (input[utils.i] == '$' && quote != SINGLE)
-		// Si pas entre quotes simple
 		{
 			utils.j = utils.i + 1;
-			while (input[utils.j] && ((ft_isalnum(input[utils.j]) || input[utils.j] == '_')))
+			while (input[utils.j] && ((ft_isalnum(input[utils.j])
+						|| input[utils.j] == '_')))
 				utils.j++;
 			if (utils.j > utils.i + 1)
 			{
@@ -42,7 +41,6 @@ char *expand_fragment(const char *input, int quote, t_env_manager *env)
 					utils.k++;
 				}
 				var_name[utils.k] = '\0';
-				/* on recupere la variable dans notre env manager */
 				env_var = get_var(env, var_name);
 				if (env_var)
 					value = ft_strdup(env_var->value);
@@ -52,7 +50,7 @@ char *expand_fragment(const char *input, int quote, t_env_manager *env)
 				utils.s1 = str_join_free(utils.s1, value);
 				free(value);
 				utils.i = utils.j;
-				continue;
+				continue ;
 			}
 		}
 		{
@@ -65,10 +63,9 @@ char *expand_fragment(const char *input, int quote, t_env_manager *env)
 	return (utils.s1);
 }
 
-
-t_qtype set_qtype_fragment(t_token *token_head)
+t_qtype	set_qtype_fragment(t_token *token_head)
 {
-	t_fragment *tmp;
+	t_fragment	*tmp;
 
 	tmp = token_head->fragments;
 	while (tmp)
@@ -80,10 +77,10 @@ t_qtype set_qtype_fragment(t_token *token_head)
 	return (NONE);
 }
 
-static t_token *create_new_token_from_word(const char *word,
-										   t_token *token_head)
+static t_token	*create_new_token_from_word(const char *word,
+					t_token *token_head)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = ft_memalloc(sizeof(t_token));
 	if (!token)
@@ -104,19 +101,18 @@ static t_token *create_new_token_from_word(const char *word,
 	return (token);
 }
 
-static void process_unquoted_fragment(const char *expanded, char **current,
-									  t_token **new_head, t_token **new_last, t_token *token)
+static void	process_unquoted_fragment(const char *expanded, char **current,
+				t_token **new_head, t_token **new_last, t_token *token)
 {
-	int i;
-	t_token *new_token;
-	char tmp[2];
+	int		i;
+	t_token	*new_token;
+	char	tmp[2];
 
 	i = 0;
 	while (expanded[i])
 	{
 		if (ft_isspace(expanded[i]))
 		{
-			/* Si current n'est pas vide, on le finalise */
 			if ((*current)[0] != '\0')
 			{
 				new_token = create_new_token_from_word(*current, token);
@@ -133,7 +129,6 @@ static void process_unquoted_fragment(const char *expanded, char **current,
 				free(*current);
 				*current = ft_strdup("");
 			}
-			/* Sauter tous les separateurs */
 			while (expanded[i] && ft_isspace(expanded[i]))
 				i++;
 		}
@@ -147,14 +142,14 @@ static void process_unquoted_fragment(const char *expanded, char **current,
 	}
 }
 
-t_token *word_split_token(t_token *token, t_env_manager *env)
+t_token	*word_split_token(t_token *token, t_env_manager *env)
 {
-	t_token *new_head;
-	t_token *new_last;
-	t_fragment *frag;
-	char *current;
-	char *expanded;
-	t_token *new_token;
+	t_token		*new_head;
+	t_token		*new_last;
+	t_fragment	*frag;
+	char		*current;
+	char		*expanded;
+	t_token		*new_token;
 
 	new_head = NULL;
 	new_last = NULL;
@@ -171,13 +166,11 @@ t_token *word_split_token(t_token *token, t_env_manager *env)
 				return (NULL);
 			}
 			process_unquoted_fragment(expanded, &current, &new_head, &new_last,
-									  token);
+				token);
 			free(expanded);
 		}
 		else
 		{
-			/* Pour DOUBLE quotes, on effectue quand meme l'expansion,
-				et pour SINGLE, on fait un strdup */
 			if (frag->quote_type == DOUBLE)
 				expanded = expand_fragment(frag->text, frag->quote_type, env);
 			else
@@ -187,13 +180,11 @@ t_token *word_split_token(t_token *token, t_env_manager *env)
 				free(current);
 				return (NULL);
 			}
-			/* Simple concatenation pour les fragments cites */
 			current = str_join_free(current, expanded);
 			free(expanded);
 		}
 		frag = frag->next;
 	}
-	// Only add if there is someting in current to prevent $var="a b   " to add an empty token
 	if (ft_strlen(current) > 0)
 	{
 		new_token = create_new_token_from_word(current, token);

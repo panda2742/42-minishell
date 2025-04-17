@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/17 11:37:00 by ehosta           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void		_load_exec_params(t_minishell *minishell, t_execparams *params,
-				t_excmd **cmds);
+					t_excmd **cmds);
 static t_bool	_create_child(t_excmd *cmd, t_execparams *params);
 
 t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
@@ -29,7 +41,8 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 			exit(0);
 		if (cmd->proto == NULL)
 			execute_from_path(minishell, cmd, cmds);
-		else {
+		else
+		{
 			(*cmd->proto)(cmd);
 			if (cmd->in_a_child)
 				exit(0);
@@ -37,7 +50,9 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		free_env(cmd->env);
 		ft_free_strtab(cmd->envp);
 		free_cmds(cmds);
-		exit(0);
+		if (cmd->in_a_child && cmd->proto == NULL)
+			exit(0);
+		cmd = cmd->next;
 	}
 	cmd = *cmds;
 	while (params.nb_launched)
@@ -52,7 +67,6 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	ft_free_strtab(minishell->env.envlst);
 	return (minishell->last_status);
 }
-
 
 static void	_load_exec_params(t_minishell *minishell, t_execparams *params,
 				t_excmd **cmds)

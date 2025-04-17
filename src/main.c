@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 16:50:41 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 11:18:31 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,8 @@
 #include <stdio.h>
 #include <strings.h>
 
-
-
-void	free_dom_help(t_token *token, t_token *new_tokens,
-			t_token_list *token_list, char *line, char *final_cmd, t_excmd *cmd) // to delete
-{
-	free_tokens(new_tokens);
-	free_tokens_in_list(token_list->tokens, token_list);
-	free(final_cmd);
-	(void)(cmd);
-	free_tokens(token);
-	free(line);
-	free(cmd->name);
-	free(cmd->raw);
-	free(cmd->argv);
-	free(cmd);
-}
-
-void	expand_caller(t_token *token, t_token **new_tokens, t_minishell *minishell)
+void	expand_caller(t_token *token, t_token **new_tokens,
+			t_minishell *minishell)
 {
 	t_token	*last_new;
 	t_token	*split_token;
@@ -48,14 +32,12 @@ void	expand_caller(t_token *token, t_token **new_tokens, t_minishell *minishell)
 		split_token = word_split_token(tmp, &minishell->env);
 		if (split_token)
 		{
-			// Concatene la chaine de tokens obtenue via le word splitting
 			if (!*new_tokens)
 			{
 				*new_tokens = split_token;
 				last_new = *new_tokens;
 			}
-			else
-			{
+			else {
 				while (last_new->next)
 					last_new = last_new->next;
 				last_new->next = split_token;
@@ -65,36 +47,37 @@ void	expand_caller(t_token *token, t_token **new_tokens, t_minishell *minishell)
 	}
 }
 
-t_excmd *set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell, t_token *new_tokens)
+t_excmd	*set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell,
+			t_token *new_tokens)
 {
-	char *cmd_name = get_first_word(token);
+	char	*cmd_name;
+	int		count_args;
+
+	cmd_name = get_first_word(token);
 	cmd = create_cmd(cmd_name, &minishell->env);
 	if (!cmd)
 		return (NULL);
 	cmd->argc = token_lstsize(token);
-	int count_args = count_arg_words(token);
+	count_args = count_arg_words(token);
 	cmd->raw = join_tokens_to_string(new_tokens);
-	cmd->argv = ft_memalloc(sizeof(char *) *( count_args + 1));
+	cmd->argv = ft_memalloc(sizeof(char *) * (count_args + 1));
 	if (!cmd->argv)
 		return (NULL);
 	cmd->argv[count_args] = NULL;
 	return (cmd);
 }
 
-void build_redirs_and_args(t_excmd *cmd, t_token *token)
+void	build_redirs_and_args(t_excmd *cmd, t_token *token)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (token && (token->type != PIPE))
 	{
 		if (is_redir(token))
-		{
 			handle_is_redir_tokens(cmd, token);
-		}
 		if (token->type == WORD)
-		{
-			cmd->argv[i] = token->text;
-			i++;
-		}
+			cmd->argv[i++] = token->text;
 		token = token->next;
 	}
 }
@@ -108,19 +91,22 @@ void	link_prev_cmd(t_excmd **first, t_excmd **prev, t_excmd *cmd)
 		*first = cmd;
 	*prev = cmd;
 }
-t_excmd *create_cmd_list(t_token_list *token_list_head, t_minishell *minishell, t_token *all_tokens)
+
+t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell,
+			t_token *all_tokens)
 {
-	t_excmd		*first;
-	t_excmd		*prev;
-	t_excmd		*cmd;
+	t_excmd			*first;
+	t_excmd			*prev;
+	t_excmd			*cmd;
 	t_token_list	*curr_list;
+	t_token			*cmd_tokens;
 
 	first = NULL;
 	prev = NULL;
 	curr_list = token_list_head;
 	while (curr_list)
 	{
-		t_token *cmd_tokens = curr_list->tokens;
+		cmd_tokens = curr_list->tokens;
 		cmd = set_cmd(cmd, cmd_tokens, minishell, all_tokens);
 		if (!cmd)
 		{
@@ -143,40 +129,32 @@ t_excmd *create_cmd_list(t_token_list *token_list_head, t_minishell *minishell, 
 */
 t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 {
-	t_token *new_tokens;
-	t_token_list *head_list;
-	t_excmd *cmd_list;
-	
+	t_token			*new_tokens;
+	t_token_list	*head_list;
+	t_excmd			*cmd_list;
+
 	new_tokens = NULL;
 	expand_caller(token, &new_tokens, minishell);
 	head_list = NULL;
 	token_list(new_tokens, &head_list);
 	cmd_list = create_cmd_list(head_list, minishell, new_tokens);
-	// print_cmds(cmd_list);
-
 	free_tokens(new_tokens);
-	// free_tokens_in_list(head_list->tokens, head_list);
-
 	return (cmd_list);
-	// char *final_cmd;
-	// (void)final_cmd;
-	// final_cmd = join_tokens_to_string(new_tokens);
-	// ft_printf("Final command: %s\n", final_cmd);
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	char		*line;
 	t_token		*token;
-
-	t_minishell minishell;
-	char 		*prompt;
+	t_minishell	minishell;
+	char		*prompt;
+	t_excmd		*first;
 
 	(void)argc;
 	(void)argv;
 	if (create_env(env, &minishell.env) == NULL)
 	{
-		puterr(ft_sprintf(": memory allocation failed"), false);
+		puterr(ft_sprintf(": Environment memory allocation failed"), false);
 		return (EXIT_FAILURE);
 	}
 	while (1)
@@ -189,27 +167,22 @@ int	main(int argc, char **argv, char **env)
 		{
 			ft_printf("exit\n");
 			free_env(&minishell.env);
-			break;
+			break ;
 		}
 		add_history(line);
 		token = ft_input(line);
 		if (token == NULL)
 		{
 			free(line);
-			continue;
+			continue ;
 		}
 		if (!lexer_parse(token))
 		{
 			free_tokens(token);
 			free(line);
-			continue;
+			continue ;
 		}
-		
-		t_excmd *first = NULL;
-		
 		first = process_tokens(token, &minishell);
-
-		(void)first;
 		exec_command(&minishell, &first);
 	}
 	free_env(&minishell.env);

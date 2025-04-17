@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:11:09 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 17:05:45 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 10:16:03 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	*ft_memalloc(size_t __size)
 {
 	static int	crash = 0;
 
-	if (crash++ > 0)
-		return (NULL);
+	(void)crash;
+	// if (crash++ > -10)
+	// 	return (NULL);
 	return (malloc(__size));
 }
