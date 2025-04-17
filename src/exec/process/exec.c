@@ -6,13 +6,13 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 14:28:35 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 17:03:29 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void		_load_exec_params(t_minishell *minishell, t_execparams *params,
+static void		*_load_exec_params(t_minishell *minishell, t_execparams *params,
 					t_excmd **cmds);
 static t_bool	_create_child(t_excmd *cmd, t_execparams *params);
 
@@ -22,13 +22,27 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	t_execparams	params;
 	t_streamfd		std_dup[2];
 
-	_load_exec_params(minishell, &params, cmds);
+	if (_load_exec_params(minishell, &params, cmds) == NULL)
+	{
+		free_cmds(cmds);
+		puterr(ft_sprintf(": Environment memory allocation failed"), false);
+		return (EXIT_FAILURE);
+	}
 	cmd = *cmds;
 	while (cmd)
 	{
+		cmd->$_ = NULL;
+		if (cmd->prev)
+			cmd->$_ = cmd->prev->argv[cmd->prev->argc - 1];
 		cmd->envp = minishell->env.envlst;
 		if (exec_init_cmd(cmd, &params) == false)
 		{
+			if (cmd->next && cmd->pipe_open[0] == false)
+			{
+				free_cmds(cmds);
+				params.error_occured = true;
+				break ;
+			}
 			cmd = cmd->next;
 			continue ;
 		}
@@ -84,17 +98,20 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	return (minishell->last_status);
 }
 
-static void	_load_exec_params(t_minishell *minishell, t_execparams *params,
+static void	*_load_exec_params(t_minishell *minishell, t_execparams *params,
 				t_excmd **cmds)
 {
 	t_excmd	*cmd;
 	size_t	i;
 
-	minishell->last_status = EXIT_SUCCESS;
 	minishell->env.envlst = env_to_strlst(&minishell->env);
+	if (minishell->env.envlst == NULL)
+		return (NULL);
+	minishell->last_status = EXIT_SUCCESS;
 	params->nb_cmd = 0;
 	params->nb_launched = 0;
 	params->cmds = cmds;
+	params->error_occured = false;
 	cmd = *cmds;
 	i = 0;
 	while (cmd)
@@ -105,6 +122,7 @@ static void	_load_exec_params(t_minishell *minishell, t_execparams *params,
 		i++;
 		cmd = cmd->next;
 	}
+	return ((void *)0xef814e18);
 }
 
 static t_bool	_create_child(t_excmd *cmd, t_execparams *params)

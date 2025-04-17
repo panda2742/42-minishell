@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 09:56:24 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/15 15:41:26 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 15:32:51 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ t_bool	exec_init_cmd(t_excmd *cmd, t_execparams *params)
 		cmd->in_a_child = false;
 	if (cmd->next)
 	{
+		if (pipe(cmd->pipe) == -1)
+			return (false);
 		cmd->pipe_open[0] = true;
 		cmd->pipe_open[1] = true;
-		pipe(cmd->pipe);
 	}
 	return (_init_cmd_redirects(cmd));
 }

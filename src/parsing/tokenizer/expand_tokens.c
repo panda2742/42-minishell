@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 09:30:48 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:49:15 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*expand_fragment(const char *input, int quote, t_env_manager *env)
 	utils.s1 = ft_strdup("");
 	while (input[utils.i])
 	{
-		if (input[utils.i] == '$' && quote != SINGLE)
+		if (input[utils.i] == '$' && quote != QUOTE_SINGLE)
 		{
 			utils.j = utils.i + 1;
 			while (input[utils.j] && ((ft_isalnum(input[utils.j])
@@ -70,11 +70,11 @@ t_qtype	set_qtype_fragment(t_token *token_head)
 	tmp = token_head->fragments;
 	while (tmp)
 	{
-		if (tmp->quote_type == DOUBLE)
-			return (DOUBLE);
+		if (tmp->quote_type == QUOTE_DOUBLE)
+			return (QUOTE_DOUBLE);
 		tmp = tmp->next;
 	}
-	return (NONE);
+	return (QUOTE_NONE);
 }
 
 static t_token	*create_new_token_from_word(const char *word,
@@ -157,7 +157,7 @@ t_token	*word_split_token(t_token *token, t_env_manager *env)
 	current = ft_strdup("");
 	while (frag)
 	{
-		if (frag->quote_type == NONE)
+		if (frag->quote_type == QUOTE_NONE)
 		{
 			expanded = expand_fragment(frag->text, frag->quote_type, env);
 			if (!expanded)
@@ -171,7 +171,7 @@ t_token	*word_split_token(t_token *token, t_env_manager *env)
 		}
 		else
 		{
-			if (frag->quote_type == DOUBLE)
+			if (frag->quote_type == QUOTE_DOUBLE)
 				expanded = expand_fragment(frag->text, frag->quote_type, env);
 			else
 				expanded = ft_strdup(frag->text);

@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:48 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 15:15:20 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,14 @@ t_redir	*create_in_redirect(char *filepath)
 	t_redir	*res;
 
 	res = ft_memalloc(sizeof(t_redir));
-	if (!res)
+	if (res == NULL)
 		return (NULL);
 	res->filepath = ft_strdup(filepath);
+	if (res->filepath == NULL)
+	{
+		free(res);
+		return (NULL);
+	}
 	res->fd.fd = -2;
 	res->fd.type = STREAM_STD;
 	res->is_heredoc = false;
@@ -36,9 +41,14 @@ t_redir	*create_out_redirect(char *filepath, t_bool append_mode)
 	t_redir	*res;
 
 	res = ft_memalloc(sizeof(t_redir));
-	if (!res)
+	if (res == NULL)
 		return (NULL);
 	res->filepath = ft_strdup(filepath);
+	if (res->filepath == NULL)
+	{
+		free(res);
+		return (NULL);
+	}
 	res->fd.fd = -2;
 	res->fd.type = STREAM_STD;
 	res->is_heredoc = false;
@@ -55,7 +65,7 @@ t_redir	*create_heredoc_redirect(char *delimiter)
 	t_redir	*res;
 
 	res = ft_memalloc(sizeof(t_redir));
-	if (!res)
+	if (res == NULL)
 		return (NULL);
 	res->filepath = NULL;
 	res->fd.fd = -2;

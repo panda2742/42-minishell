@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 23:01:09 by abonifac          #+#    #+#             */
-/*   Updated: 2025/04/17 11:11:52 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:49:35 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*get_first_word(t_token *token)
 	tmp = token;
 	while (tmp)
 	{
-		if (tmp->type == WORD)
+		if (tmp->type == TOKEN_WORD)
 		{
 			tmp->is_first_word = true;
 			return (tmp->text);

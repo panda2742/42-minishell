@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:23:02 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/15 15:40:24 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:50:07 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	print_cmd(t_excmd *cmd)
 				printf(" \"%s< %s%s\"", B_BLUE, redir->filepath, RESET);
 			printf(" | fd %s%d%s", B_YELLOW, redir->fd.fd, RESET);
 			if (redir->fd.fd == -2)
-				printf(" %sHEREDOC%s", B_RED, RESET);
+				printf(" %sTOKEN_HEREDOC%s", B_RED, RESET);
 			else if (redir->fd.fd == -1)
 				printf(" %sCLOSED%s", B_RED, RESET);
 			else if (redir->fd.fd == 0)
@@ -131,7 +131,7 @@ void	print_cmd(t_excmd *cmd)
 				printf(" \"%s> %s%s\"", B_BLUE, redir->filepath, RESET);
 			printf(" | fd %s%d%s", B_YELLOW, redir->fd.fd, RESET);
 			if (redir->fd.fd == -2)
-				printf(" %sHEREDOC%s", B_RED, RESET);
+				printf(" %sTOKEN_HEREDOC%s", B_RED, RESET);
 			else if (redir->fd.fd == -1)
 				printf(" %sCLOSED%s", B_RED, RESET);
 			else if (redir->fd.fd == 0)

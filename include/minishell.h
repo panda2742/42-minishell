@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 14:23:58 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 17:02:44 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_env_manager
 typedef enum e_stream_type
 {
 	STREAM_STD,
-	STREAM_PIPE,
+	STREAM_TOKEN_PIPE,
 	STREAM_REDIR,
 }	t_stream_type;
 
@@ -163,6 +163,10 @@ typedef struct s_excmd
 	 */
 	char			**argv;
 	/**
+	 * $_
+	 */
+	char			*$_;
+	/**
 	 * The environment manager. Musts exist. // E
 	 */
 	t_env_manager	*env;
@@ -228,6 +232,7 @@ typedef struct s_execparams
 	size_t	nb_cmd;
 	size_t	nb_launched;
 	t_excmd	**cmds;
+	t_bool	error_occured;
 }			t_execparams;
 
 typedef struct s_strvec
@@ -255,20 +260,20 @@ typedef struct s_minishell
 
 typedef enum e_qtype
 {
-	NONE,
-	SINGLE,
-	DOUBLE
+	QUOTE_NONE,
+	QUOTE_SINGLE,
+	QUOTE_DOUBLE
 }						t_qtype;
 
 typedef enum e_token_type
 {
-	WORD,
-	PIPE,
-	REDIR_IN,
-	REDIR_OUT,
-	APPEND,
-	HEREDOC,
-	REDIR_ARG
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_APPEND,
+	TOKEN_HEREDOC,
+	TOKEN_REDIR_ARG
 }						t_token_type;
 
 typedef struct s_fragment
@@ -324,7 +329,6 @@ t_env_var		*get_var(t_env_manager *env, const char *name);
 
 // ERRORS ----------------------------------------------------------------------
 
-void			*handle_env_mem_alloc(t_env_manager *env);
 t_exit			command_failure(t_excmd *c, char *message, t_bool call_perror);
 void			puterr(char *message, t_bool call_perror);
 
@@ -372,7 +376,7 @@ int				is_char_redir_or_pipe(char c);
 void			print_tokens(t_token *tokens);
 void			handle_redir_out(const char *input, int *i,
 					t_token **token_list);
-void			handle_pipe(int *i, t_token **token_list);
+void			*handle_pipe(int *i, t_token **token_list);
 void			handle_redir_pipe(int *i, t_token **token_list,
 					const char *input);
 t_token			*ft_input(const char *input);

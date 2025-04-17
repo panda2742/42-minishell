@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 09:07:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 09:08:49 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:49:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ t_token_list	*add_token_list_node(t_token *start, t_token *end,
 }
 
 /*
- * Cut the token list at each PIPE and return the new struct for the command
- * End when PIPE or NULL is found
+ * Cut the token list at each TOKEN_PIPE and return the new struct for the command
+ * End when TOKEN_PIPE or NULL is found
 */
 void	token_list(t_token *head_token, t_token_list **head_list)
 {
@@ -99,14 +99,14 @@ void	token_list(t_token *head_token, t_token_list **head_list)
 	{
 		start = current;
 		end = NULL;
-		while (current && current->type != PIPE)
+		while (current && current->type != TOKEN_PIPE)
 		{
 			current = current->next;
 			end = current;
 		}
 		head_tokens = NULL;
 		add_token_list_node(start, end, head_list, &head_tokens);
-		if (current && current->type == PIPE)
+		if (current && current->type == TOKEN_PIPE)
 			current = current->next;
 	}
 }

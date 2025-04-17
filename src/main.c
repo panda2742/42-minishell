@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 11:18:31 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 16:50:09 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ void	build_redirs_and_args(t_excmd *cmd, t_token *token)
 	int	i;
 
 	i = 0;
-	while (token && (token->type != PIPE))
+	while (token && (token->type != TOKEN_PIPE))
 	{
 		if (is_redir(token))
 			handle_is_redir_tokens(cmd, token);
-		if (token->type == WORD)
+		if (token->type == TOKEN_WORD)
 			cmd->argv[i++] = token->text;
 		token = token->next;
 	}
@@ -129,8 +129,8 @@ t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell,
 */
 t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 {
-	t_token			*new_tokens;
 	t_token_list	*head_list;
+	t_token			*new_tokens;
 	t_excmd			*cmd_list;
 
 	new_tokens = NULL;
@@ -144,30 +144,35 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 
 int	main(int argc, char **argv, char **env)
 {
-	char		*line;
-	t_token		*token;
 	t_minishell	minishell;
-	char		*prompt;
 	t_excmd		*first;
+	t_token		*token;
+	char		*line;
+	char		*prompt;
 
 	(void)argc;
 	(void)argv;
 	if (create_env(env, &minishell.env) == NULL)
 	{
-		puterr(ft_sprintf(": Environment memory allocation failed"), false);
+		puterr(ft_sprintf(": Environment memory allocation failed\n"), false);
 		return (EXIT_FAILURE);
 	}
 	while (1)
 	{
 		set_sig_action();
 		prompt = show_prompt(&minishell.env);
+		if (prompt == NULL)
+		{
+			free_env(&minishell.env);
+			return (EXIT_FAILURE);
+		}
 		line = readline(prompt);
 		free(prompt);
 		if (!line)
 		{
-			ft_printf("exit\n");
 			free_env(&minishell.env);
-			break ;
+			printf(B_GREEN "Good bye!\n" RESET);
+			return (EXIT_SUCCESS);
 		}
 		add_history(line);
 		token = ft_input(line);

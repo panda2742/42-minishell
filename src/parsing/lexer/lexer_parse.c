@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:45 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 08:59:41 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:50:13 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ void	update_token_redir(t_token *list)
 	t_fragment	*tmp;
 
 	tmp = list->next->fragments;
-	list->next->type = REDIR_ARG;
+	list->next->type = TOKEN_REDIR_ARG;
 	while (tmp)
 	{
-		if (tmp->quote_type == NONE)
-			tmp->quote_type = DOUBLE;
+		if (tmp->quote_type == QUOTE_NONE)
+			tmp->quote_type = QUOTE_DOUBLE;
 		tmp = tmp->next;
 	}
 }
@@ -37,7 +37,7 @@ static int	check_redir_error(t_token *token)
 	if (token->next == NULL)
 		return (
 			ft_printf_error("syntax error near unexpected token `newline'\n"));
-	if (token->next->type != WORD)
+	if (token->next->type != TOKEN_WORD)
 		return (
 			ft_printf_error("syntax error near unexpected token `newline'\n"));
 	update_token_redir(token);
@@ -48,7 +48,7 @@ static int	check_pipe_error(t_token *token)
 {
 	if (token->next == NULL)
 		return (ft_printf_error("Syntax error end with a | not allowed\n"));
-	if (token->next->type == PIPE)
+	if (token->next->type == TOKEN_PIPE)
 		return (ft_printf_error("Syntax error || detected\n"));
 	return (1);
 }
@@ -60,12 +60,12 @@ int	lexer_parse(t_token *token)
 	list = token;
 	if (list == NULL)
 		return (0);
-	if (list->type == PIPE)
+	if (list->type == TOKEN_PIPE)
 		return (
 			ft_printf_error("Error: syntax error near unexpected token `|'\n"));
 	while (list != NULL)
 	{
-		if (list->type == PIPE)
+		if (list->type == TOKEN_PIPE)
 		{
 			if (check_pipe_error(list) == 0)
 				return (0);
