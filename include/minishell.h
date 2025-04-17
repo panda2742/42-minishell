@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 09:02:58 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:23:58 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -345,9 +345,9 @@ t_cmdproto		load_builtin(const char *command_name, t_cmdproto *proto);
 void			close_pipe(int sfd, t_bool *door);
 t_bool			exec_init_cmd(t_excmd *cmd, t_execparams *params);
 char			*get_full_path(char *path, char *cmd_name);
-t_bool			create_streams(t_excmd *cmd);
-t_bool			execute_from_path(t_minishell *minishell, t_excmd *cmd,
-					t_excmd **cmds);
+t_bool			create_streams(t_excmd *cmd, t_streamfd *in_dup,
+					t_streamfd *out_dup);
+t_bool			execute_from_path(t_minishell *minishell, t_excmd *cmd);
 
 // MEMORY ----------------------------------------------------------------------
 

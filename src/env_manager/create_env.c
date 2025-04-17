@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 10:18:27 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:08:03 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,4 @@ static void	_init_manager(char **envp, t_env_manager *env)
 	while (envp[env->env_size])
 		env->env_size += 1;
 	env->vars = ft_memalloc(sizeof(t_env_var *));
-	printf("%p\n", env->vars);
 }

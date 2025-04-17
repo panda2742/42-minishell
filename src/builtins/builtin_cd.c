@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:11 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 10:35:57 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:06:59 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ static void		_update_vars(t_env_manager *env);
 
 t_exit	builtin_cd(t_excmd *c)
 {
-	printf("args: %d\n", c->argc);
-	printf("argv: %s %s %s\n", c->argv[0], c->argv[1], c->argv[2]);
 	if (c->argc > 2)
 		return (
 			command_failure(

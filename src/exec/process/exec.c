@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 11:37:00 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:28:35 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 {
 	t_excmd			*cmd;
 	t_execparams	params;
+	t_streamfd		std_dup[2];
 
 	_load_exec_params(minishell, &params, cmds);
 	cmd = *cmds;
@@ -37,15 +38,30 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 			cmd = cmd->next;
 			continue ;
 		}
-		if (create_streams(cmd) == false)
+		if (create_streams(cmd, &std_dup[0], &std_dup[1]) == false)
 			exit(0);
 		if (cmd->proto == NULL)
-			execute_from_path(minishell, cmd, cmds);
+			execute_from_path(minishell, cmd);
 		else
 		{
 			(*cmd->proto)(cmd);
 			if (cmd->in_a_child)
 				exit(0);
+			else
+			{
+				if (dup2(std_dup[0].fd, STDIN_FILENO) == -1)
+				{
+					puterr(ft_sprintf(": dup2 in-stream error"), true);
+					return (false);
+				}
+				if (dup2(std_dup[1].fd, STDOUT_FILENO) == -1)
+				{
+					puterr(ft_sprintf(": dup2 out-stream error"), true);
+					return (false);
+				}
+				close(std_dup[0].fd);
+				close(std_dup[1].fd);
+			}
 		}
 		free_env(cmd->env);
 		ft_free_strtab(cmd->envp);
