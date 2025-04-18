@@ -136,7 +136,7 @@ runv:
 	clear
 	$(MAKE) bonus
 	clear
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=.valgrind_suppress.txt ./$(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=/home/ehosta/Documents/42-minishell/.valgrind_suppress.txt ./$(NAME)
 
 
 -include $(DEPS)

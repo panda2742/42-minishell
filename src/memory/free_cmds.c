@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:19:34 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 15:49:19 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/18 09:30:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	free_one_cmd(t_excmd *cmd)
 		free(cmd->name);
 	if (cmd->raw)
 		free(cmd->raw);
+	if (cmd->$_)
+		free(cmd->$_);
 	if (cmd->argv[0])
 		ft_free_strtab(cmd->argv);
 	if (cmd->in_redirects.size)

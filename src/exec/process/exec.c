@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 17:03:29 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/18 16:41:30 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void		*_load_exec_params(t_minishell *minishell, t_execparams *params,
 					t_excmd **cmds);
 static t_bool	_create_child(t_excmd *cmd, t_execparams *params);
 
-t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
+t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 {
 	t_excmd			*cmd;
 	t_execparams	params;
@@ -25,22 +25,31 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 	if (_load_exec_params(minishell, &params, cmds) == NULL)
 	{
 		free_cmds(cmds);
-		puterr(ft_sprintf(": Environment memory allocation failed"), false);
-		return (EXIT_FAILURE);
+		puterr(ft_sprintf(
+			": error: Pipeline init failure (memory allocation), skipping\n"
+			), false);
+		params.status = EXIT_FAILURE;
+		params.error_occured = true;
+		params.prompt_back = false;
+		return (params);
 	}
 	cmd = *cmds;
 	while (cmd)
 	{
-		cmd->$_ = NULL;
-		if (cmd->prev)
-			cmd->$_ = cmd->prev->argv[cmd->prev->argc - 1];
+		if (cmd->prev && cmd->prev->argc > 0)
+			cmd->$_ = ft_strdup(cmd->prev->argv[cmd->prev->argc - 1]);
 		cmd->envp = minishell->env.envlst;
 		if (exec_init_cmd(cmd, &params) == false)
 		{
 			if (cmd->next && cmd->pipe_open[0] == false)
 			{
 				free_cmds(cmds);
+				puterr(ft_sprintf(
+					": error: Pipe creation failure"
+					), true);
 				params.error_occured = true;
+				params.status = EXIT_FAILURE;
+				params.prompt_back = true;
 				break ;
 			}
 			cmd = cmd->next;
@@ -60,28 +69,40 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		{
 			(*cmd->proto)(cmd);
 			if (cmd->in_a_child)
+			{
+				if (std_dup[0].type == STREAM_STD)
+					close(std_dup[0].fd);
+				if (std_dup[1].type == STREAM_STD)
+					close(std_dup[1].fd);
 				exit(0);
+			}
 			else
 			{
-				if (dup2(std_dup[0].fd, STDIN_FILENO) == -1)
+				if (std_dup[0].type == STREAM_STD && dup2(std_dup[0].fd, STDIN_FILENO) == -1)
 				{
 					puterr(ft_sprintf(": dup2 in-stream error"), true);
-					return (false);
+					if (std_dup[1].type == STREAM_STD && dup2(std_dup[1].fd, STDOUT_FILENO) == -1)
+					{
+						puterr(ft_sprintf(": dup2 out-stream error"), true);
+						close(std_dup[1].fd);
+					}
+					close(std_dup[0].fd);
+					return (params);
 				}
-				if (dup2(std_dup[1].fd, STDOUT_FILENO) == -1)
+				if (std_dup[1].type == STREAM_STD && dup2(std_dup[1].fd, STDOUT_FILENO) == -1)
 				{
 					puterr(ft_sprintf(": dup2 out-stream error"), true);
-					return (false);
+					close(std_dup[1].fd);
 				}
-				close(std_dup[0].fd);
-				close(std_dup[1].fd);
 			}
 		}
-		free_env(cmd->env);
-		ft_free_strtab(cmd->envp);
-		free_cmds(cmds);
 		if (cmd->in_a_child && cmd->proto == NULL)
+		{
+			free_env(cmd->env);
+			ft_free_strtab(cmd->envp);
+			free_cmds(cmds);
 			exit(0);
+		}
 		cmd = cmd->next;
 	}
 	cmd = *cmds;
@@ -95,7 +116,7 @@ t_exit	exec_command(t_minishell *minishell, t_excmd **cmds)
 		cmd = cmd->next;
 	}
 	ft_free_strtab(minishell->env.envlst);
-	return (minishell->last_status);
+	return (params);
 }
 
 static void	*_load_exec_params(t_minishell *minishell, t_execparams *params,
@@ -112,6 +133,8 @@ static void	*_load_exec_params(t_minishell *minishell, t_execparams *params,
 	params->nb_launched = 0;
 	params->cmds = cmds;
 	params->error_occured = false;
+	params->status = EXIT_SUCCESS;
+	params->prompt_back = true;
 	cmd = *cmds;
 	i = 0;
 	while (cmd)
@@ -122,7 +145,7 @@ static void	*_load_exec_params(t_minishell *minishell, t_execparams *params,
 		i++;
 		cmd = cmd->next;
 	}
-	return ((void *)0xef814e18);
+	return ((void *)0x1);
 }
 
 static t_bool	_create_child(t_excmd *cmd, t_execparams *params)

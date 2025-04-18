@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:11 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 14:06:59 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/18 15:16:37 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,17 @@ static void	_update_vars(t_env_manager *env)
 		if (pwd && pwd->value)
 			old_pwd->value = pwd->value;
 		else
-			old_pwd->value = NULL;
+			old_pwd->value = ft_strdup("");
+		old_pwd->value_length = ft_strlen(old_pwd->value);
 	}
 	if (pwd)
 	{
 		cwd = getcwd(NULL, 0);
-		if (!cwd)
-			return ;
-		pwd->value = cwd;
+		if (cwd)
+			pwd->value = cwd;
+		else
+			pwd->value = ft_strdup("");
+		pwd->value_length = ft_strlen(pwd->value);
 	}
 }
 

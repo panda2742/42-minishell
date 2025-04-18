@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 17:02:44 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/18 10:46:07 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,8 @@ typedef struct s_execparams
 	size_t	nb_launched;
 	t_excmd	**cmds;
 	t_bool	error_occured;
+	t_exit	status;
+	t_bool	prompt_back;
 }			t_execparams;
 
 typedef struct s_strvec
@@ -344,7 +346,7 @@ t_redir			*create_out_redirect(char *filepath, t_bool append_mode);
 t_redir			*create_heredoc_redirect(char *delimiter);
 void			read_heredocs(t_redir_manager *redirects_manager);
 t_redir			*get_last_redirect(t_redir_manager *redirects_manager);
-t_exit			exec_command(t_minishell *minishell, t_excmd **cmds);
+t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds);
 t_cmdproto		load_builtin(const char *command_name, t_cmdproto *proto);
 void			close_pipe(int sfd, t_bool *door);
 t_bool			exec_init_cmd(t_excmd *cmd, t_execparams *params);

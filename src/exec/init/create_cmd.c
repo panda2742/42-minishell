@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 14:29:05 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/18 09:09:42 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	res->status = EXIT_SUCCESS;
 	res->prev = NULL;
 	res->next = NULL;
+	res->$_ = NULL;
 	_init_redirects(res);
 	return (res);
 }

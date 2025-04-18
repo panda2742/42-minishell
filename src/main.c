@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 16:50:09 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/18 16:29:09 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,17 +144,20 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_minishell	minishell;
-	t_excmd		*first;
-	t_token		*token;
-	char		*line;
-	char		*prompt;
+	t_execparams	params;
+	t_minishell		minishell;
+	t_excmd			*first;
+	t_token			*token;
+	char			*line;
+	char			*prompt;
 
 	(void)argc;
 	(void)argv;
 	if (create_env(env, &minishell.env) == NULL)
 	{
-		puterr(ft_sprintf(": Environment memory allocation failed\n"), false);
+		puterr(ft_sprintf(
+			": error: Environment creation memory allocation failure\n"
+			), false);
 		return (EXIT_FAILURE);
 	}
 	while (1)
@@ -188,10 +191,15 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		}
 		first = process_tokens(token, &minishell);
-		exec_command(&minishell, &first);
+		params = exec_command(&minishell, &first);
+		free_tokens(token);
+		if (params.error_occured == true)
+		{
+			minishell.last_status = params.status;
+			if (params.prompt_back == false)
+				break ;
+		}
 	}
 	free_env(&minishell.env);
 	return (minishell.last_status);
 }
-
-// cd ls -e "coucou'bon|jour'" 'bonjour"cou>cou"' | > >> < <<

@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 14:41:18 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/18 14:38:29 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_env_var	**create_env(char **envp, t_env_manager *env)
 			return (NULL);
 		}
 		elt->next = NULL;
-		if (env->vars[0] == NULL)
+		if (!env->vars[0])
 			env->vars[0] = elt;
 		if (prev)
 			prev->next = elt;
