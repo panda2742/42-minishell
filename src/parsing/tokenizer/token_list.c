@@ -3,33 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   token_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 09:07:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 14:49:41 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/21 00:13:19 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_tokens_in_list(t_token *tokens, t_token_list *list)
+/*
+ * Free the tokens in the list
+ * The function will free all the tokens in the list
+ * and then free the list itself
+*/
+void	free_tokens_in_list(t_token_list *head)
 {
-	t_token			*next_token;
-	t_token_list	*next_list;
+    t_token_list	*tmp;
 
-	while (list)
-	{
-		next_list = list->next;
-		free(list);
-		list = next_list;
-		while (tokens)
-		{
-			next_token = tokens->next;
-			free(tokens->text);
-			free(tokens);
-			tokens = next_token;
-		}
-	}
+    while (head)
+    {
+        tmp = head->next;
+        free_tokens(head->tokens);
+        free(head);
+        head = tmp;
+    }
 }
 /*
  * Add a new token list node to the linked list of token lists

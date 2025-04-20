@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/18 16:29:09 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/21 00:10:03 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell,
 * 1. Expand the tokens
 * 2. Create a new list of tokens fully expanded
 * 3. Create a list of commands
+* new_tokens is the list of tokens after expansion
 */
 t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 {
@@ -134,10 +135,12 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 	t_excmd			*cmd_list;
 
 	new_tokens = NULL;
-	expand_caller(token, &new_tokens, minishell);
 	head_list = NULL;
+	expand_caller(token, &new_tokens, minishell);
+	free_tokens(token);
 	token_list(new_tokens, &head_list);
 	cmd_list = create_cmd_list(head_list, minishell, new_tokens);
+	free_tokens_in_list(head_list);
 	free_tokens(new_tokens);
 	return (cmd_list);
 }
@@ -151,6 +154,7 @@ int	main(int argc, char **argv, char **env)
 	char			*line;
 	char			*prompt;
 
+	first = NULL;
 	(void)argc;
 	(void)argv;
 	if (create_env(env, &minishell.env) == NULL)
@@ -175,6 +179,9 @@ int	main(int argc, char **argv, char **env)
 		{
 			free_env(&minishell.env);
 			printf(B_GREEN "Good bye!\n" RESET);
+			// Il faut un meilleur parametre pour free cmds
+			// if (first)
+			// 	free_cmds(&first);
 			return (EXIT_SUCCESS);
 		}
 		add_history(line);
@@ -192,13 +199,14 @@ int	main(int argc, char **argv, char **env)
 		}
 		first = process_tokens(token, &minishell);
 		params = exec_command(&minishell, &first);
-		free_tokens(token);
 		if (params.error_occured == true)
 		{
 			minishell.last_status = params.status;
 			if (params.prompt_back == false)
 				break ;
 		}
+		free(line);
+		free_cmds(&first);
 	}
 	free_env(&minishell.env);
 	return (minishell.last_status);

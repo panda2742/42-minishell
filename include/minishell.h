@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/18 10:46:07 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/21 00:10:40 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -393,7 +393,7 @@ void			append_fragment(t_token *token, t_fragment *frag);
 void			free_tokens(t_token *tokens);
 t_token			*ft_create_token(t_token_type type);
 void			append_token(t_token **token_list, t_token *token);
-void			free_tokens_in_list(t_token *tokens, t_token_list *list);
+void			free_tokens_in_list(t_token_list *head);
 t_token_list	*add_token_list_node(t_token *start, t_token *end,
 					t_token_list **head_list, t_token **head_tokens);
 void			token_list(t_token *head_token, t_token_list **head_list);
