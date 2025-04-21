@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/18 09:09:42 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/21 16:29:48 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	res->status = EXIT_SUCCESS;
 	res->prev = NULL;
 	res->next = NULL;
-	res->$_ = NULL;
 	_init_redirects(res);
 	return (res);
 }

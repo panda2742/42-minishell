@@ -3,16 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   expand_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 14:49:15 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/21 17:43:00 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*expand_fragment(const char *input, int quote, t_env_manager *env)
+void incr_on_alnum(char *str, int *j)
+{
+	while (str[*j] && ft_isalnum(str[*j]))
+		(*j)++;
+}
+
+void handle_last_rvalue(t_minishell *mini, t_utils *utils)
+{
+	char *value;
+	
+	value = ft_itoa(mini->last_status);
+	if (!value)
+	{
+		free(utils->s1);
+		mini->last_status = 2;
+	}
+	utils->s1 = str_join_free(utils->s1, value);
+	utils->i = utils->j + 1;
+	free(value);
+}
+
+char	*expand_fragment(const char *input, int quote, t_minishell *mini)
 {
 	t_utils		utils;
 	t_env_var	*env_var;
@@ -22,15 +43,29 @@ char	*expand_fragment(const char *input, int quote, t_env_manager *env)
 
 	ft_memset(&utils, 0, sizeof(t_utils));
 	utils.s1 = ft_strdup("");
+	if (!utils.s1)
+		return (NULL);
 	while (input[utils.i])
 	{
 		if (input[utils.i] == '$' && quote != QUOTE_SINGLE)
 		{
 			utils.j = utils.i + 1;
-			while (input[utils.j] && ((ft_isalnum(input[utils.j])
-						|| input[utils.j] == '_')))
-				utils.j++;
-			if (utils.j > utils.i + 1)
+			incr_on_alnum((char *)input, &utils.j);
+			if (input[utils.j] == '?')
+			{
+				// value = ft_itoa(mini->last_status);
+				// if (!value)
+				// {
+				// 	free(utils.s1);
+				// 	return (NULL);
+				// }
+				// utils.s1 = str_join_free(utils.s1, value);
+				// free(value);
+				// utils.i = utils.j + 1;
+				handle_last_rvalue(mini, &utils);
+				continue ;
+			}
+			else if (utils.j > utils.i + 1)
 			{
 				utils.len1 = utils.j - utils.i - 1;
 				var_name = ft_memalloc(utils.len1 + 1);
@@ -41,7 +76,7 @@ char	*expand_fragment(const char *input, int quote, t_env_manager *env)
 					utils.k++;
 				}
 				var_name[utils.k] = '\0';
-				env_var = get_var(env, var_name);
+				env_var = get_var(&mini->env, var_name);
 				if (env_var)
 					value = ft_strdup(env_var->value);
 				else
@@ -142,7 +177,7 @@ static void	process_unquoted_fragment(const char *expanded, char **current,
 	}
 }
 
-t_token	*word_split_token(t_token *token, t_env_manager *env)
+t_token	*word_split_token(t_token *token, t_minishell *mini)
 {
 	t_token		*new_head;
 	t_token		*new_last;
@@ -159,7 +194,7 @@ t_token	*word_split_token(t_token *token, t_env_manager *env)
 	{
 		if (frag->quote_type == QUOTE_NONE)
 		{
-			expanded = expand_fragment(frag->text, frag->quote_type, env);
+			expanded = expand_fragment(frag->text, frag->quote_type, mini);
 			if (!expanded)
 			{
 				free(current);
@@ -172,7 +207,7 @@ t_token	*word_split_token(t_token *token, t_env_manager *env)
 		else
 		{
 			if (frag->quote_type == QUOTE_DOUBLE)
-				expanded = expand_fragment(frag->text, frag->quote_type, env);
+				expanded = expand_fragment(frag->text, frag->quote_type, mini);
 			else
 				expanded = ft_strdup(frag->text);
 			if (!expanded)

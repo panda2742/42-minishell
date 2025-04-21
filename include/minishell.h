@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/21 00:10:40 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/21 17:39:32 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <wait.h>
 # include <unistd.h>
+# include <stdint.h>
 # include "libft.h"
 
 # ifndef PROJECT_NAME
@@ -29,6 +30,97 @@
  */
 typedef int			t_exit;
 
+/*
+ * Parsing
+*/
+typedef enum e_qtype
+{
+	QUOTE_NONE,
+	QUOTE_SINGLE,
+	QUOTE_DOUBLE
+}						t_qtype;
+
+typedef enum e_token_type
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_APPEND,
+	TOKEN_HEREDOC,
+	TOKEN_REDIR_ARG
+}						t_token_type;
+
+typedef enum e_redir_type
+{
+	IN_REDIR,
+	OUT_REDIR,
+}	t_redir_type;
+
+/*
+ * Exec
+*/
+
+typedef enum e_stream_type
+{
+	STREAM_STD,
+	STREAM_TOKEN_PIPE,
+	STREAM_REDIR,
+}	t_stream_type;
+
+typedef union u_errors
+{
+	struct {
+		uint32_t	exc_env_strlst:1;
+		uint32_t	exc_pipe:1;
+		uint32_t	exc_in_last_redir:1;
+		uint32_t	exc_open_fd:1;
+		uint32_t	exc_close_fd:1;
+		uint32_t	exc_dup2_in:1;
+		uint32_t	exc_dup2_out:1;
+		uint32_t	exc_dup2_recover_in:1;
+		uint32_t	exc_dup2_recover_out:1;
+		uint32_t	exc_dup_in:1;
+		uint32_t	exc_dup_out:1;
+		uint32_t	exc_fork:1;
+		uint32_t	exc_access_fok:1;
+		uint32_t	exc_access_xok:1;
+		uint32_t	exc_execve:1;
+	};
+	uint32_t	errors_raw;
+}	t_errors;
+
+/*
+ * Parsing :
+ * First we do t_token, t_tokens are made with fragments
+ * Then on expand we do a new list of t_token with the expanded text
+ * Then we do a t_token_list with the t_tokens, it stops on pipes and NULL
+*/
+typedef struct s_fragment
+{
+	char				*text;
+	t_qtype				quote_type;
+	struct s_fragment	*next;
+}						t_fragment;
+
+typedef struct s_token
+{
+	t_token_type		type;
+	t_fragment			*fragments;
+	t_qtype				quote_type;
+	char				*text;
+	int					index;
+	t_bool				is_first_word;
+	struct s_token		*next;
+}						t_token;
+
+typedef struct s_token_list
+{
+	t_token				*tokens;
+	struct s_token_list	*next;
+}						t_token_list;
+
+/* Exec */
 typedef struct s_env_var
 {
 	char				*name;
@@ -51,13 +143,6 @@ typedef struct s_env_manager
 	size_t		env_size;
 	char		**envlst;
 }			t_env_manager;
-
-typedef enum e_stream_type
-{
-	STREAM_STD,
-	STREAM_TOKEN_PIPE,
-	STREAM_REDIR,
-}	t_stream_type;
 
 typedef struct s_streamfd
 {
@@ -111,12 +196,6 @@ typedef struct s_redir
 	struct s_redir	*next;
 }				t_redir;
 
-typedef enum e_redir_type
-{
-	IN_REDIR,
-	OUT_REDIR,
-}	t_redir_type;
-
 typedef struct s_redir_manager
 {
 	size_t			size;
@@ -162,10 +241,6 @@ typedef struct s_excmd
 	 * If empty, the list includes only a NULL element.
 	 */
 	char			**argv;
-	/**
-	 * $_
-	 */
-	char			*$_;
 	/**
 	 * The environment manager. Musts exist. // E
 	 */
@@ -229,12 +304,11 @@ typedef struct s_excmd
 
 typedef struct s_execparams
 {
-	size_t	nb_cmd;
-	size_t	nb_launched;
-	t_excmd	**cmds;
-	t_bool	error_occured;
-	t_exit	status;
-	t_bool	prompt_back;
+	size_t		nb_cmd;
+	size_t		nb_launched;
+	t_excmd		**cmds;
+	t_exit		status;
+	t_errors	errs;
 }			t_execparams;
 
 typedef struct s_strvec
@@ -260,47 +334,7 @@ typedef struct s_minishell
 	t_exit			last_status;
 }			t_minishell;
 
-typedef enum e_qtype
-{
-	QUOTE_NONE,
-	QUOTE_SINGLE,
-	QUOTE_DOUBLE
-}						t_qtype;
 
-typedef enum e_token_type
-{
-	TOKEN_WORD,
-	TOKEN_PIPE,
-	TOKEN_REDIR_IN,
-	TOKEN_REDIR_OUT,
-	TOKEN_APPEND,
-	TOKEN_HEREDOC,
-	TOKEN_REDIR_ARG
-}						t_token_type;
-
-typedef struct s_fragment
-{
-	char				*text;
-	t_qtype				quote_type;
-	struct s_fragment	*next;
-}						t_fragment;
-
-typedef struct s_token
-{
-	t_token_type		type;
-	t_fragment			*fragments;
-	t_qtype				quote_type;
-	char				*text;
-	int					index;
-	t_bool				is_first_word;
-	struct s_token		*next;
-}						t_token;
-
-typedef struct s_token_list
-{
-	t_token				*tokens;
-	struct s_token_list	*next;
-}						t_token_list;
 
 typedef struct s_utils
 {
@@ -349,11 +383,14 @@ t_redir			*get_last_redirect(t_redir_manager *redirects_manager);
 t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds);
 t_cmdproto		load_builtin(const char *command_name, t_cmdproto *proto);
 void			close_pipe(int sfd, t_bool *door);
-t_bool			exec_init_cmd(t_excmd *cmd, t_execparams *params);
+t_bool			create_cmd_pipe(t_excmd *cmd, t_execparams *params);
 char			*get_full_path(char *path, char *cmd_name);
 t_bool			create_streams(t_excmd *cmd, t_streamfd *in_dup,
 					t_streamfd *out_dup);
 t_bool			execute_from_path(t_minishell *minishell, t_excmd *cmd);
+t_bool			create_child(t_excmd *cmd, t_execparams *params);
+t_bool			load_pipeline_params(t_minishell *minishell, 
+					t_execparams *params, t_excmd **cmds);
 
 // MEMORY ----------------------------------------------------------------------
 
@@ -383,10 +420,9 @@ void			handle_redir_pipe(int *i, t_token **token_list,
 					const char *input);
 t_token			*ft_input(const char *input);
 
-char			*expand_fragment(const char *input, int quote,
-					t_env_manager *env);
+char			*expand_fragment(const char *input, int quote, t_minishell *mini);
 t_qtype			set_qtype_fragment(t_token *token_head);
-t_token			*word_split_token(t_token *token, t_env_manager *env);
+t_token			*word_split_token(t_token *token, t_minishell *mini);
 t_fragment		*new_fragment(const char *start, size_t len,
 					t_qtype quote_type);
 void			append_fragment(t_token *token, t_fragment *frag);

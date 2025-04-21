@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/21 00:10:03 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/21 17:43:16 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	expand_caller(t_token *token, t_token **new_tokens,
 	last_new = NULL;
 	while (tmp)
 	{
-		split_token = word_split_token(tmp, &minishell->env);
+		split_token = word_split_token(tmp, minishell);
 		if (split_token)
 		{
 			if (!*new_tokens)
@@ -164,6 +164,7 @@ int	main(int argc, char **argv, char **env)
 			), false);
 		return (EXIT_FAILURE);
 	}
+	minishell.last_status = EXIT_SUCCESS;
 	while (1)
 	{
 		set_sig_action();
@@ -179,7 +180,7 @@ int	main(int argc, char **argv, char **env)
 		{
 			free_env(&minishell.env);
 			printf(B_GREEN "Good bye!\n" RESET);
-			// Il faut un meilleur parametre pour free cmds
+			// Il faut un meilleur paramètre pour free cmds
 			// if (first)
 			// 	free_cmds(&first);
 			return (EXIT_SUCCESS);
@@ -198,15 +199,12 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		}
 		first = process_tokens(token, &minishell);
+		
 		params = exec_command(&minishell, &first);
-		if (params.error_occured == true)
-		{
-			minishell.last_status = params.status;
-			if (params.prompt_back == false)
-				break ;
-		}
+		minishell.last_status = params.status;
+		printf("prev status: %d\n", params.status);
 		free(line);
-		free_cmds(&first);
+		// free_cmds(&first);
 	}
 	free_env(&minishell.env);
 	return (minishell.last_status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:51 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 15:05:00 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/21 17:28:47 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ static t_bool	_try_open(t_redir *last, t_redir_manager *redirects_manager)
 		redirects_manager->problematic = last;
 		return (false);
 	}
+	last->fd.type = STREAM_REDIR;
 	return (true);
 }
 

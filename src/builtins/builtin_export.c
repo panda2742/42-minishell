@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:21 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:47:14 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/21 16:35:02 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,5 @@ t_exit	builtin_export(t_excmd *c)
 {
 	printf(MAGENTA "<'export' builtin to code>\n" RESET);
 	(void)c;
-	return (0);
+	return (2);
 }
