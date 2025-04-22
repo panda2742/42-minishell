@@ -6,17 +6,11 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 17:23:11 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:01:54 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void incr_on_alnum(char *str, int *j)
-{
-	while (str[*j] && ft_isalnum(str[*j]))
-		(*j)++;
-}
 
 void handle_last_rvalue(t_minishell *mini, t_utils *utils)
 {

@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/21 17:39:32 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:03:30 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -434,9 +434,6 @@ int				ft_printf_error(char *str);
 int				lexer_parse(t_token *token);
 int				is_char_redir_or_pipe(char c);
 void			print_tokens(t_token *tokens);
-void			handle_redir_out(const char *input, int *i,
-					t_token **token_list);
-void			*handle_pipe(int *i, t_token **token_list);
 void			handle_redir_pipe(int *i, t_token **token_list,
 					const char *input);
 t_token			*ft_input(const char *input);
@@ -464,6 +461,7 @@ char			*str_join_free(char *s1, const char *s2);
 int				ft_strcmp(char *s1, char *s2);
 char			*get_first_word(t_token *token);
 void			handle_is_redir_tokens(t_excmd *cmd, t_token *token);
+void			incr_on_alnum(char *str, int *j);
 int				is_redir(t_token *head_token);
 char			*join_tokens_to_string(t_token *tokens);
 char			*ft_sprintf(const char *format, ...);

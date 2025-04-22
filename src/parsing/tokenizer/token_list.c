@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 09:07:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 15:53:06 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:01:16 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,19 @@
 */
 void	free_tokens_in_list(t_token_list *head)
 {
-    t_token_list	*tmp;
+	t_token_list	*tmp;
 
-    while (head)
-    {
-        tmp = head->next;
-        free_tokens(head->tokens);
-        free(head);
-        head = tmp;
-    }
+	while (head)
+	{
+		tmp = head->next;
+		free_tokens(head->tokens);
+		free(head);
+		head = tmp;
+	}
 }
 
-t_token_list *append_token_list(t_token_list **head_list, t_token_list *list, t_token **head_tokens)
+t_token_list	*append_token_list(t_token_list **head_list,
+		t_token_list *list, t_token **head_tokens)
 {
 	t_token_list	*tmp;
 
@@ -89,7 +90,8 @@ t_token_list	*add_token_list_node(t_token *start, t_token *end,
 }
 
 /*
- * Cut the token list at each TOKEN_PIPE and return the new struct for the command
+ * Cut the token list at each TOKEN_PIPE 
+ * and return the new struct for the command
  * End when TOKEN_PIPE or NULL is found
 */
 void	token_list(t_token *head_token, t_token_list **head_list)

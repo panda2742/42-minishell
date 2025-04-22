@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:07:18 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 10:56:24 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/22 19:08:27 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,13 @@ t_cmdproto	load_builtin(const char *command_name, t_cmdproto *proto)
 		builtin_cd, builtin_echo, builtin_env, builtin_exit,
 		builtin_export, builtin_pwd, builtin_unset
 	};
-	size_t				len;
 	int					i;
 
 	i = -1;
 	*proto = NULL;
 	while (++i < 7)
 	{
-		len = ft_strlen(builtins[i]);
-		if (ft_strncmp(command_name, builtins[i], len) == 0)
+		if (ft_strcmp((char *)command_name, builtins[i]) == 0)
 		{
 			*proto = command_prototypes[i];
 			break ;

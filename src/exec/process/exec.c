@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/21 17:55:01 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/22 18:39:54 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 			free_cmds(cmds);
 			exit(0);
 		}
+		cmd = cmd->next;
 	}
 	cmd = *cmds;
 	while (params.nb_launched)
