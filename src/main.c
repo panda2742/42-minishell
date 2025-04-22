@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/21 17:43:16 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/22 10:54:54 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,11 +200,13 @@ int	main(int argc, char **argv, char **env)
 		}
 		first = process_tokens(token, &minishell);
 		
-		params = exec_command(&minishell, &first);
-		minishell.last_status = params.status;
-		printf("prev status: %d\n", params.status);
+		(void) params;
+		print_cmds(first);
+		// params = exec_command(&minishell, &first);
+		// minishell.last_status = params.status;
+		// printf("prev status: %d\n", params.status);
 		free(line);
-		// free_cmds(&first);
+		free_cmds(&first);
 	}
 	free_env(&minishell.env);
 	return (minishell.last_status);
