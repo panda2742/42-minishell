@@ -134,6 +134,7 @@ run:
 
 .PHONY: ab
 ab:
+	git pull
 	clear
 	$(MAKE) bonus
 	clear
@@ -141,6 +142,7 @@ ab:
 
 .PHONY: eh
 eh:
+	git pull
 	clear
 	$(MAKE) bonus
 	clear
