@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 10:07:58 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/22 10:21:56 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,22 +141,22 @@ static t_token	*create_new_token_from_word(const char *word,
 	token->next = NULL;
 	return (token);
 }
-// void	add_char_to_string(char expanded, char *current, int *i)
-// {
-// 	char tmp[2];
+void	add_char_to_string(char *expanded, char **current, int *i)
+{
+	char tmp[2];
 	
-// 	tmp[0] = expanded;
-// 	tmp[1] = '\0';
-// 	current = str_join_free(current, tmp);
-// 	i++;
-// }
+	tmp[0] = expanded[*i];
+	tmp[1] = '\0';
+	*current = str_join_free(*current, tmp);
+	(*i)++;
+}
 
 static void	process_unquoted_fragment(const char *expanded, char **current,
 				t_token **new_head, t_token **new_last, t_token *token)
 {
 	int		i;
 	t_token	*new_token;
-	char	tmp[2];
+	// char	tmp[2];
 
 	i = 0;
 	while (expanded[i])
@@ -184,11 +184,11 @@ static void	process_unquoted_fragment(const char *expanded, char **current,
 		}
 		else
 		{
-			// add_char_to_string(expanded[i], *current, &i);
-			tmp[0] = expanded[i];
-			tmp[1] = '\0';
-			*current = str_join_free(*current, tmp);
-			i++;
+			add_char_to_string((char *)expanded, current, &i);
+		// 	tmp[0] = expanded[i];
+		// 	tmp[1] = '\0';
+		// 	*current = str_join_free(*current, tmp);
+		// 	i++;
 		}
 	}
 }
