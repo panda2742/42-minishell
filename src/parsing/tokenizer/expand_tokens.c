@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 11:49:16 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/22 17:23:11 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,26 +150,28 @@ void add_char_to_string(char *expanded, char **current, int *i)
 	*current = str_join_free(*current, tmp);
 	(*i)++;
 }
-
-void update_head_and_last(t_token *new_last, t_token *new_head, t_token *new_token)
-{
-
-	if (!new_head)
-	{
-		new_head = new_token;
-		new_last = new_token;
-	}
-	else
-	{
-		new_last->next = new_token;
-		new_last = new_token;
-	}
-}
-
 typedef struct s_word_split {
 	t_token	*new_head;
 	t_token *new_last;
+	char *current;
 } t_word_split;
+
+void update_head_and_last(t_token **new_last, t_token **new_head, t_token *new_token)
+{
+
+	if (!*new_head)
+	{
+		*new_head = new_token;
+		*new_last = new_token;
+	}
+	else
+	{
+		(*new_last)->next = new_token;
+		*new_last = new_token;
+	}
+}
+
+
 
 /*
  * New_head is the head of the new token list
@@ -180,7 +182,7 @@ typedef struct s_word_split {
  */
 
 static void process_unquoted_frag(const char *expanded, char **current,
-								  t_word_split *new_list, t_token *token)
+								  t_word_split **new_list, t_token *token)
 {
 	int i;
 	t_token *new_token;
@@ -193,7 +195,7 @@ static void process_unquoted_frag(const char *expanded, char **current,
 			if ((*current)[0] != '\0')
 			{
 				new_token = create_new_token_from_word(*current, token);
-				update_head_and_last((new_list)->new_last, (new_list)->new_head, new_token);
+				update_head_and_last(&(*new_list)->new_last, &(*new_list)->new_head, new_token);
 				free(*current);
 				*current = ft_strdup("");
 			}
@@ -205,7 +207,7 @@ static void process_unquoted_frag(const char *expanded, char **current,
 	}
 }
 
-void add_new_token(t_token **new_head, t_token **new_last, char *current, t_token *token)
+t_token	*add_new_token(t_token **new_head, t_token **new_last, char *current, t_token *token)
 {
 	t_token *new_token;
 
@@ -215,72 +217,81 @@ void add_new_token(t_token **new_head, t_token **new_last, char *current, t_toke
 		if (!new_token)
 		{
 			free(current);
-			return;
+			return (*new_head);
 		}
 		if (!*new_head)
 			*new_head = new_token;
 		else
 			(*new_last)->next = new_token;
-		*new_last = new_token;
+		// *new_last = new_token;
 	}
+	return (*new_head);
+}
+
+
+char *handle_quote_none(t_fragment *frag, t_minishell *mini, t_word_split *new_list, t_token *token)
+{
+	char *expanded;
+	
+
+	expanded = expand_fragment(frag->text, frag->quote_type, mini);
+	if (!expanded)
+	{
+		free(new_list->current);
+		return (NULL);
+	}
+	process_unquoted_frag(expanded, &new_list->current, &new_list, token);
+	free(expanded);
+	return (new_list->current);
+}
+
+char *handle_other_quotes(t_fragment *frag, t_minishell *mini, char *current)
+{
+	char *expanded;
+
+	if (frag->quote_type == QUOTE_DOUBLE)
+		expanded = expand_fragment(frag->text, frag->quote_type, mini);
+	else
+		expanded = ft_strdup(frag->text);
+	if (!expanded)
+	{
+		free(current);
+		return (NULL);
+	}
+	current = str_join_free(current, expanded);
+	free(expanded);
+	return (current);
 }
 
 /*
+ * Here we go threw the fragments of the token
+ * If the fragment is not quoted we check if it needs to be expanded and split
+ * If the fragment is quoted we expand it and add it to the current string
  * If strlen(current) > 0 we create a new token with the current string
+ * with the function add_new_token
  */
-
-
-// void handle_quote_none(t_fragment *frag, t_minishell *mini, t_word_split *new_list)
-// {
-// 	char *expanded;
-	
-// }
 
 t_token *word_split_token(t_token *token, t_minishell *mini)
 {
-	// t_token *new_head;
-	// t_token *new_last;
-	t_word_split new_list;
-	t_fragment *frag;
-	char *current;
-	char *expanded;
+	t_word_split	new_list;
+	t_fragment		*frag;
 
-	
 	new_list.new_head = NULL;
 	new_list.new_last = NULL;
 	frag = token->fragments;
-	current = ft_strdup("");
-
+	new_list.current = ft_strdup("");
 	while (frag)
 	{
 		if (frag->quote_type == QUOTE_NONE)
-		{
-			expanded = expand_fragment(frag->text, frag->quote_type, mini);
-			if (!expanded)
-			{
-				free(current);
-				return (NULL);
-			}
-			process_unquoted_frag(expanded, &current, &new_list, token);
-			free(expanded);
-		}
+			new_list.current = handle_quote_none(frag, mini, &new_list, token);
 		else
-		{
-			if (frag->quote_type == QUOTE_DOUBLE)
-				expanded = expand_fragment(frag->text, frag->quote_type, mini);
-			else
-				expanded = ft_strdup(frag->text);
-			if (!expanded)
-			{
-				free(current);
-				return (NULL);
-			}
-			current = str_join_free(current, expanded);
-			free(expanded);
-		}
+			new_list.current = handle_other_quotes(frag, mini, new_list.current);
 		frag = frag->next;
 	}
-	add_new_token(&new_list.new_head, &new_list.new_last, current, token);
-	free(current);
+	if (!new_list.current)
+		return (NULL);
+	new_list.new_head = add_new_token(&new_list.new_head, &new_list.new_last, new_list.current, token);
+
+	free(new_list.current);
 	return (new_list.new_head);
 }

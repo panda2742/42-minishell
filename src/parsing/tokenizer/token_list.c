@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 09:07:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/21 00:13:19 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:53:06 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,29 @@ void	free_tokens_in_list(t_token_list *head)
         head = tmp;
     }
 }
+
+t_token_list *append_token_list(t_token_list **head_list, t_token_list *list, t_token **head_tokens)
+{
+	t_token_list	*tmp;
+
+	if (!head_list || !head_tokens)
+		return (NULL);
+	list = ft_memalloc(sizeof(t_token_list));
+	if (!list)
+		return (NULL);
+	list->tokens = *head_tokens;
+	list->next = NULL;
+	if (*head_list == NULL)
+		*head_list = list;
+	else
+	{
+		tmp = *head_list;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = list;
+	}
+	return (list);
+}
 /*
  * Add a new token list node to the linked list of token lists
  * The new node contains a list of tokens from start to end
@@ -39,11 +62,11 @@ t_token_list	*add_token_list_node(t_token *start, t_token *end,
 					t_token_list **head_list, t_token **head_tokens)
 {
 	t_token_list	*list;
-	t_token_list	*tmp;
 	t_token			*new_token;
 	t_token			*tmp_token;
 
 	tmp_token = start;
+	list = NULL;
 	while (tmp_token != end)
 	{
 		new_token = ft_create_token(tmp_token->type);
@@ -61,20 +84,7 @@ t_token_list	*add_token_list_node(t_token *start, t_token *end,
 		new_token->quote_type = tmp_token->quote_type;
 		tmp_token = tmp_token->next;
 	}
-	list = ft_memalloc(sizeof(t_token_list));
-	if (!list)
-		return (NULL);
-	list->tokens = *head_tokens;
-	list->next = NULL;
-	if (*head_list == NULL)
-		*head_list = list;
-	else
-	{
-		tmp = *head_list;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = list;
-	}
+	list = append_token_list(head_list, list, head_tokens);
 	return (list);
 }
 
