@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/21 17:43:00 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:59:45 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,59 @@ void handle_last_rvalue(t_minishell *mini, t_utils *utils)
 	if (!value)
 	{
 		free(utils->s1);
-		mini->last_status = 2;
+		mini->last_status = 2; /////////////////////
+		return ;
 	}
 	utils->s1 = str_join_free(utils->s1, value);
 	utils->i = utils->j + 1;
 	free(value);
 }
 
+void handle_expand_char(t_utils *utils, t_minishell *mini, char *input)
+{
+	t_env_var *env_var;
+	char	*var_name;
+	char	*value;
+
+	utils->len1 = utils->j - utils->i - 1;
+	var_name = ft_memalloc(utils->len1 + 1);
+	utils->k = 0;
+	while (utils->k < utils->len1)
+	{
+		var_name[utils->k] = input[utils->i + utils->k + 1];
+		utils->k++;
+	}
+	var_name[utils->k] = '\0';
+	env_var = get_var(&mini->env, var_name);
+	if (env_var)
+		value = ft_strdup(env_var->value);
+	else
+		value = ft_strdup("");
+	free(var_name);
+	utils->s1 = str_join_free(utils->s1, value);
+	free(value);
+	utils->i = utils->j;
+}
+
+void	handle_normal_char(t_utils *utils, char *input)
+{
+	char	tmp[2];
+
+	tmp[0] = input[utils->i];
+	tmp[1] = '\0';
+	utils->s1 = str_join_free(utils->s1, tmp);
+	utils->i++;
+}
+
+/*
+ * Here we check if there is a $ in the fragmentstring
+ * We use i and j to find the $ and the end of the variable
+ * In handler functions we join everything in the string utils.s1
+ * if there is no $ we joins the chars one by one
+*/
 char	*expand_fragment(const char *input, int quote, t_minishell *mini)
 {
 	t_utils		utils;
-	t_env_var	*env_var;
-	char		*var_name;
-	char		*value;
-	char		tmp[2];
 
 	ft_memset(&utils, 0, sizeof(t_utils));
 	utils.s1 = ft_strdup("");
@@ -52,52 +91,19 @@ char	*expand_fragment(const char *input, int quote, t_minishell *mini)
 			utils.j = utils.i + 1;
 			incr_on_alnum((char *)input, &utils.j);
 			if (input[utils.j] == '?')
-			{
-				// value = ft_itoa(mini->last_status);
-				// if (!value)
-				// {
-				// 	free(utils.s1);
-				// 	return (NULL);
-				// }
-				// utils.s1 = str_join_free(utils.s1, value);
-				// free(value);
-				// utils.i = utils.j + 1;
 				handle_last_rvalue(mini, &utils);
-				continue ;
-			}
 			else if (utils.j > utils.i + 1)
-			{
-				utils.len1 = utils.j - utils.i - 1;
-				var_name = ft_memalloc(utils.len1 + 1);
-				utils.k = 0;
-				while (utils.k < utils.len1)
-				{
-					var_name[utils.k] = input[utils.i + 1 + utils.k];
-					utils.k++;
-				}
-				var_name[utils.k] = '\0';
-				env_var = get_var(&mini->env, var_name);
-				if (env_var)
-					value = ft_strdup(env_var->value);
-				else
-					value = ft_strdup("");
-				free(var_name);
-				utils.s1 = str_join_free(utils.s1, value);
-				free(value);
-				utils.i = utils.j;
-				continue ;
-			}
+				handle_expand_char(&utils, mini, (char *)input);
 		}
-		{
-			tmp[0] = input[utils.i];
-			tmp[1] = '\0';
-			utils.s1 = str_join_free(utils.s1, tmp);
-		}
-		utils.i++;
+		else
+			handle_normal_char(&utils, (char *)input);
 	}
 	return (utils.s1);
 }
-
+/*
+ * Here we check if there is a double quote in the fragments
+ * If there is one we set the quote type to QUOTE_DOUBLE
+*/
 t_qtype	set_qtype_fragment(t_token *token_head)
 {
 	t_fragment	*tmp;
