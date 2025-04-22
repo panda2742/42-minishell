@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 14:57:46 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/22 19:11:39 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,3 +212,5 @@ int	main(int argc, char **argv, char **env)
 	free_env(&minishell.env);
 	return (minishell.last_status);
 }
+
+// ptit test
