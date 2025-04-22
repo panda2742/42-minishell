@@ -6,9 +6,9 @@ t_bool	execute_builtin(t_child_behavior_params p)
 		return (*p.cmd->proto)(p.cmd);
 	else
 	{
-		p.minishell->last_status = (*p.cmd->proto)(p.cmd);
+		p.params->status = (*p.cmd->proto)(p.cmd);
 		if (restore_std(p.in_dup, p.out_dup) == false)
 			return (1);
-		return (p.minishell->last_status);
+		return (p.params->status);
 	}
 }

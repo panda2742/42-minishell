@@ -21,13 +21,13 @@ t_exit	builtin_exit(t_excmd *c)
 	{
 		(void)cmd;
 		(void)tmp;
-		free_cmds(c->params->cmds);
 		if (c->in_dup)
 			sclose_fd(c->in_dup->fd, NULL);
 		if (c->out_dup)
 			sclose_fd(c->out_dup->fd, NULL);
 		c->params->status = -2;
-		return (c->params->status);
+		free_cmds(c->params->cmds);
+		return (-2);
 	}
 	exit(EXIT_SUCCESS);
 }
