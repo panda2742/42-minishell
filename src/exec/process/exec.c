@@ -42,6 +42,7 @@ t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 			cmd = cmd->next;
 			continue ;
 		}
+		print_cmd(cmd);
 		if (cmd->proto == NULL)
 			execute_from_path(minishell, &params, cmd);
 		else

@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 static t_bool	_try_open(t_redir *last, t_redir_manager *redirects_manager);
-static void		_continue_loop(t_redir *last);
+static t_redir	*_continue_loop(t_redir *last);
 
 void	read_heredocs(t_redir_manager *redirects_manager)
 {
@@ -62,9 +62,10 @@ t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 		if (_try_open(last, redirects_manager) == false)
 			return (NULL);
 		if (last->next)
-			_continue_loop(last);
-		if (last->next)
+		{
+			last = _continue_loop(last);
 			continue ;
+		}
 		break ;
 	}
 	redirects_manager->last = last;
@@ -93,9 +94,9 @@ static t_bool	_try_open(t_redir *last, t_redir_manager *redirects_manager)
 	return (true);
 }
 
-static void	_continue_loop(t_redir *last)
+static t_redir	*_continue_loop(t_redir *last)
 {
 	close(last->fd.fd);
 	last->fd.fd = -1;
-	last = last->next;
+	return (last->next);
 }
