@@ -17,17 +17,15 @@ static void	_unset_var(t_excmd *c);
 t_exit	builtin_unset(t_excmd *c)
 {
 	if (c->argc > 2)
-		return (
-			command_failure(
-				c, ft_sprintf(": %s: Too many arguments\n", c->name), false
-			)
-		);
+	{
+		puterr(ft_sprintf(": %s: Too many arguments\n", c->name), false);
+		return (EXIT_FAILURE);
+	}
 	if (c->argc == 1)
-		return (
-			command_failure(
-				c, ft_sprintf(": %s: Too few arguments\n", c->name), false
-			)
-		);
+	{
+		puterr(ft_sprintf(": %s: Too few arguments\n", c->name), false);
+		return (EXIT_FAILURE);
+	}
 	_unset_var(c);
 	return (0);
 }

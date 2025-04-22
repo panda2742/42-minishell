@@ -26,7 +26,7 @@ t_redir	*create_in_redirect(char *filepath)
 		return (NULL);
 	}
 	res->fd.fd = -2;
-	res->fd.type = STREAM_STD;
+	res->fd.type = STREAM_REDIR;
 	res->is_heredoc = false;
 	res->heredoc_id = -1;
 	res->heredoc_del = NULL;
@@ -50,7 +50,7 @@ t_redir	*create_out_redirect(char *filepath, t_bool append_mode)
 		return (NULL);
 	}
 	res->fd.fd = -2;
-	res->fd.type = STREAM_STD;
+	res->fd.type = STREAM_REDIR;
 	res->is_heredoc = false;
 	res->heredoc_id = -1;
 	res->heredoc_del = NULL;
@@ -69,7 +69,7 @@ t_redir	*create_heredoc_redirect(char *delimiter)
 		return (NULL);
 	res->filepath = NULL;
 	res->fd.fd = -2;
-	res->fd.type = STREAM_STD;
+	res->fd.type = STREAM_REDIR;
 	res->is_heredoc = true;
 	res->heredoc_id = -1;
 	res->heredoc_del = ft_strdup(delimiter);

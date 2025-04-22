@@ -12,70 +12,46 @@
 
 #include "minishell.h"
 
+static unsigned char	_init_child_behavior(t_child_behavior_params p);
+
 t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 {
 	t_excmd			*cmd;
 	t_execparams	params;
 	t_streamfd		std_dup[2];
+	unsigned char	init_behavior_res;
 
 	if (load_pipeline_params(minishell, &params, cmds) == false)
 		return (params);
 	cmd = *cmds;
 	while (cmd)
 	{
-		cmd->envp = minishell->env.envlst;
-		if (create_cmd_pipe(cmd, &params) == false)
+		std_dup[0].fd = -1;
+		std_dup[1].fd = -1;
+		std_dup[0].type = STREAM_STD;
+		std_dup[1].type = STREAM_STD;
+		cmd->minishell = minishell;
+		cmd->params = &params;
+		init_behavior_res = _init_child_behavior((t_child_behavior_params){
+			.minishell=minishell,.cmd=cmd,.in_dup=&std_dup[0],
+			.out_dup=&std_dup[1],.params=&params});
+		if (init_behavior_res == 0)
+			break ;
+		if (init_behavior_res == 1)
 		{
-			if (params.errs.exc_pipe)
-				break ;
 			cmd = cmd->next;
 			continue ;
 		}
-		params.nb_launched++;
-		if (create_child(cmd, &params) == false)
-		{
-			if (params.errs.exc_fork == 1)
-				break ;
-			cmd = cmd->next;
-			continue ;
-		}
-		if (create_streams(cmd, &std_dup[0], &std_dup[1]) == false)
-			exit(0);
 		if (cmd->proto == NULL)
-			execute_from_path(minishell, cmd);
+			execute_from_path(minishell, &params, cmd);
 		else
+			execute_builtin((t_child_behavior_params){
+				.minishell=minishell,.cmd=cmd,.in_dup=&std_dup[0],
+				.out_dup=&std_dup[1],.params=&params});
+		if (cmd->in_a_child)
 		{
-			(*cmd->proto)(cmd);
-			if (cmd->in_a_child)
-			{
-				if (std_dup[0].type == STREAM_STD)
-					close(std_dup[0].fd);
-				if (std_dup[1].type == STREAM_STD)
-					close(std_dup[1].fd);
-				exit(0);
-			}
-			else
-			{
-				if (std_dup[0].type == STREAM_STD && dup2(std_dup[0].fd, STDIN_FILENO) == -1)
-				{
-					puterr(ft_sprintf(": dup2 input reset error"), true);
-					if (std_dup[1].type == STREAM_STD && dup2(std_dup[1].fd, STDOUT_FILENO) == -1)
-					{
-						puterr(ft_sprintf(": dup2 output reset error"), true);
-						close(std_dup[1].fd);
-					}
-					close(std_dup[0].fd);
-					return (params);
-				}
-				if (std_dup[1].type == STREAM_STD && dup2(std_dup[1].fd, STDOUT_FILENO) == -1)
-				{
-					puterr(ft_sprintf(": dup2 output reset error"), true);
-					close(std_dup[1].fd);
-				}
-			}
-		}
-		if (cmd->in_a_child && cmd->proto == NULL)
-		{
+			sclose_fd(cmd->in_redirects.final_fd.fd, NULL);
+			sclose_fd(cmd->out_redirects.final_fd.fd, NULL);
 			free_env(cmd->env);
 			ft_free_strtab(cmd->envp);
 			free_cmds(cmds);
@@ -95,4 +71,27 @@ t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 	}
 	ft_free_strtab(minishell->env.envlst);
 	return (params);
+}
+
+static unsigned char	_init_child_behavior(t_child_behavior_params p)
+{
+	p.cmd->envp = p.minishell->env.envlst;
+	p.cmd->in_dup = p.in_dup;
+	p.cmd->out_dup = p.out_dup;
+	if (create_cmd_pipe(p.cmd, p.params) == false)
+	{
+		if (p.params->errs.exc_pipe)
+			return (0);
+		return (1);
+	}
+	p.params->nb_launched++;
+	if (create_child(p.cmd, p.params) == false)
+	{
+		if (p.params->errs.exc_fork == 1)
+			return (0);
+		return (1);
+	}
+	if (create_streams(p.cmd, p.params, p.in_dup, p.out_dup) == false)
+		exit(1);
+	return (2);
 }

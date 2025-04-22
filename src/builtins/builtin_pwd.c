@@ -16,20 +16,17 @@ t_exit	builtin_pwd(t_excmd	*c)
 {
 	char	*buffer;
 
+	(void)c;
 	buffer = getcwd(NULL, 0);
 	if (buffer == NULL)
-	{
-		c->status = EXIT_FAILURE;
-		return (c->status);
-	}
+		return (EXIT_FAILURE);
 	if (ft_putstr_fd(buffer, 1) == -1)
 	{
 		free(buffer);
-		c->status = EXIT_FAILURE;
-		return (c->status);
+		return (EXIT_FAILURE);
 	}
 	free(buffer);
 	if (ft_putstr_fd("\n", 1) == -1)
-		c->status = EXIT_FAILURE;
-	return (c->status);
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

@@ -9,7 +9,7 @@ t_bool	create_child(t_excmd *cmd, t_execparams *params)
 	forkid = fork();
 	if (forkid == 0)
 		return (true);
-	close_pipe(cmd->pipe[1], &cmd->pipe_open[1]);
+	sclose_fd(cmd->pipe[1], &cmd->pipe_open[1]);
 	if (forkid > 0)
 		return (false);
 	if (forkid < 0)
@@ -22,4 +22,3 @@ t_bool	create_child(t_excmd *cmd, t_execparams *params)
 	}
 	return (true);
 }
-

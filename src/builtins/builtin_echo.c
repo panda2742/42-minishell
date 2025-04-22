@@ -23,6 +23,8 @@ t_exit	builtin_echo(t_excmd *c)
 		return (0);
 	while (++i < c->argc)
 	{
+		if (!c->argv[i])
+			break ;
 		printf("%s", c->argv[i]);
 		if (i < c->argc - 1)
 			printf(" ");

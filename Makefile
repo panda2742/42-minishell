@@ -17,11 +17,11 @@ override	HEADER_FILES	:=	minishell
 # The C source code files of the project
 override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export pwd unset)
 override	SRC_ENV_MANAGER	:=	create_env env_to_strlst get_var
-override	SRC_ERRORS		:=	error_handler puterr
+override	SRC_ERRORS		:=	puterr
 override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
 								$(addprefix init/, create_cmd create_redirect redirect_manager) \
-								$(addprefix process/, exec_child exec_utils exec) \
-								$(addprefix timeline/, create_child create_cmd_pipe fd_manager load_pipeline_params)
+								$(addprefix process/, exec_utils exec execute_builtin execute_from_path) \
+								$(addprefix timeline/, create_child create_cmd_pipe fd_manager load_pipeline_params restore_std)
 override	SRC_MEMORY		:=	free_cmds free_env
 override	SRC_MISC		:=	print_cmds show_prompt signals
 override	SRC_PARSING		:=	$(addprefix lexer/, lexer_parse lexer lexer_utils) \
@@ -142,7 +142,7 @@ ab:
 
 .PHONY: eh
 eh:
-	git pull
+	# git pull
 	clear
 	$(MAKE) bonus
 	clear

@@ -18,21 +18,19 @@ static void		_update_vars(t_env_manager *env);
 t_exit	builtin_cd(t_excmd *c)
 {
 	if (c->argc > 2)
-		return (
-			command_failure(
-				c, ft_sprintf(": %s: Too many arguments\n", c->name), false
-			)
-		);
+	{
+		puterr(ft_sprintf(": %s: Too many arguments\n", c->name), false);
+		return (EXIT_FAILURE);
+	}
 	if (c->argc == 1 && _set_home(c) == EXIT_FAILURE)
-		return (c->status);
+		return (EXIT_FAILURE);
 	else if (c->argc == 2 && chdir(c->argv[1]) == -1)
-		return (
-			command_failure(
-				c, ft_sprintf(": %s: %s", c->name, c->argv[1]), true
-			)
-		);
+	{
+		puterr(ft_sprintf(": %s: %s", c->name, c->argv[1]), false);
+		return (EXIT_FAILURE);
+	}
 	_update_vars(c->env);
-	return (c->status);
+	return (EXIT_SUCCESS);
 }
 
 static void	_update_vars(t_env_manager *env)
@@ -70,12 +68,14 @@ static t_exit	_set_home(t_excmd *c)
 
 	home = get_var(c->env, "HOME");
 	if (!home || !home->value)
-		return (
-			command_failure(
-				c, ft_sprintf(": %s: Home variable not set\n", c->name), false
-			)
-		);
+	{
+		puterr(ft_sprintf(": %s: Home variable not set\n", c->name), false);
+		return (EXIT_FAILURE);
+	}
 	if (chdir(home->value) == -1)
-		return (command_failure(c, ft_sprintf(": %s", c->name), true));
-	return (c->status);
+	{
+		puterr(ft_sprintf(": %s", c->name), true);
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }

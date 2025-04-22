@@ -14,20 +14,20 @@
 
 t_exit	builtin_exit(t_excmd *c)
 {
-	const t_exit	status = c->status;
 	t_excmd			*cmd;
 	t_excmd			*tmp;
 
-	ft_free_strtab(c->env->envlst);
-	free_env(c->env);
-	cmd = c;
-	while (cmd->prev)
-		cmd = cmd->prev;
-	while (cmd)
+	if (!c->in_a_child)
 	{
-		tmp = cmd->next;
-		free_one_cmd(cmd);
-		cmd = tmp;
+		(void)cmd;
+		(void)tmp;
+		free_cmds(c->params->cmds);
+		if (c->in_dup)
+			sclose_fd(c->in_dup->fd, NULL);
+		if (c->out_dup)
+			sclose_fd(c->out_dup->fd, NULL);
+		c->params->status = -2;
+		return (c->params->status);
 	}
-	exit(status);
+	exit(EXIT_SUCCESS);
 }

@@ -90,7 +90,6 @@ static t_bool	_try_open(t_redir *last, t_redir_manager *redirects_manager)
 		redirects_manager->problematic = last;
 		return (false);
 	}
-	last->fd.type = STREAM_REDIR;
 	return (true);
 }
 

@@ -33,9 +33,12 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	res->envp = empty_tab();
 	res->raw = NULL;
 	res->paths = empty_tab();
-	res->status = EXIT_SUCCESS;
 	res->prev = NULL;
 	res->next = NULL;
+	res->in_dup = NULL;
+	res->out_dup = NULL;
+	res->minishell = NULL;
+	res->params = NULL;
 	_init_redirects(res);
 	return (res);
 }

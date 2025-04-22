@@ -169,8 +169,10 @@ int	main(int argc, char **argv, char **env)
 	{
 		set_sig_action();
 		prompt = show_prompt(&minishell.env);
-		if (prompt == NULL)
+		if (prompt == NULL || minishell.last_status == -2)
 		{
+			if (prompt)
+				free(prompt);
 			free_env(&minishell.env);
 			return (EXIT_FAILURE);
 		}
@@ -201,12 +203,11 @@ int	main(int argc, char **argv, char **env)
 		first = process_tokens(token, &minishell);
 		
 		(void) params;
-		print_cmds(first);
-		// params = exec_command(&minishell, &first);
-		// minishell.last_status = params.status;
-		// printf("prev status: %d\n", params.status);
+		// print_cmds(first);
+		params = exec_command(&minishell, &first);
+		minishell.last_status = params.status;
+		printf("prev status: %d\n", params.status);
 		free(line);
-		free_cmds(&first);
 	}
 	free_env(&minishell.env);
 	return (minishell.last_status);

@@ -12,13 +12,18 @@
 
 #include "minishell.h"
 
-void	close_pipe(int sfd, t_bool *door)
+t_bool	sclose_fd(int sfd, t_bool *door)
 {
-	if (sfd == 0 || sfd == 1)
-		return ;
-	close(sfd);
+	if (sfd == 0 || sfd == 1 || sfd < 0)
+		return (true);
+	if (close(sfd) == -1)
+	{
+		// puterr(ft_sprintf(": close fd error"), true);
+		return (false);
+	}
 	if (door)
 		*door = false;
+	return (true);
 }
 
 t_cmdproto	load_builtin(const char *command_name, t_cmdproto *proto)

@@ -64,7 +64,7 @@ typedef enum e_redir_type
 typedef enum e_stream_type
 {
 	STREAM_STD,
-	STREAM_TOKEN_PIPE,
+	STREAM_PIPE,
 	STREAM_REDIR,
 }	t_stream_type;
 
@@ -75,7 +75,6 @@ typedef union u_errors
 		uint32_t	exc_pipe:1;
 		uint32_t	exc_in_last_redir:1;
 		uint32_t	exc_open_fd:1;
-		uint32_t	exc_close_fd:1;
 		uint32_t	exc_dup2_in:1;
 		uint32_t	exc_dup2_out:1;
 		uint32_t	exc_dup2_recover_in:1;
@@ -207,6 +206,24 @@ typedef struct s_redir_manager
 	t_streamfd		final_fd;
 }			t_redir_manager;
 
+
+typedef struct s_strvec
+{
+	char			*s;
+	size_t			len;
+	size_t			total_len;
+	struct s_strvec	*next;
+}					t_strvec;
+
+/**
+ * The main structure of the project/code.
+ */
+typedef struct s_minishell
+{
+	t_env_manager	env;
+	t_exit			last_status;
+}			t_minishell;
+
 /**
  * @brief The data of a command executed in the execution program.
  * 
@@ -287,9 +304,21 @@ typedef struct s_excmd
 	 */
 	t_bool			pipe_open[2];
 	/**
-	 * The status of the executed command. // E
+	 * A boring information...
 	 */
-	t_exit			status;
+	t_streamfd		*in_dup;
+	/**
+	 * Another boring information...
+	 */
+	t_streamfd		*out_dup;
+	/**
+	 * Minishell structure.
+	 */
+	t_minishell		*minishell;
+	/**
+	 * Pipeline params.
+	 */
+	struct s_execparams	*params;
 	/**
 	 * The previous element of the command list. If it is the first element or 
 	 * if there is no other element, default value is NULL. 
@@ -302,6 +331,12 @@ typedef struct s_excmd
 	struct s_excmd	*next;
 }					t_excmd;
 
+/**
+ * Represents a prototype of a command function (used for builtins commands).
+ * The parameter is a pointer to a s_command structure, defined above.
+ */
+typedef t_exit (*	t_cmdproto)(t_excmd *);
+
 typedef struct s_execparams
 {
 	size_t		nb_cmd;
@@ -311,30 +346,14 @@ typedef struct s_execparams
 	t_errors	errs;
 }			t_execparams;
 
-typedef struct s_strvec
+typedef struct s_child_behavior_params
 {
-	char			*s;
-	size_t			len;
-	size_t			total_len;
-	struct s_strvec	*next;
-}					t_strvec;
-
-/**
- * Represents a prototype of a command function (used for builtins commands).
- * The parameter is a pointer to a s_command structure, defined above.
- */
-typedef t_exit (*	t_cmdproto)(t_excmd *);
-
-/**
- * The main structure of the project/code.
- */
-typedef struct s_minishell
-{
-	t_env_manager	env;
-	t_exit			last_status;
-}			t_minishell;
-
-
+	t_minishell		*minishell;
+	t_execparams	*params;
+	t_excmd			*cmd;
+	t_streamfd		*in_dup;
+	t_streamfd		*out_dup;
+}			t_child_behavior_params;
 
 typedef struct s_utils
 {
@@ -365,7 +384,6 @@ t_env_var		*get_var(t_env_manager *env, const char *name);
 
 // ERRORS ----------------------------------------------------------------------
 
-t_exit			command_failure(t_excmd *c, char *message, t_bool call_perror);
 void			puterr(char *message, t_bool call_perror);
 
 // EXEC ------------------------------------------------------------------------
@@ -382,15 +400,18 @@ void			read_heredocs(t_redir_manager *redirects_manager);
 t_redir			*get_last_redirect(t_redir_manager *redirects_manager);
 t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds);
 t_cmdproto		load_builtin(const char *command_name, t_cmdproto *proto);
-void			close_pipe(int sfd, t_bool *door);
+t_bool			sclose_fd(int sfd, t_bool *door);
 t_bool			create_cmd_pipe(t_excmd *cmd, t_execparams *params);
 char			*get_full_path(char *path, char *cmd_name);
-t_bool			create_streams(t_excmd *cmd, t_streamfd *in_dup,
-					t_streamfd *out_dup);
-t_bool			execute_from_path(t_minishell *minishell, t_excmd *cmd);
+t_bool			create_streams(t_excmd *cmd, t_execparams *params, 
+					t_streamfd *in_dup, t_streamfd *out_dup);
+t_bool			execute_from_path(t_minishell *minishell, t_execparams *params,
+					t_excmd *cmd);
+t_bool			execute_builtin(t_child_behavior_params p);
 t_bool			create_child(t_excmd *cmd, t_execparams *params);
 t_bool			load_pipeline_params(t_minishell *minishell, 
 					t_execparams *params, t_excmd **cmds);
+t_bool			restore_std(t_streamfd *in_dup, t_streamfd *out_dup);
 
 // MEMORY ----------------------------------------------------------------------
 

@@ -36,6 +36,8 @@ void	free_one_cmd(t_excmd *cmd)
 		free(cmd->raw);
 	if (cmd->argv[0])
 		ft_free_strtab(cmd->argv);
+	if (cmd->paths[0])
+		ft_free_strtab(cmd->paths);
 	if (cmd->in_redirects.size)
 	{
 		close(cmd->in_redirects.final_fd.fd);

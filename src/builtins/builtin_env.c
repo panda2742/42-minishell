@@ -30,13 +30,10 @@ t_exit	builtin_env(t_excmd *c)
 			continue ;
 		}
 		if (!_write_var(c, var))
-		{
-			c->status = EXIT_FAILURE;
-			break ;
-		}
+			return (EXIT_FAILURE);
 		var = var->next;
 	}
-	return (c->status);
+	return (EXIT_SUCCESS);
 }
 
 static t_bool	_write_var(t_excmd *cmd, t_env_var *var)
