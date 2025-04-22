@@ -42,13 +42,14 @@ t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 			cmd = cmd->next;
 			continue ;
 		}
-		print_cmd(cmd);
 		if (cmd->proto == NULL)
 			execute_from_path(minishell, &params, cmd);
 		else
 			execute_builtin((t_child_behavior_params){
 				.minishell=minishell,.cmd=cmd,.in_dup=&std_dup[0],
 				.out_dup=&std_dup[1],.params=&params});
+		if (params.status == -2)
+			return (params);
 		if (cmd->in_a_child)
 		{
 			sclose_fd(cmd->in_redirects.final_fd.fd, NULL);
@@ -58,7 +59,6 @@ t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 			free_cmds(cmds);
 			exit(0);
 		}
-		cmd = cmd->next;
 	}
 	cmd = *cmds;
 	while (params.nb_launched)
