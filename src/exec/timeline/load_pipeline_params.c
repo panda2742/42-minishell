@@ -25,7 +25,8 @@ t_bool	load_pipeline_params(t_minishell *minishell, t_execparams *params,
 	{
 		params->nb_cmd++;
 		cmd->id = params->nb_cmd;
-		cmd->proto = load_builtin(cmd->name, &cmd->proto);
+		if (cmd->name)
+			cmd->proto = load_builtin(cmd->name, &cmd->proto);
 		cmd = cmd->next;
 	}
 	return (true);

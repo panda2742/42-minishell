@@ -22,9 +22,13 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	if (!res)
 		return (NULL);
 	res->id = -1;
-	res->name = ft_strdup(cmd_name);
-	if (!res->name)
-		return (NULL);
+	res->name = NULL;
+	if (cmd_name)
+	{
+		res->name = ft_strdup(cmd_name);
+		if (res->name == NULL)
+			return (NULL);
+	}
 	res->in_a_child = true;
 	res->proto = NULL;
 	res->argc = 0;

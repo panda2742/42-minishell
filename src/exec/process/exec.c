@@ -80,16 +80,14 @@ static unsigned char	_init_child_behavior(t_child_behavior_params p)
 	p.cmd->envp = p.minishell->env.envlst;
 	p.cmd->in_dup = p.in_dup;
 	p.cmd->out_dup = p.out_dup;
-	if (p.cmd->name)
-	{
-		
-	}
 	if (create_cmd_pipe(p.cmd, p.params) == false)
 	{
 		if (p.params->errs.exc_pipe)
 			return (0);
 		return (1);
 	}
+	if (!p.cmd->name)
+		return (1);
 	p.params->nb_launched++;
 	if (create_child(p.cmd, p.params) == false)
 	{

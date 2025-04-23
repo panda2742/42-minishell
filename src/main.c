@@ -110,7 +110,7 @@ t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell,
 		cmd = set_cmd(cmd, cmd_tokens, minishell, all_tokens);
 		if (!cmd)
 		{
-			puterr(ft_sprintf(": memory allocation error"), false);
+			puterr(ft_sprintf(": error: Memory allocation error\n"), false);
 			free_cmds(&first);
 			return (NULL);
 		}
