@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/13 15:14:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/01/15 17:33:58 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ static char	*_join_res_buffer(char *res, char *buffer, int *end, int is_nl)
 	if (res)
 		res_len = ft_strlen(res);
 	out_len = res_len + eof_buffer;
-	out = malloc(out_len + 1);
+	out = ft_memalloc(out_len + 1);
 	if (!out && res)
 		free(res);
 	if (!out)

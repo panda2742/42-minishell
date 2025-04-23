@@ -28,7 +28,7 @@ char	**ft_split(char const *s, const char *charset)
 	int		_bufcpyres;
 
 	word_count = _count_words(s, charset);
-	tabstr = (char **)malloc((word_count + 1) * sizeof(char *));
+	tabstr = (char **)ft_memalloc((word_count + 1) * sizeof(char *));
 	if (!tabstr)
 		return (NULL);
 	w = 0;
@@ -73,9 +73,9 @@ static int	_bufcpy(char **result, size_t w, const char *s, const char *charset)
 	len = 0;
 	while (_is_in_charset(*s, charset) && *s)
 		s++;
-	while (_is_in_charset(s[len], charset) && s[len])
+	while (!_is_in_charset(s[len], charset) && s[len])
 		len++;
-	result[w] = (char *)malloc((len + 1) * sizeof(char));
+	result[w] = (char *)ft_memalloc((len + 1) * sizeof(char));
 	if (!result[w])
 	{
 		while (w)
@@ -99,6 +99,7 @@ static t_bool	_is_in_charset(char c, const char *charset)
 	{
 		if (*charset == c)
 			return (true);
+		charset++;
 	}
 	return (false);
 }

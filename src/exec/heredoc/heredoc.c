@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_eprintf.c                                       :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/25 10:12:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/02/25 10:16:13 by ehosta           ###   ########.fr       */
+/*   Created: 2025/04/14 15:04:40 by ehosta            #+#    #+#             */
+/*   Updated: 2025/04/14 15:04:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_printf.h"
+#include "minishell.h"
 
-int	ft_eprintf(const char *format, ...)
+t_exit	heredoc(char *buffer, char *del, t_bool skip_writing)
 {
-	va_list	args;
-	int		return_value;
+	char	*line;
 
-	if (!format || !*format)
-		return (-1);
-	va_start(args, format);
-	return_value = parse_format((char *)format, args, 2);
-	va_end(args);
-	return (return_value);
+	(void)del;
+	while (1)
+	{
+		line = readline("> ");
+		if (buffer && !skip_writing)
+			buffer = line;
+		break ;
+	}
+	return (EXIT_SUCCESS);
 }

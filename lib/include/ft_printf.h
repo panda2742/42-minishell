@@ -21,7 +21,6 @@
 # endif
 
 int	ft_printf(const char *format, ...);
-int	ft_eprintf(const char *format, ...);
 int	parse_format(char *str, va_list args, int fd);
 
 #endif
