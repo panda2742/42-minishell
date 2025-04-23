@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 17:37:02 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:32:26 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,11 @@ void	build_redirs_and_args(t_excmd *cmd, t_token *token)
 		if (is_redir(token))
 			handle_is_redir_tokens(cmd, token);
 		if (token->type == TOKEN_WORD)
-			cmd->argv[i++] = token->text;
+		{
+			cmd->argv[i++] = ft_strdup(token->text);
+			free(token->text);
+			token->text = NULL;
+		}
 		token = token->next;
 	}
 }
@@ -69,6 +73,7 @@ t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
 	t_token_list	*curr_list;
 	t_token			*cmd_tokens;
 
+
 	first = NULL;
 	prev = NULL;
 	curr_list = token_list_head;
@@ -88,7 +93,6 @@ t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
 	}
 	return (first);
 }
-
 
 
 /*
@@ -119,12 +123,14 @@ int	main(int argc, char **argv, char **env)
 {
 	t_execparams	params;
 	t_minishell		minishell;
+	t_excmd			*head;
 	t_excmd			*first;
 	t_token			*token;
 	char			*line;
 	char			*prompt;
 
 	first = NULL;
+	head = NULL;
 	(void)argc;
 	(void)argv;
 	if (create_env(env, &minishell.env) == NULL)
@@ -137,12 +143,15 @@ int	main(int argc, char **argv, char **env)
 	minishell.last_status = EXIT_SUCCESS;
 	while (1)
 	{
+
 		set_sig_action();
 		prompt = show_prompt(&minishell);
 		if (prompt == NULL || minishell.last_status == -2)
 		{
 			if (prompt)
 				free(prompt);
+			if (head != NULL)
+				free_cmds(&head);
 			free_env(&minishell.env);
 			return (EXIT_FAILURE);
 		}
@@ -153,8 +162,8 @@ int	main(int argc, char **argv, char **env)
 			free_env(&minishell.env);
 			printf(B_GREEN "Good bye!\n" RESET);
 			// Il faut un meilleur paramètre pour free cmds
-			// if (first)
-			// 	free_cmds(&first);
+			if (first)
+				free_cmds(&head);
 			return (EXIT_SUCCESS);
 		}
 		add_history(line);
@@ -171,7 +180,11 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		}
 		first = process_tokens(token, &minishell);
+		if (head == NULL)
+			head = first;
+		(void) first;
 		(void) params;
+		// free_cmds(&first);
 		params = exec_command(&minishell, &first);
 		minishell.last_status = params.status;
 		free(line);
@@ -179,5 +192,3 @@ int	main(int argc, char **argv, char **env)
 	free_env(&minishell.env);
 	return (minishell.last_status);
 }
-
-// ptit test

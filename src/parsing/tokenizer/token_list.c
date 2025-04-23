@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 09:07:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 17:47:15 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:38:34 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	free_tokens_list(t_token *tokens)
 	{
 		tmp_token = tokens;
 		tokens = tokens->next;
-		printf("text: %s\n", tmp_token->text);
+		if (tmp_token->text)
+			free(tmp_token->text);
 		tmp_frag = tmp_token->fragments;
 		while (tmp_frag)
 		{
