@@ -12,7 +12,8 @@
 
 #include "minishell.h"
 
-static unsigned char	_init_child_behavior(t_child_behavior_params p);
+static unsigned char	_init_child_behavior(t_child_behavior_params p,
+							size_t *proc);
 
 t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 {
@@ -34,7 +35,7 @@ t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 		cmd->params = &params;
 		init_behavior_res = _init_child_behavior((t_child_behavior_params){
 			.minishell=minishell,.cmd=cmd,.in_dup=&std_dup[0],
-			.out_dup=&std_dup[1],.params=&params});
+			.out_dup=&std_dup[1],.params=&params}, &params.nb_launched);
 		if (init_behavior_res == 0)
 			break ;
 		if (init_behavior_res == 1)
@@ -62,6 +63,7 @@ t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 		break ;
 	}
 	cmd = *cmds;
+	printf("Waiting for %zu processes to finish...\n", params.nb_launched);
 	while (params.nb_launched)
 	{
 		if (cmd->prev)
@@ -75,7 +77,8 @@ t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 	return (params);
 }
 
-static unsigned char	_init_child_behavior(t_child_behavior_params p)
+static unsigned char	_init_child_behavior(t_child_behavior_params p,
+							size_t *proc)
 {
 	p.cmd->envp = p.minishell->env.envlst;
 	p.cmd->in_dup = p.in_dup;
@@ -88,14 +91,14 @@ static unsigned char	_init_child_behavior(t_child_behavior_params p)
 	}
 	if (!p.cmd->name)
 		return (1);
-	p.params->nb_launched++;
-	if (create_child(p.cmd, p.params) == false)
+	(*proc)++;
+	if (create_child(p.cmd, p.params, proc) == false)
 	{
 		if (p.params->errs.exc_fork == 1)
 			return (0);
 		return (1);
 	}
 	if (create_streams(p.cmd, p.params, p.in_dup, p.out_dup) == false)
-		return (1); 
+		exit(1);
 	return (2);
 }

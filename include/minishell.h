@@ -414,7 +414,7 @@ t_bool			create_streams(t_excmd *cmd, t_execparams *params,
 t_bool			execute_from_path(t_minishell *minishell, t_execparams *params,
 					t_excmd *cmd);
 t_bool			execute_builtin(t_child_behavior_params p);
-t_bool			create_child(t_excmd *cmd, t_execparams *params);
+t_bool			create_child(t_excmd *cmd, t_execparams *params, size_t *proc);
 t_bool			load_pipeline_params(t_minishell *minishell, 
 					t_execparams *params, t_excmd **cmds);
 t_bool			restore_std(t_streamfd *in_dup, t_streamfd *out_dup);

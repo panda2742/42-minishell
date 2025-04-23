@@ -26,7 +26,6 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	if (cmd_name)
 	{
 		res->name = ft_strdup(cmd_name);
-		free(cmd_name);
 		if (res->name == NULL)
 			return (NULL);
 	}

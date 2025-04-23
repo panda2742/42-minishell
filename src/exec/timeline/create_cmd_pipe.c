@@ -24,6 +24,8 @@ t_bool	create_cmd_pipe(t_excmd *cmd, t_execparams *params)
 		cmd->pipe_open[0] = true;
 		cmd->pipe_open[1] = true;
 	}
+	if (cmd->prev)
+		sclose_fd(cmd->prev->pipe[1], &cmd->prev->pipe_open[1]);
 	return (_manage_redirects(cmd, params));
 }
 
