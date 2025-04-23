@@ -15,6 +15,8 @@
 static size_t	_total_len(const char *format, va_list args);
 static char		*_write_res(const char *format, va_list args, char *buffer);
 static char		*_handle_string(va_list args, size_t *i, char *buffer);
+static size_t	_int_size(int n);
+static char		*_handle_int(va_list args, size_t *i, char *buffer);
 
 char	*ft_sprintf(const char *format, ...)
 {
@@ -49,11 +51,36 @@ static size_t	_total_len(const char *format, va_list args)
 			len += ft_strlen(va_arg(args, char *));
 			format++;
 		}
+		else if (*format == '%' && *(format + 1) == 'd')
+		{
+			len += _int_size(va_arg(args, int));
+			format++;
+		}
 		else
 			len++;
 		format++;
 	}
 	return (len);
+}
+
+static size_t	_int_size(int n)
+{
+	size_t	i;
+
+	i = 0;
+	if (n == 0)
+		return (1);
+	if (n < 0)
+	{
+		n = -n;
+		i++;
+	}
+	while (n)
+	{
+		n /= 10;
+		i++;
+	}
+	return (i);
 }
 
 static char	*_write_res(const char *format, va_list args, char *buffer)
@@ -66,6 +93,11 @@ static char	*_write_res(const char *format, va_list args, char *buffer)
 		if (*format == '%' && *(format + 1) == 's')
 		{
 			_handle_string(args, &i, buffer);
+			format++;
+		}
+		else if (*format == '%' && *(format + 1) == 'd')
+		{
+			_handle_int(args, &i, buffer);
 			format++;
 		}
 		else
@@ -92,5 +124,30 @@ static char	*_handle_string(va_list args, size_t *i, char *buffer)
 		buffer[*i] = str[j];
 		(*i)++;
 	}
+	return (buffer);
+}
+
+static char	*_handle_int(va_list args, size_t *i, char *buffer)
+{
+	int		nb;
+	size_t	len;
+	size_t	j;
+
+	nb = va_arg(args, int);
+	len = _int_size(nb);
+	if (nb < 0)
+	{
+		buffer[*i] = '-';
+		(*i)++;
+		nb = -nb;
+		len--;
+	}
+	j = -1;
+	while (++j < len)
+	{
+		buffer[*i + len - j - 1] = (nb % 10) + '0';
+		nb /= 10;
+	}
+	(*i) += len;
 	return (buffer);
 }

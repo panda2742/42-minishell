@@ -421,7 +421,7 @@ void			free_env(t_env_manager *env);
 
 // MISC ------------------------------------------------------------------------
 
-char			*show_prompt(t_env_manager *env);
+char			*show_prompt(t_minishell *minishell);
 void			sigint_handler(int signal);
 void			set_sig_action(void);
 void			print_cmds(t_excmd *cmd);

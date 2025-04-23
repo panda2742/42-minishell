@@ -16,15 +16,19 @@ static char	*_get_user(t_env_manager *env);
 static char	*_get_path(t_env_manager *env);
 static char	*_replace_by_home(t_env_var *home_var, char *cwd);
 
-char	*show_prompt(t_env_manager *env)
+char	*show_prompt(t_minishell *minishell)
 {
-	const char	*user = _get_user(env);
-	const char	*path = _get_path(env);
+	const char	*user = _get_user(&minishell->env);
+	const char	*path = _get_path(&minishell->env);
 	char		*res;
 
 	res = ft_sprintf(
-			"\001%s\002%s\001%s\002::\001%s\002%s\001%s\002 @\
- \001%s\002%s\001%s\002 \001%s\002>\001%s\002 ",
+			"\001%s\002%d\001%s\002 ×\
+ \001%s\002%s\001%s\002::\
+\001%s\002%s\001%s\002 @\
+ \001%s\002%s\001%s\002\
+ \001%s\002>\001%s\002 ",
+			B_WHITE, minishell->last_status, RESET,
 			B_MAGENTA, PROJECT_NAME, RESET,
 			B_BLUE, user, RESET,
 			B_CYAN, path, RESET,

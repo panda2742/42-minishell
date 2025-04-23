@@ -38,7 +38,7 @@ static t_bool	_manage_redirects(t_excmd *cmd, t_execparams *params)
 	if (_load_redirects(&cmd->out_redirects) == false)
 	{
 		if (cmd->in_redirects.final_fd.fd == STREAM_REDIR)
-			close(cmd->in_redirects.final_fd.fd);
+			sclose_fd(cmd->in_redirects.final_fd.fd, NULL);
 		free_cmds(params->cmds);
 		return (false);
 	}

@@ -168,7 +168,7 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		set_sig_action();
-		prompt = show_prompt(&minishell.env);
+		prompt = show_prompt(&minishell);
 		if (prompt == NULL || minishell.last_status == -2)
 		{
 			if (prompt)
@@ -203,10 +203,8 @@ int	main(int argc, char **argv, char **env)
 		first = process_tokens(token, &minishell);
 		
 		(void) params;
-		// print_cmds(first);
 		params = exec_command(&minishell, &first);
 		minishell.last_status = params.status;
-		printf("prev status: %d\n", params.status);
 		free(line);
 	}
 	free_env(&minishell.env);

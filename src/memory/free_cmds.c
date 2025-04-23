@@ -40,13 +40,13 @@ void	free_one_cmd(t_excmd *cmd)
 		ft_free_strtab(cmd->paths);
 	if (cmd->in_redirects.size)
 	{
-		close(cmd->in_redirects.final_fd.fd);
+		sclose_fd(cmd->in_redirects.final_fd.fd, NULL);
 		cmd->in_redirects.final_fd.fd = -1;
 		_free_redirect_manager(&cmd->in_redirects);
 	}
 	if (cmd->out_redirects.size)
 	{
-		close(cmd->out_redirects.final_fd.fd);
+		sclose_fd(cmd->out_redirects.final_fd.fd, NULL);
 		cmd->out_redirects.final_fd.fd = -1;
 		_free_redirect_manager(&cmd->out_redirects);
 	}

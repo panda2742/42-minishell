@@ -96,7 +96,7 @@ static t_bool	_try_open(t_redir *last, t_redir_manager *redirects_manager)
 
 static t_redir	*_continue_loop(t_redir *last)
 {
-	close(last->fd.fd);
+	sclose_fd(last->fd.fd, NULL);
 	last->fd.fd = -1;
 	return (last->next);
 }
