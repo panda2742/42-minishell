@@ -24,9 +24,9 @@ override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
 								$(addprefix timeline/, create_child create_cmd_pipe fd_manager load_pipeline_params restore_std)
 override	SRC_MEMORY		:=	free_cmds free_env
 override	SRC_MISC		:=	print_cmds show_prompt signals
-override	SRC_PARSING		:=	$(addprefix lexer/,  handle_redir_pipe lexer_parse lexer lexer_utils) \
-								$(addprefix tokenizer/, expand_tokens fragments token_lexer token_list)
-override	SRC_UTILS		:=	$(addprefix parsing/, count_arg_words free_str_return_null ft_split_parser ft_str_join_free ft_strcmp get_first_word handle_is_redir_token incr_on_alnum is_redir join_token_to_string print_t_token_list skip_spaces token_lstsize) \
+override	SRC_PARSING		:=	$(addprefix lexer/, handle_redir_pipe lexer_parse lexer lexer_utils) \
+								$(addprefix tokenizer/, expand expand_tokens fragments token_lexer token_list)
+override	SRC_UTILS		:=	$(addprefix parsing/, count_arg_words free_str_return_null ft_add_char ft_split_parser ft_str_join_free ft_strcmp get_first_word handle_is_redir_token incr_on_alnum is_redir join_token_to_string print_t_token_list skip_spaces token_lstsize) \
 								empty_tab \
 								ft_sprintf
 override	SOURCE_FILES	:=	$(addprefix builtins/, $(SRC_BUILTINS)) \

@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 14:52:54 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 15:44:03 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,36 +16,6 @@
 #include <stdio.h>
 #include <strings.h>
 
-void	expand_caller(t_token *token, t_token **new_tokens,
-			t_minishell *minishell)
-{
-	t_token	*last_new;
-	t_token	*split_token;
-	t_token	*tmp;
-
-	split_token = NULL;
-	tmp = token;
-	*new_tokens = NULL;
-	last_new = NULL;
-	while (tmp)
-	{
-		split_token = word_split_token(tmp, minishell);
-		if (split_token)
-		{
-			if (!*new_tokens)
-			{
-				*new_tokens = split_token;
-				last_new = *new_tokens;
-			}
-			else {
-				while (last_new->next)
-					last_new = last_new->next;
-				last_new->next = split_token;
-			}
-		}
-		tmp = tmp->next;
-	}
-}
 
 t_excmd	*set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell)
 {

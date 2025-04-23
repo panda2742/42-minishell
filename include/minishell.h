@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 14:07:34 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:16:11 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -435,13 +435,19 @@ void			print_cmd(t_excmd *cmd);
 
 // PARSING ---------------------------------------------------------------------
 
+void	expand_caller(t_token *token, t_token **new_tokens,
+	t_minishell *minishell);
+void			handle_redir_pipe(int *i, t_token **token_list,
+	const char *input);
+t_token	*add_new_token(t_token **new_head, t_token **new_last,
+	char *current, t_token *token);
+void	process_unquoted_frag(const char *expanded, char **current,
+	t_word_split **new_list, t_token *token);
 void			update_token_redir(t_token *list);
 int				ft_printf_error(char *str);
 int				lexer_parse(t_token *token);
 int				is_char_redir_or_pipe(char c);
 void			print_tokens(t_token *tokens);
-void			handle_redir_pipe(int *i, t_token **token_list,
-					const char *input);
 t_token			*ft_input(const char *input);
 
 char			*expand_fragment(const char *input, int quote, t_minishell *mini);
@@ -462,18 +468,20 @@ void			token_list(t_token *head_token, t_token_list **head_list);
 
 size_t			count_arg_words(t_token *token);
 char			*free_str_return_null(char *str);
+void			handle_normal_char(t_utils *utils, char *input);
+void			add_char_to_string(char *expanded, char **current, int *i);
 char			**ft_split_a(char const *s, char c);
 char			*str_join_free(char *s1, const char *s2);
 int				ft_strcmp(char *s1, char *s2);
 char			*get_first_word(t_token *token);
 void			handle_is_redir_tokens(t_excmd *cmd, t_token *token);
 void			incr_on_alnum(char *str, int *j);
-int				is_redir(t_token *head_token);
-char			*join_tokens_to_string(t_token *tokens);
 char			*ft_sprintf(const char *format, ...);
 void			*empty_tab(void);
-size_t			token_lstsize(t_token *head);
-void			skip_spaces(const char *input, int *i);
+int				is_redir(t_token *head_token);
+char			*join_tokens_to_string(t_token *tokens);
 void			print_token_list(t_token_list *list);
+void			skip_spaces(const char *input, int *i);
+size_t			token_lstsize(t_token *head);
 
 #endif
