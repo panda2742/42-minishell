@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:45 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 14:50:13 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/23 14:28:31 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * This function set the word after a redir to be REDIR_ARG
+ * It also for the quote type to be QUOTE_DOUBLE
+ * It is because bash always consider redirs quotes as double quotes
+*/
 void	update_token_redir(t_token *list)
 {
 	t_fragment	*tmp;

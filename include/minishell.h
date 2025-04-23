@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 19:03:30 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:07:34 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -365,6 +365,12 @@ typedef struct s_utils
 	char				*s1;
 	char				*s2;
 }						t_utils;
+
+typedef struct s_word_split {
+	t_token	*new_head;
+	t_token *new_last;
+	char *current;
+} 			t_word_split;
 
 // BUILTINS --------------------------------------------------------------------
 

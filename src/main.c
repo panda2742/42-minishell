@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 19:11:39 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:52:54 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ void	expand_caller(t_token *token, t_token **new_tokens,
 	}
 }
 
-t_excmd	*set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell,
-			t_token *new_tokens)
+t_excmd	*set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell)
 {
 	char	*cmd_name;
 	int		count_args;
@@ -59,7 +58,7 @@ t_excmd	*set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell,
 		return (NULL);
 	cmd->argc = token_lstsize(token);
 	count_args = count_arg_words(token);
-	cmd->raw = join_tokens_to_string(new_tokens);
+	cmd->raw = join_tokens_to_string(token);
 	cmd->argv = ft_memalloc(sizeof(char *) * (count_args + 1));
 	if (!cmd->argv)
 		return (NULL);
@@ -92,8 +91,7 @@ void	link_prev_cmd(t_excmd **first, t_excmd **prev, t_excmd *cmd)
 	*prev = cmd;
 }
 
-t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell,
-			t_token *all_tokens)
+t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
 {
 	t_excmd			*first;
 	t_excmd			*prev;
@@ -107,7 +105,7 @@ t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell,
 	while (curr_list)
 	{
 		cmd_tokens = curr_list->tokens;
-		cmd = set_cmd(cmd, cmd_tokens, minishell, all_tokens);
+		cmd = set_cmd(cmd, cmd_tokens, minishell);
 		if (!cmd)
 		{
 			puterr(ft_sprintf(": error: Memory allocation error\n"), false);
@@ -139,9 +137,9 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 	expand_caller(token, &new_tokens, minishell);
 	free_tokens(token);
 	token_list(new_tokens, &head_list);
-	cmd_list = create_cmd_list(head_list, minishell, new_tokens);
-	free_tokens_in_list(head_list);
 	free_tokens(new_tokens);
+	cmd_list = create_cmd_list(head_list, minishell);
+	free_tokens_in_list(head_list);
 	return (cmd_list);
 }
 

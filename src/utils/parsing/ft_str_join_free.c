@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_join_free.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 22:26:35 by abonifac          #+#    #+#             */
-/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/23 14:44:19 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * Join but also free the first string.
+*/
 static void	set_len(t_utils *vars, char *s1, const char *s2)
 {
 	if (s1)

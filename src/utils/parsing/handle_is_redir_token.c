@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   handle_is_redir_token.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 23:04:34 by abonifac          #+#    #+#             */
-/*   Updated: 2025/04/17 14:50:07 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/23 14:47:52 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * Helper function to handle the redirections.
+ * It is called when we find a redirection in the token list.
+ * It adds the redirection to the cmd struct.
+*/
 void	handle_is_redir_tokens(t_excmd *cmd, t_token *token)
 {
 	if (token->type == TOKEN_REDIR_IN)

@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   count_arg_words.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:29:55 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 14:49:35 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/23 14:43:28 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/**
+ * Count the number of TOKEN_WORD in a token list.
+ * Called when we set argc
+ */
 
 size_t	count_arg_words(t_token *token)
 {
