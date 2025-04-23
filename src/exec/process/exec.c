@@ -59,7 +59,7 @@ t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
 			free_cmds(cmds);
 			exit(0);
 		}
-		cmd = cmd->next;
+		break ;
 	}
 	cmd = *cmds;
 	while (params.nb_launched)

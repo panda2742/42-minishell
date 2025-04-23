@@ -14,21 +14,23 @@
 
 t_exit	builtin_echo(t_excmd *c)
 {
-	int	i;
+	int		i;
+	char	**av;
 
 	i = -1;
-	c->argv++;
+	av = c->argv;
+	av++;
 	c->argc--;
 	if (c->argc == 0)
 		return (0);
 	while (++i < c->argc)
 	{
-		if (!c->argv[i])
+		if (!av[i])
 			break ;
-		printf("%s", c->argv[i]);
+		printf("%s", av[i]);
 		if (i < c->argc - 1)
 			printf(" ");
 	}
 	printf("\n");
-	return (0);
+	return (EXIT_SUCCESS);
 }

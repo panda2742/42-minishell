@@ -199,7 +199,6 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		}
 		first = process_tokens(token, &minishell);
-		
 		(void) params;
 		params = exec_command(&minishell, &first);
 		minishell.last_status = params.status;
