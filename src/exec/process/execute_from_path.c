@@ -56,9 +56,9 @@ t_bool	execute_from_path(t_minishell *minishell, t_execparams *params,
 	}
 	if (access(cmd->name, F_OK) != 0)
 		params->errs.exc_access_fok = 1;
-	else if (access(fullpath, X_OK) != 0)
+	else if (access(cmd->name, X_OK) != 0)
 		params->errs.exc_access_xok = 1;
-	else if (execve(fullpath, cmd->argv, cmd->envp) == -1)
+	else if (execve(cmd->name, cmd->argv, cmd->envp) == -1)
 		params->errs.exc_execve = 1;
 	_print_err(params, cmd);
 	return (false);
