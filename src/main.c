@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 15:44:03 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 17:37:02 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
 	}
 	return (first);
 }
+
+
 
 /*
 * Process the tokens after the lexer and parser
