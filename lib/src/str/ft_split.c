@@ -12,26 +12,31 @@
 
 #include "../../include/ft_str.h"
 
-static size_t	_count_words(char const *s, char c);
-static int		_bufcpy(char **result, size_t w, const char *s, char c);
+static size_t	_count_words(char const *s, const char *charset);
+static int		_bufcpy(
+					char **result,
+					size_t w,
+					const char *s,
+					const char *charset);
+static t_bool	_is_in_charset(char c, const char *charset);
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, const char *charset)
 {
 	size_t	word_count;
 	size_t	w;
 	char	**tabstr;
 	int		_bufcpyres;
 
-	word_count = _count_words(s, c);
-	tabstr = (char **)malloc((word_count + 1) * sizeof(char *));
+	word_count = _count_words(s, charset);
+	tabstr = (char **)ft_memalloc((word_count + 1) * sizeof(char *));
 	if (!tabstr)
 		return (NULL);
 	w = 0;
 	while (w < word_count)
 	{
-		while (*s && *s == c)
+		while (*s && _is_in_charset(*s, charset))
 			s++;
-		_bufcpyres = _bufcpy(tabstr, w, s, c);
+		_bufcpyres = _bufcpy(tabstr, w, s, charset);
 		if (_bufcpyres == -1)
 			return (NULL);
 		s += _bufcpyres;
@@ -41,36 +46,36 @@ char	**ft_split(char const *s, char c)
 	return (tabstr);
 }
 
-static size_t	_count_words(char const *s, char c)
+static size_t	_count_words(char const *s, const char *charset)
 {
 	size_t	word_count;
 
 	word_count = 0;
-	while (*s && *s == c)
+	while (*s && _is_in_charset(*s, charset))
 		s++;
 	while (*s)
 	{
-		while (*s && *s == c)
+		while (*s && _is_in_charset(*s, charset))
 			s++;
-		if (*s && *s != c)
+		if (*s && !_is_in_charset(*s, charset))
 			word_count++;
-		while (*s && *s != c)
+		while (*s && !_is_in_charset(*s, charset))
 			s++;
 	}
 	return (word_count);
 }
 
-static int	_bufcpy(char **result, size_t w, const char *s, char c)
+static int	_bufcpy(char **result, size_t w, const char *s, const char *charset)
 {
 	size_t	len;
 	size_t	i;
 
 	len = 0;
-	while (*s == c && *s)
+	while (_is_in_charset(*s, charset) && *s)
 		s++;
-	while (s[len] != c && s[len])
+	while (!_is_in_charset(s[len], charset) && s[len])
 		len++;
-	result[w] = (char *)malloc((len + 1) * sizeof(char));
+	result[w] = (char *)ft_memalloc((len + 1) * sizeof(char));
 	if (!result[w])
 	{
 		while (w)
@@ -86,4 +91,15 @@ static int	_bufcpy(char **result, size_t w, const char *s, char c)
 	}
 	result[w][i] = '\0';
 	return (len + 1);
+}
+
+static t_bool	_is_in_charset(char c, const char *charset)
+{
+	while (*charset)
+	{
+		if (*charset == c)
+			return (true);
+		charset++;
+	}
+	return (false);
 }

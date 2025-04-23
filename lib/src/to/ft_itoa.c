@@ -24,7 +24,7 @@ char	*ft_itoa(int n)
 		return (ft_strdup("0"));
 	if (n == -2147483648)
 		return (ft_strdup("-2147483648"));
-	buf = (char *)malloc(sizeof(char) * (_digits_size(n) + 1));
+	buf = (char *)ft_memalloc(sizeof(char) * (_digits_size(n) + 1));
 	if (!buf)
 		return (NULL);
 	i = 0;

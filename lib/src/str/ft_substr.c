@@ -21,13 +21,13 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 	if (start >= ft_strlen(s))
 	{
-		res = (char *)malloc(sizeof(char));
+		res = (char *)ft_memalloc(sizeof(char));
 		if (!res)
 			return (NULL);
 		res[0] = '\0';
 		return (res);
 	}
-	res = (char *)malloc((_getmax(s, start, len) + 1) * sizeof(char));
+	res = (char *)ft_memalloc((_getmax(s, start, len) + 1) * sizeof(char));
 	if (!res)
 		return (NULL);
 	i = 0;

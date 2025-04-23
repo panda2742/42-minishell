@@ -6,7 +6,7 @@
 #    By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 14:44:31 by ehosta            #+#    #+#              #
-#    Updated: 2025/03/04 08:48:44 by ehosta           ###   ########.fr        #
+#    Updated: 2025/04/16 15:27:06 by ehosta           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,8 @@ override	SRC_IS		:=	ft_isalnum \
 							ft_isdigit \
 							ft_isincharset \
 							ft_isprint \
-							ft_issorted
+							ft_issorted \
+							ft_isspace
 override	SRC_LST		:=	ft_lstadd_back \
 							ft_lstadd_front \
 							ft_lstclear \
@@ -63,14 +64,14 @@ override	SRC_MATH	:=	ft_abs \
 							ft_sqrt
 override	SRC_MEM		:=	ft_bzero \
 							ft_calloc \
+							ft_memalloc \
 							ft_memchr \
 							ft_memcmp \
 							ft_memcpy \
 							ft_memmove \
 							ft_memset
 override	SRC_MISC	:=	ft_selection_sort
-override	SRC_PRINTF	:=	ft_eprintf \
-							ft_printf
+override	SRC_PRINTF	:=	ft_printf
 override	SRC_STR		:=	ft_split \
 							ft_strchr \
 							ft_strdup \
@@ -108,7 +109,7 @@ override	DEPS		:=	$(patsubst %.o,%.d,$(OBJ))
 override	DIRS		:=	$(sort $(dir $(NAME) $(OBJ) $(DEPS)))
 
 override	DEPFLAGS	:=	-MMD -MP
-OFLAGS		:=	-O3
+OFLAGS		:=	-O0
 CFLAGS		:=	-Wall -Wextra -Werror $(DEPFLAGS)
 ARFLAGS		:=	rcs
 MAKEFLAGS	:=	--no-print-directory

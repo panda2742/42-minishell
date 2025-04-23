@@ -15,8 +15,9 @@
 
 # include <stdlib.h>
 # include "ft_mem.h"
+# include "ft_base.h"
 
-char	**ft_split(const char *s, char c);
+char	**ft_split(const char *s, const char *charset);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *s);
 void	ft_striteri(char *s, void (*f)(unsigned int, char *));

@@ -1,0 +1,32 @@
+[0x4b7d360] [[4;35m0x4b7d360[0m]
+[0x4b7d360]   id           [1;33m1[0m
+[0x4b7d360]   name         [1;34mecho[0m
+[0x4b7d360]   in_a_child   [1;31mfalse[0m
+[0x4b7d360]   prototype    [4;35m0x4015c0[0m
+[0x4b7d360]   -
+[0x4b7d360]   argc         [1;33m4[0m
+[0x4b7d360]   argv         [1;33m0x4b7d780[0m ([1;33m2[0m detected)
+[0x4b7d360]    values:     [[1;34mecho[0m, [1;34mcoucou[0m]
+[0x4b7d360]   -
+[0x4b7d360]   env          [4;35m0x1ffefff938[0m
+[0x4b7d360]   envp         [4;35m0x4b7d900[0m ([1;33m80[0m detected)
+[0x4b7d360]   -
+[0x4b7d360]   raw          [1;34mecho coucou > test[0m
+[0x4b7d360]   paths        [4;35m0x4b7d900[0m ([1;33m0[0m detected)
+[0x4b7d360]   -
+[0x4b7d360]   [1;37minput redirections:[0m
+[0x4b7d360]     size         [1;33m0[0m
+[0x4b7d360]     has_heredoc  [1;31mfalse[0m
+[0x4b7d360]     final_fd     [1;33m0[0m
+[0x4b7d360]   -
+[0x4b7d360]   [1;37moutput redirections:[0m
+[0x4b7d360]     size         [1;33m1[0m
+[0x4b7d360]     has_heredoc  [1;31mfalse[0m
+[0x4b7d360]     final_fd     [1;33m3[0m
+[0x4b7d360]     list:
+[0x4b7d360]     ([4;35m0x4b7d7e0[0m) "[1;34m> test[0m" | fd [1;33m3[0m [1;32mOPEN[0m -> ([4;35m(nil)[0m)
+[0x4b7d360]   -
+[0x4b7d360]   pipe         [[1;31mCLOSED[0m, [1;31mCLOSED[0m][[1;33m0[0m, [1;33m0[0m]
+[0x4b7d360]   -
+[0x4b7d360]   [37m(nil)[0m <= [4;35m0x4b7d360[0m => [37m(nil)[0m
+coucou 

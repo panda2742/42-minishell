@@ -20,7 +20,7 @@ void	*ft_calloc(size_t count, size_t size)
 	bytes = count * size;
 	if (count != 0 && (count * size) / count != size)
 		return (NULL);
-	ptr = malloc(bytes);
+	ptr = ft_memalloc(bytes);
 	if (!ptr)
 		return (NULL);
 	ft_bzero(ptr, bytes);

@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 11:39:21 by ehosta            #+#    #+#             */
-/*   Updated: 2025/02/10 12:40:34 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_array	*ft_array_cpy(t_array *arr)
 		bytes += sizeof(int) * arr->size;
 	if (arr->type == ARRAY_STRING)
 		bytes += sizeof(char **) * (arr->size + 1);
-	cpy->data = malloc(bytes);
+	cpy->data = ft_memalloc(bytes);
 	if (!cpy->data)
 		return (free(cpy), NULL);
 	if (arr->type == ARRAY_INT)
@@ -58,7 +58,7 @@ static void	_cpy_strtab(char **cpytab, char **arrtab)
 	while (arrtab[++i])
 	{
 		len = ft_strlen(arrtab[i]);
-		cpytab[i] = malloc(sizeof(char *) * (len + 1));
+		cpytab[i] = ft_memalloc(sizeof(char *) * (len + 1));
 		j = -1;
 		while (cpytab[++j])
 			cpytab[i][j] = arrtab[i][j];
