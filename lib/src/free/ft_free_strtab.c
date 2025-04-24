@@ -17,8 +17,13 @@ void	ft_free_strtab(char **strtab)
 	int	i;
 
 	i = -1;
+	if (strtab == NULL)
+		return ;
 	while (strtab[++i])
+	{
 		ft_free_str(strtab[i]);
+		strtab[i] = NULL;
+	}
 	free(strtab);
 	strtab = NULL;
 }

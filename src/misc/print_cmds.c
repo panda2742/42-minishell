@@ -64,11 +64,10 @@ void	print_cmd(t_excmd *cmd)
 	while (cmd->envp[envp_len] && envp_len < 1000)
 		envp_len++;
 	printf("[%p]   %-12s %s%p%s (%s%d%s detected)\n", cmd, "envp", U_MAGENTA, cmd->envp, RESET, B_YELLOW, envp_len, RESET);
-	printf("[%p]   -\n[%p]   %-12s %s%s%s\n", cmd, cmd, "raw", B_BLUE, cmd->raw, RESET);
 	paths_len = 0;
 	while (cmd->paths[paths_len] && paths_len < 1000)
 		paths_len++;
-	printf("[%p]   %-12s %s%p%s (%s%d%s detected)\n", cmd, "paths", U_MAGENTA, cmd->envp, RESET, B_YELLOW, paths_len, RESET);
+	printf("[%p]   -\n[%p]   %-12s %s%p%s (%s%d%s detected)\n", cmd, cmd, "paths", U_MAGENTA, cmd->envp, RESET, B_YELLOW, paths_len, RESET);
 	printf("[%p]   -\n[%p]   %sinput redirections:%s\n", cmd, cmd, B_WHITE, RESET);
 	printf("[%p]     %-12s %s%zu%s\n", cmd, "size", B_YELLOW, cmd->in_redirects.size, RESET);
 	if (cmd->in_redirects.has_heredoc)

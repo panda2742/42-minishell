@@ -12,20 +12,6 @@
 
 #include "minishell.h"
 
-t_bool	sclose_fd(int sfd, t_bool *door)
-{
-	if (sfd == 0 || sfd == 1 || sfd < 0)
-		return (true);
-	if (close(sfd) == -1)
-	{
-		// puterr(ft_sprintf(": close fd error"), true);
-		return (false);
-	}
-	if (door)
-		*door = false;
-	return (true);
-}
-
 t_cmdproto	load_builtin(const char *command_name, t_cmdproto *proto)
 {
 	static char			*builtins[7] = {
@@ -57,5 +43,6 @@ char	*get_full_path(char *path, char *cmd_name)
 
 	tmp2 = ft_strjoin(path, "/");
 	tmp = ft_strjoin(tmp2, cmd_name);
+	free(tmp2);
 	return (tmp);
 }

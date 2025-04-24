@@ -31,23 +31,31 @@ void	free_cmds(t_excmd **cmds)
 void	free_one_cmd(t_excmd *cmd)
 {
 	if (cmd->name)
+	{
 		free(cmd->name);
-	if (cmd->raw)
-		free(cmd->raw);
+		cmd->name = NULL;
+	}
 	if (cmd->argv[0])
+	{
 		ft_free_strtab(cmd->argv);
+		cmd->argv = NULL;
+	}
 	if (cmd->paths[0])
+	{
 		ft_free_strtab(cmd->paths);
+		cmd->argv = NULL;
+	}
 	if (cmd->in_redirects.size)
 	{
-		sclose_fd(cmd->in_redirects.final_fd.fd, NULL);
+		if (cmd->in_redirects.final_fd.fd > STDERR_FILENO)
+			close(cmd->in_redirects.final_fd.fd);
 		cmd->in_redirects.final_fd.fd = -1;
 		_free_redirect_manager(&cmd->in_redirects);
 	}
 	if (cmd->out_redirects.size)
 	{
-		sclose_fd(cmd->out_redirects.final_fd.fd, NULL);
-		cmd->out_redirects.final_fd.fd = -1;
+		if (cmd->out_redirects.final_fd.fd > STDERR_FILENO)
+			cmd->out_redirects.final_fd.fd = -1;
 		_free_redirect_manager(&cmd->out_redirects);
 	}
 	free(cmd);
@@ -60,15 +68,26 @@ static void	_free_redirect_manager(t_redir_manager *manager)
 	t_redir	*tmp;
 
 	i = -1;
+	if (manager->redirects == NULL)
+		return ;
 	elt = *manager->redirects;
 	while (++i < manager->size && elt)
 	{
 		if (elt->filepath)
+		{
 			free(elt->filepath);
+			elt->filepath = NULL;
+		}
 		if (elt->heredoc_del)
+		{
 			free(elt->heredoc_del);
+			elt->heredoc_del = NULL;
+		}
 		if (elt->heredoc_content)
+		{
 			free(elt->heredoc_content);
+			elt->heredoc_content = NULL;
+		}
 		tmp = elt->next;
 		free(elt);
 		elt = tmp;

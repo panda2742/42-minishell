@@ -28,7 +28,6 @@ t_excmd	*set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell)
 		return (NULL);
 	cmd->argc = token_lstsize(token);
 	count_args = count_arg_words(token);
-	cmd->raw = join_tokens_to_string(token);
 	cmd->argv = ft_memalloc(sizeof(char *) * (count_args + 1));
 	if (!cmd->argv)
 		return (NULL);
@@ -121,17 +120,19 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_execparams	params;
+	t_execvars		*vars;
 	t_minishell		minishell;
 	t_excmd			*head;
 	t_excmd			*first;
 	t_token			*token;
 	char			*line;
-	char			*prompt;
 
 	first = NULL;
 	head = NULL;
-	(void)argc;
+	minishell.argc = argc;
+	minishell.argv = argv;
+	minishell.prompt_theme = -1;
+	minishell.last_status = EXIT_SUCCESS;
 	(void)argv;
 	if (create_env(env, &minishell.env) == NULL)
 	{
@@ -143,27 +144,12 @@ int	main(int argc, char **argv, char **env)
 	minishell.last_status = EXIT_SUCCESS;
 	while (1)
 	{
-
 		set_sig_action();
-		prompt = show_prompt(&minishell);
-		if (prompt == NULL || minishell.last_status == -2)
-		{
-			if (prompt)
-				free(prompt);
-			if (head != NULL)
-				free_cmds(&head);
-			free_env(&minishell.env);
-			return (EXIT_FAILURE);
-		}
-		line = readline(prompt);
-		free(prompt);
+		line = show_prompt(&minishell);
 		if (!line)
 		{
 			free_env(&minishell.env);
 			printf(B_GREEN "Good bye!\n" RESET);
-			// Il faut un meilleur paramètre pour free cmds
-			if (first)
-				free_cmds(&head);
 			return (EXIT_SUCCESS);
 		}
 		add_history(line);
@@ -179,16 +165,16 @@ int	main(int argc, char **argv, char **env)
 			free(line);
 			continue ;
 		}
+		free(line);
 		first = process_tokens(token, &minishell);
 		if (head == NULL)
 			head = first;
-		(void) first;
-		(void) params;
-		// free_cmds(&first);
-		params = exec_command(&minishell, &first);
-		minishell.last_status = params.status;
-		free(line);
+		vars = exec_command(&minishell, &first);
+		if (vars == NULL)
+			minishell.last_status = EXIT_FAILURE;
+		else
+			minishell.last_status = vars->status;
+		free(vars);
 	}
-	free_env(&minishell.env);
 	return (minishell.last_status);
 }

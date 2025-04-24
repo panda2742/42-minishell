@@ -12,16 +12,15 @@
 
 #include "minishell.h"
 
-static void	_print_err(t_execparams *params, t_excmd *cmd);
+static void	_print_err(t_excmd *cmd);
 
-t_bool	execute_from_path(t_minishell *minishell, t_execparams *params,
-			t_excmd *cmd)
+void	execute_from_path(t_excmd *cmd)
 {
 	int			i;
 	t_env_var	*path_var;
 	char		*fullpath;
 
-	path_var = get_var(&minishell->env, "PATH");
+	path_var = get_var(&cmd->vars->minishell->env, "PATH");
 	if (path_var != NULL)
 	{
 		cmd->paths = ft_split(path_var->value, ":");
@@ -37,39 +36,48 @@ t_bool	execute_from_path(t_minishell *minishell, t_execparams *params,
 		i++;
 		if (access(fullpath, F_OK) != 0)
 		{
-			params->errs.exc_access_fok = 1;
+			cmd->vars->errs.exc_access_fok = 1;
 			free(fullpath);
 			continue ;
 		}
 		if (access(fullpath, X_OK) != 0)
 		{
-			params->errs.exc_access_xok = 1;
+			cmd->vars->errs.exc_access_xok = 1;
 			free(fullpath);
 			continue ;
 		}
 		if (execve(fullpath, cmd->argv, cmd->envp) == -1)
 		{
-			params->errs.exc_execve = 1;
+			cmd->vars->errs.exc_execve = 1;
 			free(fullpath);
 			break ;
 		}
+		free(fullpath);
 	}
 	if (access(cmd->name, F_OK) != 0)
-		params->errs.exc_access_fok = 1;
+		cmd->vars->errs.exc_access_fok = 1;
 	else if (access(cmd->name, X_OK) != 0)
-		params->errs.exc_access_xok = 1;
+		cmd->vars->errs.exc_access_xok = 1;
 	else if (execve(cmd->name, cmd->argv, cmd->envp) == -1)
-		params->errs.exc_execve = 1;
-	_print_err(params, cmd);
-	return (false);
+		cmd->vars->errs.exc_execve = 1;
+	_print_err(cmd);
 }
 
-static void	_print_err(t_execparams *params, t_excmd *cmd)
+static void	_print_err(t_excmd *cmd)
 {
-	if (params->errs.exc_access_xok)
+	if (cmd->vars->errs.exc_access_xok)
+	{
 		puterr(ft_sprintf(": %s: Permission denied\n", cmd->name), false);
-	else if (params->errs.exc_access_fok)
+		cmd->vars->status = EXIT_CANNOT_EXEC;
+	}
+	else if (cmd->vars->errs.exc_access_fok)
+	{
 		puterr(ft_sprintf(": %s: Command not found\n", cmd->name), false);
-	else if (params->errs.exc_execve)
+		cmd->vars->status = EXIT_NOT_FOUND;
+	}
+	else if (cmd->vars->errs.exc_execve)
+	{
+		cmd->vars->status = EXIT_FAILURE;
 		puterr(ft_sprintf(": %s", cmd->name), true);
+	}
 }
