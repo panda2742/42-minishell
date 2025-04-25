@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_parser.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 22:26:25 by abonifac          #+#    #+#             */
-/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/04/23 14:43:54 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * Just a simple split
+*/
 static int	is_c(char c, char s)
 {
 	if (s == c)

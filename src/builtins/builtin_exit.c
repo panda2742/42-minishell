@@ -14,20 +14,12 @@
 
 t_exit	builtin_exit(t_excmd *c)
 {
-	t_excmd			*cmd;
-	t_excmd			*tmp;
+	t_excmd			**cmds;
 
-	if (!c->in_a_child)
-	{
-		(void)cmd;
-		(void)tmp;
-		if (c->in_dup)
-			sclose_fd(c->in_dup->fd, NULL);
-		if (c->out_dup)
-			sclose_fd(c->out_dup->fd, NULL);
-		c->params->status = -2;
-		free_cmds(c->params->cmds);
-		return (-2);
-	}
+	cmds = c->vars->cmds;
+	ft_free_strtab(c->vars->minishell->env.envlst);
+	free_env(&c->vars->minishell->env);
+	free(c->vars);
+	free_cmds(cmds);
 	exit(EXIT_SUCCESS);
 }

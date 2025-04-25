@@ -6,11 +6,36 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 09:07:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 19:01:16 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:38:34 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_tokens_list(t_token *tokens)
+{
+	t_token		*tmp_token;
+	t_fragment	*tmp_frag;
+	t_fragment	*next_frag;
+
+	while (tokens)
+	{
+		tmp_token = tokens;
+		tokens = tokens->next;
+		if (tmp_token->text)
+			free(tmp_token->text);
+		tmp_frag = tmp_token->fragments;
+		while (tmp_frag)
+		{
+			next_frag = tmp_frag->next;
+			free(tmp_frag->text);
+			free(tmp_frag);
+			tmp_frag = next_frag;
+		}
+		free(tmp_token);
+	}
+}
+
 
 /*
  * Free the tokens in the list
@@ -24,16 +49,16 @@ void	free_tokens_in_list(t_token_list *head)
 	while (head)
 	{
 		tmp = head->next;
-		free_tokens(head->tokens);
+		free_tokens_list(head->tokens);
 		free(head);
 		head = tmp;
 	}
 }
 
-t_token_list	*append_token_list(t_token_list **head_list,
-		t_token_list *list, t_token **head_tokens)
+t_token_list	*append_token_list(t_token_list **head_list, t_token **head_tokens)
 {
 	t_token_list	*tmp;
+	t_token_list	*list;
 
 	if (!head_list || !head_tokens)
 		return (NULL);
@@ -85,7 +110,7 @@ t_token_list	*add_token_list_node(t_token *start, t_token *end,
 		new_token->quote_type = tmp_token->quote_type;
 		tmp_token = tmp_token->next;
 	}
-	list = append_token_list(head_list, list, head_tokens);
+	list = append_token_list(head_list, head_tokens);
 	return (list);
 }
 

@@ -19,14 +19,13 @@ override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export pwd unset)
 override	SRC_ENV_MANAGER	:=	create_env env_to_strlst get_var
 override	SRC_ERRORS		:=	puterr
 override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
-								$(addprefix init/, create_cmd create_redirect redirect_manager) \
-								$(addprefix process/, exec_utils exec execute_builtin execute_from_path) \
-								$(addprefix timeline/, create_child create_cmd_pipe fd_manager load_pipeline_params restore_std)
+								$(addprefix init/, create_cmd create_execvars create_redirect redirect_manager) \
+								$(addprefix process/, exec_multiple_commands exec_single_builtin exec_utils exec execute_from_path)
 override	SRC_MEMORY		:=	free_cmds free_env
 override	SRC_MISC		:=	print_cmds show_prompt signals
-override	SRC_PARSING		:=	$(addprefix lexer/,  handle_redir_pipe lexer_parse lexer lexer_utils) \
-								$(addprefix tokenizer/, expand_tokens fragments token_lexer token_list)
-override	SRC_UTILS		:=	$(addprefix parsing/, count_arg_words free_str_return_null ft_split_parser ft_str_join_free ft_strcmp get_first_word handle_is_redir_token incr_on_alnum is_redir join_token_to_string print_t_token_list skip_spaces token_lstsize) \
+override	SRC_PARSING		:=	$(addprefix lexer/, handle_redir_pipe lexer_parse lexer lexer_utils) \
+								$(addprefix tokenizer/, expand expand_tokens fragments token_lexer token_list)
+override	SRC_UTILS		:=	$(addprefix parsing/, count_arg_words free_str_return_null ft_add_char ft_split_parser ft_str_join_free ft_strcmp get_first_word handle_is_redir_token incr_on_alnum is_redir join_token_to_string print_t_token_list skip_spaces token_lstsize) \
 								empty_tab \
 								ft_sprintf
 override	SOURCE_FILES	:=	$(addprefix builtins/, $(SRC_BUILTINS)) \
@@ -140,13 +139,14 @@ ab:
 	clear
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=.valgrind_suppress.txt ./$(NAME)
 
+
 .PHONY: eh
 eh:
 	# git pull
 	clear
 	$(MAKE) bonus
 	clear
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=/home/ehosta/Documents/42-minishell/.valgrind_suppress.txt ./$(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=/home/ehosta/Documents/42-minishell/.valgrind_suppress.txt ./$(NAME) -t 1
 
 
 -include $(DEPS)

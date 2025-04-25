@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/21 16:29:48 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:32:46 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,24 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	if (!res)
 		return (NULL);
 	res->id = -1;
-	res->name = ft_strdup(cmd_name);
-	if (!res->name)
-		return (NULL);
+	res->name = NULL;
+	if (cmd_name)
+	{
+		res->name = ft_strdup(cmd_name);
+		if (res->name == NULL)
+			return (NULL);
+	}
 	res->in_a_child = true;
 	res->proto = NULL;
 	res->argc = 0;
 	res->argv = empty_tab();
 	res->env = env;
 	res->envp = empty_tab();
-	res->raw = NULL;
 	res->paths = empty_tab();
+	_init_redirects(res);
+	res->vars = NULL;
 	res->prev = NULL;
 	res->next = NULL;
-	res->in_dup = NULL;
-	res->out_dup = NULL;
-	res->minishell = NULL;
-	res->params = NULL;
-	_init_redirects(res);
 	return (res);
 }
 
@@ -65,6 +65,10 @@ static void	_init_redirects(t_excmd *cmd)
 	cmd->pipe_open[1] = false;
 	cmd->pipe[0] = 0;
 	cmd->pipe[1] = 0;
+	cmd->std_dup[0].fd = -1;
+	cmd->std_dup[1].fd = -1;
+	cmd->std_dup[0].type = STREAM_STD;
+	cmd->std_dup[1].type = STREAM_STD;
 }
 
 t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect)
@@ -94,10 +98,4 @@ t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect)
 	last->next = redirect;
 	manager->size += 1;
 	return (redirect);
-}
-
-void	link_commands(t_excmd *cmd1, t_excmd *cmd2)
-{
-	cmd1->next = cmd2;
-	cmd2->prev = cmd1;
 }

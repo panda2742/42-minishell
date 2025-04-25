@@ -10,9 +10,3 @@
     ...
     fun:add_history
 }
-{
-    leak ???
-    Memcheck:Leak
-    ...
-    fun:???
-}

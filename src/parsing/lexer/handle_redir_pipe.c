@@ -6,12 +6,15 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 18:54:00 by abonifac          #+#    #+#             */
-/*   Updated: 2025/04/22 18:57:57 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:29:07 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * Just some helper funcitons to handle the redirections and pipes
+*/
 static void	handle_redir_in(const char *input, int *i, t_token **token_list)
 {
 	t_token	*token;

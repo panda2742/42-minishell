@@ -6,33 +6,33 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 19:01:54 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 16:17:12 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void handle_last_rvalue(t_minishell *mini, t_utils *utils)
+void	handle_last_rvalue(t_minishell *mini, t_utils *utils)
 {
-	char *value;
+	char	*value;
 
 	value = ft_itoa(mini->last_status);
 	if (!value)
 	{
 		free(utils->s1);
 		mini->last_status = 2; /////////////////////
-		return;
+		return ;
 	}
 	utils->s1 = str_join_free(utils->s1, value);
 	utils->i = utils->j + 1;
 	free(value);
 }
 
-void handle_expand_char(t_utils *utils, t_minishell *mini, char *input)
+void	handle_expand_char(t_utils *utils, t_minishell *mini, char *input)
 {
-	t_env_var *env_var;
-	char *var_name;
-	char *value;
+	t_env_var	*env_var;
+	char		*var_name;
+	char		*value;
 
 	utils->len1 = utils->j - utils->i - 1;
 	var_name = ft_memalloc(utils->len1 + 1);
@@ -54,25 +54,15 @@ void handle_expand_char(t_utils *utils, t_minishell *mini, char *input)
 	utils->i = utils->j;
 }
 
-void handle_normal_char(t_utils *utils, char *input)
-{
-	char tmp[2];
-
-	tmp[0] = input[utils->i];
-	tmp[1] = '\0';
-	utils->s1 = str_join_free(utils->s1, tmp);
-	utils->i++;
-}
-
 /*
  * Here we check if there is a $ in the fragmentstring
  * We use i and j to find the $ and the end of the variable
  * In handler functions we join everything in the string utils.s1
  * if there is no $ we joins the chars one by one
  */
-char *expand_fragment(const char *input, int quote, t_minishell *mini)
+char	*expand_fragment(const char *input, int quote, t_minishell *mini)
 {
-	t_utils utils;
+	t_utils	utils;
 
 	ft_memset(&utils, 0, sizeof(t_utils));
 	utils.s1 = ft_strdup("");
@@ -98,9 +88,10 @@ char *expand_fragment(const char *input, int quote, t_minishell *mini)
  * Here we check if there is a double quote in the fragments
  * If there is one we set the quote type to QUOTE_DOUBLE
  */
-t_qtype set_qtype_fragment(t_token *token_head)
+
+t_qtype	set_qtype_fragment(t_token *token_head)
 {
-	t_fragment *tmp;
+	t_fragment	*tmp;
 
 	tmp = token_head->fragments;
 	while (tmp)
@@ -112,10 +103,10 @@ t_qtype set_qtype_fragment(t_token *token_head)
 	return (QUOTE_NONE);
 }
 
-static t_token *create_new_token_from_word(const char *word,
-										   t_token *token_head)
+static t_token	*create_new_token_from_word(const char *word,
+							t_token *token_head)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = ft_memalloc(sizeof(t_token));
 	if (!token)
@@ -135,24 +126,12 @@ static t_token *create_new_token_from_word(const char *word,
 	token->next = NULL;
 	return (token);
 }
-void add_char_to_string(char *expanded, char **current, int *i)
+
+
+
+void	update_head_and_last(t_token **new_last, t_token **new_head,
+							t_token *new_token)
 {
-	char tmp[2];
-
-	tmp[0] = expanded[*i];
-	tmp[1] = '\0';
-	*current = str_join_free(*current, tmp);
-	(*i)++;
-}
-typedef struct s_word_split {
-	t_token	*new_head;
-	t_token *new_last;
-	char *current;
-} t_word_split;
-
-void update_head_and_last(t_token **new_last, t_token **new_head, t_token *new_token)
-{
-
 	if (!*new_head)
 	{
 		*new_head = new_token;
@@ -165,8 +144,6 @@ void update_head_and_last(t_token **new_last, t_token **new_head, t_token *new_t
 	}
 }
 
-
-
 /*
  * New_head is the head of the new token list
  * New_last is the last token of the new token list
@@ -175,11 +152,11 @@ void update_head_and_last(t_token **new_last, t_token **new_head, t_token *new_t
  * and add it to the new token list
  */
 
-static void process_unquoted_frag(const char *expanded, char **current,
-								  t_word_split **new_list, t_token *token)
+void	process_unquoted_frag(const char *expanded, char **current,
+								t_word_split **new_list, t_token *token)
 {
-	int i;
-	t_token *new_token;
+	int		i;
+	t_token	*new_token;
 
 	i = 0;
 	while (expanded[i])
@@ -189,7 +166,8 @@ static void process_unquoted_frag(const char *expanded, char **current,
 			if ((*current)[0] != '\0')
 			{
 				new_token = create_new_token_from_word(*current, token);
-				update_head_and_last(&(*new_list)->new_last, &(*new_list)->new_head, new_token);
+				update_head_and_last(&(*new_list)->new_last,
+					&(*new_list)->new_head, new_token);
 				free(*current);
 				*current = ft_strdup("");
 			}
@@ -201,9 +179,10 @@ static void process_unquoted_frag(const char *expanded, char **current,
 	}
 }
 
-t_token	*add_new_token(t_token **new_head, t_token **new_last, char *current, t_token *token)
+t_token	*add_new_token(t_token **new_head, t_token **new_last,
+						char *current, t_token *token)
 {
-	t_token *new_token;
+	t_token	*new_token;
 
 	if (ft_strlen(current) > 0)
 	{
@@ -220,72 +199,4 @@ t_token	*add_new_token(t_token **new_head, t_token **new_last, char *current, t_
 		// *new_last = new_token;
 	}
 	return (*new_head);
-}
-
-
-char *handle_quote_none(t_fragment *frag, t_minishell *mini, t_word_split *new_list, t_token *token)
-{
-	char *expanded;
-	
-
-	expanded = expand_fragment(frag->text, frag->quote_type, mini);
-	if (!expanded)
-	{
-		free(new_list->current);
-		return (NULL);
-	}
-	process_unquoted_frag(expanded, &new_list->current, &new_list, token);
-	free(expanded);
-	return (new_list->current);
-}
-
-char *handle_other_quotes(t_fragment *frag, t_minishell *mini, char *current)
-{
-	char *expanded;
-
-	if (frag->quote_type == QUOTE_DOUBLE)
-		expanded = expand_fragment(frag->text, frag->quote_type, mini);
-	else
-		expanded = ft_strdup(frag->text);
-	if (!expanded)
-	{
-		free(current);
-		return (NULL);
-	}
-	current = str_join_free(current, expanded);
-	free(expanded);
-	return (current);
-}
-
-/*
- * Here we go threw the fragments of the token
- * If the fragment is not quoted we check if it needs to be expanded and split
- * If the fragment is quoted we expand it and add it to the current string
- * If strlen(current) > 0 we create a new token with the current string
- * with the function add_new_token
- */
-
-t_token *word_split_token(t_token *token, t_minishell *mini)
-{
-	t_word_split	new_list;
-	t_fragment		*frag;
-
-	new_list.new_head = NULL;
-	new_list.new_last = NULL;
-	frag = token->fragments;
-	new_list.current = ft_strdup("");
-	while (frag)
-	{
-		if (frag->quote_type == QUOTE_NONE)
-			new_list.current = handle_quote_none(frag, mini, &new_list, token);
-		else
-			new_list.current = handle_other_quotes(frag, mini, new_list.current);
-		frag = frag->next;
-	}
-	if (!new_list.current)
-		return (NULL);
-	new_list.new_head = add_new_token(&new_list.new_head, &new_list.new_last, new_list.current, token);
-
-	free(new_list.current);
-	return (new_list.new_head);
 }

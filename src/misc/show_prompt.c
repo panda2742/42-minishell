@@ -15,23 +15,20 @@
 static char	*_get_user(t_env_manager *env);
 static char	*_get_path(t_env_manager *env);
 static char	*_replace_by_home(t_env_var *home_var, char *cwd);
+static char	*_load_theme(t_minishell *minishell);
 
-char	*show_prompt(t_env_manager *env)
+char	*show_prompt(t_minishell *minishell)
 {
-	const char	*user = _get_user(env);
-	const char	*path = _get_path(env);
+	static char	default_prompt[13] = "minishell $ ";
 	char		*res;
-
-	res = ft_sprintf(
-			"\001%s\002%s\001%s\002::\001%s\002%s\001%s\002 @\
- \001%s\002%s\001%s\002 \001%s\002>\001%s\002 ",
-			B_MAGENTA, PROJECT_NAME, RESET,
-			B_BLUE, user, RESET,
-			B_CYAN, path, RESET,
-			B_MAGENTA, RESET
-			);
-	free((char *)path);
-	return (res);
+	char		*line;
+	
+	res = _load_theme(minishell);
+	if (res == NULL)
+		return (readline(default_prompt));
+	line = readline(res);
+	free(res);
+	return (line);
 }
 
 static char	*_get_user(t_env_manager *env)
@@ -80,4 +77,46 @@ static char	*_replace_by_home(t_env_var *home_var, char *cwd)
 	cwd[0] = '~';
 	cwd[len + 1] = 0;
 	return (cwd);
+}
+
+static char	*_load_theme(t_minishell *minishell)
+{
+	const char	*user = _get_user(&minishell->env);
+	const char	*path = _get_path(&minishell->env);
+	char		*res;
+
+	if (minishell->prompt_theme == -1)
+	{
+		minishell->prompt_theme = 0;
+		if (minishell->argc >= 3)
+		{
+			if (ft_strcmp(minishell->argv[2], "--theme") && ft_strcmp(minishell->argv[0], "-t"))
+				minishell->prompt_theme = ft_atoi(minishell->argv[2]) % 2;
+		}
+	}
+	res = NULL;
+	if (minishell->prompt_theme == 0)
+		res = ft_sprintf(
+				"\001%s\002%d\001%s\002 ×\
+ \001%s\002%s\001%s\002::\
+ \001%s\002%s\001%s\002 @\
+ \001%s\002%s\001%s\002\
+ \001%s\002>\001%s\002 ",
+			B_WHITE, minishell->last_status, RESET,
+			B_MAGENTA, PROJECT_NAME, RESET,
+			B_BLUE, user, RESET,
+			B_CYAN, path, RESET,
+			B_MAGENTA, RESET
+			);
+	if (minishell->prompt_theme == 1)
+		res = ft_sprintf(
+				"\001%s\002%d\001%s\002 -\
+ \001%s\002%s\001%s\002\
+ \001%s\002$\001%s\002 ",
+			B_MAGENTA, minishell->last_status, RESET,
+			U_GREEN, path, RESET,
+			WHITE, RESET
+			);
+	free((char *)path);
+	return (res);
 }

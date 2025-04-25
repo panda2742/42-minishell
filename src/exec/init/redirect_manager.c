@@ -56,9 +56,11 @@ t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 	{
 		last->fd.fd = -1;
 		if (!last->filepath && !last->is_heredoc)
+		{
 			redirects_manager->problematic = last;
-		if (!last->filepath && !last->is_heredoc)
+			puterr(ft_sprintf(": error: Memory allocation error (redirects)\n"), false);
 			return (NULL);
+		}
 		if (_try_open(last, redirects_manager) == false)
 			return (NULL);
 		if (last->next)
@@ -89,6 +91,10 @@ static t_bool	_try_open(t_redir *last, t_redir_manager *redirects_manager)
 	if (last->fd.fd == -1 && !last->is_heredoc)
 	{
 		redirects_manager->problematic = last;
+		if (last->filepath)
+			puterr(ft_sprintf(": %s", last->filepath), true);
+		else
+			puterr(ft_sprintf(": (invalid filename)"), true);
 		return (false);
 	}
 	return (true);
@@ -96,7 +102,8 @@ static t_bool	_try_open(t_redir *last, t_redir_manager *redirects_manager)
 
 static t_redir	*_continue_loop(t_redir *last)
 {
-	close(last->fd.fd);
+	if (last->fd.fd > STDERR_FILENO)
+		close(last->fd.fd);
 	last->fd.fd = -1;
 	return (last->next);
 }

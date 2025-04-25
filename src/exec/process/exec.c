@@ -12,88 +12,42 @@
 
 #include "minishell.h"
 
-static unsigned char	_init_child_behavior(t_child_behavior_params p);
+static t_bool	_load_env_strlst(t_execvars *vars);
 
-t_execparams	exec_command(t_minishell *minishell, t_excmd **cmds)
+t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 {
-	t_excmd			*cmd;
-	t_execparams	params;
-	t_streamfd		std_dup[2];
-	unsigned char	init_behavior_res;
+	t_execvars		*vars;
 
-	if (load_pipeline_params(minishell, &params, cmds) == false)
-		return (params);
-	cmd = *cmds;
-	while (cmd)
+	vars = create_execvars(minishell, cmds);
+	if (vars == NULL)
 	{
-		std_dup[0].fd = -1;
-		std_dup[1].fd = -1;
-		std_dup[0].type = STREAM_STD;
-		std_dup[1].type = STREAM_STD;
-		cmd->minishell = minishell;
-		cmd->params = &params;
-		init_behavior_res = _init_child_behavior((t_child_behavior_params){
-			.minishell=minishell,.cmd=cmd,.in_dup=&std_dup[0],
-			.out_dup=&std_dup[1],.params=&params});
-		if (init_behavior_res == 0)
-			break ;
-		if (init_behavior_res == 1)
-		{
-			cmd = cmd->next;
-			continue ;
-		}
-		if (cmd->proto == NULL)
-			execute_from_path(minishell, &params, cmd);
-		else
-			execute_builtin((t_child_behavior_params){
-				.minishell=minishell,.cmd=cmd,.in_dup=&std_dup[0],
-				.out_dup=&std_dup[1],.params=&params});
-		if (params.status == -2)
-			return (params);
-		if (cmd->in_a_child)
-		{
-			sclose_fd(cmd->in_redirects.final_fd.fd, NULL);
-			sclose_fd(cmd->out_redirects.final_fd.fd, NULL);
-			free_env(cmd->env);
-			ft_free_strtab(cmd->envp);
-			free_cmds(cmds);
-			exit(0);
-		}
-		cmd = cmd->next;
+		puterr(ft_sprintf(": error:  Memory allocation error\n"), false);
+		return (NULL);
 	}
-	cmd = *cmds;
-	while (params.nb_launched)
-	{
-		if (cmd->prev)
-			waitpid(-1, NULL, 0);
-		else
-			waitpid(-1, &minishell->last_status, 0);
-		params.nb_launched--;
-		cmd = cmd->next;
-	}
+	if (vars->nb_cmd == 0)
+		return (vars);
+	if (_load_env_strlst(vars) == false)
+		return (vars);
+	if (vars->nb_cmd == 1 && (*vars->cmds)->proto != NULL)
+		exec_single_builtin(*(vars->cmds));
+	else
+		exec_multiple_commands(vars);
+	free_cmds(vars->cmds);
 	ft_free_strtab(minishell->env.envlst);
-	return (params);
+	return (vars);
 }
 
-static unsigned char	_init_child_behavior(t_child_behavior_params p)
+static t_bool	_load_env_strlst(t_execvars *vars)
 {
-	p.cmd->envp = p.minishell->env.envlst;
-	p.cmd->in_dup = p.in_dup;
-	p.cmd->out_dup = p.out_dup;
-	if (create_cmd_pipe(p.cmd, p.params) == false)
+	vars->minishell->env.envlst = env_to_strlst(&vars->minishell->env);
+	if (vars->minishell->env.envlst == NULL)
 	{
-		if (p.params->errs.exc_pipe)
-			return (0);
-		return (1);
+		vars->errs.exc_env_strlst = 1;
+		free(vars->cmds);
+		puterr(ft_sprintf(
+			": error: Pipeline init failure (memory allocation), killing %s\n"
+			PROJECT_NAME), false);
+		return (false);
 	}
-	p.params->nb_launched++;
-	if (create_child(p.cmd, p.params) == false)
-	{
-		if (p.params->errs.exc_fork == 1)
-			return (0);
-		return (1);
-	}
-	if (create_streams(p.cmd, p.params, p.in_dup, p.out_dup) == false)
-		exit(1);
-	return (2);
+	return (true);
 }

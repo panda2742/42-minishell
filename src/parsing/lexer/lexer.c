@@ -6,12 +6,19 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:59:55 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 18:57:46 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:24:32 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+ * In this three functions, we handle the quotes.
+ * We skip the first quote, then we look for the closing quote.
+ * If we find it, we create a new fragment with the text between the two quotes.
+ * If we don't find it, we print an error message and return 0.
+ * We also increment the index to skip the closing quote.
+*/
 static int	parse_single_quote(t_token *token, const char *input, int *i)
 {
 	int	start;
@@ -66,8 +73,9 @@ static int	parse_unquoted(t_token *token, const char *input, int *i)
 }
 
 /*
-* Construit un token TOKEN_WORD en accumulant ses fragments jusqu'a rencontrer un
-* delimiteur.
+* We build a TOKEN_WORD token by accumulating its fragments until we meet a
+* delimiter.
+* A delimiter is a space, a redirection or a pipe.
 */
 static t_token	*parse_word_token(const char *input, int *i)
 {
@@ -99,9 +107,9 @@ static t_token	*parse_word_token(const char *input, int *i)
 }
 
 /*
-** Pour chaque element de la chaine d'entree, on saute les espaces,
-** on gere les tokens de redirection/pipe via handle_redir_pipe, ou on construit
-** un token TOKEN_WORD en accumulant ses fragments.
+ * For each elemt of the input string, we skip spaces,
+ * we handle redirection/pipe tokens via handle_redir_pipe, or we build
+ * a TOKEN_WORD token by accumulating its fragments.
 */
 t_token	*ft_input(const char *input)
 {

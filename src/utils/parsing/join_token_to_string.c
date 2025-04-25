@@ -6,11 +6,15 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 23:07:06 by abonifac          #+#    #+#             */
-/*   Updated: 2025/04/15 23:07:14 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/23 14:49:02 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*
+ * Just used to build the raw string from the token list.
+*/
 
 char	*join_tokens_to_string(t_token *tokens)
 {
