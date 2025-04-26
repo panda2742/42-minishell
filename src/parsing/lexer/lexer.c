@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:59:55 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 14:24:32 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/26 19:42:55 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@
  * If we find it, we create a new fragment with the text between the two quotes.
  * If we don't find it, we print an error message and return 0.
  * We also increment the index to skip the closing quote.
-*/
-static int	parse_single_quote(t_token *token, const char *input, int *i)
+ */
+static int parse_single_quote(t_token *token, const char *input, int *i)
 {
-	int	start;
+	int start;
+	t_fragment	*frag;
 
 	(*i)++;
 	start = *i;
@@ -30,18 +31,21 @@ static int	parse_single_quote(t_token *token, const char *input, int *i)
 	if (input[*i] != '\'')
 	{
 		ft_printf("Quotes not closed\n");
-		return (0);
+		return (ERR_LEX);
 	}
-	append_fragment(token, new_fragment(input + start, *i - start,
-			QUOTE_SINGLE));
+	frag = new_fragment(input + start, *i - start, QUOTE_SINGLE);
+	if (!frag)
+		return (ERR_MALLOC);
+	append_fragment(token, frag);
 	(*i)++;
-	return (1);
+	return (ERR_NONE);
 }
 
-static int	parse_double_quote(t_token *token, const char *input, int *i)
+static int parse_double_quote(t_token *token, const char *input, int *i)
 {
-	int	start;
-
+	int start;
+	t_fragment	*frag;
+	
 	(*i)++;
 	start = *i;
 	while (input[*i] && input[*i] != '\"')
@@ -49,90 +53,97 @@ static int	parse_double_quote(t_token *token, const char *input, int *i)
 	if (input[*i] != '\"')
 	{
 		ft_printf("Quotes not closed\n");
-		return (0);
+		return (ERR_LEX);
 	}
-	append_fragment(token, new_fragment(input + start, *i - start,
-			QUOTE_DOUBLE));
+	frag = new_fragment(input + start, *i - start, QUOTE_DOUBLE);
+	if (!frag)
+		return (ERR_MALLOC);
+	append_fragment(token, frag);
 	(*i)++;
-	return (1);
+	return (ERR_NONE);
 }
 
-static int	parse_unquoted(t_token *token, const char *input, int *i)
+static int parse_unquoted(t_token *token, const char *input, int *i)
 {
-	int	start;
+	int start;
+	t_fragment	*frag;
 
 	start = *i;
-	while (input[*i] && !ft_isspace(input[*i])
-		&& !is_char_redir_or_pipe(input[*i]) && input[*i] != '\''
-		&& input[*i] != '\"')
+	while (input[*i] && !ft_isspace(input[*i]) && !is_char_redir_or_pipe(input[*i]) && input[*i] != '\'' && input[*i] != '\"')
 	{
 		(*i)++;
 	}
-	append_fragment(token, new_fragment(input + start, *i - start, QUOTE_NONE));
-	return (1);
+	frag = new_fragment(input + start, *i - start, QUOTE_NONE);
+	if (!frag)
+		return (ERR_MALLOC);
+	append_fragment(token, frag);
+	return (ERR_NONE);
 }
 
 /*
-* We build a TOKEN_WORD token by accumulating its fragments until we meet a
-* delimiter.
-* A delimiter is a space, a redirection or a pipe.
-*/
-static t_token	*parse_word_token(const char *input, int *i)
+ * We build a TOKEN_WORD token by accumulating its fragments until we meet a
+ * delimiter.
+ * A delimiter is a space, a redirection or a pipe.
+ */
+static t_err parse_word_token(const char *input, int *i, t_token **curr)
 {
-	t_token	*token;
+	t_token *token;
+	t_err status;
 
 	token = ft_create_token(TOKEN_WORD);
 	if (token == NULL)
-		return (NULL);
-	while (input[*i] && !ft_isspace(input[*i])
-		&& !is_char_redir_or_pipe(input[*i]))
+		return (ERR_MALLOC);
+	while (input[*i] && !ft_isspace(input[*i]) && !is_char_redir_or_pipe(input[*i]))
 	{
 		if (input[*i] == '\'')
 		{
-			if (parse_single_quote(token, input, i) == 0)
-				return (NULL);
+			status = parse_single_quote(token, input, i);
 		}
 		else if (input[*i] == '\"')
 		{
-			if (parse_double_quote(token, input, i) == 0)
-				return (NULL);
+			status = parse_double_quote(token, input, i);
 		}
 		else
 		{
-			if (parse_unquoted(token, input, i) == 0)
-				return (NULL);
+			status = parse_unquoted(token, input, i);
+		}
+		if (status != ERR_NONE)
+		{
+			free(token);
+			return (status);
 		}
 	}
-	return (token);
+	*curr = token;
+	return (ERR_NONE);
 }
 
 /*
  * For each elemt of the input string, we skip spaces,
  * we handle redirection/pipe tokens via handle_redir_pipe, or we build
  * a TOKEN_WORD token by accumulating its fragments.
-*/
-t_token	*ft_input(const char *input)
+ */
+t_err ft_input(const char *input, t_token **output)
 {
-	t_token	*token_list;
-	t_token	*curr_token;
-	int		i;
+	t_token *curr_token;
+	t_err status;
+	int i;
 
-	token_list = NULL;
+	*output = NULL;
 	i = 0;
 	while (input[i])
 	{
 		skip_spaces(input, &i);
 		if (!input[i])
-			break ;
+			break;
 		if (is_char_redir_or_pipe(input[i]))
 		{
-			handle_redir_pipe(&i, &token_list, input);
-			continue ;
+			status = handle_redir_pipe(&i, output, input);
+			continue;
 		}
-		curr_token = parse_word_token(input, &i);
-		if (curr_token == NULL)
-			return (NULL);
-		append_token(&token_list, curr_token);
+		status = parse_word_token(input, &i, &curr_token);
+		if (status != ERR_NONE)
+			return (status);
+		append_token(output, curr_token);
 	}
-	return (token_list);
+	return (ERR_NONE);
 }

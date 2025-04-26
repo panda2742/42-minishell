@@ -10,3 +10,33 @@
     ...
     fun:add_history
 }
+{
+   3obj_ls
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   fun:(below main)
+}
+{
+	2obj_ls
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   fun:(below main)
+}
+{
+   4obj_ls
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   obj:/usr/bin/ls
+   fun:(below main)
+}

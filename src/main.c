@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 19:32:26 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/26 19:31:51 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@
 #include <stdio.h>
 #include <strings.h>
 
-
-t_excmd	*set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell)
+t_excmd *set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell)
 {
-	char	*cmd_name;
-	int		count_args;
+	char *cmd_name;
+	int count_args;
 
 	cmd_name = get_first_word(token);
 	cmd = create_cmd(cmd_name, &minishell->env);
@@ -35,9 +34,9 @@ t_excmd	*set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell)
 	return (cmd);
 }
 
-void	build_redirs_and_args(t_excmd *cmd, t_token *token)
+void build_redirs_and_args(t_excmd *cmd, t_token *token)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (token && (token->type != TOKEN_PIPE))
@@ -54,7 +53,7 @@ void	build_redirs_and_args(t_excmd *cmd, t_token *token)
 	}
 }
 
-void	link_prev_cmd(t_excmd **first, t_excmd **prev, t_excmd *cmd)
+void link_prev_cmd(t_excmd **first, t_excmd **prev, t_excmd *cmd)
 {
 	cmd->prev = *prev;
 	if (*prev)
@@ -64,14 +63,13 @@ void	link_prev_cmd(t_excmd **first, t_excmd **prev, t_excmd *cmd)
 	*prev = cmd;
 }
 
-t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
+t_excmd *create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
 {
-	t_excmd			*first;
-	t_excmd			*prev;
-	t_excmd			*cmd;
-	t_token_list	*curr_list;
-	t_token			*cmd_tokens;
-
+	t_excmd *first;
+	t_excmd *prev;
+	t_excmd *cmd;
+	t_token_list *curr_list;
+	t_token *cmd_tokens;
 
 	first = NULL;
 	prev = NULL;
@@ -93,19 +91,18 @@ t_excmd	*create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
 	return (first);
 }
 
-
 /*
-* Process the tokens after the lexer and parser
-* 1. Expand the tokens
-* 2. Create a new list of tokens fully expanded
-* 3. Create a list of commands
-* new_tokens is the list of tokens after expansion
-*/
-t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
+ * Process the tokens after the lexer and parser
+ * 1. Expand the tokens
+ * 2. Create a new list of tokens fully expanded
+ * 3. Create a list of commands
+ * new_tokens is the list of tokens after expansion
+ */
+t_excmd *process_tokens(t_token *token, t_minishell *minishell)
 {
-	t_token_list	*head_list;
-	t_token			*new_tokens;
-	t_excmd			*cmd_list;
+	t_token_list *head_list;
+	t_token *new_tokens;
+	t_excmd *cmd_list;
 
 	new_tokens = NULL;
 	head_list = NULL;
@@ -118,14 +115,14 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 	return (cmd_list);
 }
 
-int	main(int argc, char **argv, char **env)
+int main(int argc, char **argv, char **env)
 {
-	t_execvars		*vars;
-	t_minishell		minishell;
-	t_excmd			*head;
-	t_excmd			*first;
-	t_token			*token;
-	char			*line;
+	t_execvars *vars;
+	t_minishell minishell;
+	t_excmd *head;
+	t_excmd *first;
+	t_err status;
+	char *line;
 
 	first = NULL;
 	head = NULL;
@@ -137,13 +134,15 @@ int	main(int argc, char **argv, char **env)
 	if (create_env(env, &minishell.env) == NULL)
 	{
 		puterr(ft_sprintf(
-			": error: Environment creation memory allocation failure\n"
-			), false);
+				   ": error: Environment creation memory allocation failure\n"),
+			   false);
 		return (EXIT_FAILURE);
 	}
 	minishell.last_status = EXIT_SUCCESS;
 	while (1)
 	{
+		t_token *token;
+
 		set_sig_action();
 		line = show_prompt(&minishell);
 		if (!line)
@@ -153,17 +152,34 @@ int	main(int argc, char **argv, char **env)
 			return (EXIT_SUCCESS);
 		}
 		add_history(line);
-		token = ft_input(line);
-		if (token == NULL)
+		status = ft_input(line, &token);
+		if (status == ERR_MALLOC || status == ERR_LEX)
 		{
 			free(line);
-			continue ;
+			if (status == ERR_MALLOC)
+			{
+
+				puterr(ft_sprintf(
+						   ": error: Memory allocation error\n"),
+					   false);
+				free_env(&minishell.env);
+				return (EXIT_FAILURE);
+			}
+			else
+			{
+				
+				puterr(ft_sprintf(
+					": error: Lexical analysis error\n"),
+					false);
+					free_tokens(token);
+				}
+			continue;
 		}
 		if (!lexer_parse(token))
 		{
 			free_tokens(token);
 			free(line);
-			continue ;
+			continue;
 		}
 		free(line);
 		first = process_tokens(token, &minishell);
