@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/26 19:31:51 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/28 11:05:57 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,10 @@ t_excmd *process_tokens(t_token *token, t_minishell *minishell)
 	t_token_list *head_list;
 	t_token *new_tokens;
 	t_excmd *cmd_list;
+	
 
-	new_tokens = NULL;
-	head_list = NULL;
+	// new_tokens = NULL;
+	// head_list = NULL;
 	expand_caller(token, &new_tokens, minishell);
 	free_tokens(token);
 	token_list(new_tokens, &head_list);
@@ -162,17 +163,18 @@ int main(int argc, char **argv, char **env)
 				puterr(ft_sprintf(
 						   ": error: Memory allocation error\n"),
 					   false);
+				free_tokens(token);
 				free_env(&minishell.env);
 				return (EXIT_FAILURE);
 			}
-			else
-			{
+			// else
+			// {
 				
-				puterr(ft_sprintf(
-					": error: Lexical analysis error\n"),
-					false);
-					free_tokens(token);
-				}
+			// 	puterr(ft_sprintf(
+			// 		": error: Lexical analysis error\n"),
+			// 		false);
+			// 		free_tokens(token);
+			// 	}
 			continue;
 		}
 		if (!lexer_parse(token))

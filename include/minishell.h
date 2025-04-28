@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/26 18:52:35 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:52:22 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,10 +368,10 @@ typedef struct s_utils
 
 typedef struct s_word_split
 {
-	t_token *new_head;
-	t_token *new_last;
+	t_token *new_h;
+	t_token *new_t;
 	char *current;
-} t_word_split;
+} t_w_split;
 
 // BUILTINS --------------------------------------------------------------------
 
@@ -432,11 +432,11 @@ void print_cmd(t_excmd *cmd);
 void expand_caller(t_token *token, t_token **new_tokens,
 				   t_minishell *minishell);
 t_err handle_redir_pipe(int *i, t_token **token_list,
-					   const char *input);
-t_token *add_new_token(t_token **new_head, t_token **new_last,
+						const char *input);
+t_token *add_new_token(t_token **new_h, t_token **new_t,
 					   char *current, t_token *token);
-void process_unquoted_frag(const char *expanded, char **current,
-						   t_word_split **new_list, t_token *token);
+t_err process_unquoted_frag(const char *expanded, char **current,
+							t_w_split **new_list, t_token *token);
 void update_token_redir(t_token *list);
 int ft_printf_error(char *str);
 int lexer_parse(t_token *token);
@@ -462,8 +462,8 @@ void token_list(t_token *head_token, t_token_list **head_list);
 
 size_t count_arg_words(t_token *token);
 char *free_str_return_null(char *str);
-void handle_normal_char(t_utils *utils, char *input);
-void add_char_to_string(char *expanded, char **current, int *i);
+t_err handle_normal_char(t_utils *utils, char *input);
+t_err add_char_to_string(char *expanded, char **current, int *i);
 char **ft_split_a(char const *s, char c);
 char *str_join_free(char *s1, const char *s2);
 int ft_strcmp(char *s1, char *s2);

@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 09:03:27 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 17:36:22 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:44:13 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ t_token	*ft_create_token(t_token_type type)
 	t_token	*new;
 
 	new = ft_memalloc(sizeof(t_token));
+	// new = NULL;
 	if (!new)
 		return (NULL);
 	new->is_first_word = false;
