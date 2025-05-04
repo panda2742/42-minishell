@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:01 by abonifac          #+#    #+#             */
-/*   Updated: 2025/04/28 18:31:43 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:07:42 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_err handle_quote_none(t_fragment *frag, t_minishell *mini,
 	free(expanded);
 	if (status != ERR_NONE)
 	{
-		free(new_list->current);
+		// free(new_list->current); // j ai test de l enlever a voir?
 		return (status);
 	}
 	return (ERR_NONE);
@@ -64,7 +64,7 @@ t_err handle_other_quotes(t_fragment *frag, t_w_split *n_list, t_minishell *mini
  * with the function add_new_token
  */
 
-t_token *word_split_token(t_token *token, t_minishell *mini)
+t_err word_split_token(t_token *token, t_minishell *mini, t_token **out_list)
 {
 	t_w_split n_list;
 	t_fragment *frag;
@@ -74,37 +74,45 @@ t_token *word_split_token(t_token *token, t_minishell *mini)
 	n_list.new_h = NULL;
 	n_list.new_t = NULL;
 	frag = token->fragments;
+	n_list.has_quotes = false;
 	n_list.current = ft_strdup("");
 	if (!n_list.current)
-		return (NULL);
+		return (ERR_MALLOC);
 
 	while (frag)
 	{
 		if (frag->quote_type == QUOTE_NONE)
 			status = handle_quote_none(frag, mini, &n_list, token);
 		else
+		{
+			n_list.has_quotes = true;
 			status = handle_other_quotes(frag, &n_list, mini);
+		}
 
 		if (status != ERR_NONE)
 		{
 			free(n_list.current);
 			free_tokens(n_list.new_h);
-			return (NULL);
+			return (ERR_MALLOC);
 		}
 		frag = frag->next;
 	}
-
-	added = add_new_token(&n_list.new_h,
-						  &n_list.new_t,
-						  n_list.current,
-						  token);
+	
+	if (n_list.has_quotes == false && n_list.current[0] == '\0')
+	{
+		free(n_list.current);
+		*out_list = n_list.new_h;
+		return (ERR_NONE);
+	}
+	added = add_new_token(&n_list.new_h, &n_list.new_t, n_list.current, token);
 	free(n_list.current);
 	if (!added)
 	{
 		free_tokens(n_list.new_h);
-		return (NULL);
+		return (ERR_MALLOC);
 	}
-	return (n_list.new_h);
+	*out_list = n_list.new_h;
+	return (ERR_NONE);
 }
 
 static t_token *get_tail(t_token *tok)
@@ -119,6 +127,7 @@ void expand_caller(t_token *token, t_token **new_tokens, t_minishell *mini)
 	t_token *last_new;
 	t_token *split_token;
 	t_token *tmp;
+	t_err	st;
 
 	// split_token = NULL;
 	*new_tokens = NULL;
@@ -126,18 +135,29 @@ void expand_caller(t_token *token, t_token **new_tokens, t_minishell *mini)
 	tmp = token;
 	while (tmp)
 	{
-		split_token = word_split_token(tmp, mini);
-		// (void)mini;
-		// split_token = NULL;
-		if (split_token == NULL)
+		st = word_split_token(tmp, mini, &split_token);
+		if (st == ERR_MALLOC)
 		{
-			puterr(ft_sprintf(": error: Memory allocation error\n"),
-				   false);
-			free_tokens(token); // ou tmp?
+			puterr(ft_sprintf(": error: Memory allocation error\n"), false);
+			free_tokens(token);
 			if (*new_tokens)
 				free_tokens(*new_tokens);
 			free_env(&mini->env);
 			exit(EXIT_FAILURE);
+		}
+		// (void)mini;
+		// split_token = NULL;
+		if (split_token == NULL)
+		{
+			tmp = tmp->next;
+			continue;
+			// puterr(ft_sprintf(": error: Memory allocation error\n"),
+			// 	   false);
+			// free_tokens(token);
+			// if (*new_tokens)
+			// 	free_tokens(*new_tokens);
+			// free_env(&mini->env);
+			// exit(EXIT_FAILURE);
 		}
 		if (!*new_tokens)
 			*new_tokens = split_token;

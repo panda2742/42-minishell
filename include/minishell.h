@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/28 17:52:22 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:51:55 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,7 +371,17 @@ typedef struct s_word_split
 	t_token *new_h;
 	t_token *new_t;
 	char *current;
+	t_bool	has_quotes;
 } t_w_split;
+
+
+typedef struct s_token_list_h
+{
+	t_token	*current;
+	t_token	*start;
+	t_token	*end;
+} t_token_list_h;
+
 
 // BUILTINS --------------------------------------------------------------------
 
@@ -446,7 +456,7 @@ t_err ft_input(const char *input, t_token **output);
 
 char *expand_fragment(const char *input, int quote, t_minishell *mini);
 t_qtype set_qtype_fragment(t_token *token_head);
-t_token *word_split_token(t_token *token, t_minishell *mini);
+t_err word_split_token(t_token *token, t_minishell *mini, t_token **out_list);
 t_fragment *new_fragment(const char *start, size_t len,
 						 t_qtype quote_type);
 void append_fragment(t_token *token, t_fragment *frag);
@@ -454,9 +464,8 @@ void free_tokens(t_token *tokens);
 t_token *ft_create_token(t_token_type type);
 void append_token(t_token **token_list, t_token *token);
 void free_tokens_in_list(t_token_list *head);
-t_token_list *add_token_list_node(t_token *start, t_token *end,
-								  t_token_list **head_list, t_token **head_tokens);
-void token_list(t_token *head_token, t_token_list **head_list);
+t_token_list	*add_token_list_node(t_token_list_h *u, t_token_list **head_list);	
+void token_list(t_token *head_token, t_token_list **head_list, t_minishell *mini);
 
 // UTILS -----------------------------------------------------------------------
 

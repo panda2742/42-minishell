@@ -6,11 +6,57 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:59:55 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/28 10:42:32 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:50:14 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static t_fragment *
+parse_variable_fragment(const char *input, int *i)
+{
+    int         start;
+    t_fragment *frag;
+
+    start = *i;          // on est sur '$'
+    (*i)++;              // on sort le '$'
+    if (input[*i] == '?')
+        (*i)++;
+    else
+        while (input[*i] && ft_isalnum(input[*i]))
+            (*i)++;
+    frag = new_fragment(input + start, *i - start, QUOTE_NONE);
+    return (frag);       // new_fragment fait malloc → NULL si échec
+}
+
+static t_err
+parse_quote_prefixed_fragment(t_token *token,
+                              const char *input,
+                              int *i)
+{
+    char        quote;
+    int         start;
+    t_fragment *frag;
+
+    /* on est sur '$' */
+    (*i)++;
+    quote = input[*i];    /* ' ou " */
+    (*i)++;
+    start = *i;
+    /* on lit jusqu’à la même quote */
+    while (input[*i] && input[*i] != quote)
+        (*i)++;
+    if (input[*i] != quote)
+        return (ERR_LEX);        /* quote non fermée */
+    /* crée un fragment dont text = contenu entre quotes */
+    frag = new_fragment(input + start, *i - start,
+                        quote == '"' ? QUOTE_DOUBLE : QUOTE_NONE);
+    if (!frag)
+        return (ERR_MALLOC);
+    append_fragment(token, frag);
+    (*i)++;                    /* on saute la quote fermante */
+    return (ERR_NONE);
+}
 
 /*
  * In this three functions, we handle the quotes.
@@ -69,7 +115,7 @@ static int parse_unquoted(t_token *token, const char *input, int *i)
 	t_fragment	*frag;
 
 	start = *i;
-	while (input[*i] && !ft_isspace(input[*i]) && !is_char_redir_or_pipe(input[*i]) && input[*i] != '\'' && input[*i] != '\"')
+	while (input[*i] && !ft_isspace(input[*i]) && !is_char_redir_or_pipe(input[*i]) && input[*i] != '\'' && input[*i] != '\"' && input[*i] != '$')
 	{
 		(*i)++;
 	}
@@ -85,37 +131,57 @@ static int parse_unquoted(t_token *token, const char *input, int *i)
  * delimiter.
  * A delimiter is a space, a redirection or a pipe.
  */
-static t_err parse_word_token(const char *input, int *i, t_token **curr)
+static t_err
+parse_word_token(const char *input, int *i, t_token **out)
 {
-	t_token *token;
-	t_err status;
+    t_token    *token;
+    t_err       st;
+    t_fragment *frag;
 
-	token = ft_create_token(TOKEN_WORD);
-	if (token == NULL)
-		return (ERR_MALLOC);
-	while (input[*i] && !ft_isspace(input[*i]) && !is_char_redir_or_pipe(input[*i]))
-	{
-		if (input[*i] == '\'')
-		{
-			status = parse_single_quote(token, input, i);
-		}
-		else if (input[*i] == '\"')
-		{
-			status = parse_double_quote(token, input, i);
-		}
-		else
-		{
-			status = parse_unquoted(token, input, i);
-		}
-		if (status != ERR_NONE)
-		{
-			free(token);
-			return (status);
-		}
-	}
-	*curr = token;
-	return (ERR_NONE);
+    token = ft_create_token(TOKEN_WORD);
+    if (!token)
+        return (ERR_MALLOC);
+
+    while (input[*i]
+        && !ft_isspace(input[*i])
+        && !is_char_redir_or_pipe(input[*i]))
+    {
+        if (input[*i] == '\'')
+            st = parse_single_quote(token, input, i);
+        else if (input[*i] == '\"')
+            st = parse_double_quote(token, input, i);
+
+        /* nouveau : $ suivi d’une quote simple ou double */
+        else if (input[*i] == '$'
+              && (input[*i+1] == '\'' || input[*i+1] == '\"'))
+            st = parse_quote_prefixed_fragment(token, input, i);
+
+        /* variable normale : $VAR ou $? */
+        else if (input[*i] == '$')
+        {
+            frag = parse_variable_fragment(input, i);
+            if (!frag)
+            {
+                free_tokens(token);
+                return (ERR_MALLOC);
+            }
+            append_fragment(token, frag);
+            st = ERR_NONE;
+        }
+        else
+            st = parse_unquoted(token, input, i);
+
+        if (st != ERR_NONE)
+        {
+            free_tokens(token);
+            return (st);
+        }
+    }
+    *out = token;
+    return (ERR_NONE);
 }
+
+
 
 /*
  * For each elemt of the input string, we skip spaces,

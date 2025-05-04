@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/28 11:05:57 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:03:53 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,16 +101,16 @@ t_excmd *create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
 t_excmd *process_tokens(t_token *token, t_minishell *minishell)
 {
 	t_token_list *head_list;
-	t_token *new_tokens;
+	t_token *tok_expand;
 	t_excmd *cmd_list;
 	
 
-	// new_tokens = NULL;
+	// tok_expand = NULL;
 	// head_list = NULL;
-	expand_caller(token, &new_tokens, minishell);
+	expand_caller(token, &tok_expand, minishell);
 	free_tokens(token);
-	token_list(new_tokens, &head_list);
-	free_tokens(new_tokens);
+	token_list(tok_expand, &head_list, minishell);
+	free_tokens(tok_expand);
 	cmd_list = create_cmd_list(head_list, minishell);
 	free_tokens_in_list(head_list);
 	return (cmd_list);

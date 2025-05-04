@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/28 18:27:18 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:09:00 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ t_err handle_last_rvalue(t_minishell *mini, t_utils *utils)
 		free(utils->s1);
 		return (ERR_MALLOC);
 	}
-	
 	tmp = str_join_free(utils->s1, value);
 	free(value);
 	if (!tmp)
@@ -57,8 +56,6 @@ t_err handle_expand_char(t_utils *utils, t_minishell *mini, char *input)
 		value = ft_strdup(env_var->value);
 	else
 		value = ft_strdup("");
-	free(value);
-	value = NULL;
 	if (value == NULL)
 	{
 		free(utils->s1);
@@ -81,31 +78,42 @@ t_err handle_expand_char(t_utils *utils, t_minishell *mini, char *input)
  */
 char *expand_fragment(const char *input, int quote, t_minishell *mini)
 {
-	t_utils u;
-	t_err	st;
+    t_utils u;
+    t_err   st;
 
-	ft_memset(&u, 0, sizeof(u));
-	u.s1 = ft_strdup("");
-	if (!u.s1)
-		return (NULL);
-	while (input[u.i])
-	{
-		if (input[u.i] == '$' && quote != QUOTE_SINGLE)
-		{
-			u.j = u.i + 1;
-			incr_on_alnum((char *)input, &u.j);
-			if (input[u.j] == '?')
-				st = handle_last_rvalue(mini, &u);
-			else if (u.j > u.i + 1)
-				st = handle_expand_char(&u, mini, (char *)input);
-		}
-		else
-			st = handle_normal_char(&u, (char *)input);
-		if (st != ERR_NONE)
-			return (NULL);
-	}
-	return (u.s1);
+    ft_memset(&u, 0, sizeof(u));
+    u.s1 = ft_strdup("");
+    if (!u.s1)
+        return (NULL);
+
+    while (input[u.i])
+    {
+        if (input[u.i] == '$' && quote != QUOTE_SINGLE)
+        {
+            u.j = u.i + 1;
+            incr_on_alnum((char *)input, &u.j);
+            if (input[u.j] == '?')
+                st = handle_last_rvalue(mini, &u);
+            else if (u.j > u.i + 1)
+                st = handle_expand_char(&u, mini, (char *)input);
+            else
+                /* dollar isolé, traité comme caractère normal */
+                st = handle_normal_char(&u, (char *)input);
+        }
+        else
+        {
+            st = handle_normal_char(&u, (char *)input);
+        }
+
+        if (st != ERR_NONE)
+        {
+            free(u.s1);
+            return (NULL);
+        }
+    }
+    return (u.s1);
 }
+
 /*
  * Here we check if there is a double quote in the fragments
  * If there is one we set the quote type to QUOTE_DOUBLE
@@ -188,8 +196,8 @@ t_err process_unquoted_frag(const char *expanded, char **current,
 			if ((*current)[0] != '\0')
 			{
 				n_tok = create_new_token_from_word(*current, token);
-				// (void)token;
-				// new_token = NULL;
+				// (void)token; test malloc
+				// n_tok = NULL; 
 				if (!n_tok)
 					return (ERR_MALLOC);
 				update_head_and_last(&(*new_list)->new_h, &(*new_list)->new_t, n_tok);
@@ -219,17 +227,11 @@ t_token *add_new_token(t_token **new_h, t_token **new_t,
 
 	new_token = create_new_token_from_word(current, token);
 	if (!new_token)
-	{
 		return (NULL);
-	}
 	if (!*new_h)
-	{
 		*new_h = new_token;
-	}
 	else
-	{
 		(*new_t)->next = new_token;
-	}
 	*new_t = new_token;
 
 	return (new_token);
