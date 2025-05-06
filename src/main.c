@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/30 17:03:53 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/05 20:08:09 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,14 @@ t_excmd *set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell)
 	cmd->argc = token_lstsize(token);
 	count_args = count_arg_words(token);
 	cmd->argv = ft_memalloc(sizeof(char *) * (count_args + 1));
+	// free(cmd->argv);
+	// cmd->argv = NULL;
 	if (!cmd->argv)
+	{
+		free(cmd->name);
+		free(cmd);	
 		return (NULL);
+	}
 	cmd->argv[count_args] = NULL;
 	return (cmd);
 }
@@ -81,8 +87,10 @@ t_excmd *create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
 		if (!cmd)
 		{
 			puterr(ft_sprintf(": error: Memory allocation error\n"), false);
+			free_env(&minishell->env);
+			free_tokens_in_list(token_list_head);
 			free_cmds(&first);
-			return (NULL);
+			exit(EXIT_FAILURE);
 		}
 		build_redirs_and_args(cmd, cmd_tokens);
 		link_prev_cmd(&first, &prev, cmd);
@@ -103,7 +111,6 @@ t_excmd *process_tokens(t_token *token, t_minishell *minishell)
 	t_token_list *head_list;
 	t_token *tok_expand;
 	t_excmd *cmd_list;
-	
 
 	// tok_expand = NULL;
 	// head_list = NULL;
@@ -116,6 +123,40 @@ t_excmd *process_tokens(t_token *token, t_minishell *minishell)
 	return (cmd_list);
 }
 
+void exit_if_line_null(char *line, t_minishell *minishell)
+{
+	if (!line)
+	{
+		free_env(&minishell->env);
+		line = NULL;
+		printf(B_GREEN "Good bye!\n" RESET);
+		exit (EXIT_FAILURE);
+	}
+}
+
+/*
+ * Check if the environment was created successfully
+ * If not, print an error message and exit
+ * Malloc secured
+*/
+void	create_env_or_exit_if_env_error(char **env, t_minishell *minishell,
+										int argc, char **argv)
+{
+	t_env_var **env_var;
+
+	minishell->argc = argc;
+	minishell->argv = argv;
+	minishell->prompt_theme = -1;
+	minishell->last_status = EXIT_SUCCESS;
+	env_var = create_env(env, &minishell->env);
+	if (env_var == NULL)
+	{
+		puterr(ft_sprintf(
+				   ": error: Environment creation memory allocation failure\n"),
+			   false);
+		exit (EXIT_FAILURE);
+	}
+}
 int main(int argc, char **argv, char **env)
 {
 	t_execvars *vars;
@@ -127,31 +168,18 @@ int main(int argc, char **argv, char **env)
 
 	first = NULL;
 	head = NULL;
-	minishell.argc = argc;
-	minishell.argv = argv;
-	minishell.prompt_theme = -1;
-	minishell.last_status = EXIT_SUCCESS;
-	(void)argv;
-	if (create_env(env, &minishell.env) == NULL)
-	{
-		puterr(ft_sprintf(
-				   ": error: Environment creation memory allocation failure\n"),
-			   false);
-		return (EXIT_FAILURE);
-	}
-	minishell.last_status = EXIT_SUCCESS;
+	// minishell.argc = argc;
+	// minishell.argv = argv;
+	// minishell.prompt_theme = -1;
+	// minishell.last_status = EXIT_SUCCESS;
+	create_env_or_exit_if_env_error(env, &minishell, argc, argv);
 	while (1)
 	{
 		t_token *token;
 
 		set_sig_action();
-		line = show_prompt(&minishell);
-		if (!line)
-		{
-			free_env(&minishell.env);
-			printf(B_GREEN "Good bye!\n" RESET);
-			return (EXIT_SUCCESS);
-		}
+		line = show_prompt(&minishell); // line secured
+		exit_if_line_null(line, &minishell);
 		add_history(line);
 		status = ft_input(line, &token);
 		if (status == ERR_MALLOC || status == ERR_LEX)
@@ -160,9 +188,7 @@ int main(int argc, char **argv, char **env)
 			if (status == ERR_MALLOC)
 			{
 
-				puterr(ft_sprintf(
-						   ": error: Memory allocation error\n"),
-					   false);
+				puterr(ft_sprintf(": error: Memory allocation error\n"), false);
 				free_tokens(token);
 				free_env(&minishell.env);
 				return (EXIT_FAILURE);

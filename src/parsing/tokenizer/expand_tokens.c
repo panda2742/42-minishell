@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/29 16:09:00 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/05 19:48:56 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ t_err handle_expand_char(t_utils *utils, t_minishell *mini, char *input)
 
 	utils->len1 = utils->j - utils->i - 1;
 	var_name = ft_memalloc(utils->len1 + 1);
+	// free(var_name);
+	// var_name = NULL;
 	if (!var_name)
 		return (ERR_MALLOC);
 	utils->k = 0;
@@ -56,9 +58,12 @@ t_err handle_expand_char(t_utils *utils, t_minishell *mini, char *input)
 		value = ft_strdup(env_var->value);
 	else
 		value = ft_strdup("");
+	// free(value);
+	// value = NULL;
 	if (value == NULL)
 	{
-		free(utils->s1);
+		// free(var_name);
+		// free(utils->s1);
 		return (ERR_MALLOC);
 	}
 	tmp = str_join_free(utils->s1, value);

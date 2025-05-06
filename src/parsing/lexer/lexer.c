@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:59:55 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/29 16:50:14 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/05 20:05:44 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,8 +180,6 @@ parse_word_token(const char *input, int *i, t_token **out)
     *out = token;
     return (ERR_NONE);
 }
-
-
 
 /*
  * For each elemt of the input string, we skip spaces,

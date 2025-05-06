@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 19:32:46 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/05 18:32:34 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	t_excmd	*res;
 
 	res = ft_memalloc(sizeof(t_excmd));
+	// free(res);
+	// res = NULL;
 	if (!res)
 		return (NULL);
 	res->id = -1;
@@ -26,8 +28,13 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	if (cmd_name)
 	{
 		res->name = ft_strdup(cmd_name);
+		// free(res->name);
+		// res->name = NULL;
 		if (res->name == NULL)
+		{
+			free(res);
 			return (NULL);
+		}
 	}
 	res->in_a_child = true;
 	res->proto = NULL;
@@ -86,8 +93,10 @@ t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect)
 	if (manager->size == 0)
 	{
 		manager->redirects = ft_memalloc(sizeof(t_redir *));
+		// free(manager->redirects);
+		// manager->redirects = NULL; // a gerer correctement
 		if (!manager->redirects)
-			return (NULL);
+			exit(EXIT_FAILURE);
 		manager->redirects[0] = redirect;
 		manager->size += 1;
 		return (redirect);
