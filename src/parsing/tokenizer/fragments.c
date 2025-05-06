@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:32 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/28 11:00:14 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/06 15:41:44 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ t_fragment	*new_fragment(const char *start, size_t len, t_qtype quote_type)
 	t_fragment	*new;
 
 	new = ft_memalloc(sizeof(t_fragment));
+	// free(new);
 	// new = NULL;
 	if (!new)
 		return (NULL);
 	new->text = ft_memalloc(sizeof(char) * (len + 1));
+	// free(new->text);
+	// new->text = NULL;
 	if (!new->text)
 	{
 		free(new);
