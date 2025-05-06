@@ -21,7 +21,7 @@ void	exec_multiple_commands(t_execvars *vars)
 		{
 			if (pipe(cmd->pipe) == -1)
 			{
-				
+				// securiser l'ouverture de la pipe ici
 			}
 			cmd->pipe_open[0] = true;
 			cmd->pipe_open[1] = true;
@@ -29,14 +29,6 @@ void	exec_multiple_commands(t_execvars *vars)
 		fork_id = fork();
 		if (fork_id == 0)
 		{
-			if (cmd->id < cmd->vars->nb_cmd) // Si un pipe a été créé pour la commande actuelle
-			{
-				close(cmd->pipe[0]); // Ferme l'extrémité de lecture du pipe (non utilisée par l'enfant)
-			}
-			if (cmd->prev) // Si la commande précédente a un pipe
-			{
-				close(cmd->prev->pipe[1]); // Ferme l'extrémité d'écriture du pipe précédent
-			}
 			status = _setup_cmd(cmd);
 			if (status != EXIT_SUCCESS)
 			{
@@ -68,15 +60,6 @@ void	exec_multiple_commands(t_execvars *vars)
 			// au cas ou...
 			exit(status);
 		}
-		if (cmd->id < cmd->vars->nb_cmd) // Si un pipe a été créé pour la commande actuelle
-		{
-			close(cmd->pipe[0]); // Ferme l'extrémité de lecture du pipe
-			close(cmd->pipe[1]); // Ferme l'extrémité d'écriture du pipe
-		}
-		if (cmd->prev) // Si la commande précédente a un pipe
-		{
-			close(cmd->prev->pipe[0]); // Ferme l'extrémité de lecture du pipe précédent
-		}
 		if (cmd->next == NULL)
 			last_fork = fork_id;
 		vars->nb_launched++;
@@ -87,6 +70,8 @@ void	exec_multiple_commands(t_execvars *vars)
 			vars->nb_launched--;
 			break ;
 		}
+		close_pipe(cmd, 2);
+		close_pipe(cmd->prev, 1);
 		cmd = cmd->next;
 	}
 	waitpid(last_fork, &vars->minishell->last_status, 0);
@@ -104,30 +89,18 @@ static int	_setup_cmd(t_excmd *cmd)
 		return (cmd->vars->status);
 	if (_check_output_redir(cmd) == EXIT_FAILURE)
 		return (cmd->vars->status);
-
-	if (cmd->in_redirects.final_fd.type == STREAM_STD)
-		printf("[%s %zu] input fd: %d\ttype: STANDARD\n", cmd->name, cmd->id, cmd->in_redirects.final_fd.fd);
-	if (cmd->in_redirects.final_fd.type == STREAM_REDIR)
-		printf("[%s %zu] input fd: %d\ttype: REDIRECT\n", cmd->name, cmd->id, cmd->in_redirects.final_fd.fd);
-	if (cmd->in_redirects.final_fd.type == STREAM_PIPE)
-		printf("[%s %zu] input fd: %d\ttype: PIPE\n", cmd->name, cmd->id, cmd->in_redirects.final_fd.fd);
-
-	if (cmd->out_redirects.final_fd.type == STREAM_STD)
-		printf("[%s %zu] output fd: %d\ttype: STANDARD\n", cmd->name, cmd->id, cmd->out_redirects.final_fd.fd);
-	if (cmd->out_redirects.final_fd.type == STREAM_REDIR)
-		printf("[%s %zu] output fd: %d\ttype: REDIRECT\n", cmd->name, cmd->id, cmd->out_redirects.final_fd.fd);
-	if (cmd->out_redirects.final_fd.type == STREAM_PIPE)
-		printf("[%s %zu] output fd: %d\ttype: PIPE\n", cmd->name, cmd->id, cmd->out_redirects.final_fd.fd);
-
 	// creation des dups
 	if (_create_input_dup2_redir(cmd) == EXIT_FAILURE)
 	{
+		close_pipe(cmd, 3);
 		return (cmd->vars->status);
 	}
 	if (_create_output_dup2_redir(cmd) == EXIT_FAILURE)
 	{
+		close_pipe(cmd, 3);
 		return (cmd->vars->status);
 	}
+	close_pipe(cmd, 3);
 	return (EXIT_SUCCESS);
 }
 
@@ -166,11 +139,13 @@ static int	_check_output_redir(t_excmd *cmd)
 
 static int	_create_input_dup2_redir(t_excmd *cmd)
 {
-	if (cmd->in_redirects.final_fd.type != STREAM_STD && cmd->in_redirects.last->is_heredoc == false)
+	if (cmd->in_redirects.final_fd.type != STREAM_STD)
 	{
+		if (cmd->in_redirects.final_fd.type == STREAM_REDIR && cmd->in_redirects.last->is_heredoc == true)
+			return (cmd->vars->status);
 		if (dup2(cmd->in_redirects.final_fd.fd, STDIN_FILENO) == -1)
 		{
-			puterr(ft_sprintf(": dup2 error"), true);
+			puterr(ft_sprintf(": %s dup2 input error", cmd->name), true);
 			if (cmd->in_redirects.final_fd.type == STREAM_REDIR)
 				close(cmd->in_redirects.final_fd.fd);
 			if (cmd->out_redirects.size > 0 && cmd->out_redirects.final_fd.type == STREAM_REDIR)
@@ -190,7 +165,7 @@ static int	_create_output_dup2_redir(t_excmd *cmd)
 	{
 		if (dup2(cmd->out_redirects.final_fd.fd, STDOUT_FILENO) == -1)
 		{
-			puterr(ft_sprintf(": dup2 error"), true);
+			puterr(ft_sprintf(": %s dup2 output error", cmd->name), true);
 			if (cmd->out_redirects.final_fd.type == STREAM_REDIR)
 				close(cmd->out_redirects.final_fd.fd);
 			cmd->vars->status = EXIT_FAILURE;

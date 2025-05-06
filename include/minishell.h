@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/30 18:51:55 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:07:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -422,6 +422,7 @@ void execute_from_path(t_excmd *cmd);
 t_execvars *create_execvars(t_minishell *minishell, t_excmd **cmds);
 void reset_execvars(t_execvars *vars);
 void exec_multiple_commands(t_execvars *vars);
+int	close_pipe(t_excmd *cmd, int streams);
 
 // MEMORY ----------------------------------------------------------------------
 
@@ -458,7 +459,7 @@ char *expand_fragment(const char *input, int quote, t_minishell *mini);
 t_qtype set_qtype_fragment(t_token *token_head);
 t_err word_split_token(t_token *token, t_minishell *mini, t_token **out_list);
 t_fragment *new_fragment(const char *start, size_t len,
-						 t_qtype quote_type);
+							t_qtype quote_type);
 void append_fragment(t_token *token, t_fragment *frag);
 void free_tokens(t_token *tokens);
 t_token *ft_create_token(t_token_type type);

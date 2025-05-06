@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:23:02 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/05 15:40:40 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/06 12:25:26 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	print_cmd(t_excmd *cmd)
 	t_redir	*redir;
 
 	printf("[%p] [%s%p%s]\n", cmd, U_MAGENTA, cmd, RESET);
+	if (cmd == NULL)
+		return ;
 	printf("[%p]   %-12s %s%zu%s\n", cmd, "id", B_YELLOW, cmd->id, RESET);
 	printf("[%p]   %-12s %s%s%s\n", cmd, "name", B_BLUE, cmd->name, RESET);
 	if (cmd->in_a_child)
