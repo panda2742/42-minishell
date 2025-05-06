@@ -1,1 +1,1 @@
-cat /dev/urandom | valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=.valgrind_suppress.txt ./minishell 2> outerror 
+head -c 1024 /dev/urandom | tr -dc '[:print:]\n' | valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=.valgrind_suppress.txt ./minishell 2> outerror

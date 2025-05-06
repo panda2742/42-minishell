@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/05 20:08:09 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:07:34 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ t_excmd *create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
 			free_env(&minishell->env);
 			free_tokens_in_list(token_list_head);
 			free_cmds(&first);
+			free(first);
 			exit(EXIT_FAILURE);
 		}
 		build_redirs_and_args(cmd, cmd_tokens);
@@ -106,20 +107,57 @@ t_excmd *create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
  * 3. Create a list of commands
  * new_tokens is the list of tokens after expansion
  */
+
+ 
 t_excmd *process_tokens(t_token *token, t_minishell *minishell)
 {
 	t_token_list *head_list;
 	t_token *tok_expand;
 	t_excmd *cmd_list;
 
-	// tok_expand = NULL;
-	// head_list = NULL;
+	tok_expand = NULL;
+	head_list = NULL;
 	expand_caller(token, &tok_expand, minishell);
 	free_tokens(token);
 	token_list(tok_expand, &head_list, minishell);
 	free_tokens(tok_expand);
 	cmd_list = create_cmd_list(head_list, minishell);
 	free_tokens_in_list(head_list);
+	return (cmd_list);
+}
+
+t_excmd *build_and_parse_line(char *line, t_minishell *mini)
+{
+	t_token *token;
+	t_excmd *cmd_list;
+	t_err status;
+
+	status = ft_input(line, &token);
+	if (status == ERR_MALLOC)
+	{
+		puterr(ft_sprintf(": error: Memory allocation error\n"), false);
+		free(line);
+		free_env(&mini->env);
+		exit(EXIT_FAILURE);
+	}
+	else if (status == ERR_LEX)
+	{
+		puterr(ft_sprintf(": error: Lexical error\n"), false);
+		free(line);
+		mini->last_status = 2;
+		free_tokens(token);
+		return (NULL);
+	}
+	if (!lexer_parse(token))
+	{
+		free(line);
+		mini->last_status = 2;
+		free_tokens(token);
+		return (NULL);
+	}
+	cmd_list = process_tokens(token, mini);
+	free(line);
+	// free_tokens(token);
 	return (cmd_list);
 }
 
@@ -157,60 +195,42 @@ void	create_env_or_exit_if_env_error(char **env, t_minishell *minishell,
 		exit (EXIT_FAILURE);
 	}
 }
+
+void handle_status_error(t_token *token, t_minishell *minishell, t_err status)
+{
+	if (status == ERR_MALLOC)
+	{
+
+		puterr(ft_sprintf(": error: Memory allocation error\n"), false);
+		free_tokens(token);
+		free_env(&minishell->env);
+		exit (EXIT_FAILURE);
+	}
+	else
+	{
+			free_tokens(token);
+	}
+}
 int main(int argc, char **argv, char **env)
 {
 	t_execvars *vars;
 	t_minishell minishell;
 	t_excmd *head;
 	t_excmd *first;
-	t_err status;
 	char *line;
 
 	first = NULL;
 	head = NULL;
-	// minishell.argc = argc;
-	// minishell.argv = argv;
-	// minishell.prompt_theme = -1;
-	// minishell.last_status = EXIT_SUCCESS;
 	create_env_or_exit_if_env_error(env, &minishell, argc, argv);
 	while (1)
 	{
-		t_token *token;
-
 		set_sig_action();
 		line = show_prompt(&minishell); // line secured
 		exit_if_line_null(line, &minishell);
 		add_history(line);
-		status = ft_input(line, &token);
-		if (status == ERR_MALLOC || status == ERR_LEX)
-		{
-			free(line);
-			if (status == ERR_MALLOC)
-			{
-
-				puterr(ft_sprintf(": error: Memory allocation error\n"), false);
-				free_tokens(token);
-				free_env(&minishell.env);
-				return (EXIT_FAILURE);
-			}
-			// else
-			// {
-				
-			// 	puterr(ft_sprintf(
-			// 		": error: Lexical analysis error\n"),
-			// 		false);
-			// 		free_tokens(token);
-			// 	}
+		first = build_and_parse_line(line, &minishell);
+		if (!first)
 			continue;
-		}
-		if (!lexer_parse(token))
-		{
-			free_tokens(token);
-			free(line);
-			continue;
-		}
-		free(line);
-		first = process_tokens(token, &minishell);
 		if (head == NULL)
 			head = first;
 		vars = exec_command(&minishell, &first);
