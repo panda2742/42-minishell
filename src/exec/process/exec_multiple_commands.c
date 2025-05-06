@@ -36,6 +36,7 @@ void	exec_multiple_commands(t_execvars *vars)
 				free_env(&cmd->vars->minishell->env);
 				free_cmds(vars->cmds);
 				free(vars);
+				close_pipe(cmd, 3);
 				exit(status);
 			}
 			if (cmd->proto == NULL)
@@ -46,6 +47,7 @@ void	exec_multiple_commands(t_execvars *vars)
 				status = vars->status;
 				free_cmds(vars->cmds);
 				free(vars);
+				close_pipe(cmd, 3);
 				exit(status);
 			}
 			else
@@ -55,9 +57,11 @@ void	exec_multiple_commands(t_execvars *vars)
 				free_env(&cmd->vars->minishell->env);
 				free_cmds(vars->cmds);
 				free(vars);
+				close_pipe(cmd, 3);
 				exit(status);
 			}
 			// au cas ou...
+			close_pipe(cmd, 3);
 			exit(status);
 		}
 		if (cmd->next == NULL)

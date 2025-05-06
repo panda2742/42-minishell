@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/05 20:08:09 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/06 16:31:38 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ int main(int argc, char **argv, char **env)
 
 	first = NULL;
 	head = NULL;
+	(void)vars;
 	// minishell.argc = argc;
 	// minishell.argv = argv;
 	// minishell.prompt_theme = -1;
@@ -213,6 +214,7 @@ int main(int argc, char **argv, char **env)
 		first = process_tokens(token, &minishell);
 		if (head == NULL)
 			head = first;
+		
 		vars = exec_command(&minishell, &first);
 		if (vars == NULL)
 			minishell.last_status = EXIT_FAILURE;
