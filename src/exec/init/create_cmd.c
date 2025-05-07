@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/05 18:32:34 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:06:30 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect)
 	t_redir_manager	*manager;
 	t_redir			*last;
 
+	if (!redirect)
+		return (NULL);
 	manager = &cmd->out_redirects;
 	if (type == IN_REDIR)
 	{
@@ -94,9 +96,13 @@ t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect)
 	{
 		manager->redirects = ft_memalloc(sizeof(t_redir *));
 		// free(manager->redirects);
-		// manager->redirects = NULL; // a gerer correctement
+		// manager->redirects = NULL; 
 		if (!manager->redirects)
-			exit(EXIT_FAILURE);
+		{
+			free(redirect->filepath);
+			free(redirect);
+			return (NULL);
+		}
 		manager->redirects[0] = redirect;
 		manager->size += 1;
 		return (redirect);

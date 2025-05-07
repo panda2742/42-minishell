@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/06 11:07:41 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/07 17:01:35 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -478,7 +478,7 @@ char **ft_split_a(char const *s, char c);
 char *str_join_free(char *s1, const char *s2);
 int ft_strcmp(char *s1, char *s2);
 char *get_first_word(t_token *token);
-void handle_is_redir_tokens(t_excmd *cmd, t_token *token);
+int handle_is_redir_tokens(t_excmd *cmd, t_token *token);
 void incr_on_alnum(char *str, int *j);
 char *ft_sprintf(const char *format, ...);
 void *empty_tab(void);

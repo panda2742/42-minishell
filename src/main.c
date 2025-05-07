@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/07 09:24:36 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/07 20:04:05 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 #include <readline/readline.h>
 #include <stdio.h>
 #include <strings.h>
+
+/*
+ * cmd_name is a copy of the first word of the token list
+ * we dup it in create_cmd
+*/
 
 t_excmd *set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell)
 {
@@ -40,7 +45,7 @@ t_excmd *set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell)
 	return (cmd);
 }
 
-void build_redirs_and_args(t_excmd *cmd, t_token *token)
+int build_redirs_and_args(t_excmd *cmd, t_token *token)
 {
 	int i;
 
@@ -48,15 +53,23 @@ void build_redirs_and_args(t_excmd *cmd, t_token *token)
 	while (token && (token->type != TOKEN_PIPE))
 	{
 		if (is_redir(token))
-			handle_is_redir_tokens(cmd, token);
+		{
+			if (!handle_is_redir_tokens(cmd, token))
+				return (0);
+		}
 		if (token->type == TOKEN_WORD)
 		{
-			cmd->argv[i++] = ft_strdup(token->text);
+			cmd->argv[i++] =  ft_strdup(token->text);
+			// free(cmd->argv[i - 1]);
+			// cmd->argv[i -1] = NULL;
+			if (!cmd->argv[i - 1])
+				return (0);
 			free(token->text);
 			token->text = NULL;
 		}
 		token = token->next;
 	}
+	return (1);
 }
 
 void link_prev_cmd(t_excmd **first, t_excmd **prev, t_excmd *cmd)
@@ -90,11 +103,17 @@ t_excmd *create_cmd_list(t_token_list *token_list_head, t_minishell *minishell)
 			free_env(&minishell->env);
 			free_tokens_in_list(token_list_head);
 			free_cmds(&first);
-			free(first);
 			exit(EXIT_FAILURE);
 		}
-		build_redirs_and_args(cmd, cmd_tokens);
 		link_prev_cmd(&first, &prev, cmd);
+		if (!build_redirs_and_args(cmd, cmd_tokens))
+		{
+			puterr(ft_sprintf(": error: Memory allocation error\n"), false);
+			free_env(&minishell->env);
+			free_tokens_in_list(token_list_head);
+			free_cmds(&first);
+			exit(EXIT_FAILURE);
+		}
 		curr_list = curr_list->next;
 	}
 	return (first);
@@ -157,7 +176,6 @@ t_excmd *build_and_parse_line(char *line, t_minishell *mini)
 	}
 	cmd_list = process_tokens(token, mini);
 	free(line);
-	// free_tokens(token);
 	return (cmd_list);
 }
 

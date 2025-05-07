@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_redirect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:48 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 15:15:20 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/07 18:07:07 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ t_redir	*create_in_redirect(char *filepath)
 	if (res == NULL)
 		return (NULL);
 	res->filepath = ft_strdup(filepath);
+	// free(res->filepath);
+	// res->filepath = NULL;
 	if (res->filepath == NULL)
 	{
 		free(res);
