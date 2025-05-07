@@ -1,0 +1,270 @@
+==81365== Memcheck, a memory error detector
+==81365== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==81365== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==81365== Command: ./minishell
+==81365== 
+[1;31mminishell: error: Lexical error
+[0m[1;31mminishell: error: Lexical error
+[0m[1;31mminishell[1;31mminishell: +8T{-Sa5-y}P_US1JT$.#og3LY_W!%: Command not found
+[0m: f-0: No such file or directory
+[0m==81370== 
+==81370== FILE DESCRIPTORS: 10 open (3 std) at exit.
+==81370== Open file descriptor 3:
+==81370==    at 0x49DD07D: pipe (pipe.c:29)
+==81370==    by 0x403000: exec_multiple_commands (exec_multiple_commands.c:22)
+==81370==    by 0x403D1F: exec_command (exec.c:34)
+==81370==    by 0x409636: main (main.c:236)
+==81370== 
+==81370== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==81370==    <inherited from parent>
+==81370== 
+==81370== Open file descriptor 39: /dev/ptmx
+==81370==    <inherited from parent>
+==81370== 
+==81370== Open file descriptor 38: /dev/ptmx
+==81370==    <inherited from parent>
+==81370== 
+==81370== Open AF_UNIX socket 37: <unknown>
+==81370==    <inherited from parent>
+==81370== 
+==81370== Open file descriptor 36: /home/abonifac/.config/Code/logs/20250506T152329/ptyhost.log
+==81370==    <inherited from parent>
+==81370== 
+==81370== Open AF_UNIX socket 30: <unknown>
+==81370==    <inherited from parent>
+==81370== 
+==81370== 
+==81370== HEAP SUMMARY:
+==81370==     in use at exit: 209,328 bytes in 231 blocks
+==81370==   total heap usage: 1,337 allocs, 1,106 frees, 269,447 bytes allocated
+==81370== 
+==81370== LEAK SUMMARY:
+==81370==    definitely lost: 0 bytes in 0 blocks
+==81370==    indirectly lost: 0 bytes in 0 blocks
+==81370==      possibly lost: 0 bytes in 0 blocks
+==81370==    still reachable: 0 bytes in 0 blocks
+==81370==         suppressed: 209,328 bytes in 231 blocks
+==81370== 
+==81370== For lists of detected and suppressed errors, rerun with: -s
+==81370== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==81366== 
+==81366== FILE DESCRIPTORS: 11 open (3 std) at exit.
+==81366== Open file descriptor 4:
+==81366==    at 0x49DD07D: pipe (pipe.c:29)
+==81366==    by 0x403000: exec_multiple_commands (exec_multiple_commands.c:22)
+==81366==    by 0x403D1F: exec_command (exec.c:34)
+==81366==    by 0x409636: main (main.c:236)
+==81366== 
+==81366== Open file descriptor 3:
+==81366==    at 0x49DD07D: pipe (pipe.c:29)
+==81366==    by 0x403000: exec_multiple_commands (exec_multiple_commands.c:22)
+==81366==    by 0x403D1F: exec_command (exec.c:34)
+==81366==    by 0x409636: main (main.c:236)
+==81366== 
+==81366== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==81366==    <inherited from parent>
+==81366== 
+==81366== Open file descriptor 39: /dev/ptmx
+==81366==    <inherited from parent>
+==81366== 
+==81366== Open file descriptor 38: /dev/ptmx
+==81366==    <inherited from parent>
+==81366== 
+==81366== Open AF_UNIX socket 37: <unknown>
+==81366==    <inherited from parent>
+==81366== 
+==81366== Open file descriptor 36: /home/abonifac/.config/Code/logs/20250506T152329/ptyhost.log
+==81366==    <inherited from parent>
+==81366== 
+==81366== Open AF_UNIX socket 30: <unknown>
+==81366==    <inherited from parent>
+==81366== 
+==81366== 
+==81366== HEAP SUMMARY:
+==81366==     in use at exit: 209,328 bytes in 231 blocks
+==81366==   total heap usage: 1,297 allocs, 1,066 frees, 268,134 bytes allocated
+==81366== 
+==81366== LEAK SUMMARY:
+==81366==    definitely lost: 0 bytes in 0 blocks
+==81366==    indirectly lost: 0 bytes in 0 blocks
+==81366==      possibly lost: 0 bytes in 0 blocks
+==81366==    still reachable: 0 bytes in 0 blocks
+==81366==         suppressed: 209,328 bytes in 231 blocks
+==81366== 
+==81366== For lists of detected and suppressed errors, rerun with: -s
+==81366== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+[1;31mminishell: 3.oAtRXrQf~: Command not found
+[0m==81380== 
+==81380== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==81380== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==81380==    <inherited from parent>
+==81380== 
+==81380== Open file descriptor 39: /dev/ptmx
+==81380==    <inherited from parent>
+==81380== 
+==81380== Open file descriptor 38: /dev/ptmx
+==81380==    <inherited from parent>
+==81380== 
+==81380== Open AF_UNIX socket 37: <unknown>
+==81380==    <inherited from parent>
+==81380== 
+==81380== Open file descriptor 36: /home/abonifac/.config/Code/logs/20250506T152329/ptyhost.log
+==81380==    <inherited from parent>
+==81380== 
+==81380== Open AF_UNIX socket 30: <unknown>
+==81380==    <inherited from parent>
+==81380== 
+==81380== 
+==81380== HEAP SUMMARY:
+==81380==     in use at exit: 209,432 bytes in 234 blocks
+==81380==   total heap usage: 1,586 allocs, 1,352 frees, 281,829 bytes allocated
+==81380== 
+==81380== LEAK SUMMARY:
+==81380==    definitely lost: 0 bytes in 0 blocks
+==81380==    indirectly lost: 0 bytes in 0 blocks
+==81380==      possibly lost: 0 bytes in 0 blocks
+==81380==    still reachable: 0 bytes in 0 blocks
+==81380==         suppressed: 209,432 bytes in 234 blocks
+==81380== 
+==81380== For lists of detected and suppressed errors, rerun with: -s
+==81380== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+[1;31mminishell: error: Lexical error
+[0m[1;31mminishell: 4Tq*~2[)I_P,3o*:3KB[l5Pfj4,kJRL*bCXDylb=2PLD: Command not found
+[0m==81382== 
+==81382== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==81382== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==81382==    <inherited from parent>
+==81382== 
+==81382== Open file descriptor 39: /dev/ptmx
+==81382==    <inherited from parent>
+==81382== 
+==81382== Open file descriptor 38: /dev/ptmx
+==81382==    <inherited from parent>
+==81382== 
+==81382== Open AF_UNIX socket 37: <unknown>
+==81382==    <inherited from parent>
+==81382== 
+==81382== Open file descriptor 36: /home/abonifac/.config/Code/logs/20250506T152329/ptyhost.log
+==81382==    <inherited from parent>
+==81382== 
+==81382== Open AF_UNIX socket 30: <unknown>
+==81382==    <inherited from parent>
+==81382== 
+==81382== 
+==81382== HEAP SUMMARY:
+==81382==     in use at exit: 209,617 bytes in 240 blocks
+==81382==   total heap usage: 1,804 allocs, 1,564 frees, 299,912 bytes allocated
+==81382== 
+==81382== LEAK SUMMARY:
+==81382==    definitely lost: 0 bytes in 0 blocks
+==81382==    indirectly lost: 0 bytes in 0 blocks
+==81382==      possibly lost: 0 bytes in 0 blocks
+==81382==    still reachable: 0 bytes in 0 blocks
+==81382==         suppressed: 209,617 bytes in 240 blocks
+==81382== 
+==81382== For lists of detected and suppressed errors, rerun with: -s
+==81382== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+[1;31mminishell: 5p6Qg!##: Command not found
+[0m==81383== 
+==81383== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==81383== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==81383==    <inherited from parent>
+==81383== 
+==81383== Open file descriptor 39: /dev/ptmx
+==81383==    <inherited from parent>
+==81383== 
+==81383== Open file descriptor 38: /dev/ptmx
+==81383==    <inherited from parent>
+==81383== 
+==81383== Open AF_UNIX socket 37: <unknown>
+==81383==    <inherited from parent>
+==81383== 
+==81383== Open file descriptor 36: /home/abonifac/.config/Code/logs/20250506T152329/ptyhost.log
+==81383==    <inherited from parent>
+==81383== 
+==81383== Open AF_UNIX socket 30: <unknown>
+==81383==    <inherited from parent>
+==81383== 
+==81383== 
+==81383== HEAP SUMMARY:
+==81383==     in use at exit: 209,689 bytes in 243 blocks
+==81383==   total heap usage: 1,976 allocs, 1,733 frees, 310,682 bytes allocated
+==81383== 
+==81383== LEAK SUMMARY:
+==81383==    definitely lost: 0 bytes in 0 blocks
+==81383==    indirectly lost: 0 bytes in 0 blocks
+==81383==      possibly lost: 0 bytes in 0 blocks
+==81383==    still reachable: 0 bytes in 0 blocks
+==81383==         suppressed: 209,689 bytes in 243 blocks
+==81383== 
+==81383== For lists of detected and suppressed errors, rerun with: -s
+==81383== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+[1;31mminishell: r!*^4?\1d!Vy`: Command not found
+[0m==81384== 
+==81384== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==81384== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==81384==    <inherited from parent>
+==81384== 
+==81384== Open file descriptor 39: /dev/ptmx
+==81384==    <inherited from parent>
+==81384== 
+==81384== Open file descriptor 38: /dev/ptmx
+==81384==    <inherited from parent>
+==81384== 
+==81384== Open AF_UNIX socket 37: <unknown>
+==81384==    <inherited from parent>
+==81384== 
+==81384== Open file descriptor 36: /home/abonifac/.config/Code/logs/20250506T152329/ptyhost.log
+==81384==    <inherited from parent>
+==81384== 
+==81384== Open AF_UNIX socket 30: <unknown>
+==81384==    <inherited from parent>
+==81384== 
+==81384== 
+==81384== HEAP SUMMARY:
+==81384==     in use at exit: 209,740 bytes in 246 blocks
+==81384==   total heap usage: 2,106 allocs, 1,860 frees, 321,116 bytes allocated
+==81384== 
+==81384== LEAK SUMMARY:
+==81384==    definitely lost: 0 bytes in 0 blocks
+==81384==    indirectly lost: 0 bytes in 0 blocks
+==81384==      possibly lost: 0 bytes in 0 blocks
+==81384==    still reachable: 0 bytes in 0 blocks
+==81384==         suppressed: 209,740 bytes in 246 blocks
+==81384== 
+==81384== For lists of detected and suppressed errors, rerun with: -s
+==81384== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==81365== 
+==81365== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==81365== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==81365==    <inherited from parent>
+==81365== 
+==81365== Open file descriptor 39: /dev/ptmx
+==81365==    <inherited from parent>
+==81365== 
+==81365== Open file descriptor 38: /dev/ptmx
+==81365==    <inherited from parent>
+==81365== 
+==81365== Open AF_UNIX socket 37: <unknown>
+==81365==    <inherited from parent>
+==81365== 
+==81365== Open file descriptor 36: /home/abonifac/.config/Code/logs/20250506T152329/ptyhost.log
+==81365==    <inherited from parent>
+==81365== 
+==81365== Open AF_UNIX socket 30: <unknown>
+==81365==    <inherited from parent>
+==81365== 
+==81365== 
+==81365== HEAP SUMMARY:
+==81365==     in use at exit: 209,740 bytes in 246 blocks
+==81365==   total heap usage: 2,071 allocs, 1,825 frees, 324,578 bytes allocated
+==81365== 
+==81365== LEAK SUMMARY:
+==81365==    definitely lost: 0 bytes in 0 blocks
+==81365==    indirectly lost: 0 bytes in 0 blocks
+==81365==      possibly lost: 0 bytes in 0 blocks
+==81365==    still reachable: 0 bytes in 0 blocks
+==81365==         suppressed: 209,740 bytes in 246 blocks
+==81365== 
+==81365== For lists of detected and suppressed errors, rerun with: -s
+==81365== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

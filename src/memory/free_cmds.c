@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:19:34 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 19:04:18 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:54:03 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	free_cmds(t_excmd **cmds)
 		free_one_cmd(cmd);
 		cmd = tmp;
 	}
+	// free(cmds); Je l ai commente car ca cree une erreur mais on va en avoir besoin je pense
 }
 
 void	free_one_cmd(t_excmd *cmd)
