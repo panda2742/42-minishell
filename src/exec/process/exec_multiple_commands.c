@@ -36,7 +36,6 @@ void	exec_multiple_commands(t_execvars *vars)
 				free_env(&cmd->vars->minishell->env);
 				free_cmds(vars->cmds);
 				free(vars);
-				close_pipe(cmd, 3);
 				exit(status);
 			}
 			if (cmd->proto == NULL)
@@ -47,7 +46,6 @@ void	exec_multiple_commands(t_execvars *vars)
 				status = vars->status;
 				free_cmds(vars->cmds);
 				free(vars);
-				close_pipe(cmd, 3);
 				exit(status);
 			}
 			else
@@ -57,12 +55,8 @@ void	exec_multiple_commands(t_execvars *vars)
 				free_env(&cmd->vars->minishell->env);
 				free_cmds(vars->cmds);
 				free(vars);
-				close_pipe(cmd, 3);
 				exit(status);
 			}
-			// au cas ou...
-			close_pipe(cmd, 3);
-			exit(status);
 		}
 		if (cmd->next == NULL)
 			last_fork = fork_id;
@@ -72,10 +66,9 @@ void	exec_multiple_commands(t_execvars *vars)
 			vars->status = EXIT_FORK_FAILED;
 			puterr(ft_sprintf(": Pipeline stopped; %d failed", fork_id), true);
 			vars->nb_launched--;
+			close_pipe(cmd, 3);
 			break ;
 		}
-		close_pipe(cmd, 2);
-		close_pipe(cmd->prev, 1);
 		cmd = cmd->next;
 	}
 	waitpid(last_fork, &vars->minishell->last_status, 0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/07 20:04:05 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/08 10:59:07 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_excmd *set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell)
 	if (!cmd->argv)
 	{
 		free(cmd->name);
-		free(cmd);	
+		free(cmd);
 		return (NULL);
 	}
 	cmd->argv[count_args] = NULL;
