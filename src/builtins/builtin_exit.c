@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:19 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/07 12:10:13 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/07 16:07:43 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void		_free_before_exit(t_excmd *c);
 static t_bool	_check_errors(t_excmd *c);
+static t_bool	_is_numeric_only(char *nptr);
 
 t_exit	builtin_exit(t_excmd *c)
 {
@@ -21,6 +22,7 @@ t_exit	builtin_exit(t_excmd *c)
 	char				*arg;
 	t_bool				free_at_end;
 
+	(void)arg;
 	status = (unsigned char)c->vars->minishell->last_status;
 	if (c->argc == 1)
 	{
@@ -33,6 +35,7 @@ t_exit	builtin_exit(t_excmd *c)
 		_free_before_exit(c);
 		exit(status);
 	}
+	return (0);
 }
 
 static void	_free_before_exit(t_excmd *c)
@@ -44,11 +47,13 @@ static void	_free_before_exit(t_excmd *c)
 	free_env(&c->vars->minishell->env);
 	free(c->vars);
 	free_cmds(cmds);
+	(void)_is_numeric_only;
 }
 
 static t_bool	_check_errors(t_excmd *c)
 {
-	
+	(void)c;
+	return (true);
 }
 
 static t_bool	_is_numeric_only(char *nptr)
