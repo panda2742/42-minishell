@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/05 19:48:56 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:39:47 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,6 @@ t_token *add_new_token(t_token **new_h, t_token **new_t,
 	else
 		(*new_t)->next = new_token;
 	*new_t = new_token;
-
+	free(current);
 	return (new_token);
 }
