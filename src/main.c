@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/08 10:59:27 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/08 15:28:12 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,8 +185,8 @@ void exit_if_line_null(char *line, t_minishell *minishell)
 	{
 		free_env(&minishell->env);
 		line = NULL;
-		printf(B_GREEN "Good bye!\n" RESET);
-		exit (EXIT_FAILURE);
+		printf("exit\n");
+		exit(EXIT_FAILURE);
 	}
 }
 

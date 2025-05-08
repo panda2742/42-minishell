@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:38 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 09:31:41 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/08 15:26:43 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	puterr(char *message, t_bool call_perror)
 {
-	ft_putstr_fd(B_RED PROJECT_NAME, 2);
+	ft_putstr_fd(RED PROJECT_NAME, 2);
 	if (message)
 	{
 		if (call_perror)
