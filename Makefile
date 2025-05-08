@@ -133,6 +133,7 @@ run:
 
 .PHONY: ab
 ab:
+	git pull
 	clear
 	$(MAKE) bonus
 	clear

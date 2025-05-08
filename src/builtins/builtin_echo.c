@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:14 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/07 10:30:52 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/08 11:28:14 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ t_exit	builtin_echo(t_excmd *c)
 	av++;
 	c->argc--;
 	if (c->argc == 0)
+	{
+		printf("\n");
 		return (0);
+	}
 	while (++i < c->argc)
 	{
 		if (!av[i])
