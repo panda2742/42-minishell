@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/08 15:20:49 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:27:25 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -439,8 +439,17 @@ void			print_cmd(t_excmd *cmd);
 
 // PARSING ---------------------------------------------------------------------
 
+// CMD ------------------------------------------------------------------------
 t_excmd			*create_cmd_list(t_token_list *token_list_head,
 					t_minishell *minishell);
+
+// LEXER ----------------------------------------------------------------------
+
+t_err			parse_quote_prefixed_fragment(t_token *token,
+								const char *input, int *i);
+int				parse_single_quote(t_token *token, const char *input, int *i);
+int				parse_double_quote(t_token *token, const char *input, int *i);
+int				parse_unquoted(t_token *token, const char *input, int *i);
 
 void			expand_caller(t_token *token, t_token **new_tokens,
 					t_minishell *minishell);
