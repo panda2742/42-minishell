@@ -27,6 +27,7 @@ void	exec_multiple_commands(t_execvars *vars)
 			cmd->pipe_open[1] = true;
 		}
 		fork_id = fork();
+		// child
 		if (fork_id == 0)
 		{
 			status = _setup_cmd(cmd);
@@ -58,17 +59,15 @@ void	exec_multiple_commands(t_execvars *vars)
 				exit(status);
 			}
 		}
-		if (cmd->next == NULL)
-			last_fork = fork_id;
-		vars->nb_launched++;
-		if (fork_id < 0)
+		else if (fork_id < 0)
 		{
 			vars->status = EXIT_FORK_FAILED;
 			puterr(ft_sprintf(": Pipeline stopped; %d failed", fork_id), true);
-			vars->nb_launched--;
-			close_pipe(cmd, 3);
 			break ;
 		}
+		if (cmd->next == NULL)
+			last_fork = fork_id;
+		vars->nb_launched++;
 		cmd = cmd->next;
 	}
 	waitpid(last_fork, &vars->minishell->last_status, 0);

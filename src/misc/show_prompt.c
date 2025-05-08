@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:39:24 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/08 15:25:05 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/08 15:51:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char	*_load_theme(t_minishell *minishell);
 
 char	*show_prompt(t_minishell *minishell)
 {
-	static char	default_prompt[13] = "minishell $ ";
+	static char	default_prompt[13] = "minishell$ ";
 	char		*res;
 	char		*line;
 	
