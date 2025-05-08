@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:39:24 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 14:51:23 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/08 15:25:05 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	*show_prompt(t_minishell *minishell)
 	char		*res;
 	char		*line;
 	
+	if (!isatty(STDIN_FILENO))
+		return (readline(""));
 	res = _load_theme(minishell);
 	if (res == NULL)
 		return (readline(default_prompt));
@@ -91,7 +93,7 @@ static char	*_load_theme(t_minishell *minishell)
 		if (minishell->argc >= 3)
 		{
 			if (ft_strcmp(minishell->argv[2], "--theme") && ft_strcmp(minishell->argv[0], "-t"))
-				minishell->prompt_theme = ft_atoi(minishell->argv[2]) % 2;
+				minishell->prompt_theme = ft_atoi(minishell->argv[2]) % 3;
 		}
 	}
 	res = NULL;
@@ -117,6 +119,8 @@ static char	*_load_theme(t_minishell *minishell)
 			U_GREEN, path, RESET,
 			WHITE, RESET
 			);
+	if (minishell->prompt_theme == 2)
+		res = NULL;
 	free((char *)path);
 	return (res);
 }

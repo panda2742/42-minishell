@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:07:18 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 19:08:27 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/07 11:25:45 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,24 @@ char	*get_full_path(char *path, char *cmd_name)
 	tmp = ft_strjoin(tmp2, cmd_name);
 	free(tmp2);
 	return (tmp);
+}
+
+int	close_pipe(t_excmd *cmd, int streams)
+{
+	int	res;
+
+	if (cmd == NULL)
+		return (0);
+	res = 0;
+	if (streams & 1 && cmd->pipe_open[0])
+	{
+		res |= close(cmd->pipe[0]);
+		cmd->pipe_open[0] = false;
+	}
+	if ((streams >> 1) & 1 && cmd->pipe_open[1])
+	{
+		res |= close(cmd->pipe[1]);
+		cmd->pipe_open[1] = false;
+	}
+	return (res);
 }

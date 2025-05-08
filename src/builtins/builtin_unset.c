@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:25 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:47:14 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/07 10:35:12 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static void	_unset_var(t_excmd *c);
 
 t_exit	builtin_unset(t_excmd *c)
 {
+	// TODO PLUSIEURS VARS FDP
 	if (c->argc > 2)
 	{
 		puterr(ft_sprintf(": %s: Too many arguments\n", c->name), false);
@@ -54,5 +55,7 @@ static void	_unset_var(t_excmd *c)
 		prev = var;
 		if (var->next)
 			var = var->next;
+		else
+			break ;
 	}
 }

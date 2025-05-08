@@ -17,6 +17,7 @@ t_execvars	*create_execvars(t_minishell *minishell, t_excmd **cmds)
 		{
 			vars->nb_cmd++;
 			cmd->vars = vars;
+			cmd->id = vars->nb_cmd;
 			if (cmd->name)
 				cmd->proto = load_builtin(cmd->name, &cmd->proto);
 			cmd = cmd->next;

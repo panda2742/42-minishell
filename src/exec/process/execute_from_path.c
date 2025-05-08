@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_child.c                                       :+:      :+:    :+:   */
+/*   execute_from_path.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:59:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/21 14:14:57 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:16:53 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,46 +20,52 @@ void	execute_from_path(t_excmd *cmd)
 	t_env_var	*path_var;
 	char		*fullpath;
 
-	path_var = get_var(&cmd->vars->minishell->env, "PATH");
-	if (path_var != NULL)
+	if (ft_strchr(cmd->name, '/') == NULL)
 	{
-		cmd->paths = ft_split(path_var->value, ":");
-		if (cmd->paths == NULL)
+		path_var = get_var(&cmd->vars->minishell->env, "PATH");
+		if (path_var != NULL)
+		{
+			cmd->paths = ft_split(path_var->value, ":");
+			if (cmd->paths == NULL)
+				cmd->paths = empty_tab();
+		}
+		else
 			cmd->paths = empty_tab();
+		i = 0;
+		while (cmd->paths[i])
+		{
+			fullpath = get_full_path(cmd->paths[i], cmd->name);
+			i++;
+			if (access(fullpath, F_OK) != 0)
+			{
+				cmd->vars->errs.exc_access_fok = 1;
+				free(fullpath);
+				continue ;
+			}
+			if (access(fullpath, X_OK) != 0)
+			{
+				cmd->vars->errs.exc_access_xok = 1;
+				free(fullpath);
+				continue ;
+			}
+			if (execve(fullpath, cmd->argv, cmd->envp) == -1)
+			{
+				cmd->vars->errs.exc_execve = 1;
+				free(fullpath);
+				break ;
+			}
+			free(fullpath);
+		}
 	}
 	else
-		cmd->paths = empty_tab();
-	i = 0;
-	while (cmd->paths[i])
 	{
-		fullpath = get_full_path(cmd->paths[i], cmd->name);
-		i++;
-		if (access(fullpath, F_OK) != 0)
-		{
+		if (access(cmd->name, F_OK) != 0)
 			cmd->vars->errs.exc_access_fok = 1;
-			free(fullpath);
-			continue ;
-		}
-		if (access(fullpath, X_OK) != 0)
-		{
+		else if (access(cmd->name, X_OK) != 0)
 			cmd->vars->errs.exc_access_xok = 1;
-			free(fullpath);
-			continue ;
-		}
-		if (execve(fullpath, cmd->argv, cmd->envp) == -1)
-		{
+		else if (execve(cmd->name, cmd->argv, cmd->envp) == -1)
 			cmd->vars->errs.exc_execve = 1;
-			free(fullpath);
-			break ;
-		}
-		free(fullpath);
 	}
-	if (access(cmd->name, F_OK) != 0)
-		cmd->vars->errs.exc_access_fok = 1;
-	else if (access(cmd->name, X_OK) != 0)
-		cmd->vars->errs.exc_access_xok = 1;
-	else if (execve(cmd->name, cmd->argv, cmd->envp) == -1)
-		cmd->vars->errs.exc_execve = 1;
 	_print_err(cmd);
 }
 

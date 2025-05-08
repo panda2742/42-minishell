@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:11:01 by abonifac          #+#    #+#             */
-/*   Updated: 2025/04/23 16:25:33 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:54:48 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,32 @@
 /*
  * Callled in expand_tokens.c and expand
 */
-void	handle_normal_char(t_utils *utils, char *input)
+t_err	handle_normal_char(t_utils *utils, char *input)
 {
 	char	tmp[2];
+	char	*new;
 
 	tmp[0] = input[utils->i];
 	tmp[1] = '\0';
-	utils->s1 = str_join_free(utils->s1, tmp);
+	new = str_join_free(utils->s1, tmp);
+	if (new == NULL)
+		return (ERR_MALLOC);
+	utils->s1 = new;
 	utils->i++;
+	return (ERR_NONE);
 }
 
-void	add_char_to_string(char *expanded, char **current, int *i)
+t_err	add_char_to_string(char *expanded, char **current, int *i)
 {
 	char	tmp[2];
+	char	*new;
 
 	tmp[0] = expanded[*i];
 	tmp[1] = '\0';
-	*current = str_join_free(*current, tmp);
+	new = str_join_free(*current, tmp);
+	if (new == NULL)
+		return (ERR_MALLOC);
+	*current = new;
 	(*i)++;
+	return (ERR_NONE);
 }

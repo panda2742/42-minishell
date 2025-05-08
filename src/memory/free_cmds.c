@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:19:34 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 19:04:18 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:58:05 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,12 @@ void	free_one_cmd(t_excmd *cmd)
 		free(cmd->name);
 		cmd->name = NULL;
 	}
-	if (cmd->argv[0])
+	if (cmd->argv && cmd->argv != empty_tab())
 	{
-		ft_free_strtab(cmd->argv);
+		if (cmd->argv[0])
+			ft_free_strtab(cmd->argv);
+		else
+			free(cmd->argv);
 		cmd->argv = NULL;
 	}
 	if (cmd->paths[0])
