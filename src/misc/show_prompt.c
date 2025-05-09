@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:39:24 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 13:52:54 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/09 17:07:17 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	*_get_user(t_env_manager *env)
 
 	user_var = get_var(env, "USER");
 	if (!user_var || !user_var->value)
-		user = ft_strdup((char *)default_user);
+		user = (char *)default_user;
 	else
 		user = user_var->value;
 	return (user);

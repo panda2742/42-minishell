@@ -6,7 +6,7 @@
 #    By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 14:44:31 by ehosta            #+#    #+#              #
-#    Updated: 2025/05/09 12:29:30 by ehosta           ###   ########.fr        #
+#    Updated: 2025/05/09 14:39:39 by ehosta           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -112,7 +112,7 @@ override	DIRS		:=	$(sort $(dir $(NAME) $(OBJ) $(DEPS)))
 
 override	DEPFLAGS	:=	-MMD -MP
 OFLAGS		:=	-O0
-CFLAGS		:=	-Wall -Wextra -Werror $(DEPFLAGS)
+CFLAGS		:=	-Wall -Wextra -Werror -g3 $(DEPFLAGS)
 ARFLAGS		:=	rcs
 MAKEFLAGS	:=	--no-print-directory
 RMFLAGS		:=	-rf

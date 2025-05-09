@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:59:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 11:50:05 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/09 14:32:02 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	execute_from_path(t_excmd *cmd)
 				cmd->paths = empty_tab();
 		}
 		else
-			cmd->paths = empty_tab();
+			cmd->paths = empty_paths();
 		i = 0;
 		while (cmd->paths[i])
 		{

@@ -16,7 +16,7 @@ override	HEADER_FILES	:=	minishell
 
 # The C source code files of the project
 override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export pwd unset)
-override	SRC_ENV_MANAGER	:=	create_env env_to_strlst get_var
+override	SRC_ENV_MANAGER	:=	create_env default_env env_to_strlst get_var
 override	SRC_ERRORS		:=	puterr
 override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
 								$(addprefix init/, create_cmd create_execvars create_redirect redirect_manager) \
@@ -60,7 +60,7 @@ override	DIRS		:=	$(sort $(dir $(NAME) $(OBJ) $(LIBFT) $(DEPS)))
 
 
 # The C compilation flags
-CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP -D PROJECT_NAME=\"$(NAME)\"
+CFLAGS		:=	-Wall -Wextra -Werror -MMD -MP -g3 -D PROJECT_NAME=\"$(NAME)\"
 # The Makefile flags to hide the current directory on compilation
 MAKEFLAGS	:=	--no-print-directory
 # The compiler binary 
@@ -147,7 +147,7 @@ eh:
 	clear
 	$(MAKE) bonus
 	clear
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=/home/ehosta/Documents/42-minishell/.valgrind_suppress.txt ./$(NAME) -t 2
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=/home/ehosta/Documents/42-minishell/.valgrind_suppress.txt ./$(NAME) -t 0
 
 
 -include $(DEPS)

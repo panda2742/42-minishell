@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_var.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:34 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/07 19:39:03 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:16:40 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_env_var	*get_var(t_env_manager *env, const char *name)
 
 	i = -1;
 	var = *env->vars;
-	while (++i < env->env_size && var->next)
+	while (++i < env->env_size && var)
 	{
 		if (ft_strcmp((char *)name, var->name) == 0)
 			return (var);

@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 12:32:29 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/09 17:17:39 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_env_var	**create_env(char **envp, t_env_manager *env)
 	size_t		i;
 	t_env_var	*elt;
 	t_env_var	*prev;
+	char		*cwd;
 
 	if (_init_manager(envp, env) == NULL)
 		return (NULL);
@@ -58,6 +59,13 @@ t_env_var	**create_env(char **envp, t_env_manager *env)
 			prev->next = elt;
 		prev = elt;
 	}
+	init_var(env, "PWD");
+	init_var(env, "OLDPWD");
+	init_var(env, "SHLVL");
+	cwd = getcwd(NULL, 0);
+	ensure_var(env, "PWD", cwd);
+	free(cwd);
+	ensure_var(env, "SHLVL", "0");
 	_increment_shlevel(env);
 	return (env->vars);
 }

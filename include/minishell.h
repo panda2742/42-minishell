@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 11:13:52 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 16:07:21 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -422,6 +422,9 @@ t_execvars		*create_execvars(t_minishell *minishell, t_excmd **cmds);
 void			reset_execvars(t_execvars *vars);
 void			exec_multiple_commands(t_execvars *vars);
 int				close_pipe(t_excmd *cmd, int streams);
+t_env_var		*ensure_var(t_env_manager *env, const char *name,
+					char *default_val);
+t_env_var		*init_var(t_env_manager *env, const char *name);
 
 // MEMORY ----------------------------------------------------------------------
 
@@ -509,6 +512,7 @@ int				handle_is_redir_tokens(t_excmd *cmd, t_token *token);
 void			incr_on_alnum(char *str, int *j);
 char			*ft_sprintf(const char *format, ...);
 void			*empty_tab(void);
+char			**empty_paths(void);
 int				is_redir(t_token *head_token);
 char			*join_tokens_to_string(t_token *tokens);
 void			print_token_list(t_token_list *list);

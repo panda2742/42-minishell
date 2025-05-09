@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/08 17:53:10 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:20:13 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void exit_if_line_null(char *line, t_minishell *minishell)
  * Malloc secured
 */
 void	create_env_or_exit_if_env_error(char **env, t_minishell *minishell,
-										int argc, char **argv)
+											int argc, char **argv)
 {
 	t_env_var **env_var;
 
@@ -104,8 +104,8 @@ void	create_env_or_exit_if_env_error(char **env, t_minishell *minishell,
 	if (env_var == NULL)
 	{
 		puterr(ft_sprintf(
-				   ": error: Environment creation memory allocation failure\n"),
-			   false);
+				": error: Environment creation memory allocation failure\n"),
+				false);
 		exit (EXIT_FAILURE);
 	}
 }
@@ -133,9 +133,10 @@ int main(int argc, char **argv, char **env)
 	t_excmd *first;
 	char *line;
 
+	(void)env;
 	first = NULL;
 	head = NULL;
-	create_env_or_exit_if_env_error(env, &minishell, argc, argv);
+	create_env_or_exit_if_env_error(empty_tab(), &minishell, argc, argv);
 	while (1)
 	{
 		set_sig_action();
