@@ -19,7 +19,9 @@
 # include "ft_str.h"
 
 int		ft_atoi(const char *str);
+int		ft_atoll(const char *str);
 char	*ft_itoa(int n);
+char	*ft_lltoa(long long n);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
 

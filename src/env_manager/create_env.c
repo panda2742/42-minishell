@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/05 19:55:24 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:32:29 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static char			*_get_name(t_env_var *var, char *env_var);
 static char			*_get_value(t_env_var *var, char *env_var);
 static t_env_var	**_init_manager(char **envp, t_env_manager *env);
+static void			_increment_shlevel(t_env_manager *env);
 
 t_env_var	**create_env(char **envp, t_env_manager *env)
 {
@@ -57,6 +58,7 @@ t_env_var	**create_env(char **envp, t_env_manager *env)
 			prev->next = elt;
 		prev = elt;
 	}
+	_increment_shlevel(env);
 	return (env->vars);
 }
 
@@ -107,4 +109,19 @@ static t_env_var	**_init_manager(char **envp, t_env_manager *env)
 	while (envp[env->env_size])
 		env->env_size += 1;
 	return (env->vars);
+}
+
+static void	_increment_shlevel(t_env_manager *env)
+{
+	t_env_var	*shlevel_var;
+	int64_t		lvl_value;
+
+	shlevel_var = get_var(env, "SHLVL");
+	if (shlevel_var == NULL || shlevel_var->value == NULL)
+		return ;
+	lvl_value = ft_atoll(shlevel_var->value) + 1;
+	free(shlevel_var->value);
+	shlevel_var->value = ft_lltoa(lvl_value);
+	if (shlevel_var->value)
+		shlevel_var->value_length = ft_strlen(shlevel_var->value);
 }

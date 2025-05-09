@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:39:24 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/08 15:51:41 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/09 13:52:54 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*show_prompt(t_minishell *minishell)
 
 static char	*_get_user(t_env_manager *env)
 {
-	static char	default_user[8] = "unknown";
+	static char	default_user[7] = "shweck";
 	t_env_var	*user_var;
 	char		*user;
 
@@ -49,7 +49,7 @@ static char	*_get_user(t_env_manager *env)
 
 static char	*_get_path(t_env_manager *env)
 {
-	static char	default_path[6] = "?/?";
+	static char	default_path[27] = "*its a dark place here...*";
 	char		*cwd;
 	t_env_var	*home_var;
 

@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:59:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/08 11:16:53 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/09 11:50:05 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	execute_from_path(t_excmd *cmd)
 	t_env_var	*path_var;
 	char		*fullpath;
 
-	if (ft_strchr(cmd->name, '/') == NULL)
+	if (cmd->name && ft_strchr(cmd->name, '/') == NULL)
 	{
 		path_var = get_var(&cmd->vars->minishell->env, "PATH");
 		if (path_var != NULL)
@@ -57,7 +57,7 @@ void	execute_from_path(t_excmd *cmd)
 			free(fullpath);
 		}
 	}
-	else
+	else if (cmd->name && ft_strchr(cmd->name, '/'))
 	{
 		if (access(cmd->name, F_OK) != 0)
 			cmd->vars->errs.exc_access_fok = 1;
@@ -65,6 +65,10 @@ void	execute_from_path(t_excmd *cmd)
 			cmd->vars->errs.exc_access_xok = 1;
 		else if (execve(cmd->name, cmd->argv, cmd->envp) == -1)
 			cmd->vars->errs.exc_execve = 1;
+	}
+	else
+	{
+		cmd->vars->errs.exc_access_fok = 1;
 	}
 	_print_err(cmd);
 }
