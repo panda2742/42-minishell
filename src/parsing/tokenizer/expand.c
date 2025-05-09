@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:01 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/09 11:33:01 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:24:46 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static t_err	apply_fragments(t_w_split *n, t_fragment *frag,
 		else
 		{
 			n->has_quotes = true;
-			handle_other_quotes(frag, n, mini);
+			st = handle_other_quotes(frag, n, mini);
 		}
 		if (st != ERR_NONE)
 			return (st);
@@ -112,6 +112,7 @@ void	expand_caller(t_token *token, t_token **new_tokens, t_minishell *mini)
 	t_token	*tmp;
 	t_err	st;
 
+	split_token = NULL;
 	*new_tokens = NULL;
 	last_new = NULL;
 	tmp = token;

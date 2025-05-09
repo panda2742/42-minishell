@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 12:16:02 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:18:34 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_err	handle_expand_char(t_utils *utils, t_minishell *mini, char *input)
 	// var_name = NULL;
 	if (!var_name)
 		return (ERR_MALLOC);
-	utils->k = 0;
+	// utils->k = 0;
 	// while (utils->k < utils->len1)
 	// {
 	// 	var_name[utils->k] = input[utils->i + utils->k + 1];
