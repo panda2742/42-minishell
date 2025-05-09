@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 20:15:59 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 20:21:33 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,56 +68,13 @@ t_excmd *build_and_parse_line(char *line, t_minishell *mini)
 	return (cmd_list);
 }
 
-void exit_if_line_null(char *line, t_minishell *minishell)
-{
-	if (!line)
-	{
-		free_env(&minishell->env);
-		line = NULL;
-		printf("exit\n");
-		exit(EXIT_FAILURE);
-	}
-}
 
 /*
  * Check if the environment was created successfully
  * If not, print an error message and exit
  * Malloc secured
 */
-void	create_env_or_exit_if_env_error(char **env, t_minishell *minishell,
-											int argc, char **argv)
-{
-	t_env_var **env_var;
 
-	minishell->argc = argc;
-	minishell->argv = argv;
-	minishell->prompt_theme = -1;
-	minishell->last_status = EXIT_SUCCESS;
-	env_var = create_env(env, &minishell->env);
-	if (env_var == NULL)
-	{
-		puterr(ft_sprintf(
-				": error: Environment creation memory allocation failure\n"),
-				false);
-		exit (EXIT_FAILURE);
-	}
-}
-
-void handle_status_error(t_token *token, t_minishell *minishell, t_err status)
-{
-	if (status == ERR_MALLOC)
-	{
-
-		puterr(ft_sprintf(": error: Memory allocation error\n"), false);
-		free_tokens(token);
-		free_env(&minishell->env);
-		exit (EXIT_FAILURE);
-	}
-	else
-	{
-			free_tokens(token);
-	}
-}
 int main(int argc, char **argv, char **env)
 {
 	t_execvars	*vars;
@@ -127,7 +84,6 @@ int main(int argc, char **argv, char **env)
 
 	(void)env;
 	first = NULL;
-	head = NULL;
 	create_env_or_exit_if_env_error(empty_tab(), &minishell, argc, argv);
 	while (1)
 	{
