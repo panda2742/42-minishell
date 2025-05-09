@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/22 18:39:54 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:48:18 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 
 static t_bool	_load_env_strlst(t_execvars *vars)
 {
+	t_excmd	*cmd;
+
 	vars->minishell->env.envlst = env_to_strlst(&vars->minishell->env);
 	if (vars->minishell->env.envlst == NULL)
 	{
@@ -48,6 +50,12 @@ static t_bool	_load_env_strlst(t_execvars *vars)
 			": error: Pipeline init failure (memory allocation), killing %s\n"
 			PROJECT_NAME), false);
 		return (false);
+	}
+	cmd = *vars->cmds;
+	while (cmd)
+	{
+		cmd->envp = vars->minishell->env.envlst;
+		cmd = cmd->next;
 	}
 	return (true);
 }

@@ -6,7 +6,7 @@
 #    By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/15 14:44:31 by ehosta            #+#    #+#              #
-#    Updated: 2025/04/16 15:27:06 by ehosta           ###   ########.fr        #
+#    Updated: 2025/05/09 12:29:30 by ehosta           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,7 +88,9 @@ override	SRC_STR		:=	ft_split \
 							ft_strtrim \
 							ft_substr
 override	SRC_TO		:=	ft_atoi \
+							ft_atoll \
 							ft_itoa \
+							ft_lltoa \
 							ft_tolower \
 							ft_toupper
 override	SRCS		:=	$(addprefix array/,$(SRC_ARRAY)) \
