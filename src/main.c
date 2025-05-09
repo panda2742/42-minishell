@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/08 15:38:58 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:53:10 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
  * new_tokens is the list of tokens after expansion
  */
 
- 
 t_excmd *process_tokens(t_token *token, t_minishell *minishell)
 {
 	t_token_list *head_list;

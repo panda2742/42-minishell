@@ -24,8 +24,8 @@ override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
 override	SRC_MEMORY		:=	free_cmds free_env
 override	SRC_MISC		:=	print_cmds show_prompt signals
 override	SRC_PARSING		:=	$(addprefix cmd/, cmd) \
-								$(addprefix lexer/, handle_redir_pipe lexer_parse lexer lexer_utils) \
-								$(addprefix tokenizer/, expand expand_tokens fragments token_lexer token_list)
+								$(addprefix lexer/, handle_redir_pipe lexer_parse lexer_quotes lexer_utils lexer) \
+								$(addprefix tokenizer/, expand_caller_utils expand expand_tokens fragments token_lexer token_list word_split_token_utils) 
 override	SRC_UTILS		:=	$(addprefix parsing/, count_arg_words free_str_return_null ft_add_char ft_split_parser ft_str_join_free ft_strcmp get_first_word handle_is_redir_token incr_on_alnum is_redir join_token_to_string print_t_token_list skip_spaces token_lstsize) \
 								empty_tab \
 								ft_sprintf
@@ -147,7 +147,7 @@ eh:
 	clear
 	$(MAKE) bonus
 	clear
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=/home/ehosta/Documents/42-minishell/.valgrind_suppress.txt ./$(NAME) -t 1
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=/home/ehosta/Documents/42-minishell/.valgrind_suppress.txt ./$(NAME) -t 2
 
 
 -include $(DEPS)

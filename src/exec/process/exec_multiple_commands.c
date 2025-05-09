@@ -27,6 +27,7 @@ void	exec_multiple_commands(t_execvars *vars)
 			cmd->pipe_open[1] = true;
 		}
 		fork_id = fork();
+		// child
 		if (fork_id == 0)
 		{
 			status = _setup_cmd(cmd);
