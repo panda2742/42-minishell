@@ -25,7 +25,7 @@ override	SRC_MEMORY		:=	free_cmds free_env
 override	SRC_MISC		:=	print_cmds show_prompt signals
 override	SRC_PARSING		:=	$(addprefix cmd/, cmd) \
 								$(addprefix lexer/, handle_redir_pipe lexer_parse lexer_quotes lexer_utils lexer) \
-								$(addprefix tokenizer/, expand expand_tokens fragments token_lexer token_list)
+								$(addprefix tokenizer/, expand_caller_utils expand expand_tokens fragments token_lexer token_list word_split_token_utils) 
 override	SRC_UTILS		:=	$(addprefix parsing/, count_arg_words free_str_return_null ft_add_char ft_split_parser ft_str_join_free ft_strcmp get_first_word handle_is_redir_token incr_on_alnum is_redir join_token_to_string print_t_token_list skip_spaces token_lstsize) \
 								empty_tab \
 								ft_sprintf
