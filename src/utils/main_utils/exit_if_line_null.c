@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   incr_on_alnum.c                                    :+:      :+:    :+:   */
+/*   exit_if_line_null.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/22 19:02:43 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/09 18:05:47 by abonifac         ###   ########.fr       */
+/*   Created: 2025/05/09 19:08:50 by abonifac          #+#    #+#             */
+/*   Updated: 2025/05/09 19:09:01 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
- * This function increments the index j until it finds a non-alphanumeric
-*/
-
-void	incr_on_alnum(char *str, int *j, int i)
+void exit_if_line_null(char *line, t_minishell *minishell)
 {
-	*j = i;
-	while (str[*j] && ft_isalnum(str[*j]))
-		(*j)++;
+	if (!line)
+	{
+		free_env(&minishell->env);
+		line = NULL;
+		printf("exit\n");
+		exit(EXIT_FAILURE);
+	}
 }

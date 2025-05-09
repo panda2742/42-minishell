@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 16:07:21 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/09 20:14:52 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -449,11 +449,10 @@ t_excmd			*create_cmd_list(t_token_list *token_list_head,
 // LEXER ----------------------------------------------------------------------
 
 t_err			parse_quote_prefixed_fragment(t_token *token,
-								const char *input, int *i);
+					const char *input, int *i);
 int				parse_single_quote(t_token *token, const char *input, int *i);
 int				parse_double_quote(t_token *token, const char *input, int *i);
 int				parse_unquoted(t_token *token, const char *input, int *i);
-
 
 t_err			handle_redir_pipe(int *i, t_token **token_list,
 					const char *input);
@@ -471,8 +470,6 @@ t_err			ft_input(const char *input, t_token **output);
 char			*expand_fragment(const char *input, int quote,
 					t_minishell *mini);
 t_qtype			set_qtype_fragment(t_token *token_head);
-// t_err			word_split_token(t_token *token, t_minishell *mini,
-// 					t_token **out_list);
 t_fragment		*new_fragment(const char *start, size_t len,
 					t_qtype quote_type);
 void			append_fragment(t_token *token, t_fragment *frag);
@@ -494,12 +491,33 @@ t_err			empty_var(t_w_split *n_list, t_token **out_list);
 t_err			set_n_list_and_frag(t_w_split *n_list);
 t_err			free_n_list(t_w_split *n_list);
 
-
-
-
+t_qtype			set_qtype_fragment(t_token *token_head);
+void			update_head_and_last(t_token **new_h, t_token **new_t,
+					t_token *new_token);
+t_err			handle_last_rvalue(t_minishell *mini, t_utils *utils);
+void			set_var_name(t_utils *utils, char *var_name, char *input);
+t_err			handle_expand_char(t_utils *utils, t_minishell *mini,
+					char *input);
+void			free_tokens_list(t_token *tokens);
+void			free_tokens_in_list(t_token_list *head);
+void			update_head_tail(t_token_list_h *utils, t_token **new_token,
+					t_token **tmp);
+void			append_cmd_node(t_token_list **head, t_token_list *node);
+void			exit_node_failed(t_minishell *mini, t_token_list **tok_cmd_h,
+					t_token *tok_exp_h);
+t_token_list	*add_token_failed(t_token_list *list, t_token *new_token);
+void			set_values(t_token_list_h *utils);
 
 // UTILS -----------------------------------------------------------------------
 
+// MAIN_UTILS
+void			create_env_or_exit_if_env_error(char **env,
+					t_minishell *minishell, int argc, char **argv);
+void			exit_if_line_null(char *line, t_minishell *minishell);
+t_excmd			*handle_status_err(t_err status, t_token *token, t_minishell *mini);
+
+
+// PARSING
 size_t			count_arg_words(t_token *token);
 char			*free_str_return_null(char *str);
 t_err			handle_normal_char(t_utils *utils, char *input);
@@ -509,7 +527,7 @@ char			*str_join_free(char *s1, const char *s2);
 int				ft_strcmp(char *s1, char *s2);
 char			*get_first_word(t_token *token);
 int				handle_is_redir_tokens(t_excmd *cmd, t_token *token);
-void			incr_on_alnum(char *str, int *j);
+void			incr_on_alnum(char *str, int *j, int i);
 char			*ft_sprintf(const char *format, ...);
 void			*empty_tab(void);
 char			**empty_paths(void);

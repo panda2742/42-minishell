@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:01 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/09 12:24:46 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 14:35:58 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ static t_err	apply_fragments(t_w_split *n, t_fragment *frag,
  * with the function add_new_token
  */
 
-static t_err	word_split_token(t_token *token, t_minishell *mini, t_token **out_list)
+static t_err	word_split_token(t_token *token, t_minishell *mini,
+					t_token **out_list)
 {
 	t_w_split	n_list;
 	t_fragment	*frag;

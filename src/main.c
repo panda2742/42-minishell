@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 17:20:13 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/09 20:15:59 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,35 +43,28 @@ t_excmd *process_tokens(t_token *token, t_minishell *minishell)
 
 t_excmd *build_and_parse_line(char *line, t_minishell *mini)
 {
-	t_token *token;
-	t_excmd *cmd_list;
-	t_err status;
+	t_token	*token;
+	t_excmd	*cmd_list;
+	t_err 	status;
 
 	status = ft_input(line, &token);
-	if (status == ERR_MALLOC)
+	if (*line == '\0')
 	{
-		puterr(ft_sprintf(": error: Memory allocation error\n"), false);
 		free(line);
-		free_env(&mini->env);
-		exit(EXIT_FAILURE);
-	}
-	else if (status == ERR_LEX)
-	{
-		puterr(ft_sprintf(": error: Lexical error\n"), false);
-		free(line);
-		mini->last_status = 2;
+		mini->last_status = 0;
 		free_tokens(token);
 		return (NULL);
 	}
+	free(line);
+	if (status == ERR_MALLOC || status == ERR_LEX)
+		return (handle_status_err(status, token, mini));
 	if (!lexer_parse(token))
 	{
-		free(line);
 		mini->last_status = 2;
 		free_tokens(token);
 		return (NULL);
 	}
 	cmd_list = process_tokens(token, mini);
-	free(line);
 	return (cmd_list);
 }
 
@@ -127,11 +120,10 @@ void handle_status_error(t_token *token, t_minishell *minishell, t_err status)
 }
 int main(int argc, char **argv, char **env)
 {
-	t_execvars *vars;
-	t_minishell minishell;
-	t_excmd *head;
-	t_excmd *first;
-	char *line;
+	t_execvars	*vars;
+	t_minishell	minishell;
+	t_excmd		*first;
+	char 		*line;
 
 	(void)env;
 	first = NULL;
@@ -145,10 +137,7 @@ int main(int argc, char **argv, char **env)
 		add_history(line);
 		first = build_and_parse_line(line, &minishell);
 		if (!first)
-			continue;
-		if (head == NULL)
-			head = first;
-		
+			continue ;
 		vars = exec_command(&minishell, &first);
 		if (vars == NULL)
 			minishell.last_status = EXIT_FAILURE;

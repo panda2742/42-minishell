@@ -1,0 +1,171 @@
+==114704== Memcheck, a memory error detector
+==114704== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==114704== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==114704== Command: ./minishell
+==114704== 
+==114704== Conditional jump or move depends on uninitialised value(s)
+==114704==    at 0x407EB1: free_tokens (token_lexer.c:21)
+==114704==    by 0x406C34: free_tok_return_st (lexer.c:41)
+==114704==    by 0x407048: parse_word_token (lexer.c:84)
+==114704==    by 0x406E1B: ft_input (lexer.c:113)
+==114704==    by 0x409D8C: build_and_parse_line (main.c:50)
+==114704==    by 0x409ECA: main (main.c:87)
+==114704==  Uninitialised value was created by a stack allocation
+==114704==    at 0x406D80: ft_input (lexer.c:96)
+==114704== 
+[31mminishell: error: Lexical error
+[0m==114704== Source and destination overlap in memcpy_chk(0x48c71e0, 0x48c71e1, 2)
+==114704==    at 0x48539B2: __memcpy_chk (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==114704==    by 0x48A67AD: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==114704==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==114704==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==114704==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==114704==    by 0x4895D14: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==114704==    by 0x40577A: show_prompt (show_prompt.c:27)
+==114704==    by 0x409EA3: main (main.c:84)
+==114704== 
+==114704== Source and destination overlap in memcpy_chk(0x48c71e0, 0x48c71e1, 2)
+==114704==    at 0x48539B2: __memcpy_chk (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==114704==    by 0x48A67AD: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==114704==    by 0x48AB154: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==114704==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==114704==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==114704==    by 0x4895D14: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==114704==    by 0x40577A: show_prompt (show_prompt.c:27)
+==114704==    by 0x409EA3: main (main.c:84)
+==114704== 
+==114704== Use of uninitialised value of size 8
+==114704==    at 0x407EC3: free_tokens (token_lexer.c:24)
+==114704==    by 0x406C34: free_tok_return_st (lexer.c:41)
+==114704==    by 0x407048: parse_word_token (lexer.c:84)
+==114704==    by 0x406E1B: ft_input (lexer.c:113)
+==114704==    by 0x409D8C: build_and_parse_line (main.c:50)
+==114704==    by 0x409ECA: main (main.c:87)
+==114704==  Uninitialised value was created by a stack allocation
+==114704==    at 0x406D80: ft_input (lexer.c:96)
+==114704== 
+==114704== Use of uninitialised value of size 8
+==114704==    at 0x407ECF: free_tokens (token_lexer.c:25)
+==114704==    by 0x406C34: free_tok_return_st (lexer.c:41)
+==114704==    by 0x407048: parse_word_token (lexer.c:84)
+==114704==    by 0x406E1B: ft_input (lexer.c:113)
+==114704==    by 0x409D8C: build_and_parse_line (main.c:50)
+==114704==    by 0x409ECA: main (main.c:87)
+==114704==  Uninitialised value was created by a stack allocation
+==114704==    at 0x406D80: ft_input (lexer.c:96)
+==114704== 
+==114704== Invalid free() / delete / delete[] / realloc()
+==114704==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==114704==    by 0x407EF9: free_tokens (token_lexer.c:29)
+==114704==    by 0x406C34: free_tok_return_st (lexer.c:41)
+==114704==    by 0x407048: parse_word_token (lexer.c:84)
+==114704==    by 0x406E1B: ft_input (lexer.c:113)
+==114704==    by 0x409D8C: build_and_parse_line (main.c:50)
+==114704==    by 0x409ECA: main (main.c:87)
+==114704==  Address 0xa87d8348a8458948 is not stack'd, malloc'd or (recently) free'd
+==114704== 
+==114704== Invalid free() / delete / delete[] / realloc()
+==114704==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==114704==    by 0x407F02: free_tokens (token_lexer.c:30)
+==114704==    by 0x406C34: free_tok_return_st (lexer.c:41)
+==114704==    by 0x407048: parse_word_token (lexer.c:84)
+==114704==    by 0x406E1B: ft_input (lexer.c:113)
+==114704==    by 0x409D8C: build_and_parse_line (main.c:50)
+==114704==    by 0x409ECA: main (main.c:87)
+==114704==  Address 0x409ecb is in the Text segment of /home/abonifac/milestone3/42-minishell/minishell
+==114704==    at 0x409ECB: main (main.c:87)
+==114704== 
+==114704== Invalid read of size 8
+==114704==    at 0x407EE6: free_tokens (token_lexer.c:28)
+==114704==    by 0x406C34: free_tok_return_st (lexer.c:41)
+==114704==    by 0x407048: parse_word_token (lexer.c:84)
+==114704==    by 0x406E1B: ft_input (lexer.c:113)
+==114704==    by 0x409D8C: build_and_parse_line (main.c:50)
+==114704==    by 0x409ECA: main (main.c:87)
+==114704==  Address 0xb07d8d48ffffffc7 is not stack'd, malloc'd or (recently) free'd
+==114704== 
+==114704== 
+==114704== Process terminating with default action of signal 11 (SIGSEGV)
+==114704==  General Protection Fault
+==114704==    at 0x407EE6: free_tokens (token_lexer.c:28)
+==114704==    by 0x406C34: free_tok_return_st (lexer.c:41)
+==114704==    by 0x407048: parse_word_token (lexer.c:84)
+==114704==    by 0x406E1B: ft_input (lexer.c:113)
+==114704==    by 0x409D8C: build_and_parse_line (main.c:50)
+==114704==    by 0x409ECA: main (main.c:87)
+==114704== 
+==114704== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==114704== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==114704==    <inherited from parent>
+==114704== 
+==114704== Open AF_UNIX socket 37: <unknown>
+==114704==    <inherited from parent>
+==114704== 
+==114704== Open file descriptor 36: /home/abonifac/.config/Code/logs/20250509T162611/ptyhost.log
+==114704==    <inherited from parent>
+==114704== 
+==114704== 
+==114704== HEAP SUMMARY:
+==114704==     in use at exit: 222,485 bytes in 490 blocks
+==114704==   total heap usage: 727 allocs, 239 frees, 238,980 bytes allocated
+==114704== 
+==114704== 8 bytes in 1 blocks are still reachable in loss record 2 of 90
+==114704==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==114704==    by 0x40A13D: ft_memalloc (in /home/abonifac/milestone3/42-minishell/minishell)
+==114704==    by 0x4021D9: _init_manager (create_env.c:103)
+==114704==    by 0x40202C: create_env (create_env.c:25)
+==114704==    by 0x40949F: create_env_or_exit_if_env_error (create_env.c:37)
+==114704==    by 0x409E95: main (main.c:80)
+==114704== 
+==114704== 12 bytes in 2 blocks are indirectly lost in loss record 9 of 90
+==114704==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==114704==    by 0x40A13D: ft_memalloc (in /home/abonifac/milestone3/42-minishell/minishell)
+==114704==    by 0x407DA9: new_fragment (fragments.c:31)
+==114704==    by 0x406AD1: parse_unquoted (lexer_quotes.c:112)
+==114704==    by 0x407019: parse_word_token (lexer.c:82)
+==114704==    by 0x406E1B: ft_input (lexer.c:113)
+==114704==    by 0x409D8C: build_and_parse_line (main.c:50)
+==114704==    by 0x409ECA: main (main.c:87)
+==114704== 
+==114704== 60 (48 direct, 12 indirect) bytes in 2 blocks are definitely lost in loss record 27 of 90
+==114704==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==114704==    by 0x40A13D: ft_memalloc (in /home/abonifac/milestone3/42-minishell/minishell)
+==114704==    by 0x407D7C: new_fragment (fragments.c:26)
+==114704==    by 0x406AD1: parse_unquoted (lexer_quotes.c:112)
+==114704==    by 0x407019: parse_word_token (lexer.c:82)
+==114704==    by 0x406E1B: ft_input (lexer.c:113)
+==114704==    by 0x409D8C: build_and_parse_line (main.c:50)
+==114704==    by 0x409ECA: main (main.c:87)
+==114704== 
+==114704== 1,090 bytes in 76 blocks are still reachable in loss record 58 of 90
+==114704==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==114704==    by 0x40A13D: ft_memalloc (in /home/abonifac/milestone3/42-minishell/minishell)
+==114704==    by 0x4022D4: _get_name (create_env.c:72)
+==114704==    by 0x4020BF: create_env (create_env.c:38)
+==114704==    by 0x40949F: create_env_or_exit_if_env_error (create_env.c:37)
+==114704==    by 0x409E95: main (main.c:80)
+==114704== 
+==114704== 3,040 bytes in 76 blocks are still reachable in loss record 63 of 90
+==114704==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==114704==    by 0x40A13D: ft_memalloc (in /home/abonifac/milestone3/42-minishell/minishell)
+==114704==    by 0x402085: create_env (create_env.c:32)
+==114704==    by 0x40949F: create_env_or_exit_if_env_error (create_env.c:37)
+==114704==    by 0x409E95: main (main.c:80)
+==114704== 
+==114704== 3,233 bytes in 76 blocks are still reachable in loss record 64 of 90
+==114704==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==114704==    by 0x40A13D: ft_memalloc (in /home/abonifac/milestone3/42-minishell/minishell)
+==114704==    by 0x4023EF: _get_value (create_env.c:94)
+==114704==    by 0x40210B: create_env (create_env.c:45)
+==114704==    by 0x40949F: create_env_or_exit_if_env_error (create_env.c:37)
+==114704==    by 0x409E95: main (main.c:80)
+==114704== 
+==114704== LEAK SUMMARY:
+==114704==    definitely lost: 48 bytes in 2 blocks
+==114704==    indirectly lost: 12 bytes in 2 blocks
+==114704==      possibly lost: 0 bytes in 0 blocks
+==114704==    still reachable: 7,371 bytes in 229 blocks
+==114704==         suppressed: 215,054 bytes in 257 blocks
+==114704== 
+==114704== For lists of detected and suppressed errors, rerun with: -s
+==114704== ERROR SUMMARY: 19 errors from 9 contexts (suppressed: 0 from 0)
