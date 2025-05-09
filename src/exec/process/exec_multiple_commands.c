@@ -12,6 +12,8 @@ void	exec_multiple_commands(t_execvars *vars)
 	pid_t	fork_id;
 	pid_t	last_fork;
 	int		status;
+	pid_t	ended_pid;
+	int		wait_status;
 
 	cmd = *vars->cmds;
 	while (cmd)
@@ -77,10 +79,14 @@ void	exec_multiple_commands(t_execvars *vars)
 		vars->nb_launched++;
 		cmd = cmd->next;
 	}
-	waitpid(last_fork, &vars->minishell->last_status, 0);
-	while (vars->nb_launched - 1)
+	while (vars->nb_launched)
 	{
-		waitpid(-1, NULL, 0);
+		ended_pid = waitpid(-1, &wait_status, 0);
+		if (ended_pid == last_fork)
+		{
+			if (WIFEXITED(wait_status))
+				vars->status = WEXITSTATUS(wait_status);
+		}
 		vars->nb_launched--;
 	}
 }

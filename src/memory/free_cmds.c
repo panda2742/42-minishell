@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:19:34 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/07 15:58:05 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 17:32:16 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	free_one_cmd(t_excmd *cmd)
 			free(cmd->argv);
 		cmd->argv = NULL;
 	}
-	if (cmd->paths[0])
+	if (cmd->paths[0] && cmd->paths != empty_paths())
 	{
 		ft_free_strtab(cmd->paths);
 		cmd->argv = NULL;
