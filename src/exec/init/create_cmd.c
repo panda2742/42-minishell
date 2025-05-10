@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/07 18:06:30 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/10 11:29:29 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,18 @@
 
 static void	_init_redirects(t_excmd *cmd);
 
+t_excmd	*free_res_return_null(t_excmd *res)
+{
+	free(res);
+	res = NULL;
+	return (NULL);
+}
+
 t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 {
 	t_excmd	*res;
 
 	res = ft_memalloc(sizeof(t_excmd));
-	// free(res);
-	// res = NULL;
 	if (!res)
 		return (NULL);
 	res->id = -1;
@@ -28,13 +33,8 @@ t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 	if (cmd_name)
 	{
 		res->name = ft_strdup(cmd_name);
-		// free(res->name);
-		// res->name = NULL;
 		if (res->name == NULL)
-		{
-			free(res);
-			return (NULL);
-		}
+			return (free_res_return_null(res));
 	}
 	res->in_a_child = true;
 	res->proto = NULL;
@@ -78,6 +78,21 @@ static void	_init_redirects(t_excmd *cmd)
 	cmd->std_dup[1].type = STREAM_STD;
 }
 
+t_redir	*free_redir_and_return_null(t_redir *redirect)
+{
+	free(redirect->filepath);
+	free(redirect);
+	return (NULL);
+}
+
+void	update_last_next(t_redir **last, t_redir *redirect)
+{
+	while ((*last)->next)
+		*last = (*last)->next;
+	(*last)->next = redirect;
+}
+
+// Je n ai pas tout compris a ce qu il se passe ici
 t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect)
 {
 	t_redir_manager	*manager;
@@ -95,22 +110,14 @@ t_redir	*add_redirect(t_excmd *cmd, t_redir_type type, t_redir *redirect)
 	if (manager->size == 0)
 	{
 		manager->redirects = ft_memalloc(sizeof(t_redir *));
-		// free(manager->redirects);
-		// manager->redirects = NULL; 
 		if (!manager->redirects)
-		{
-			free(redirect->filepath);
-			free(redirect);
-			return (NULL);
-		}
+			return (free_redir_and_return_null(redirect));
 		manager->redirects[0] = redirect;
 		manager->size += 1;
 		return (redirect);
 	}
 	last = *manager->redirects;
-	while (last->next)
-		last = last->next;
-	last->next = redirect;
+	update_last_next(&last, redirect);
 	manager->size += 1;
 	return (redirect);
 }

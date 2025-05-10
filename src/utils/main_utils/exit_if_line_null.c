@@ -6,13 +6,13 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 19:08:50 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/09 19:09:01 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/10 10:52:51 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void exit_if_line_null(char *line, t_minishell *minishell)
+void	exit_if_line_null(char *line, t_minishell *minishell)
 {
 	if (!line)
 	{

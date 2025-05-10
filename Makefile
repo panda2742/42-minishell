@@ -29,7 +29,8 @@ override	SRC_PARSING		:=	$(addprefix cmd/, cmd) \
 override	SRC_UTILS		:=	$(addprefix parsing/, count_arg_words free_str_return_null ft_add_char ft_split_parser ft_str_join_free ft_strcmp get_first_word handle_is_redir_token incr_on_alnum is_redir join_token_to_string print_t_token_list skip_spaces token_lstsize) \
 								$(addprefix main_utils/, create_env exit_if_line_null status_err) \
 								empty_tab \
-								ft_sprintf
+								ft_sprintf \
+								int_size
 override	SOURCE_FILES	:=	$(addprefix builtins/, $(SRC_BUILTINS)) \
 								$(addprefix env_manager/, $(SRC_ENV_MANAGER)) \
 								$(addprefix errors/, $(SRC_ERRORS)) \

@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:48 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/07 18:07:07 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/10 11:37:38 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ t_redir	*create_out_redirect(char *filepath, t_bool append_mode)
 	if (res == NULL)
 		return (NULL);
 	res->filepath = ft_strdup(filepath);
+	// free(res->filepath);
+	// res->filepath = NULL;
 	if (res->filepath == NULL)
 	{
 		free(res);

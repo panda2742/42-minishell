@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 20:21:33 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/10 10:47:59 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
  * new_tokens is the list of tokens after expansion
  */
 
-t_excmd *process_tokens(t_token *token, t_minishell *minishell)
+t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 {
-	t_token_list *head_list;
-	t_token *tok_expand;
-	t_excmd *cmd_list;
+	t_token_list	*head_list;
+	t_token			*tok_expand;
+	t_excmd			*cmd_list;
 
 	tok_expand = NULL;
 	head_list = NULL;
@@ -41,11 +41,11 @@ t_excmd *process_tokens(t_token *token, t_minishell *minishell)
 	return (cmd_list);
 }
 
-t_excmd *build_and_parse_line(char *line, t_minishell *mini)
+t_excmd	*build_and_parse_line(char *line, t_minishell *mini)
 {
 	t_token	*token;
 	t_excmd	*cmd_list;
-	t_err 	status;
+	t_err	status;
 
 	status = ft_input(line, &token);
 	if (*line == '\0')
@@ -68,23 +68,22 @@ t_excmd *build_and_parse_line(char *line, t_minishell *mini)
 	return (cmd_list);
 }
 
-
 /*
  * Check if the environment was created successfully
  * If not, print an error message and exit
  * Malloc secured
 */
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	t_execvars	*vars;
 	t_minishell	minishell;
 	t_excmd		*first;
-	char 		*line;
+	char		*line;
 
 	(void)env;
 	first = NULL;
-	create_env_or_exit_if_env_error(empty_tab(), &minishell, argc, argv);
+	create_env_or_exit_if_env_error(env, &minishell, argc, argv);
 	while (1)
 	{
 		set_sig_action();

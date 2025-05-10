@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:51 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/05 14:10:02 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/10 11:37:24 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,14 @@ void	read_heredocs(t_redir_manager *redirects_manager)
 	}
 }
 
+t_redir	*mem_redir_fail(t_redir_manager *redirects_manager, t_redir *last)
+{
+	redirects_manager->problematic = last;
+	puterr(ft_sprintf(": error: Memory allocation error (redirects)\n"), false);
+	return (NULL);
+}
+
+
 t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 {
 	t_redir	*last;
@@ -56,11 +64,7 @@ t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 	{
 		last->fd.fd = -1;
 		if (!last->filepath && !last->is_heredoc)
-		{
-			redirects_manager->problematic = last;
-			puterr(ft_sprintf(": error: Memory allocation error (redirects)\n"), false);
-			return (NULL);
-		}
+			return (mem_redir_fail(redirects_manager, last));
 		if (_try_open(last, redirects_manager) == false)
 			return (NULL);
 		if (last->next)

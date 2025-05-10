@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 19:47:18 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/09 20:10:12 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/10 10:56:13 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 void	create_env_or_exit_if_env_error(char **env, t_minishell *minishell,
 	int argc, char **argv)
 {
-	t_env_var **env_var;
+	t_env_var	**env_var;
 
 	minishell->argc = argc;
 	minishell->argv = argv;
@@ -30,7 +30,7 @@ void	create_env_or_exit_if_env_error(char **env, t_minishell *minishell,
 	if (env == NULL)
 	{
 		puterr(ft_sprintf(
-			": error: Environment creation memory allocation failure\n"),
+				": error: Environment creation memory allocation failure\n"),
 			false);
 		exit (EXIT_FAILURE);
 	}
@@ -38,7 +38,7 @@ void	create_env_or_exit_if_env_error(char **env, t_minishell *minishell,
 	if (env_var == NULL)
 	{
 		puterr(ft_sprintf(
-		": error: Environment creation memory allocation failure\n"),
+				": error: Environment creation memory allocation failure\n"),
 			false);
 		exit (EXIT_FAILURE);
 	}

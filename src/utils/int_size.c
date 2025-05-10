@@ -1,31 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   status_err.c                                       :+:      :+:    :+:   */
+/*   int_size.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/09 19:49:19 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/10 10:55:06 by abonifac         ###   ########.fr       */
+/*   Created: 2025/05/10 10:49:30 by abonifac          #+#    #+#             */
+/*   Updated: 2025/05/10 10:52:28 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_excmd	*handle_status_err(t_err status, t_token *token, t_minishell *mini)
+/*
+ * Used in ft_sprintf
+*/
+
+size_t	_int_size(int n)
 {
-	if (status == ERR_MALLOC)
+	size_t	i;
+
+	i = 0;
+	if (n == 0)
+		return (1);
+	if (n < 0)
 	{
-		puterr(ft_sprintf(": error: Memory allocation error\n"), false);
-		free_tokens(token);
-		free_env(&mini->env);
-		exit(EXIT_FAILURE);
+		n = -n;
+		i++;
 	}
-	else if (status == ERR_LEX)
+	while (n)
 	{
-		puterr(ft_sprintf(": error: Lexical error\n"), false);
-		mini->last_status = 2;
-		return (NULL);
+		n /= 10;
+		i++;
 	}
-	return (NULL);
+	return (i);
 }

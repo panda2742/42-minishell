@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 20:14:52 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/10 10:51:34 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -509,6 +509,9 @@ t_token_list	*add_token_failed(t_token_list *list, t_token *new_token);
 void			set_values(t_token_list_h *utils);
 
 // UTILS -----------------------------------------------------------------------
+
+size_t			_int_size(int n);
+
 
 // MAIN_UTILS
 void			create_env_or_exit_if_env_error(char **env,
