@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:51 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/10 11:37:24 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/11 12:10:06 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ t_redir	*mem_redir_fail(t_redir_manager *redirects_manager, t_redir *last)
 	puterr(ft_sprintf(": error: Memory allocation error (redirects)\n"), false);
 	return (NULL);
 }
-
 
 t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 {

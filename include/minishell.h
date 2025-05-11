@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/10 10:51:34 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/11 13:41:18 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -439,6 +439,8 @@ void			sigint_handler(int signal);
 void			set_sig_action(void);
 void			print_cmds(t_excmd *cmd);
 void			print_cmd(t_excmd *cmd);
+char			*build_theme0(int last_status, const char *user, const char *path);
+char			*build_theme1(int last_status, const char *path);
 
 // PARSING ---------------------------------------------------------------------
 

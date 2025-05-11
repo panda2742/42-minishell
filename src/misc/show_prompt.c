@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   show_prompt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:39:24 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 17:07:17 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/11 13:40:08 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*show_prompt(t_minishell *minishell)
 	static char	default_prompt[13] = "minishell$ ";
 	char		*res;
 	char		*line;
-	
+
 	if (!isatty(STDIN_FILENO))
 		return (readline(""));
 	res = _load_theme(minishell);
@@ -92,33 +92,16 @@ static char	*_load_theme(t_minishell *minishell)
 		minishell->prompt_theme = 0;
 		if (minishell->argc >= 3)
 		{
-			if (ft_strcmp(minishell->argv[2], "--theme") && ft_strcmp(minishell->argv[0], "-t"))
+			if (ft_strcmp(minishell->argv[2], "--theme")
+				&& ft_strcmp(minishell->argv[0], "-t"))
 				minishell->prompt_theme = ft_atoi(minishell->argv[2]) % 3;
 		}
 	}
 	res = NULL;
 	if (minishell->prompt_theme == 0)
-		res = ft_sprintf(
-				"\001%s\002%d\001%s\002 ×\
- \001%s\002%s\001%s\002::\
- \001%s\002%s\001%s\002 @\
- \001%s\002%s\001%s\002\
- \001%s\002>\001%s\002 ",
-			B_WHITE, minishell->last_status, RESET,
-			B_MAGENTA, PROJECT_NAME, RESET,
-			B_BLUE, user, RESET,
-			B_CYAN, path, RESET,
-			B_MAGENTA, RESET
-			);
+		res = build_theme0(minishell->last_status, user, path);
 	if (minishell->prompt_theme == 1)
-		res = ft_sprintf(
-				"\001%s\002%d\001%s\002 -\
- \001%s\002%s\001%s\002\
- \001%s\002$\001%s\002 ",
-			B_MAGENTA, minishell->last_status, RESET,
-			U_GREEN, path, RESET,
-			WHITE, RESET
-			);
+		res = build_theme1(minishell->last_status, path);
 	if (minishell->prompt_theme == 2)
 		res = NULL;
 	free((char *)path);
