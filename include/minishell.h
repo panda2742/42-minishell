@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 10:29:38 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/12 10:56:44 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,13 +382,12 @@ typedef struct s_token_list_h
 	t_token	*end;
 }	t_token_list_h;
 
-# define HD_FRAG_BUFFER 4096
-
 typedef struct s_hdfrag
 {
-	char			buffer[HD_FRAG_BUFFER];
+	char			*buffer;
 	uint16_t		len;
 	uint16_t		total_len;
+	size_t			pos;
 	struct s_hdfrag	*next;
 }					t_hdfrag;
 
