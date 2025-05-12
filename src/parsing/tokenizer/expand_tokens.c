@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 14:37:56 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:17:46 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static t_err	helper_create_new_token(char *current, t_w_split **new_list,
 	if (!n_tok)
 		return (ERR_MALLOC);
 	update_head_and_last(&(*new_list)->new_h, &(*new_list)->new_t, n_tok);
-	free(current);
+	// free(current);
 	current = ft_strdup("");
 	if (current == NULL)
 		return (ERR_MALLOC);
