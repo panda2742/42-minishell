@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 10:56:44 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/12 15:21:38 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -448,7 +448,8 @@ void			sigint_handler(int signal);
 void			set_sig_action(void);
 void			print_cmds(t_excmd *cmd);
 void			print_cmd(t_excmd *cmd);
-char			*build_theme0(int last_status, const char *user, const char *path);
+char			*build_theme0(int last_status, const char *user,
+					const char *path);
 char			*build_theme1(int last_status, const char *path);
 
 // PARSING ---------------------------------------------------------------------
@@ -523,13 +524,12 @@ void			set_values(t_token_list_h *utils);
 
 size_t			_int_size(int n);
 
-
 // MAIN_UTILS
 void			create_env_or_exit_if_env_error(char **env,
 					t_minishell *minishell, int argc, char **argv);
 void			exit_if_line_null(char *line, t_minishell *minishell);
-t_excmd			*handle_status_err(t_err status, t_token *token, t_minishell *mini);
-
+t_excmd			*handle_status_err(t_err status, t_token *token,
+					t_minishell *mini);
 
 // PARSING
 size_t			count_arg_words(t_token *token);

@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:19 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/11 13:49:22 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:23:01 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static t_bool	_check_errors(t_excmd *c, unsigned char *status)
 		if (_is_numeric_only(c->argv[i]) == false)
 		{
 			puterr(ft_sprintf(": exit: %s: numeric argument required\n",
-				c->argv[i]), false);
+					c->argv[i]), false);
 			*status = EXIT_PARSING;
 			return (true);
 		}

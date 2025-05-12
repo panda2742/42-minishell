@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:11 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/11 13:49:06 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:22:48 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_exit	builtin_cd(t_excmd *c)
 	else if (c->argc == 2 && chdir(c->argv[1]) == -1)
 	{
 		puterr(ft_sprintf(": %s: %s No such a file or directory\n",
-			c->name, c->argv[1]), false);
+				c->name, c->argv[1]), false);
 		return (EXIT_FAILURE);
 	}
 	_update_vars(c->env);
