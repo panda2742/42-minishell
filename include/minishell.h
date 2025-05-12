@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 15:32:49 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:13:00 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -454,6 +454,7 @@ void			print_cmd(t_excmd *cmd);
 char			*build_theme0(int last_status, const char *user,
 					const char *path);
 char			*build_theme1(int last_status, const char *path);
+char			*get_random_chars(uint8_t n);
 
 // PARSING ---------------------------------------------------------------------
 

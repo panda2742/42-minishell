@@ -5,6 +5,7 @@ static int	_check_input_redir(t_excmd *cmd);
 static int	_check_output_redir(t_excmd *cmd);
 static int	_create_input_dup2_redir(t_excmd *cmd);
 static int	_create_output_dup2_redir(t_excmd *cmd);
+static int	_write_heredoc(char *buffer, char **filepath);
 
 void	exec_multiple_commands(t_execvars *vars)
 {
@@ -151,7 +152,7 @@ static int	_create_input_dup2_redir(t_excmd *cmd)
 	if (cmd->in_redirects.final_fd.type != STREAM_STD)
 	{
 		if (cmd->in_redirects.final_fd.type == STREAM_REDIR && cmd->in_redirects.last->is_heredoc == true)
-			return (cmd->vars->status);
+			cmd->in_redirects.final_fd.fd = _write_heredoc(cmd->in_redirects.last->heredoc_content, &cmd->in_redirects.last->filepath);
 		if (dup2(cmd->in_redirects.final_fd.fd, STDIN_FILENO) == -1)
 		{
 			puterr(ft_sprintf(": %s dup2 input error", cmd->name), true);
@@ -160,10 +161,14 @@ static int	_create_input_dup2_redir(t_excmd *cmd)
 			if (cmd->out_redirects.size > 0 && cmd->out_redirects.final_fd.type == STREAM_REDIR)
 				close(cmd->out_redirects.final_fd.fd);
 			cmd->vars->status = EXIT_FAILURE;
+			if (cmd->in_redirects.final_fd.type == STREAM_REDIR && cmd->in_redirects.last->is_heredoc == true)
+				unlink(cmd->in_redirects.last->filepath);
 			return (cmd->vars->status);
 		}
 		if (cmd->in_redirects.final_fd.type == STREAM_REDIR)
 			close(cmd->in_redirects.final_fd.fd);
+		if (cmd->in_redirects.final_fd.type == STREAM_REDIR && cmd->in_redirects.last->is_heredoc == true)
+			unlink(cmd->in_redirects.last->filepath);
 	}
 	return (cmd->vars->status);
 }
@@ -184,4 +189,28 @@ static int	_create_output_dup2_redir(t_excmd *cmd)
 			close(cmd->out_redirects.final_fd.fd);
 	}
 	return (cmd->vars->status);
+}
+
+static int	_write_heredoc(char *buffer, char **filepath)
+{
+	ssize_t	buffer_len;
+	char	*random_id;
+	int		heredoc_fd;
+
+	random_id = get_random_chars(24);
+	*filepath = ft_sprintf("/tmp/minishell_heredoc_%s", random_id);
+	heredoc_fd = open(*filepath, O_CREAT | O_TRUNC | O_RDWR, 0644);
+	free(random_id);
+	if (heredoc_fd == -1)
+		return (-1);
+	buffer_len = (ssize_t)ft_strlen(buffer);
+	while ((buffer_len - 4096) > 0)
+	{
+		write(heredoc_fd, buffer, 4096);
+		buffer += 4096;
+		buffer_len -= 4096;
+	}
+	write(heredoc_fd, buffer, buffer_len);
+	free(buffer);
+	return (heredoc_fd);
 }

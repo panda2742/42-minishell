@@ -22,7 +22,7 @@ override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
 								$(addprefix init/, create_cmd_utils create_cmd create_execvars create_redirect redirect_manager) \
 								$(addprefix process/, exec_multiple_commands exec_single_builtin exec_utils exec execute_from_path)
 override	SRC_MEMORY		:=	free_cmds free_env
-override	SRC_MISC		:=	print_cmds show_prompt signals build_themes
+override	SRC_MISC		:=	print_cmds show_prompt signals build_themes get_random_chars
 override	SRC_PARSING		:=	$(addprefix cmd/, cmd) \
 								$(addprefix lexer/, handle_redir_pipe lexer_parse lexer_quotes lexer_utils lexer) \
 								$(addprefix tokenizer/, expand_caller_utils expand_tokens_utils expand expand_tokens fragments token_lexer token_list_utils token_list_utils2 token_list word_split_token_utils) 

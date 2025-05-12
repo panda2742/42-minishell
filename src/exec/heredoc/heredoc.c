@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:40 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 11:15:35 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/12 15:54:17 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static t_hdfrag	*_convert_line_to_frags(t_hdfrag *prev, char *line);
 static void		_free_frags(t_hdfrag *frag);
-static void		_print_frags(t_hdfrag *frag);
+static char		*_convert_frags_to_string(t_hdfrag *frag, char *buffer);
+static size_t	_raw_strlcpy(char *dst, const char *src, size_t size);
 
 t_exit	heredoc(char *buffer, char *del, t_bool skip_writing)
 {
@@ -44,7 +45,9 @@ t_exit	heredoc(char *buffer, char *del, t_bool skip_writing)
 		if (first == NULL)
 			first = prev;
 	}
-	_print_frags(elt);
+	buffer = _convert_frags_to_string(first, buffer);
+	_free_frags(first);
+	printf("%s", buffer);
 	return (EXIT_SUCCESS);
 }
 
@@ -82,8 +85,8 @@ static t_hdfrag	*_convert_line_to_frags(t_hdfrag *prev, char *line)
 		frag->pos = 1;
 	}
 	frag->buffer = line;
-	frag->len++;
-	frag->total_len++;
+	frag->len = ft_strlen(frag->buffer);
+	frag->total_len += frag->len;
 	return (frag);
 }
 
@@ -101,16 +104,45 @@ static void	_free_frags(t_hdfrag *frag)
 	}
 }
 
-static void	_print_frags(t_hdfrag *frag)
+static char	*_convert_frags_to_string(t_hdfrag *frag, char *buffer)
 {
+	t_hdfrag	*last;
+	size_t		total_len;
+	size_t		i;
+
+	last = frag;
+	while (last->next)
+		last = last->next;
+	total_len = last->total_len + last->pos;
+	buffer = ft_memalloc(sizeof(char) * (total_len + 1));
+	if (buffer == NULL)
+		return (NULL);
+	i = 0;
 	while (frag)
 	{
-		printf("[%s%p%s] -------------------\n", U_MAGENTA, frag, RESET);
-		printf("[%s%p%s] buffer:\t%s%s%s\n", U_MAGENTA, frag, RESET, B_BLUE, frag->buffer, RESET);
-		printf("[%s%p%s] len:\t%s%d%s\n", U_MAGENTA, frag, RESET, B_YELLOW, frag->len, RESET);
-		printf("[%s%p%s] total_len:\t%s%d%s\n", U_MAGENTA, frag, RESET, B_YELLOW, frag->total_len, RESET);
-		printf("[%s%p%s] pos:\t%s%zu%s\n", U_MAGENTA, frag, RESET, B_YELLOW, frag->pos, RESET);
-		printf("[%s%p%s] next:\n", U_MAGENTA, frag, RESET);
+		_raw_strlcpy(buffer + i, frag->buffer, frag->len + 1);
+		i += frag->len;
+		buffer[i] = '\n';
+		i++;
 		frag = frag->next;
 	}
+	buffer[total_len] = 0;
+	return (buffer);
+}
+
+static size_t	_raw_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	srclen;
+	size_t	i;
+
+	srclen = ft_strlen(src);
+	if (!size)
+		return (srclen);
+	i = 0;
+	while (i < size - 1 && src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	return (i);
 }
