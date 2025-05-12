@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 22:34:35 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 09:31:12 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_env_var	**create_env(char **envp, t_env_manager *env)
 	size_t		i;
 	t_env_var	*elt;
 	t_env_var	*prev;
-	char		*cwd;
 
 	if (_init_manager(envp, env) == NULL)
 		return (NULL);
@@ -62,10 +61,8 @@ t_env_var	**create_env(char **envp, t_env_manager *env)
 	init_var(env, "PWD");
 	init_var(env, "OLDPWD");
 	init_var(env, "SHLVL");
-	cwd = getcwd(NULL, 0);
-	ensure_var(env, "PWD", cwd);
-	// free(cwd);
-	// ensure_var(env, "SHLVL", "0");
+	ensure_var(env, "PWD", getcwd(NULL, 0));
+	ensure_var(env, "SHLVL", ft_strdup("0"));
 	_increment_shlevel(env);
 	return (env->vars);
 }

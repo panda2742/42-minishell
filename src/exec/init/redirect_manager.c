@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:51 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/11 12:10:06 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 09:44:28 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	read_heredocs(t_redir_manager *redirects_manager)
 	{
 		if (elt->is_heredoc)
 			heredoc(
-				elt->heredoc_del,
 				elt->heredoc_content,
+				elt->heredoc_del,
 				elt->heredoc_id != nb_heredoc);
 		elt = elt->next;
 	}

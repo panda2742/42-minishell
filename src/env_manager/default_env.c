@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:12:21 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 17:16:57 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/12 09:30:10 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_env_var	*ensure_var(t_env_manager *env, const char *name,
 		return (var);
 	}
 	var->value = ft_strdup(default_val);
+	free(default_val);
 	var->value_length = ft_strlen(var->value);
 	return (var);
 }
