@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 09:03:27 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/28 10:44:13 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:46:53 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	free_tokens(t_token *tokens)
 	t_fragment	*tmp_frag;
 	t_fragment	*next_frag;
 
+	if (!tokens)
+		return ;
 	while (tokens)
 	{
 		tmp_token = tokens;

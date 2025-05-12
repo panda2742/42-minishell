@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:19:34 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 15:39:19 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:01:59 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,24 +69,23 @@ void	free_one_cmd(t_excmd *cmd)
 	free(cmd);
 }
 
-static void	_free_redirect(t_redir *redir)
+static void	_free_redirect(t_redir *elt)
 {
-	if (redir->filepath)
+	if (elt->filepath)
 	{
-		free(redir->filepath);
-		redir->filepath = NULL;
+		free(elt->filepath);
+		elt->filepath = NULL;
 	}
-	if (redir->heredoc_del)
+	if (elt->heredoc_del)
 	{
-		free(redir->heredoc_del);
-		redir->heredoc_del = NULL;
+		free(elt->heredoc_del);
+		elt->heredoc_del = NULL;
 	}
-	if (redir->heredoc_content)
+	if (elt->heredoc_content)
 	{
-		free(redir->heredoc_content);
-		redir->heredoc_content = NULL;
+		free(elt->heredoc_content);
+		elt->heredoc_content = NULL;
 	}
-	free(redir);
 }
 
 static void	_free_redirect_manager(t_redir_manager *manager)

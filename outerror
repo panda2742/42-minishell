@@ -1,0 +1,2096 @@
+==63758== Memcheck, a memory error detector
+==63758== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==63758== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==63758== Command: ./minishell
+==63758== 
+==63758== Source and destination overlap in memcpy_chk(0x48c71e0, 0x48c71e1, 2)
+==63758==    at 0x48539B2: __memcpy_chk (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63758==    by 0x48A67AD: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x4895D14: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x40608A: show_prompt (show_prompt.c:27)
+==63758==    by 0x40A853: main (main.c:98)
+==63758== 
+==63758== Source and destination overlap in memcpy_chk(0x48c71e0, 0x48c71e1, 2)
+==63758==    at 0x48539B2: __memcpy_chk (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63758==    by 0x48A67AD: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x48AB154: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x4895D14: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x40608A: show_prompt (show_prompt.c:27)
+==63758==    by 0x40A853: main (main.c:98)
+==63758== 
+[31mminishell: $##!‘ãP-x{Ù»3ı: Command not found
+[0m[31mminishell: AÕÖˆ¨yn«êªç†: Command not found
+[0m==63759== 
+==63759== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63759== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63759==    <inherited from parent>
+==63759== 
+==63759== Open file descriptor 38: /dev/ptmx
+==63759==    <inherited from parent>
+==63759== 
+==63759== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63759==    <inherited from parent>
+==63759== 
+==63759== 
+==63759== HEAP SUMMARY:
+==63759==     in use at exit: 208,216 bytes in 223 blocks
+==63759==   total heap usage: 891 allocs, 668 frees, 244,395 bytes allocated
+==63759== 
+==63759== LEAK SUMMARY:
+==63759==    definitely lost: 0 bytes in 0 blocks
+==63759==    indirectly lost: 0 bytes in 0 blocks
+==63759==      possibly lost: 0 bytes in 0 blocks
+==63759==    still reachable: 0 bytes in 0 blocks
+==63759==         suppressed: 208,216 bytes in 223 blocks
+==63759== 
+==63759== For lists of detected and suppressed errors, rerun with: -s
+==63759== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+==63760== 
+==63760== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63760== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63760==    <inherited from parent>
+==63760== 
+==63760== Open file descriptor 38: /dev/ptmx
+==63760==    <inherited from parent>
+==63760== 
+==63760== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63760==    <inherited from parent>
+==63760== 
+==63760== 
+==63760== HEAP SUMMARY:
+==63760==     in use at exit: 208,216 bytes in 223 blocks
+==63760==   total heap usage: 891 allocs, 668 frees, 244,367 bytes allocated
+==63760== 
+==63760== LEAK SUMMARY:
+==63760==    definitely lost: 0 bytes in 0 blocks
+==63760==    indirectly lost: 0 bytes in 0 blocks
+==63760==      possibly lost: 0 bytes in 0 blocks
+==63760==    still reachable: 0 bytes in 0 blocks
+==63760==         suppressed: 208,216 bytes in 223 blocks
+==63760== 
+==63760== For lists of detected and suppressed errors, rerun with: -s
+==63760== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+[31mminishell: Êƒ€¶U5X`âH¢7j@Í°≥ç¸π{`R`Nı◊: Command not found
+[0m==63775== 
+==63775== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63775== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63775==    <inherited from parent>
+==63775== 
+==63775== Open file descriptor 38: /dev/ptmx
+==63775==    <inherited from parent>
+==63775== 
+==63775== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63775==    <inherited from parent>
+==63775== 
+==63775== 
+==63775== HEAP SUMMARY:
+==63775==     in use at exit: 208,348 bytes in 228 blocks
+==63775==   total heap usage: 1,136 allocs, 908 frees, 253,622 bytes allocated
+==63775== 
+==63775== LEAK SUMMARY:
+==63775==    definitely lost: 0 bytes in 0 blocks
+==63775==    indirectly lost: 0 bytes in 0 blocks
+==63775==      possibly lost: 0 bytes in 0 blocks
+==63775==    still reachable: 0 bytes in 0 blocks
+==63775==         suppressed: 208,348 bytes in 228 blocks
+==63775== 
+==63775== For lists of detected and suppressed errors, rerun with: -s
+==63775== ERROR SUMMARY: 17 errors from 2 contexts (suppressed: 0 from 0)
+[31mminishell: œã∏ß@KêÀ¶Ç: Command not found
+[0m==63776== 
+==63776== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63776== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63776==    <inherited from parent>
+==63776== 
+==63776== Open file descriptor 38: /dev/ptmx
+==63776==    <inherited from parent>
+==63776== 
+==63776== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63776==    <inherited from parent>
+==63776== 
+==63776== 
+==63776== HEAP SUMMARY:
+==63776==     in use at exit: 208,955 bytes in 248 blocks
+==63776==   total heap usage: 1,296 allocs, 1,048 frees, 293,299 bytes allocated
+==63776== 
+==63776== LEAK SUMMARY:
+==63776==    definitely lost: 0 bytes in 0 blocks
+==63776==    indirectly lost: 0 bytes in 0 blocks
+==63776==      possibly lost: 0 bytes in 0 blocks
+==63776==    still reachable: 0 bytes in 0 blocks
+==63776==         suppressed: 208,955 bytes in 248 blocks
+==63776== 
+==63776== For lists of detected and suppressed errors, rerun with: -s
+==63776== ERROR SUMMARY: 32 errors from 2 contexts (suppressed: 0 from 0)
+[31mminishell: –Ä;*æK˚8ˇ±¡W: Command not found
+[0m==63777== 
+==63777== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63777== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63777==    <inherited from parent>
+==63777== 
+==63777== Open file descriptor 38: /dev/ptmx
+==63777==    <inherited from parent>
+==63777== 
+==63777== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63777==    <inherited from parent>
+==63777== 
+==63777== 
+==63777== HEAP SUMMARY:
+==63777==     in use at exit: 209,271 bytes in 253 blocks
+==63777==   total heap usage: 1,464 allocs, 1,211 frees, 300,384 bytes allocated
+==63777== 
+==63777== LEAK SUMMARY:
+==63777==    definitely lost: 0 bytes in 0 blocks
+==63777==    indirectly lost: 0 bytes in 0 blocks
+==63777==      possibly lost: 0 bytes in 0 blocks
+==63777==    still reachable: 0 bytes in 0 blocks
+==63777==         suppressed: 209,271 bytes in 253 blocks
+==63777== 
+==63777== For lists of detected and suppressed errors, rerun with: -s
+==63777== ERROR SUMMARY: 32 errors from 2 contexts (suppressed: 0 from 0)
+[31mminishell: ¥@: Command not found
+[0m==63778== 
+==63778== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63778== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63778==    <inherited from parent>
+==63778== 
+==63778== Open file descriptor 38: /dev/ptmx
+==63778==    <inherited from parent>
+==63778== 
+==63778== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63778==    <inherited from parent>
+==63778== 
+==63778== 
+==63778== HEAP SUMMARY:
+==63778==     in use at exit: 209,310 bytes in 256 blocks
+==63778==   total heap usage: 1,564 allocs, 1,308 frees, 305,796 bytes allocated
+==63778== 
+==63778== LEAK SUMMARY:
+==63778==    definitely lost: 0 bytes in 0 blocks
+==63778==    indirectly lost: 0 bytes in 0 blocks
+==63778==      possibly lost: 0 bytes in 0 blocks
+==63778==    still reachable: 0 bytes in 0 blocks
+==63778==         suppressed: 209,310 bytes in 256 blocks
+==63778== 
+==63778== For lists of detected and suppressed errors, rerun with: -s
+==63778== ERROR SUMMARY: 32 errors from 2 contexts (suppressed: 0 from 0)
+==63758== Source and destination overlap in memcpy_chk(0x48c71e0, 0x48c71e1, 2)
+==63758==    at 0x48539B2: __memcpy_chk (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63758==    by 0x48A67AD: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x4895D14: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x40608A: show_prompt (show_prompt.c:27)
+==63758==    by 0x40A853: main (main.c:98)
+==63758== 
+[31mminishell: –Ä;*æK˚8ˇ±¡W: Command not found
+[0m==63779== 
+==63779== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63779== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63779==    <inherited from parent>
+==63779== 
+==63779== Open file descriptor 38: /dev/ptmx
+==63779==    <inherited from parent>
+==63779== 
+==63779== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63779==    <inherited from parent>
+==63779== 
+==63779== 
+==63779== HEAP SUMMARY:
+==63779==     in use at exit: 211,614 bytes in 327 blocks
+==63779==   total heap usage: 2,014 allocs, 1,687 frees, 388,668 bytes allocated
+==63779== 
+==63779== LEAK SUMMARY:
+==63779==    definitely lost: 0 bytes in 0 blocks
+==63779==    indirectly lost: 0 bytes in 0 blocks
+==63779==      possibly lost: 0 bytes in 0 blocks
+==63779==    still reachable: 0 bytes in 0 blocks
+==63779==         suppressed: 211,614 bytes in 327 blocks
+==63779== 
+==63779== For lists of detected and suppressed errors, rerun with: -s
+==63779== ERROR SUMMARY: 83 errors from 3 contexts (suppressed: 1 from 1)
+[31mminishell: í˙°≈º»Êƒ€¶U5X`âH¢7j@Í°≥ç¸π{`R`Nı◊: Command not found
+[0m==63780== 
+==63780== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63780== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63780==    <inherited from parent>
+==63780== 
+==63780== Open file descriptor 38: /dev/ptmx
+==63780==    <inherited from parent>
+==63780== 
+==63780== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63780==    <inherited from parent>
+==63780== 
+==63780== 
+==63780== HEAP SUMMARY:
+==63780==     in use at exit: 212,062 bytes in 334 blocks
+==63780==   total heap usage: 2,457 allocs, 2,123 frees, 438,148 bytes allocated
+==63780== 
+==63780== LEAK SUMMARY:
+==63780==    definitely lost: 0 bytes in 0 blocks
+==63780==    indirectly lost: 0 bytes in 0 blocks
+==63780==      possibly lost: 0 bytes in 0 blocks
+==63780==    still reachable: 0 bytes in 0 blocks
+==63780==         suppressed: 212,062 bytes in 334 blocks
+==63780== 
+==63780== For lists of detected and suppressed errors, rerun with: -s
+==63780== ERROR SUMMARY: 107 errors from 3 contexts (suppressed: 2 from 2)
+[31mminishell: £n0Êƒ€¶U5X`âH¢7j@Í°≥ç¸π{`R`Nı◊: Command not found
+[0m==63782== 
+==63782== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63782== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63782==    <inherited from parent>
+==63782== 
+==63782== Open file descriptor 38: /dev/ptmx
+==63782==    <inherited from parent>
+==63782== 
+==63782== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63782==    <inherited from parent>
+==63782== 
+==63782== 
+==63782== HEAP SUMMARY:
+==63782==     in use at exit: 212,337 bytes in 344 blocks
+==63782==   total heap usage: 2,722 allocs, 2,378 frees, 480,975 bytes allocated
+==63782== 
+==63782== LEAK SUMMARY:
+==63782==    definitely lost: 0 bytes in 0 blocks
+==63782==    indirectly lost: 0 bytes in 0 blocks
+==63782==      possibly lost: 0 bytes in 0 blocks
+==63782==    still reachable: 0 bytes in 0 blocks
+==63782==         suppressed: 212,337 bytes in 344 blocks
+==63782== 
+==63782== For lists of detected and suppressed errors, rerun with: -s
+==63782== ERROR SUMMARY: 118 errors from 3 contexts (suppressed: 2 from 2)
+[31mminishell[31mminishell: )JƒÃß™€mÚ¶ë´p¯™ÌÏ‡é#‰Ö: Command not found
+[0m: ◊∞†ÅsS†: No such file or directory
+[0m==63783== 
+==63783== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63783== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63783==    <inherited from parent>
+==63783== 
+==63783== Open file descriptor 38: /dev/ptmx
+==63783==    <inherited from parent>
+==63783== 
+==63783== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63783==    <inherited from parent>
+==63783== 
+==63783== 
+==63783== HEAP SUMMARY:
+==63783==     in use at exit: 212,698 bytes in 352 blocks
+==63783==   total heap usage: 3,230 allocs, 2,878 frees, 566,634 bytes allocated
+==63783== 
+==63783== LEAK SUMMARY:
+==63783==    definitely lost: 0 bytes in 0 blocks
+==63783==    indirectly lost: 0 bytes in 0 blocks
+==63783==      possibly lost: 0 bytes in 0 blocks
+==63783==    still reachable: 0 bytes in 0 blocks
+==63783==         suppressed: 212,698 bytes in 352 blocks
+==63783== 
+==63783== For lists of detected and suppressed errors, rerun with: -s
+==63783== ERROR SUMMARY: 165 errors from 3 contexts (suppressed: 2 from 2)
+==63784== 
+==63784== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63784== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63784==    <inherited from parent>
+==63784== 
+==63784== Open file descriptor 38: /dev/ptmx
+==63784==    <inherited from parent>
+==63784== 
+==63784== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63784==    <inherited from parent>
+==63784== 
+==63784== 
+==63784== HEAP SUMMARY:
+==63784==     in use at exit: 212,698 bytes in 352 blocks
+==63784==   total heap usage: 3,190 allocs, 2,838 frees, 565,437 bytes allocated
+==63784== 
+==63784== LEAK SUMMARY:
+==63784==    definitely lost: 0 bytes in 0 blocks
+==63784==    indirectly lost: 0 bytes in 0 blocks
+==63784==      possibly lost: 0 bytes in 0 blocks
+==63784==    still reachable: 0 bytes in 0 blocks
+==63784==         suppressed: 212,698 bytes in 352 blocks
+==63784== 
+==63784== For lists of detected and suppressed errors, rerun with: -s
+==63784== ERROR SUMMARY: 165 errors from 3 contexts (suppressed: 2 from 2)
+[31mminishell[31mminishell: ‘⁄Û¿œŸ∂i∞^mÀ¨: Command not found
+[0m: n∑ÅêfÀ˜vÒMÉÕ∞¨ËL3“ﬂúYp: No such file or directory
+[0m==63785== 
+==63785== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63785== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63785==    <inherited from parent>
+==63785== 
+==63785== Open file descriptor 38: /dev/ptmx
+==63785==    <inherited from parent>
+==63785== 
+==63785== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63785==    <inherited from parent>
+==63785== 
+==63785== 
+==63785== HEAP SUMMARY:
+==63785==     in use at exit: 212,816 bytes in 354 blocks
+==63785==   total heap usage: 3,489 allocs, 3,135 frees, 575,306 bytes allocated
+==63785== 
+==63785== LEAK SUMMARY:
+==63785==    definitely lost: 0 bytes in 0 blocks
+==63785==    indirectly lost: 0 bytes in 0 blocks
+==63785==      possibly lost: 0 bytes in 0 blocks
+==63785==    still reachable: 0 bytes in 0 blocks
+==63785==         suppressed: 212,816 bytes in 354 blocks
+==63785== 
+==63785== For lists of detected and suppressed errors, rerun with: -s
+==63785== ERROR SUMMARY: 167 errors from 3 contexts (suppressed: 2 from 2)
+==63786== 
+==63786== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63786== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63786==    <inherited from parent>
+==63786== 
+==63786== Open file descriptor 38: /dev/ptmx
+==63786==    <inherited from parent>
+==63786== 
+==63786== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63786==    <inherited from parent>
+==63786== 
+==63786== 
+==63786== HEAP SUMMARY:
+==63786==     in use at exit: 212,816 bytes in 354 blocks
+==63786==   total heap usage: 3,449 allocs, 3,095 frees, 574,251 bytes allocated
+==63786== 
+==63786== LEAK SUMMARY:
+==63786==    definitely lost: 0 bytes in 0 blocks
+==63786==    indirectly lost: 0 bytes in 0 blocks
+==63786==      possibly lost: 0 bytes in 0 blocks
+==63786==    still reachable: 0 bytes in 0 blocks
+==63786==         suppressed: 212,816 bytes in 354 blocks
+==63786== 
+==63786== For lists of detected and suppressed errors, rerun with: -s
+==63786== ERROR SUMMARY: 167 errors from 3 contexts (suppressed: 2 from 2)
+[31mminishell: ®ü˜Ÿ{BÓkzã˘5äÜ,‹ùçã”§N=¡y+?: Command not found
+[0m==63787== 
+==63787== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63787== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63787==    <inherited from parent>
+==63787== 
+==63787== Open file descriptor 38: /dev/ptmx
+==63787==    <inherited from parent>
+==63787== 
+==63787== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63787==    <inherited from parent>
+==63787== 
+==63787== 
+==63787== HEAP SUMMARY:
+==63787==     in use at exit: 212,880 bytes in 357 blocks
+==63787==   total heap usage: 3,643 allocs, 3,286 frees, 582,128 bytes allocated
+==63787== 
+==63787== LEAK SUMMARY:
+==63787==    definitely lost: 0 bytes in 0 blocks
+==63787==    indirectly lost: 0 bytes in 0 blocks
+==63787==      possibly lost: 0 bytes in 0 blocks
+==63787==    still reachable: 0 bytes in 0 blocks
+==63787==         suppressed: 212,880 bytes in 357 blocks
+==63787== 
+==63787== For lists of detected and suppressed errors, rerun with: -s
+==63787== ERROR SUMMARY: 174 errors from 3 contexts (suppressed: 2 from 2)
+[31mminishell: Î◊ä¬ﬂÎÌ©˙·∂î3y,NM: ¯: Command not found
+[0m[31mminishell: È}‚öàª7Û±y‡≠ï⁄: Command not found
+[0m==63799== 
+==63799== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63799== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63799==    <inherited from parent>
+==63799== 
+==63799== Open file descriptor 38: /dev/ptmx
+==63799==    <inherited from parent>
+==63799== 
+==63799== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63799==    <inherited from parent>
+==63799== 
+==63799== 
+==63799== HEAP SUMMARY:
+==63799==     in use at exit: 212,952 bytes in 360 blocks
+==63799==   total heap usage: 3,842 allocs, 3,482 frees, 589,412 bytes allocated
+==63799== 
+==63799== LEAK SUMMARY:
+==63799==    definitely lost: 0 bytes in 0 blocks
+==63799==    indirectly lost: 0 bytes in 0 blocks
+==63799==      possibly lost: 0 bytes in 0 blocks
+==63799==    still reachable: 0 bytes in 0 blocks
+==63799==         suppressed: 212,952 bytes in 360 blocks
+==63799== 
+==63799== For lists of detected and suppressed errors, rerun with: -s
+==63799== ERROR SUMMARY: 179 errors from 3 contexts (suppressed: 2 from 2)
+==63800== 
+==63800== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63800== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63800==    <inherited from parent>
+==63800== 
+==63800== Open file descriptor 38: /dev/ptmx
+==63800==    <inherited from parent>
+==63800== 
+==63800== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63800==    <inherited from parent>
+==63800== 
+==63800== 
+==63800== HEAP SUMMARY:
+==63800==     in use at exit: 212,952 bytes in 360 blocks
+==63800==   total heap usage: 3,842 allocs, 3,482 frees, 589,328 bytes allocated
+==63800== 
+==63800== LEAK SUMMARY:
+==63800==    definitely lost: 0 bytes in 0 blocks
+==63800==    indirectly lost: 0 bytes in 0 blocks
+==63800==      possibly lost: 0 bytes in 0 blocks
+==63800==    still reachable: 0 bytes in 0 blocks
+==63800==         suppressed: 212,952 bytes in 360 blocks
+==63800== 
+==63800== For lists of detected and suppressed errors, rerun with: -s
+==63800== ERROR SUMMARY: 179 errors from 3 contexts (suppressed: 2 from 2)
+[31mminishell: Ó˚=◊çˇ&Åtv_Ô¨W√¨qt@eÕåBN: Command not found
+[0m==63801== 
+==63801== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63801== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63801==    <inherited from parent>
+==63801== 
+==63801== Open file descriptor 38: /dev/ptmx
+==63801==    <inherited from parent>
+==63801== 
+==63801== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63801==    <inherited from parent>
+==63801== 
+==63801== 
+==63801== HEAP SUMMARY:
+==63801==     in use at exit: 213,013 bytes in 363 blocks
+==63801==   total heap usage: 3,991 allocs, 3,628 frees, 595,946 bytes allocated
+==63801== 
+==63801== LEAK SUMMARY:
+==63801==    definitely lost: 0 bytes in 0 blocks
+==63801==    indirectly lost: 0 bytes in 0 blocks
+==63801==      possibly lost: 0 bytes in 0 blocks
+==63801==    still reachable: 0 bytes in 0 blocks
+==63801==         suppressed: 213,013 bytes in 363 blocks
+==63801== 
+==63801== For lists of detected and suppressed errors, rerun with: -s
+==63801== ERROR SUMMARY: 181 errors from 3 contexts (suppressed: 2 from 2)
+[31mminishell: Ó˚=◊çˇ&Åtv_Ô¨W√¨qt@eÕåBN™b~^ﬁY?Û¶ÈûéQ`Âx^ÙâôøG˛: Command not found
+[0m==63802== 
+==63802== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63802== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63802==    <inherited from parent>
+==63802== 
+==63802== Open file descriptor 38: /dev/ptmx
+==63802==    <inherited from parent>
+==63802== 
+==63802== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63802==    <inherited from parent>
+==63802== 
+==63802== 
+==63802== HEAP SUMMARY:
+==63802==     in use at exit: 213,345 bytes in 374 blocks
+==63802==   total heap usage: 4,204 allocs, 3,830 frees, 605,025 bytes allocated
+==63802== 
+==63802== LEAK SUMMARY:
+==63802==    definitely lost: 0 bytes in 0 blocks
+==63802==    indirectly lost: 0 bytes in 0 blocks
+==63802==      possibly lost: 0 bytes in 0 blocks
+==63802==    still reachable: 0 bytes in 0 blocks
+==63802==         suppressed: 213,345 bytes in 374 blocks
+==63802== 
+==63802== For lists of detected and suppressed errors, rerun with: -s
+==63802== ERROR SUMMARY: 193 errors from 3 contexts (suppressed: 2 from 2)
+[31mminishell: ’°E=;πLY∏û8^JR^ï™≥Z∏èèùH=U¬-Wƒ≠É†–ÓuÂ%Å£n0Êƒ€¶U5X`âH¢7j@Í°≥ç¸π{`R`Nı◊: Command not found
+[0m==63803== 
+==63803== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63803== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63803==    <inherited from parent>
+==63803== 
+==63803== Open file descriptor 38: /dev/ptmx
+==63803==    <inherited from parent>
+==63803== 
+==63803== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63803==    <inherited from parent>
+==63803== 
+==63803== 
+==63803== HEAP SUMMARY:
+==63803==     in use at exit: 214,909 bytes in 426 blocks
+==63803==   total heap usage: 4,629 allocs, 4,203 frees, 655,200 bytes allocated
+==63803== 
+==63803== LEAK SUMMARY:
+==63803==    definitely lost: 0 bytes in 0 blocks
+==63803==    indirectly lost: 0 bytes in 0 blocks
+==63803==      possibly lost: 0 bytes in 0 blocks
+==63803==    still reachable: 0 bytes in 0 blocks
+==63803==         suppressed: 214,909 bytes in 426 blocks
+==63803== 
+==63803== For lists of detected and suppressed errors, rerun with: -s
+==63803== ERROR SUMMARY: 218 errors from 3 contexts (suppressed: 2 from 2)
+[31mminishell: H˘ÔhËî¶8‹Ç(2˝ùñ÷ùÀ≠]ú÷∏´µ:™E: Command not found
+[0m==63805== 
+==63805== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63805== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63805==    <inherited from parent>
+==63805== 
+==63805== Open file descriptor 38: /dev/ptmx
+==63805==    <inherited from parent>
+==63805== 
+==63805== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63805==    <inherited from parent>
+==63805== 
+==63805== 
+==63805== HEAP SUMMARY:
+==63805==     in use at exit: 216,247 bytes in 464 blocks
+==63805==   total heap usage: 4,894 allocs, 4,430 frees, 697,835 bytes allocated
+==63805== 
+==63805== LEAK SUMMARY:
+==63805==    definitely lost: 0 bytes in 0 blocks
+==63805==    indirectly lost: 0 bytes in 0 blocks
+==63805==      possibly lost: 0 bytes in 0 blocks
+==63805==    still reachable: 0 bytes in 0 blocks
+==63805==         suppressed: 216,247 bytes in 464 blocks
+==63805== 
+==63805== For lists of detected and suppressed errors, rerun with: -s
+==63805== ERROR SUMMARY: 255 errors from 3 contexts (suppressed: 3 from 3)
+[31mminishell: H˘ÔhËî¶8‹Ç(2˝ùñ÷ùÀ≠]ú÷∏´µ:™E Ö(/ød∫±: Command not found
+[0m==63806== 
+==63806== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63806== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63806==    <inherited from parent>
+==63806== 
+==63806== Open file descriptor 38: /dev/ptmx
+==63806==    <inherited from parent>
+==63806== 
+==63806== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63806==    <inherited from parent>
+==63806== 
+==63806== 
+==63806== HEAP SUMMARY:
+==63806==     in use at exit: 216,390 bytes in 474 blocks
+==63806==   total heap usage: 5,047 allocs, 4,573 frees, 704,758 bytes allocated
+==63806== 
+==63806== LEAK SUMMARY:
+==63806==    definitely lost: 0 bytes in 0 blocks
+==63806==    indirectly lost: 0 bytes in 0 blocks
+==63806==      possibly lost: 0 bytes in 0 blocks
+==63806==    still reachable: 0 bytes in 0 blocks
+==63806==         suppressed: 216,390 bytes in 474 blocks
+==63806== 
+==63806== For lists of detected and suppressed errors, rerun with: -s
+==63806== ERROR SUMMARY: 259 errors from 3 contexts (suppressed: 3 from 3)
+[31mminishell: iw·1?O7¶7Í:€Saw#ƒƒŒ◊¿=•9üË±ß§ïÖ™,%ﬁ¡Œ£`+o?;4§•¨}GoÓ†p?¸«7iﬂ™˜ÒLPÃ™:¢: No such file or directory
+[0m==63807== 
+==63807== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63807== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63807==    <inherited from parent>
+==63807== 
+==63807== Open file descriptor 38: /dev/ptmx
+==63807==    <inherited from parent>
+==63807== 
+==63807== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63807==    <inherited from parent>
+==63807== 
+==63807== 
+==63807== HEAP SUMMARY:
+==63807==     in use at exit: 216,507 bytes in 475 blocks
+==63807==   total heap usage: 5,369 allocs, 4,894 frees, 749,298 bytes allocated
+==63807== 
+==63807== LEAK SUMMARY:
+==63807==    definitely lost: 0 bytes in 0 blocks
+==63807==    indirectly lost: 0 bytes in 0 blocks
+==63807==      possibly lost: 0 bytes in 0 blocks
+==63807==    still reachable: 0 bytes in 0 blocks
+==63807==         suppressed: 216,507 bytes in 475 blocks
+==63807== 
+==63807== For lists of detected and suppressed errors, rerun with: -s
+==63807== ERROR SUMMARY: 277 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: çï%ëâpôœÒKUh1I~nÚS∂´J–·∞±Ñå\Œ›á$ﬁQ+rÛÿÈuÓ⁄ˇ: Command not found
+[0m==63808== 
+==63808== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63808== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63808==    <inherited from parent>
+==63808== 
+==63808== Open file descriptor 38: /dev/ptmx
+==63808==    <inherited from parent>
+==63808== 
+==63808== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63808==    <inherited from parent>
+==63808== 
+==63808== 
+==63808== HEAP SUMMARY:
+==63808==     in use at exit: 217,431 bytes in 494 blocks
+==63808==   total heap usage: 5,953 allocs, 5,459 frees, 837,033 bytes allocated
+==63808== 
+==63808== LEAK SUMMARY:
+==63808==    definitely lost: 0 bytes in 0 blocks
+==63808==    indirectly lost: 0 bytes in 0 blocks
+==63808==      possibly lost: 0 bytes in 0 blocks
+==63808==    still reachable: 0 bytes in 0 blocks
+==63808==         suppressed: 217,431 bytes in 494 blocks
+==63808== 
+==63808== For lists of detected and suppressed errors, rerun with: -s
+==63808== ERROR SUMMARY: 363 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: ò: Command not found
+[0m==63809== 
+==63809== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63809== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63809==    <inherited from parent>
+==63809== 
+==63809== Open file descriptor 38: /dev/ptmx
+==63809==    <inherited from parent>
+==63809== 
+==63809== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63809==    <inherited from parent>
+==63809== 
+==63809== 
+==63809== HEAP SUMMARY:
+==63809==     in use at exit: 217,469 bytes in 497 blocks
+==63809==   total heap usage: 6,051 allocs, 5,554 frees, 841,984 bytes allocated
+==63809== 
+==63809== LEAK SUMMARY:
+==63809==    definitely lost: 0 bytes in 0 blocks
+==63809==    indirectly lost: 0 bytes in 0 blocks
+==63809==      possibly lost: 0 bytes in 0 blocks
+==63809==    still reachable: 0 bytes in 0 blocks
+==63809==         suppressed: 217,469 bytes in 497 blocks
+==63809== 
+==63809== For lists of detected and suppressed errors, rerun with: -s
+==63809== ERROR SUMMARY: 363 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: Á: Command not found
+[0m==63810== 
+==63810== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63810== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63810==    <inherited from parent>
+==63810== 
+==63810== Open file descriptor 38: /dev/ptmx
+==63810==    <inherited from parent>
+==63810== 
+==63810== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63810==    <inherited from parent>
+==63810== 
+==63810== 
+==63810== HEAP SUMMARY:
+==63810==     in use at exit: 218,679 bytes in 537 blocks
+==63810==   total heap usage: 6,262 allocs, 5,725 frees, 853,275 bytes allocated
+==63810== 
+==63810== LEAK SUMMARY:
+==63810==    definitely lost: 0 bytes in 0 blocks
+==63810==    indirectly lost: 0 bytes in 0 blocks
+==63810==      possibly lost: 0 bytes in 0 blocks
+==63810==    still reachable: 0 bytes in 0 blocks
+==63810==         suppressed: 218,679 bytes in 537 blocks
+==63810== 
+==63810== For lists of detected and suppressed errors, rerun with: -s
+==63810== ERROR SUMMARY: 386 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: ËƒÕà†åá]j≠˚ÈÑæp˝®âçƒóÔ‘˚ﬁûÅ{¡‚Ë—ÅrˇD÷ô¿ÑõÓx\˘ü∞/èÍ√V‚√Úƒë¡Á¸hF: No such file or directory
+[0m==63811== 
+==63811== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63811== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63811==    <inherited from parent>
+==63811== 
+==63811== Open file descriptor 38: /dev/ptmx
+==63811==    <inherited from parent>
+==63811== 
+==63811== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63811==    <inherited from parent>
+==63811== 
+==63811== 
+==63811== HEAP SUMMARY:
+==63811==     in use at exit: 218,818 bytes in 540 blocks
+==63811==   total heap usage: 6,547 allocs, 6,007 frees, 864,789 bytes allocated
+==63811== 
+==63811== LEAK SUMMARY:
+==63811==    definitely lost: 0 bytes in 0 blocks
+==63811==    indirectly lost: 0 bytes in 0 blocks
+==63811==      possibly lost: 0 bytes in 0 blocks
+==63811==    still reachable: 0 bytes in 0 blocks
+==63811==         suppressed: 218,818 bytes in 540 blocks
+==63811== 
+==63811== For lists of detected and suppressed errors, rerun with: -s
+==63811== ERROR SUMMARY: 409 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: ⁄´ºMÊIıw?ÎÙÕ∏D€h: Command not found
+[0m==63812== 
+==63812== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63812== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63812==    <inherited from parent>
+==63812== 
+==63812== Open file descriptor 38: /dev/ptmx
+==63812==    <inherited from parent>
+==63812== 
+==63812== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63812==    <inherited from parent>
+==63812== 
+==63812== 
+==63812== HEAP SUMMARY:
+==63812==     in use at exit: 219,150 bytes in 556 blocks
+==63812==   total heap usage: 6,849 allocs, 6,293 frees, 975,634 bytes allocated
+==63812== 
+==63812== LEAK SUMMARY:
+==63812==    definitely lost: 0 bytes in 0 blocks
+==63812==    indirectly lost: 0 bytes in 0 blocks
+==63812==      possibly lost: 0 bytes in 0 blocks
+==63812==    still reachable: 0 bytes in 0 blocks
+==63812==         suppressed: 219,150 bytes in 556 blocks
+==63812== 
+==63812== For lists of detected and suppressed errors, rerun with: -s
+==63812== ERROR SUMMARY: 413 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: ¬ô©: Command not found
+[0m==63813== 
+==63813== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63813== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63813==    <inherited from parent>
+==63813== 
+==63813== Open file descriptor 38: /dev/ptmx
+==63813==    <inherited from parent>
+==63813== 
+==63813== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63813==    <inherited from parent>
+==63813== 
+==63813== 
+==63813== HEAP SUMMARY:
+==63813==     in use at exit: 220,774 bytes in 605 blocks
+==63813==   total heap usage: 7,122 allocs, 6,517 frees, 1,021,437 bytes allocated
+==63813== 
+==63813== 32 bytes in 1 blocks are still reachable in loss record 28 of 123
+==63813==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63813==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63813==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63813==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63813==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63813==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63813==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63813==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63813==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63813==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63813==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63813==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63813== 
+==63813== LEAK SUMMARY:
+==63813==    definitely lost: 0 bytes in 0 blocks
+==63813==    indirectly lost: 0 bytes in 0 blocks
+==63813==      possibly lost: 0 bytes in 0 blocks
+==63813==    still reachable: 32 bytes in 1 blocks
+==63813==         suppressed: 220,742 bytes in 604 blocks
+==63813== 
+==63813== For lists of detected and suppressed errors, rerun with: -s
+==63813== ERROR SUMMARY: 439 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: ‚˛◊ŸñÅH∞h_2Ã∏mN–™ë
+ë,7ÎÒ¬å4∑≤w(y¸sπÓgﬁVvÀ¥◊BÕ\:ÍQBd4˝Ü.ı¢ÆQÎÀëáÄ+*h|ÓL+ÿÃò≈Ωq÷¶q:ªn,œ∑*pÎﬂ Å _g_x}h¡0êÏrô»ÕÚh”Df¯Â: Command not found
+[0m[31mminishell: Àp¿˜âÓ=: Command not found
+[0m==63814== 
+==63814== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63814== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63814==    <inherited from parent>
+==63814== 
+==63814== Open file descriptor 38: /dev/ptmx
+==63814==    <inherited from parent>
+==63814== 
+==63814== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63814==    <inherited from parent>
+==63814== 
+==63814== 
+==63814== HEAP SUMMARY:
+==63814==     in use at exit: 223,224 bytes in 702 blocks
+==63814==   total heap usage: 7,670 allocs, 6,968 frees, 1,112,347 bytes allocated
+==63814== 
+==63814== 32 bytes in 1 blocks are still reachable in loss record 32 of 136
+==63814==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63814==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63814==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63814==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63814==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63814==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63814==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63814==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63814==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63814==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63814==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63814==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63814== 
+==63814== LEAK SUMMARY:
+==63814==    definitely lost: 0 bytes in 0 blocks
+==63814==    indirectly lost: 0 bytes in 0 blocks
+==63814==      possibly lost: 0 bytes in 0 blocks
+==63814==    still reachable: 32 bytes in 1 blocks
+==63814==         suppressed: 223,192 bytes in 701 blocks
+==63814== 
+==63814== For lists of detected and suppressed errors, rerun with: -s
+==63814== ERROR SUMMARY: 504 errors from 3 contexts (suppressed: 4 from 4)
+==63815== 
+==63815== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63815== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63815==    <inherited from parent>
+==63815== 
+==63815== Open file descriptor 38: /dev/ptmx
+==63815==    <inherited from parent>
+==63815== 
+==63815== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63815==    <inherited from parent>
+==63815== 
+==63815== 
+==63815== HEAP SUMMARY:
+==63815==     in use at exit: 223,224 bytes in 702 blocks
+==63815==   total heap usage: 7,670 allocs, 6,968 frees, 1,110,737 bytes allocated
+==63815== 
+==63815== 32 bytes in 1 blocks are still reachable in loss record 32 of 136
+==63815==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63815==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63815==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63815==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63815==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63815==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63815==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63815==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63815==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63815==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63815==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63815==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63815== 
+==63815== LEAK SUMMARY:
+==63815==    definitely lost: 0 bytes in 0 blocks
+==63815==    indirectly lost: 0 bytes in 0 blocks
+==63815==      possibly lost: 0 bytes in 0 blocks
+==63815==    still reachable: 32 bytes in 1 blocks
+==63815==         suppressed: 223,192 bytes in 701 blocks
+==63815== 
+==63815== For lists of detected and suppressed errors, rerun with: -s
+==63815== ERROR SUMMARY: 504 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: KÊ~\)6¯Ñ@á∂„ç61bj⁄r^pËL…–: Command not found
+[0m==63816== 
+==63816== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63816== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63816==    <inherited from parent>
+==63816== 
+==63816== Open file descriptor 38: /dev/ptmx
+==63816==    <inherited from parent>
+==63816== 
+==63816== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63816==    <inherited from parent>
+==63816== 
+==63816== 
+==63816== HEAP SUMMARY:
+==63816==     in use at exit: 223,287 bytes in 705 blocks
+==63816==   total heap usage: 7,826 allocs, 7,121 frees, 1,150,451 bytes allocated
+==63816== 
+==63816== 32 bytes in 1 blocks are still reachable in loss record 32 of 136
+==63816==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63816==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63816==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63816==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63816==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63816==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63816==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63816==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63816==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63816==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63816==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63816==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63816== 
+==63816== LEAK SUMMARY:
+==63816==    definitely lost: 0 bytes in 0 blocks
+==63816==    indirectly lost: 0 bytes in 0 blocks
+==63816==      possibly lost: 0 bytes in 0 blocks
+==63816==    still reachable: 32 bytes in 1 blocks
+==63816==         suppressed: 223,255 bytes in 704 blocks
+==63816== 
+==63816== For lists of detected and suppressed errors, rerun with: -s
+==63816== ERROR SUMMARY: 515 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: ÏY: Command not found
+[0m==63817== 
+==63817== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63817== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63817==    <inherited from parent>
+==63817== 
+==63817== Open file descriptor 38: /dev/ptmx
+==63817==    <inherited from parent>
+==63817== 
+==63817== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63817==    <inherited from parent>
+==63817== 
+==63817== 
+==63817== HEAP SUMMARY:
+==63817==     in use at exit: 223,303 bytes in 708 blocks
+==63817==   total heap usage: 7,931 allocs, 7,223 frees, 1,155,793 bytes allocated
+==63817== 
+==63817== 32 bytes in 1 blocks are still reachable in loss record 32 of 136
+==63817==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63817==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63817==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63817==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63817==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63817==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63817==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63817==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63817==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63817==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63817==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63817==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63817== 
+==63817== LEAK SUMMARY:
+==63817==    definitely lost: 0 bytes in 0 blocks
+==63817==    indirectly lost: 0 bytes in 0 blocks
+==63817==      possibly lost: 0 bytes in 0 blocks
+==63817==    still reachable: 32 bytes in 1 blocks
+==63817==         suppressed: 223,271 bytes in 707 blocks
+==63817== 
+==63817== For lists of detected and suppressed errors, rerun with: -s
+==63817== ERROR SUMMARY: 515 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: ‚œˆU∆Ã%: Command not found
+[0m==63818== 
+==63818== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63818== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63818==    <inherited from parent>
+==63818== 
+==63818== Open file descriptor 38: /dev/ptmx
+==63818==    <inherited from parent>
+==63818== 
+==63818== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63818==    <inherited from parent>
+==63818== 
+==63818== 
+==63818== HEAP SUMMARY:
+==63818==     in use at exit: 223,347 bytes in 711 blocks
+==63818==   total heap usage: 8,041 allocs, 7,330 frees, 1,161,510 bytes allocated
+==63818== 
+==63818== 32 bytes in 1 blocks are still reachable in loss record 32 of 136
+==63818==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63818==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63818==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63818==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63818==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63818==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63818==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63818==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63818==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63818==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63818==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63818==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63818== 
+==63818== LEAK SUMMARY:
+==63818==    definitely lost: 0 bytes in 0 blocks
+==63818==    indirectly lost: 0 bytes in 0 blocks
+==63818==      possibly lost: 0 bytes in 0 blocks
+==63818==    still reachable: 32 bytes in 1 blocks
+==63818==         suppressed: 223,315 bytes in 710 blocks
+==63818== 
+==63818== For lists of detected and suppressed errors, rerun with: -s
+==63818== ERROR SUMMARY: 515 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: Àf–g&∫√ã;¿ú⁄’¶{Fˆ[V—%¥8Ã¥¬kÍO÷∂ŒÑN ä1(bg: Command not found
+[0m[31mminishell: Ê◊d-ß€Ö¯£`$Íh…yÃmV: Command not found
+[0m[31mminishell: TF≈JÒ[ãﬁø: Command not found
+[0m==63819== 
+==63819== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63820== 
+==63820== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63820== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63820==    <inherited from parent>
+==63820== 
+==63820== Open file descriptor 38: /dev/ptmx
+==63820==    <inherited from parent>
+==63820== 
+==63820== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63820==    <inherited from parent>
+==63820== 
+==63820== 
+==63820== HEAP SUMMARY:
+==63820==     in use at exit: 247,079 bytes in 671 blocks
+==63820==   total heap usage: 8,652 allocs, 7,981 frees, 1,303,799 bytes allocated
+==63820== 
+==63819== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63819==    <inherited from parent>
+==63819== 
+==63819== Open file descriptor 38: /dev/ptmx
+==63819==    <inherited from parent>
+==63819== 
+==63819== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63819==    <inherited from parent>
+==63819== 
+==63819== 
+==63819== HEAP SUMMARY:
+==63819==     in use at exit: 247,079 bytes in 671 blocks
+==63819==   total heap usage: 8,652 allocs, 7,981 frees, 1,304,121 bytes allocated
+==63819== 
+==63820== 32 bytes in 1 blocks are still reachable in loss record 30 of 134
+==63820==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63820==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63820==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63820==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63820==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63820==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63820==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63820==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63820==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63820==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63820==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63820==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63820== 
+==63820== LEAK SUMMARY:
+==63820==    definitely lost: 0 bytes in 0 blocks
+==63820==    indirectly lost: 0 bytes in 0 blocks
+==63820==      possibly lost: 0 bytes in 0 blocks
+==63820==    still reachable: 32 bytes in 1 blocks
+==63820==         suppressed: 247,047 bytes in 670 blocks
+==63820== 
+==63820== For lists of detected and suppressed errors, rerun with: -s
+==63820== ERROR SUMMARY: 535 errors from 3 contexts (suppressed: 4 from 4)
+==63819== 32 bytes in 1 blocks are still reachable in loss record 30 of 134
+==63819==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63819==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63819==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63819==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63819==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63819==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63819==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63819==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63819==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63819==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63819==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63819==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63819== 
+==63819== LEAK SUMMARY:
+==63819==    definitely lost: 0 bytes in 0 blocks
+==63819==    indirectly lost: 0 bytes in 0 blocks
+==63819==      possibly lost: 0 bytes in 0 blocks
+==63819==    still reachable: 32 bytes in 1 blocks
+==63819==         suppressed: 247,047 bytes in 670 blocks
+==63819== 
+==63819== For lists of detected and suppressed errors, rerun with: -s
+==63819== ERROR SUMMARY: 535 errors from 3 contexts (suppressed: 4 from 4)
+==63821== 
+==63821== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63821== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63821==    <inherited from parent>
+==63821== 
+==63821== Open file descriptor 38: /dev/ptmx
+==63821==    <inherited from parent>
+==63821== 
+==63821== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63821==    <inherited from parent>
+==63821== 
+==63821== 
+==63821== HEAP SUMMARY:
+==63821==     in use at exit: 247,079 bytes in 671 blocks
+==63821==   total heap usage: 8,652 allocs, 7,981 frees, 1,303,645 bytes allocated
+==63821== 
+==63821== 32 bytes in 1 blocks are still reachable in loss record 30 of 134
+==63821==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63821==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63821==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63821==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63821==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63821==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63821==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63821==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63821==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63821==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63821==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63821==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63821== 
+==63821== LEAK SUMMARY:
+==63821==    definitely lost: 0 bytes in 0 blocks
+==63821==    indirectly lost: 0 bytes in 0 blocks
+==63821==      possibly lost: 0 bytes in 0 blocks
+==63821==    still reachable: 32 bytes in 1 blocks
+==63821==         suppressed: 247,047 bytes in 670 blocks
+==63821== 
+==63821== For lists of detected and suppressed errors, rerun with: -s
+==63821== ERROR SUMMARY: 535 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell[31mminishell: ÌÏ¶és\:ÄfSƒ’£ÃaWU9&ÀBı∑àïRx;e!˘º™õª‡o6«§w_rÖ¨N:U*ÃË∑í~&¥Rsô¶::7§: No such file or directory
+[0m: 0+∏~DCˆ˚Ñn*Î«Î¡Ï}+@/A7˚nã@y¥,¸∆â˚∞â¿U: No such file or directory
+[0m==63822== 
+==63822== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63822== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63822==    <inherited from parent>
+==63822== 
+==63822== Open file descriptor 38: /dev/ptmx
+==63822==    <inherited from parent>
+==63822== 
+==63822== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63822==    <inherited from parent>
+==63822== 
+==63822== 
+==63822== HEAP SUMMARY:
+==63822==     in use at exit: 247,913 bytes in 678 blocks
+==63822==   total heap usage: 9,498 allocs, 8,820 frees, 1,479,277 bytes allocated
+==63822== 
+==63822== 32 bytes in 1 blocks are still reachable in loss record 30 of 135
+==63822==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63822==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63822==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63822==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63822==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63822==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63822==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63822==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63822==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63822==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63822==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63822==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63822== 
+==63822== LEAK SUMMARY:
+==63822==    definitely lost: 0 bytes in 0 blocks
+==63822==    indirectly lost: 0 bytes in 0 blocks
+==63822==      possibly lost: 0 bytes in 0 blocks
+==63822==    still reachable: 32 bytes in 1 blocks
+==63822==         suppressed: 247,881 bytes in 677 blocks
+==63822== 
+==63822== For lists of detected and suppressed errors, rerun with: -s
+==63822== ERROR SUMMARY: 600 errors from 3 contexts (suppressed: 4 from 4)
+==63823== 
+==63823== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63823== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63823==    <inherited from parent>
+==63823== 
+==63823== Open file descriptor 38: /dev/ptmx
+==63823==    <inherited from parent>
+==63823== 
+==63823== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63823==    <inherited from parent>
+==63823== 
+==63823== 
+==63823== HEAP SUMMARY:
+==63823==     in use at exit: 247,913 bytes in 678 blocks
+==63823==   total heap usage: 9,498 allocs, 8,820 frees, 1,479,247 bytes allocated
+==63823== 
+==63823== 32 bytes in 1 blocks are still reachable in loss record 30 of 135
+==63823==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63823==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63823==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63823==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63823==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63823==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63823==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63823==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63823==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63823==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63823==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63823==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63823== 
+==63823== LEAK SUMMARY:
+==63823==    definitely lost: 0 bytes in 0 blocks
+==63823==    indirectly lost: 0 bytes in 0 blocks
+==63823==      possibly lost: 0 bytes in 0 blocks
+==63823==    still reachable: 32 bytes in 1 blocks
+==63823==         suppressed: 247,881 bytes in 677 blocks
+==63823== 
+==63823== For lists of detected and suppressed errors, rerun with: -s
+==63823== ERROR SUMMARY: 600 errors from 3 contexts (suppressed: 4 from 4)
+[31mminishell: ˆªî∏“&·ÄñŸÃëπ: Command not found
+[0m==63824== 
+==63824== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63824== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63824==    <inherited from parent>
+==63824== 
+==63824== Open file descriptor 38: /dev/ptmx
+==63824==    <inherited from parent>
+==63824== 
+==63824== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63824==    <inherited from parent>
+==63824== 
+==63824== 
+==63824== HEAP SUMMARY:
+==63824==     in use at exit: 247,950 bytes in 682 blocks
+==63824==   total heap usage: 9,682 allocs, 9,000 frees, 1,486,669 bytes allocated
+==63824== 
+==63824== 32 bytes in 1 blocks are still reachable in loss record 31 of 136
+==63824==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63824==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63824==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63824==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63824==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63824==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63824==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63824==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63824==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63824==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63824==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63824==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63824== 
+==63824== LEAK SUMMARY:
+==63824==    definitely lost: 0 bytes in 0 blocks
+==63824==    indirectly lost: 0 bytes in 0 blocks
+==63824==      possibly lost: 0 bytes in 0 blocks
+==63824==    still reachable: 32 bytes in 1 blocks
+==63824==         suppressed: 247,918 bytes in 681 blocks
+==63824== 
+==63824== For lists of detected and suppressed errors, rerun with: -s
+==63824== ERROR SUMMARY: 600 errors from 3 contexts (suppressed: 5 from 5)
+[31mminishell: +«€ŒãÖävw»îb∏øk·O‘XÛT-¬√èr¡ö¨‘d ¡›X: Command not found
+[0m==63825== 
+==63825== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63825== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63825==    <inherited from parent>
+==63825== 
+==63825== Open file descriptor 38: /dev/ptmx
+==63825==    <inherited from parent>
+==63825== 
+==63825== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63825==    <inherited from parent>
+==63825== 
+==63825== 
+==63825== HEAP SUMMARY:
+==63825==     in use at exit: 248,033 bytes in 685 blocks
+==63825==   total heap usage: 9,895 allocs, 9,210 frees, 1,527,893 bytes allocated
+==63825== 
+==63825== 32 bytes in 1 blocks are still reachable in loss record 31 of 136
+==63825==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63825==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63825==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63825==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63825==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63825==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63825==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63825==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63825==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63825==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63825==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63825==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63825== 
+==63825== LEAK SUMMARY:
+==63825==    definitely lost: 0 bytes in 0 blocks
+==63825==    indirectly lost: 0 bytes in 0 blocks
+==63825==      possibly lost: 0 bytes in 0 blocks
+==63825==    still reachable: 32 bytes in 1 blocks
+==63825==         suppressed: 248,001 bytes in 684 blocks
+==63825== 
+==63825== For lists of detected and suppressed errors, rerun with: -s
+==63825== ERROR SUMMARY: 600 errors from 3 contexts (suppressed: 5 from 5)
+[31mminishell: eÅ(: Command not found
+[0m==63826== 
+==63826== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63826== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63826==    <inherited from parent>
+==63826== 
+==63826== Open file descriptor 38: /dev/ptmx
+==63826==    <inherited from parent>
+==63826== 
+==63826== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63826==    <inherited from parent>
+==63826== 
+==63826== 
+==63826== HEAP SUMMARY:
+==63826==     in use at exit: 248,073 bytes in 688 blocks
+==63826==   total heap usage: 10,003 allocs, 9,315 frees, 1,565,882 bytes allocated
+==63826== 
+==63826== 32 bytes in 1 blocks are still reachable in loss record 31 of 136
+==63826==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63826==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63826==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63826==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63826==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63826==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63826==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63826==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63826==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63826==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63826==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63826==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63826== 
+==63826== LEAK SUMMARY:
+==63826==    definitely lost: 0 bytes in 0 blocks
+==63826==    indirectly lost: 0 bytes in 0 blocks
+==63826==      possibly lost: 0 bytes in 0 blocks
+==63826==    still reachable: 32 bytes in 1 blocks
+==63826==         suppressed: 248,041 bytes in 687 blocks
+==63826== 
+==63826== For lists of detected and suppressed errors, rerun with: -s
+==63826== ERROR SUMMARY: 600 errors from 3 contexts (suppressed: 5 from 5)
+[31mminishell: bt;ÎlGxwt‚¢›ÉóT:ñ?íø◊–R: Command not found
+[0m==63827== 
+==63827== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63827== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63827==    <inherited from parent>
+==63827== 
+==63827== Open file descriptor 38: /dev/ptmx
+==63827==    <inherited from parent>
+==63827== 
+==63827== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63827==    <inherited from parent>
+==63827== 
+==63827== 
+==63827== HEAP SUMMARY:
+==63827==     in use at exit: 248,134 bytes in 691 blocks
+==63827==   total heap usage: 10,179 allocs, 9,488 frees, 1,606,898 bytes allocated
+==63827== 
+==63827== 32 bytes in 1 blocks are still reachable in loss record 31 of 136
+==63827==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63827==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63827==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63827==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63827==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63827==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63827==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63827==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63827==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63827==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63827==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63827==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63827== 
+==63827== LEAK SUMMARY:
+==63827==    definitely lost: 0 bytes in 0 blocks
+==63827==    indirectly lost: 0 bytes in 0 blocks
+==63827==      possibly lost: 0 bytes in 0 blocks
+==63827==    still reachable: 32 bytes in 1 blocks
+==63827==         suppressed: 248,102 bytes in 690 blocks
+==63827== 
+==63827== For lists of detected and suppressed errors, rerun with: -s
+==63827== ERROR SUMMARY: 602 errors from 3 contexts (suppressed: 5 from 5)
+[31mminishell: _ÿò@*¢3ì˚€Óv„z‰—M≈òp4◊ï¶™*˚‘2%9áb: Command not found
+[0m==63828== 
+==63828== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63828== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63828==    <inherited from parent>
+==63828== 
+==63828== Open file descriptor 38: /dev/ptmx
+==63828==    <inherited from parent>
+==63828== 
+==63828== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63828==    <inherited from parent>
+==63828== 
+==63828== 
+==63828== HEAP SUMMARY:
+==63828==     in use at exit: 248,208 bytes in 694 blocks
+==63828==   total heap usage: 10,359 allocs, 9,665 frees, 1,614,609 bytes allocated
+==63828== 
+==63828== 32 bytes in 1 blocks are still reachable in loss record 31 of 136
+==63828==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63828==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63828==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63828==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63828==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63828==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63828==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63828==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63828==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63828==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63828==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63828==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63828== 
+==63828== LEAK SUMMARY:
+==63828==    definitely lost: 0 bytes in 0 blocks
+==63828==    indirectly lost: 0 bytes in 0 blocks
+==63828==      possibly lost: 0 bytes in 0 blocks
+==63828==    still reachable: 32 bytes in 1 blocks
+==63828==         suppressed: 248,176 bytes in 693 blocks
+==63828== 
+==63828== For lists of detected and suppressed errors, rerun with: -s
+==63828== ERROR SUMMARY: 604 errors from 3 contexts (suppressed: 5 from 5)
+[31mminishell: HÏ∫ñ: Command not found
+[0m==63829== 
+==63829== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63829== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63829==    <inherited from parent>
+==63829== 
+==63829== Open file descriptor 38: /dev/ptmx
+==63829==    <inherited from parent>
+==63829== 
+==63829== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63829==    <inherited from parent>
+==63829== 
+==63829== 
+==63829== HEAP SUMMARY:
+==63829==     in use at exit: 251,645 bytes in 806 blocks
+==63829==   total heap usage: 10,830 allocs, 10,024 frees, 1,768,980 bytes allocated
+==63829== 
+==63829== 32 bytes in 1 blocks are still reachable in loss record 32 of 140
+==63829==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63829==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63829==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63829==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63829==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63829==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63829==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63829==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63829==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63829==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63829==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63829==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63829== 
+==63829== LEAK SUMMARY:
+==63829==    definitely lost: 0 bytes in 0 blocks
+==63829==    indirectly lost: 0 bytes in 0 blocks
+==63829==      possibly lost: 0 bytes in 0 blocks
+==63829==    still reachable: 32 bytes in 1 blocks
+==63829==         suppressed: 251,613 bytes in 805 blocks
+==63829== 
+==63829== For lists of detected and suppressed errors, rerun with: -s
+==63829== ERROR SUMMARY: 644 errors from 3 contexts (suppressed: 5 from 5)
+[31mminishell: [WÔüÖ:%¥ˆ»ÇÉ∂¡: Command not found
+[0m==63830== 
+==63830== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63830== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63830==    <inherited from parent>
+==63830== 
+==63830== Open file descriptor 38: /dev/ptmx
+==63830==    <inherited from parent>
+==63830== 
+==63830== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63830==    <inherited from parent>
+==63830== 
+==63830== 
+==63830== HEAP SUMMARY:
+==63830==     in use at exit: 251,696 bytes in 809 blocks
+==63830==   total heap usage: 10,956 allocs, 10,147 frees, 1,775,048 bytes allocated
+==63830== 
+==63830== 32 bytes in 1 blocks are still reachable in loss record 32 of 140
+==63830==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63830==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63830==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63830==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63830==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63830==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63830==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63830==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63830==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63830==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63830==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63830==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63830== 
+==63830== LEAK SUMMARY:
+==63830==    definitely lost: 0 bytes in 0 blocks
+==63830==    indirectly lost: 0 bytes in 0 blocks
+==63830==      possibly lost: 0 bytes in 0 blocks
+==63830==    still reachable: 32 bytes in 1 blocks
+==63830==         suppressed: 251,664 bytes in 808 blocks
+==63830== 
+==63830== For lists of detected and suppressed errors, rerun with: -s
+==63830== ERROR SUMMARY: 644 errors from 3 contexts (suppressed: 5 from 5)
+[31mminishell: rÕÅ}Ï˙3ñ+(: Command not found
+[0m[31mminishell: Ã2ˆB∂·ÉÀ˙P¶ú+Ç√«Gﬂ≤¥‚ªad7‹: Command not found
+[0m[31mminishell: ÃÊ: Command not found
+[0m==63833== 
+==63833== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63833== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63833==    <inherited from parent>
+==63833== 
+==63833== Open file descriptor 38: /dev/ptmx
+==63833==    <inherited from parent>
+==63833== 
+==63833== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63833==    <inherited from parent>
+==63833== 
+==63833== 
+==63833== HEAP SUMMARY:
+==63833==     in use at exit: 253,870 bytes in 867 blocks
+==63833==   total heap usage: 11,312 allocs, 10,445 frees, 1,788,581 bytes allocated
+==63833== 
+==63833== 32 bytes in 1 blocks are still reachable in loss record 37 of 147
+==63833==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63833==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63833==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63833==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63833==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63833==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63833==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63833==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63833==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63833==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63833==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63833==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63833== 
+==63833== LEAK SUMMARY:
+==63833==    definitely lost: 0 bytes in 0 blocks
+==63833==    indirectly lost: 0 bytes in 0 blocks
+==63833==      possibly lost: 0 bytes in 0 blocks
+==63833==    still reachable: 32 bytes in 1 blocks
+==63833==         suppressed: 253,838 bytes in 866 blocks
+==63833== 
+==63833== For lists of detected and suppressed errors, rerun with: -s
+==63833== ERROR SUMMARY: 676 errors from 3 contexts (suppressed: 6 from 6)
+==63831== 
+==63831== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63831== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63831==    <inherited from parent>
+==63831== 
+==63831== Open file descriptor 38: /dev/ptmx
+==63831==    <inherited from parent>
+==63831== 
+==63831== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63831==    <inherited from parent>
+==63831== 
+==63831== 
+==63831== HEAP SUMMARY:
+==63831==     in use at exit: 253,870 bytes in 867 blocks
+==63831==   total heap usage: 11,312 allocs, 10,445 frees, 1,788,357 bytes allocated
+==63831== 
+==63831== 32 bytes in 1 blocks are still reachable in loss record 37 of 147
+==63831==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63831==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63831==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63831==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63831==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63831==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63831==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63831==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63831==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63831==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63831==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63831==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63831== 
+==63831== LEAK SUMMARY:
+==63831==    definitely lost: 0 bytes in 0 blocks
+==63831==    indirectly lost: 0 bytes in 0 blocks
+==63831==      possibly lost: 0 bytes in 0 blocks
+==63831==    still reachable: 32 bytes in 1 blocks
+==63831==         suppressed: 253,838 bytes in 866 blocks
+==63831== 
+==63831== For lists of detected and suppressed errors, rerun with: -s
+==63831== ERROR SUMMARY: 676 errors from 3 contexts (suppressed: 6 from 6)
+==63832== 
+==63832== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63832== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63832==    <inherited from parent>
+==63832== 
+==63832== Open file descriptor 38: /dev/ptmx
+==63832==    <inherited from parent>
+==63832== 
+==63832== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63832==    <inherited from parent>
+==63832== 
+==63832== 
+==63832== HEAP SUMMARY:
+==63832==     in use at exit: 253,870 bytes in 867 blocks
+==63832==   total heap usage: 11,312 allocs, 10,445 frees, 1,788,245 bytes allocated
+==63832== 
+==63832== 32 bytes in 1 blocks are still reachable in loss record 37 of 147
+==63832==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63832==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63832==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63832==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63832==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63832==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63832==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63832==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63832==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63832==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63832==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63832==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63832== 
+==63832== LEAK SUMMARY:
+==63832==    definitely lost: 0 bytes in 0 blocks
+==63832==    indirectly lost: 0 bytes in 0 blocks
+==63832==      possibly lost: 0 bytes in 0 blocks
+==63832==    still reachable: 32 bytes in 1 blocks
+==63832==         suppressed: 253,838 bytes in 866 blocks
+==63832== 
+==63832== For lists of detected and suppressed errors, rerun with: -s
+==63832== ERROR SUMMARY: 676 errors from 3 contexts (suppressed: 6 from 6)
+[31mminishell: VJ^ﬁå_nÿ‹–‚A¯∫JÀú“ÈT: Command not found
+[0m[31mminishell: ˛€—∏≥0ÿÓå§QÆ∞øiSYã7∫: Command not found
+[0m==63835== 
+==63835== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63835== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63835==    <inherited from parent>
+==63835== 
+==63835== Open file descriptor 38: /dev/ptmx
+==63835==    <inherited from parent>
+==63835== 
+==63835== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63835==    <inherited from parent>
+==63835== 
+==63835== 
+==63835== HEAP SUMMARY:
+==63835==     in use at exit: 254,318 bytes in 880 blocks
+==63835==   total heap usage: 11,592 allocs, 10,712 frees, 1,863,217 bytes allocated
+==63835== 
+==63835== 32 bytes in 1 blocks are still reachable in loss record 35 of 147
+==63835==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63835==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63835==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63835==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63835==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63835==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63835==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63835==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63835==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63835==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63835==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63835==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63835== 
+==63835== LEAK SUMMARY:
+==63835==    definitely lost: 0 bytes in 0 blocks
+==63835==    indirectly lost: 0 bytes in 0 blocks
+==63835==      possibly lost: 0 bytes in 0 blocks
+==63835==    still reachable: 32 bytes in 1 blocks
+==63835==         suppressed: 254,286 bytes in 879 blocks
+==63835== 
+==63835== For lists of detected and suppressed errors, rerun with: -s
+==63835== ERROR SUMMARY: 710 errors from 3 contexts (suppressed: 6 from 6)
+==63836== 
+==63836== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63836== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63836==    <inherited from parent>
+==63836== 
+==63836== Open file descriptor 38: /dev/ptmx
+==63836==    <inherited from parent>
+==63836== 
+==63836== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63836==    <inherited from parent>
+==63836== 
+==63836== 
+==63836== HEAP SUMMARY:
+==63836==     in use at exit: 254,318 bytes in 880 blocks
+==63836==   total heap usage: 11,592 allocs, 10,712 frees, 1,863,217 bytes allocated
+==63836== 
+==63836== 32 bytes in 1 blocks are still reachable in loss record 35 of 147
+==63836==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63836==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63836==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63836==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63836==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63836==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63836==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63836==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63836==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63836==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63836==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63836==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63836== 
+==63836== LEAK SUMMARY:
+==63836==    definitely lost: 0 bytes in 0 blocks
+==63836==    indirectly lost: 0 bytes in 0 blocks
+==63836==      possibly lost: 0 bytes in 0 blocks
+==63836==    still reachable: 32 bytes in 1 blocks
+==63836==         suppressed: 254,286 bytes in 879 blocks
+==63836== 
+==63836== For lists of detected and suppressed errors, rerun with: -s
+==63836== ERROR SUMMARY: 710 errors from 3 contexts (suppressed: 6 from 6)
+[31mminishell: œn: Command not found
+[0m==63851== 
+==63851== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63851== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63851==    <inherited from parent>
+==63851== 
+==63851== Open file descriptor 38: /dev/ptmx
+==63851==    <inherited from parent>
+==63851== 
+==63851== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63851==    <inherited from parent>
+==63851== 
+==63851== 
+==63851== HEAP SUMMARY:
+==63851==     in use at exit: 254,419 bytes in 886 blocks
+==63851==   total heap usage: 11,711 allocs, 10,825 frees, 1,868,970 bytes allocated
+==63851== 
+==63851== 32 bytes in 1 blocks are still reachable in loss record 35 of 147
+==63851==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63851==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63851==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63851==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63851==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63851==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63851==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63851==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63851==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63851==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63851==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63851==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63851== 
+==63851== LEAK SUMMARY:
+==63851==    definitely lost: 0 bytes in 0 blocks
+==63851==    indirectly lost: 0 bytes in 0 blocks
+==63851==      possibly lost: 0 bytes in 0 blocks
+==63851==    still reachable: 32 bytes in 1 blocks
+==63851==         suppressed: 254,387 bytes in 885 blocks
+==63851== 
+==63851== For lists of detected and suppressed errors, rerun with: -s
+==63851== ERROR SUMMARY: 713 errors from 3 contexts (suppressed: 6 from 6)
+[31mminishell: )AFHy: Command not found
+[0m==63852== 
+==63852== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63852== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63852==    <inherited from parent>
+==63852== 
+==63852== Open file descriptor 38: /dev/ptmx
+==63852==    <inherited from parent>
+==63852== 
+==63852== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63852==    <inherited from parent>
+==63852== 
+==63852== 
+==63852== HEAP SUMMARY:
+==63852==     in use at exit: 254,498 bytes in 892 blocks
+==63852==   total heap usage: 11,822 allocs, 10,930 frees, 1,874,654 bytes allocated
+==63852== 
+==63852== 32 bytes in 1 blocks are still reachable in loss record 35 of 147
+==63852==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63852==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63852==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63852==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63852==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63852==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63852==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63852==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63852==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63852==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63852==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63852==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63852== 
+==63852== LEAK SUMMARY:
+==63852==    definitely lost: 0 bytes in 0 blocks
+==63852==    indirectly lost: 0 bytes in 0 blocks
+==63852==      possibly lost: 0 bytes in 0 blocks
+==63852==    still reachable: 32 bytes in 1 blocks
+==63852==         suppressed: 254,466 bytes in 891 blocks
+==63852== 
+==63852== For lists of detected and suppressed errors, rerun with: -s
+==63852== ERROR SUMMARY: 713 errors from 3 contexts (suppressed: 6 from 6)
+[31mminishell: ≥5ª: Command not found
+[0m==63853== 
+==63853== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63853== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63853==    <inherited from parent>
+==63853== 
+==63853== Open file descriptor 38: /dev/ptmx
+==63853==    <inherited from parent>
+==63853== 
+==63853== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63853==    <inherited from parent>
+==63853== 
+==63853== 
+==63853== HEAP SUMMARY:
+==63853==     in use at exit: 254,527 bytes in 894 blocks
+==63853==   total heap usage: 12,024 allocs, 11,130 frees, 1,949,188 bytes allocated
+==63853== 
+==63853== 32 bytes in 1 blocks are still reachable in loss record 36 of 149
+==63853==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63853==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63853==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63853==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63853==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63853==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63853==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63853==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63853==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63853==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63853==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63853==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63853== 
+==63853== LEAK SUMMARY:
+==63853==    definitely lost: 0 bytes in 0 blocks
+==63853==    indirectly lost: 0 bytes in 0 blocks
+==63853==      possibly lost: 0 bytes in 0 blocks
+==63853==    still reachable: 32 bytes in 1 blocks
+==63853==         suppressed: 254,495 bytes in 893 blocks
+==63853== 
+==63853== For lists of detected and suppressed errors, rerun with: -s
+==63853== ERROR SUMMARY: 718 errors from 3 contexts (suppressed: 6 from 6)
+[31mminishell: £âÏg4Q‚õÖV@ùoIÅ!ZÕ€Ó\.qk¯: Command not found
+[0m==63854== 
+==63854== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63854== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63854==    <inherited from parent>
+==63854== 
+==63854== Open file descriptor 38: /dev/ptmx
+==63854==    <inherited from parent>
+==63854== 
+==63854== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63854==    <inherited from parent>
+==63854== 
+==63854== 
+==63854== HEAP SUMMARY:
+==63854==     in use at exit: 255,201 bytes in 921 blocks
+==63854==   total heap usage: 12,446 allocs, 11,525 frees, 1,998,570 bytes allocated
+==63854== 
+==63854== 32 bytes in 1 blocks are still reachable in loss record 35 of 147
+==63854==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63854==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63854==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63854==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63854==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63854==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63854==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63854==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63854==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63854==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63854==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63854==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63854== 
+==63854== LEAK SUMMARY:
+==63854==    definitely lost: 0 bytes in 0 blocks
+==63854==    indirectly lost: 0 bytes in 0 blocks
+==63854==      possibly lost: 0 bytes in 0 blocks
+==63854==    still reachable: 32 bytes in 1 blocks
+==63854==         suppressed: 255,169 bytes in 920 blocks
+==63854== 
+==63854== For lists of detected and suppressed errors, rerun with: -s
+==63854== ERROR SUMMARY: 754 errors from 3 contexts (suppressed: 6 from 6)
+[31mminishell: «Ú¬±: Command not found
+[0m==63855== 
+==63855== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63855== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63855==    <inherited from parent>
+==63855== 
+==63855== Open file descriptor 38: /dev/ptmx
+==63855==    <inherited from parent>
+==63855== 
+==63855== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63855==    <inherited from parent>
+==63855== 
+==63855== 
+==63855== HEAP SUMMARY:
+==63855==     in use at exit: 255,257 bytes in 924 blocks
+==63855==   total heap usage: 12,591 allocs, 11,667 frees, 2,004,454 bytes allocated
+==63855== 
+==63855== 32 bytes in 1 blocks are still reachable in loss record 35 of 147
+==63855==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63855==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63855==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63855==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63855==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63855==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63855==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63855==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63855==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63855==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63855==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63855==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63855== 
+==63855== LEAK SUMMARY:
+==63855==    definitely lost: 0 bytes in 0 blocks
+==63855==    indirectly lost: 0 bytes in 0 blocks
+==63855==      possibly lost: 0 bytes in 0 blocks
+==63855==    still reachable: 32 bytes in 1 blocks
+==63855==         suppressed: 255,225 bytes in 923 blocks
+==63855== 
+==63855== For lists of detected and suppressed errors, rerun with: -s
+==63855== ERROR SUMMARY: 756 errors from 3 contexts (suppressed: 6 from 6)
+[31mminishell: P?Êó: Command not found
+[0m==63856== 
+==63856== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63856== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63856==    <inherited from parent>
+==63856== 
+==63856== Open file descriptor 38: /dev/ptmx
+==63856==    <inherited from parent>
+==63856== 
+==63856== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63856==    <inherited from parent>
+==63856== 
+==63856== 
+==63856== HEAP SUMMARY:
+==63856==     in use at exit: 255,343 bytes in 927 blocks
+==63856==   total heap usage: 12,839 allocs, 11,912 frees, 2,047,512 bytes allocated
+==63856== 
+==63856== 32 bytes in 1 blocks are still reachable in loss record 35 of 147
+==63856==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63856==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63856==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63856==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63856==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63856==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63856==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63856==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63856==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63856==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63856==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63856==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63856== 
+==63856== LEAK SUMMARY:
+==63856==    definitely lost: 0 bytes in 0 blocks
+==63856==    indirectly lost: 0 bytes in 0 blocks
+==63856==      possibly lost: 0 bytes in 0 blocks
+==63856==    still reachable: 32 bytes in 1 blocks
+==63856==         suppressed: 255,311 bytes in 926 blocks
+==63856== 
+==63856== For lists of detected and suppressed errors, rerun with: -s
+==63856== ERROR SUMMARY: 764 errors from 3 contexts (suppressed: 6 from 6)
+[31mminishell: Ê: No such file or directory
+[0m==63857== 
+==63857== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63857== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63857==    <inherited from parent>
+==63857== 
+==63857== Open file descriptor 38: /dev/ptmx
+==63857==    <inherited from parent>
+==63857== 
+==63857== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63857==    <inherited from parent>
+==63857== 
+==63857== 
+==63857== HEAP SUMMARY:
+==63857==     in use at exit: 255,396 bytes in 930 blocks
+==63857==   total heap usage: 12,950 allocs, 12,020 frees, 2,052,942 bytes allocated
+==63857== 
+==63857== 32 bytes in 1 blocks are still reachable in loss record 35 of 147
+==63857==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63857==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63857==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63857==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63857==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63857==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63857==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63857==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63857==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63857==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63857==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63857==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63857== 
+==63857== LEAK SUMMARY:
+==63857==    definitely lost: 0 bytes in 0 blocks
+==63857==    indirectly lost: 0 bytes in 0 blocks
+==63857==      possibly lost: 0 bytes in 0 blocks
+==63857==    still reachable: 32 bytes in 1 blocks
+==63857==         suppressed: 255,364 bytes in 929 blocks
+==63857== 
+==63857== For lists of detected and suppressed errors, rerun with: -s
+==63857== ERROR SUMMARY: 764 errors from 3 contexts (suppressed: 6 from 6)
+[31mminishell: E%»§¢: No such file or directory
+[0m[31mminishell: %Ù$: Command not found
+[0m==63858== 
+==63858== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63858== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63858==    <inherited from parent>
+==63858== 
+==63858== Open file descriptor 38: /dev/ptmx
+==63858==    <inherited from parent>
+==63858== 
+==63858== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63858==    <inherited from parent>
+==63858== 
+==63858== 
+==63858== HEAP SUMMARY:
+==63858==     in use at exit: 255,512 bytes in 936 blocks
+==63858==   total heap usage: 13,197 allocs, 12,261 frees, 2,061,029 bytes allocated
+==63858== 
+==63858== 32 bytes in 1 blocks are still reachable in loss record 35 of 147
+==63858==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63858==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63858==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63858==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63858==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63858==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63858==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63858==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63858==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63858==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63858==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63858==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63858== 
+==63858== LEAK SUMMARY:
+==63858==    definitely lost: 0 bytes in 0 blocks
+==63858==    indirectly lost: 0 bytes in 0 blocks
+==63858==      possibly lost: 0 bytes in 0 blocks
+==63858==    still reachable: 32 bytes in 1 blocks
+==63858==         suppressed: 255,480 bytes in 935 blocks
+==63858== 
+==63858== For lists of detected and suppressed errors, rerun with: -s
+==63858== ERROR SUMMARY: 772 errors from 3 contexts (suppressed: 6 from 6)
+==63859== 
+==63859== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63859== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63859==    <inherited from parent>
+==63859== 
+==63859== Open file descriptor 38: /dev/ptmx
+==63859==    <inherited from parent>
+==63859== 
+==63859== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63859==    <inherited from parent>
+==63859== 
+==63859== 
+==63859== HEAP SUMMARY:
+==63859==     in use at exit: 255,512 bytes in 936 blocks
+==63859==   total heap usage: 13,237 allocs, 12,301 frees, 2,061,962 bytes allocated
+==63859== 
+==63859== 32 bytes in 1 blocks are still reachable in loss record 35 of 147
+==63859==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63859==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63859==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63859==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63859==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63859==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63859==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63859==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63859==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63859==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63859==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63859==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63859== 
+==63859== LEAK SUMMARY:
+==63859==    definitely lost: 0 bytes in 0 blocks
+==63859==    indirectly lost: 0 bytes in 0 blocks
+==63859==      possibly lost: 0 bytes in 0 blocks
+==63859==    still reachable: 32 bytes in 1 blocks
+==63859==         suppressed: 255,480 bytes in 935 blocks
+==63859== 
+==63859== For lists of detected and suppressed errors, rerun with: -s
+==63859== ERROR SUMMARY: 772 errors from 3 contexts (suppressed: 6 from 6)
+[31mminishell: a#)R#«æÅSÚÈK7Ûà∆: Command not found
+[0m==63860== 
+==63860== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63860== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63860==    <inherited from parent>
+==63860== 
+==63860== Open file descriptor 38: /dev/ptmx
+==63860==    <inherited from parent>
+==63860== 
+==63860== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63860==    <inherited from parent>
+==63860== 
+==63860== 
+==63860== HEAP SUMMARY:
+==63860==     in use at exit: 255,644 bytes in 939 blocks
+==63860==   total heap usage: 13,403 allocs, 12,464 frees, 2,070,006 bytes allocated
+==63860== 
+==63860== 32 bytes in 1 blocks are still reachable in loss record 33 of 145
+==63860==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63860==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63860==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63860==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63860==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63860==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63860==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63860==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63860==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63860==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63860==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63860==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63860== 
+==63860== LEAK SUMMARY:
+==63860==    definitely lost: 0 bytes in 0 blocks
+==63860==    indirectly lost: 0 bytes in 0 blocks
+==63860==      possibly lost: 0 bytes in 0 blocks
+==63860==    still reachable: 32 bytes in 1 blocks
+==63860==         suppressed: 255,612 bytes in 938 blocks
+==63860== 
+==63860== For lists of detected and suppressed errors, rerun with: -s
+==63860== ERROR SUMMARY: 798 errors from 3 contexts (suppressed: 6 from 6)
+==63758== 
+==63758== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==63758== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==63758==    <inherited from parent>
+==63758== 
+==63758== Open file descriptor 38: /dev/ptmx
+==63758==    <inherited from parent>
+==63758== 
+==63758== Open file descriptor 37: /home/abonifac/.config/Code/logs/20250512T140344/ptyhost.log
+==63758==    <inherited from parent>
+==63758== 
+==63758== 
+==63758== HEAP SUMMARY:
+==63758==     in use at exit: 255,644 bytes in 939 blocks
+==63758==   total heap usage: 13,363 allocs, 12,424 frees, 2,068,884 bytes allocated
+==63758== 
+==63758== 32 bytes in 1 blocks are still reachable in loss record 33 of 145
+==63758==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==63758==    by 0x48ADBAC: xmalloc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x48A47C2: rl_add_undo (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x48A4F4C: rl_insert_text (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x48A6411: _rl_insert_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x48AB0D0: rl_insert (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x48AB830: _rl_arg_dispatch (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x48AB928: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x488BE97: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x488BFF3: _rl_dispatch_subseq (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758==    by 0x488CCC9: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==63758== 
+==63758== LEAK SUMMARY:
+==63758==    definitely lost: 0 bytes in 0 blocks
+==63758==    indirectly lost: 0 bytes in 0 blocks
+==63758==      possibly lost: 0 bytes in 0 blocks
+==63758==    still reachable: 32 bytes in 1 blocks
+==63758==         suppressed: 255,612 bytes in 938 blocks
+==63758== 
+==63758== For lists of detected and suppressed errors, rerun with: -s
+==63758== ERROR SUMMARY: 798 errors from 3 contexts (suppressed: 6 from 6)

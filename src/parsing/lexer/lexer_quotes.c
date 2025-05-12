@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:19:17 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/08 17:41:45 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:26:37 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	parse_unquoted(t_token *token, const char *input, int *i)
 	int			start;
 	t_fragment	*frag;
 
+	frag = NULL;
 	start = *i;
 	while (input[*i] && !ft_isspace(input[*i])
 		&& !is_char_redir_or_pipe(input[*i]) && input[*i] != '\''

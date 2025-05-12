@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/10 10:47:59 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:50:38 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,14 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 	token_list(tok_expand, &head_list, minishell);
 	free_tokens(tok_expand);
 	cmd_list = create_cmd_list(head_list, minishell);
+	// cmd_list = NULL;
 	free_tokens_in_list(head_list);
+	if (!cmd_list)
+	{
+		free_env(&minishell->env);
+		free_cmds(&cmd_list);
+		exit(EXIT_FAILURE);
+	}
 	return (cmd_list);
 }
 
@@ -56,6 +63,7 @@ t_excmd	*build_and_parse_line(char *line, t_minishell *mini)
 		return (NULL);
 	}
 	free(line);
+	// status = ERR_LEX;
 	if (status == ERR_MALLOC || status == ERR_LEX)
 		return (handle_status_err(status, token, mini));
 	if (!lexer_parse(token))
