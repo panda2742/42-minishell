@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:26:31 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/09 15:57:45 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:48:05 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,11 @@ t_err	handle_expand_char(t_utils *utils, t_minishell *mini, char *input)
 		return (ERR_MALLOC);
 	set_var_name(utils, var_name, input);
 	env_var = get_var(&mini->env, var_name);
-	free(var_name);
 	if (env_var)
 		value = ft_strdup(env_var->value);
 	else
 		value = ft_strdup("");
+	free(var_name);
 	if (value == NULL)
 		return (ERR_MALLOC);
 	tmp = str_join_free(utils->s1, value);

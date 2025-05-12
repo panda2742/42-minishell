@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 14:17:46 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/12 15:17:36 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,15 +80,15 @@ static t_token	*create_new_token_from_word(const char *word,
 	return (token);
 }
 
-static t_err	helper_create_new_token(char *current, t_w_split **new_list,
+static t_err	helper_create_new_token(char **current, t_w_split **new_list,
 					t_token *token, t_token *n_tok)
 {
-	n_tok = create_new_token_from_word(current, token);
+	n_tok = create_new_token_from_word(*current, token);
 	if (!n_tok)
 		return (ERR_MALLOC);
 	update_head_and_last(&(*new_list)->new_h, &(*new_list)->new_t, n_tok);
-	// free(current);
-	current = ft_strdup("");
+	free(*current);
+	*current = ft_strdup("");
 	if (current == NULL)
 		return (ERR_MALLOC);
 	return (ERR_NONE);
@@ -116,7 +116,7 @@ t_err	process_unquoted_frag(const char *expanded, char **current,
 		{
 			if ((*current)[0] != '\0')
 			{
-				if (helper_create_new_token(*current, new_list, token, n_tok)
+				if (helper_create_new_token(current, new_list, token, n_tok)
 					!= ERR_NONE)
 					return (ERR_MALLOC);
 			}
