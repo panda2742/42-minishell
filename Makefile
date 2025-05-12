@@ -19,7 +19,7 @@ override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export pwd unset)
 override	SRC_ENV_MANAGER	:=	create_env default_env env_to_strlst get_var
 override	SRC_ERRORS		:=	puterr
 override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
-								$(addprefix init/, create_cmd create_execvars create_redirect redirect_manager) \
+								$(addprefix init/, create_cmd_utils create_cmd create_execvars create_redirect redirect_manager) \
 								$(addprefix process/, exec_multiple_commands exec_single_builtin exec_utils exec execute_from_path)
 override	SRC_MEMORY		:=	free_cmds free_env
 override	SRC_MISC		:=	print_cmds show_prompt signals build_themes

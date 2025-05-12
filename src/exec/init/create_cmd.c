@@ -6,20 +6,13 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/10 11:29:29 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:31:23 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void	_init_redirects(t_excmd *cmd);
-
-t_excmd	*free_res_return_null(t_excmd *res)
-{
-	free(res);
-	res = NULL;
-	return (NULL);
-}
 
 t_excmd	*create_cmd(char *cmd_name, t_env_manager *env)
 {
@@ -76,20 +69,6 @@ static void	_init_redirects(t_excmd *cmd)
 	cmd->std_dup[1].fd = -1;
 	cmd->std_dup[0].type = STREAM_STD;
 	cmd->std_dup[1].type = STREAM_STD;
-}
-
-t_redir	*free_redir_and_return_null(t_redir *redirect)
-{
-	free(redirect->filepath);
-	free(redirect);
-	return (NULL);
-}
-
-void	update_last_next(t_redir **last, t_redir *redirect)
-{
-	while ((*last)->next)
-		*last = (*last)->next;
-	(*last)->next = redirect;
 }
 
 // Je n ai pas tout compris a ce qu il se passe ici

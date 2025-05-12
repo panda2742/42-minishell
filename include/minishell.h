@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 15:21:38 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:32:49 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -415,6 +415,9 @@ void			puterr(char *message, t_bool call_perror);
 
 t_exit			heredoc(char *buffer, char *del, t_bool skip_writing);
 t_excmd			*create_cmd(char *cmd_name, t_env_manager *env);
+t_redir			*free_redir_and_return_null(t_redir *redirect);
+void			update_last_next(t_redir **last, t_redir *redirect);
+t_excmd			*free_res_return_null(t_excmd *res);
 t_redir			*add_redirect(t_excmd *cmd, t_redir_type type,
 					t_redir *redirect);
 t_redir			*create_in_redirect(char *filepath);
