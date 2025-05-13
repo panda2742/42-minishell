@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 17:11:50 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 19:30:41 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <dirent.h>
 # include <sys/types.h>
 # include "libft.h"
+#include <signal.h>
 
 # ifndef PROJECT_NAME
 #  define PROJECT_NAME "Minishell"
@@ -37,6 +38,8 @@
 # define EXIT_CANNOT_EXEC 126
 # define EXIT_NOT_FOUND 127
 # define EXIT_FORK_FAILED 1
+
+extern volatile sig_atomic_t g_flag_signal;
 
 /**
  * An alias to the int type, just to set the code more readable.
@@ -61,7 +64,8 @@ typedef enum e_token_type
 	TOKEN_REDIR_OUT,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
-	TOKEN_REDIR_ARG
+	TOKEN_REDIR_ARG,
+	TOKEN_REDIR_ARG_HEREDOC
 }	t_token_type;
 
 typedef enum e_redir_type
@@ -441,7 +445,11 @@ void			sort_env_list(t_env_var **head_ref);
 
 char			*show_prompt(t_minishell *minishell);
 void			sigint_handler(int signal);
-void			set_sig_action(void);
+void			 init_sighandler(void);
+
+void			sig_here_doc(int signum);
+
+void 			check_flag_signal(t_minishell *mini);
 void			print_cmds(t_excmd *cmd);
 void			print_cmd(t_excmd *cmd);
 char			*build_theme0(const char *user, const char *path);

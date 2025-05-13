@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:45 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/23 14:28:31 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:56:45 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,12 @@ void	update_token_redir(t_token *list)
 	t_fragment	*tmp;
 
 	tmp = list->next->fragments;
-	list->next->type = TOKEN_REDIR_ARG;
+	if (list->type == TOKEN_HEREDOC)
+	{
+		list->next->type = TOKEN_REDIR_ARG_HEREDOC;
+	}
+	else
+		list->next->type = TOKEN_REDIR_ARG;
 	while (tmp)
 	{
 		if (tmp->quote_type == QUOTE_NONE)

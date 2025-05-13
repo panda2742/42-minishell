@@ -3,28 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:21:20 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:21:50 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 19:17:56 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/history.h>
 #include <readline/readline.h>
-#include <signal.h>
-#include <stddef.h>
 #include <sys/types.h>
 #include <unistd.h>
-
-void	sigint_handler(int signal)
-{
-	(void)signal;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
+#include "minishell.h"
 
 /*
 	sigaction struct:
@@ -42,13 +32,19 @@ void	sigint_handler(int signal)
 			appelle sigint_handler et applique les options (sa_mask, sa_flags)
 		- signal: ignore SIGQUIT
 */
-void	set_sig_action(void)
-{
-	struct sigaction	act;
 
-	act.sa_handler = &sigint_handler;
-	sigemptyset(&act.sa_mask);
-	act.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &act, NULL);
-	signal(SIGQUIT, SIG_IGN);
+void sigint_handler(int sig)
+{
+    (void)sig;
+    write(STDOUT_FILENO, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
+}
+
+/* on installe dans la boucle, avant chaque readline */
+void init_sighandler(void)
+{
+    signal(SIGINT,  sigint_handler);
+    signal(SIGQUIT, SIG_IGN);
 }

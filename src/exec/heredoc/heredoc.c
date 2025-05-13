@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:40 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 14:47:30 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 19:19:51 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ t_exit	heredoc(char *del, char **filepath ,t_bool skip_writing)
 		write(heredoc_fd, "\n", 1);
 	}
 	close(heredoc_fd);
+
 	return (EXIT_SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:01 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/12 15:07:19 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:39:16 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,14 @@ static t_err	handle_quote_none(t_fragment *frag, t_minishell *mini,
 }
 
 static t_err	handle_other_quotes(t_fragment *frag, t_w_split *n_list,
-			t_minishell *mini)
+			t_minishell *mini, t_token *tok)
 {
 	char	*expanded;
 	char	*tmp;
 
 	n_list->has_quotes = true;
-	if (frag->quote_type == QUOTE_DOUBLE)
+	if (frag->quote_type == QUOTE_DOUBLE
+		&& tok->type != TOKEN_REDIR_ARG_HEREDOC)
 		expanded = expand_fragment(frag->text, frag->quote_type, mini);
 	else
 		expanded = ft_strdup(frag->text);
@@ -61,12 +62,13 @@ static t_err	apply_fragments(t_w_split *n, t_fragment *frag,
 
 	while (frag)
 	{
-		if (frag->quote_type == QUOTE_NONE)
+		if (frag->quote_type == QUOTE_NONE
+			&& tok->type != TOKEN_REDIR_ARG_HEREDOC)
 			st = handle_quote_none(frag, mini, n, tok);
 		else
 		{
 			n->has_quotes = true;
-			st = handle_other_quotes(frag, n, mini);
+			st = handle_other_quotes(frag, n, mini, tok);
 		}
 		if (st != ERR_NONE)
 			return (st);

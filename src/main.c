@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 15:58:17 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 19:31:12 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ t_excmd	*build_and_parse_line(char *line, t_minishell *mini)
  * Malloc secured
 */
 
+
 int	main(int argc, char **argv, char **env)
 {
 	t_execvars	*vars;
@@ -94,7 +95,7 @@ int	main(int argc, char **argv, char **env)
 	create_env_or_exit_if_env_error(env, &minishell, argc, argv);
 	while (1)
 	{
-		set_sig_action();
+		init_sighandler();
 		line = show_prompt(&minishell); // line secured
 		exit_if_line_null(line, &minishell);
 		add_history(line);
