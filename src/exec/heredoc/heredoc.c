@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:40 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 15:54:17 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 09:41:21 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,13 @@ static void		_free_frags(t_hdfrag *frag);
 static char		*_convert_frags_to_string(t_hdfrag *frag, char *buffer);
 static size_t	_raw_strlcpy(char *dst, const char *src, size_t size);
 
-t_exit	heredoc(char *buffer, char *del, t_bool skip_writing)
+t_exit	heredoc(char **buffer, char *del, t_bool skip_writing)
 {
 	char		*line;
 	t_hdfrag	*prev;
 	t_hdfrag	*elt;
 	t_hdfrag	*first;
 
-	(void)buffer;
 	prev = NULL;
 	first = NULL;
 	while (1)
@@ -45,9 +44,13 @@ t_exit	heredoc(char *buffer, char *del, t_bool skip_writing)
 		if (first == NULL)
 			first = prev;
 	}
-	buffer = _convert_frags_to_string(first, buffer);
+	if (first == NULL)
+	{
+		*buffer = ft_strdup("\n");
+		return (EXIT_SUCCESS);
+	}
+	*buffer = _convert_frags_to_string(first, *buffer);
 	_free_frags(first);
-	printf("%s", buffer);
 	return (EXIT_SUCCESS);
 }
 

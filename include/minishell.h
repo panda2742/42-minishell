@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 17:13:00 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 09:51:49 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -413,7 +413,7 @@ void			puterr(char *message, t_bool call_perror);
 
 // EXEC ------------------------------------------------------------------------
 
-t_exit			heredoc(char *buffer, char *del, t_bool skip_writing);
+t_exit			heredoc(char **buffer, char *del, t_bool skip_writing);
 t_excmd			*create_cmd(char *cmd_name, t_env_manager *env);
 t_redir			*free_redir_and_return_null(t_redir *redirect);
 void			update_last_next(t_redir **last, t_redir *redirect);
