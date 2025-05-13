@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:19 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 15:23:01 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:44:04 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,22 @@ static void	_free_before_exit(t_excmd *c)
 static t_bool	_check_errors(t_excmd *c, unsigned char *status)
 {
 	size_t	i;
+	int		y;
 
 	i = 0;
 	while (c->argv[++i])
 	{
-		if (_is_numeric_only(c->argv[i]) == false)
+		y = ft_atoi(c->argv[i]);
+		if (y == 0)
 		{
-			puterr(ft_sprintf(": exit: %s: numeric argument required\n",
+			if (_is_numeric_only(c->argv[i]) == false)			
+			{
+				puterr(ft_sprintf(": exit: %s: numeric argument required\n",
 					c->argv[i]), false);
-			*status = EXIT_PARSING;
+				*status = 2;
+			}
+			else 
+				*status = y;
 			return (true);
 		}
 	}
