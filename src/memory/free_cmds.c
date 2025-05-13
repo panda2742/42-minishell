@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:19:34 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/07 15:58:05 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:18:32 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,23 @@ void	free_cmds(t_excmd **cmds)
 	}
 }
 
+static void	_free_cmd_redirect(t_excmd *cmd)
+{
+	if (cmd->in_redirects.size)
+	{
+		if (cmd->in_redirects.final_fd.fd > STDERR_FILENO)
+			close(cmd->in_redirects.final_fd.fd);
+		cmd->in_redirects.final_fd.fd = -1;
+		_free_redirect_manager(&cmd->in_redirects);
+	}
+	if (cmd->out_redirects.size)
+	{
+		if (cmd->out_redirects.final_fd.fd > STDERR_FILENO)
+			cmd->out_redirects.final_fd.fd = -1;
+		_free_redirect_manager(&cmd->out_redirects);
+	}
+}
+
 void	free_one_cmd(t_excmd *cmd)
 {
 	if (cmd->name)
@@ -43,25 +60,27 @@ void	free_one_cmd(t_excmd *cmd)
 			free(cmd->argv);
 		cmd->argv = NULL;
 	}
-	if (cmd->paths[0])
+	if (cmd->paths[0] && cmd->paths != empty_paths())
 	{
 		ft_free_strtab(cmd->paths);
 		cmd->argv = NULL;
 	}
-	if (cmd->in_redirects.size)
-	{
-		if (cmd->in_redirects.final_fd.fd > STDERR_FILENO)
-			close(cmd->in_redirects.final_fd.fd);
-		cmd->in_redirects.final_fd.fd = -1;
-		_free_redirect_manager(&cmd->in_redirects);
-	}
-	if (cmd->out_redirects.size)
-	{
-		if (cmd->out_redirects.final_fd.fd > STDERR_FILENO)
-			cmd->out_redirects.final_fd.fd = -1;
-		_free_redirect_manager(&cmd->out_redirects);
-	}
+	_free_cmd_redirect(cmd);
 	free(cmd);
+}
+
+static void	_free_redirect(t_redir *elt)
+{
+	if (elt->filepath)
+	{
+		free(elt->filepath);
+		elt->filepath = NULL;
+	}
+	if (elt->heredoc_del)
+	{
+		free(elt->heredoc_del);
+		elt->heredoc_del = NULL;
+	}
 }
 
 static void	_free_redirect_manager(t_redir_manager *manager)
@@ -76,21 +95,7 @@ static void	_free_redirect_manager(t_redir_manager *manager)
 	elt = *manager->redirects;
 	while (++i < manager->size && elt)
 	{
-		if (elt->filepath)
-		{
-			free(elt->filepath);
-			elt->filepath = NULL;
-		}
-		if (elt->heredoc_del)
-		{
-			free(elt->heredoc_del);
-			elt->heredoc_del = NULL;
-		}
-		if (elt->heredoc_content)
-		{
-			free(elt->heredoc_content);
-			elt->heredoc_content = NULL;
-		}
+		_free_redirect(elt);
 		tmp = elt->next;
 		free(elt);
 		elt = tmp;

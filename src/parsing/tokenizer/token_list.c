@@ -6,45 +6,14 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 09:07:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/05 16:54:14 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:56:12 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_tokens_list(t_token *tokens)
-{
-	t_token		*tmp_token;
-
-	while (tokens)
-	{
-		tmp_token = tokens;
-		tokens = tokens->next;
-		if (tmp_token->text)
-			free(tmp_token->text);
-		free(tmp_token);
-	}
-}
-
-/*
- * Free the tokens in the list
- * The function will free all the tokens in the list
- * and then free the list itself
-*/
-void	free_tokens_in_list(t_token_list *head)
-{
-	t_token_list	*tmp;
-
-	while (head)
-	{
-		tmp = head->next;
-		free_tokens_list(head->tokens);
-		free(head);
-		head = tmp;
-	}
-}
-
-t_token_list	*append_token_list(t_token_list **head_list, t_token **head_tokens)
+t_token_list	*append_token_list(t_token_list **head_list,
+					t_token **head_tokens)
 {
 	t_token_list	*tmp;
 	t_token_list	*list;
@@ -67,24 +36,6 @@ t_token_list	*append_token_list(t_token_list **head_list, t_token **head_tokens)
 	}
 	return (list);
 }
-/*
- * Append a new token list node to the linked list of token lists
-*/
-static void
-append_cmd_node(t_token_list **head, t_token_list *node)
-{
-    t_token_list *new_tok;
-
-    if (!*head)
-        *head = node;
-    else
-    {
-        new_tok = *head;
-        while (new_tok->next)
-            new_tok = new_tok->next;
-        new_tok->next = node;
-    }
-}
 
 t_err	set_node_tok_list(t_token *orig, t_token *out)
 {
@@ -106,26 +57,14 @@ t_err	set_node_tok_list(t_token *orig, t_token *out)
 	return (ERR_NONE);
 }
 
-void	update_head_tail(t_token_list_h *utils, t_token **new_token)
-{
-	if (utils->start == NULL)
-		utils->start = *new_token;
-	if (utils->end == NULL)
-		utils->end = *new_token;
-	else
-	{
-		utils->end->next = *new_token;
-		utils->end = *new_token;
-	}
-}
-
 /*
  * Add a new token list node to the linked list of token lists
  * The new node contains a list of tokens from start to end
  * The function returns the new token list node
 */
 
-t_token_list	*add_token_list_node(t_token_list_h *u, t_token_list **head_list)				
+t_token_list	*add_token_list_node(t_token_list_h *u,
+					t_token_list **head_list)
 {
 	t_token_list	*list;
 	t_token			*new_token;
@@ -133,35 +72,21 @@ t_token_list	*add_token_list_node(t_token_list_h *u, t_token_list **head_list)
 	t_err			status;
 	t_token_list_h	utils;
 
-	utils.start = NULL;
-	utils.end = NULL;
+	set_values(&utils);
 	tmp = u->start;
 	list = ft_memalloc(sizeof(t_token_list));
-	// free(list);
-	// list = NULL;
 	if (list == NULL)
 		return (NULL);
-	while (tmp && tmp != u->end) 
+	while (tmp && tmp != u->end)
 	{
 		new_token = ft_memalloc(sizeof(t_token));
-		// free(new_token);
-		// new_token = NULL;
 		if (new_token == NULL)
-		{
-			free(list);
-			return (NULL);
-		}
+			return (add_token_failed(list, new_token));
 		status = set_node_tok_list(tmp, new_token);
 		if (status != ERR_NONE)
-		{
-			free(list);
-			free(new_token);
-			return (NULL);
-		}
-		update_head_tail(&utils, &new_token);
-		tmp = tmp->next;
+			return (add_token_failed(list, new_token));
+		update_head_tail(&utils, &new_token, &tmp);
 	}
-	
 	list->tokens = utils.start;
 	list->next = NULL;
 	append_cmd_node(head_list, list);
@@ -176,13 +101,15 @@ t_token_list	*add_token_list_node(t_token_list_h *u, t_token_list **head_list)
  * tok_exp_h is token expand head
  * tok_cmd_h is the token command head we are building
 */
-void	token_list(t_token *tok_exp_h, t_token_list **tok_cmd_h, t_minishell *mini)
+
+void	token_list(t_token *tok_exp_h, t_token_list **tok_cmd_h,
+					t_minishell *mini)
 {
 	t_token_list_h	u;
 	t_token_list	*node;
 
 	(void)mini;
-	(void)node;
+	node = NULL;
 	*tok_cmd_h = NULL;
 	if (tok_exp_h == NULL)
 		return ;
@@ -199,13 +126,7 @@ void	token_list(t_token *tok_exp_h, t_token_list **tok_cmd_h, t_minishell *mini)
 		// head_tokens = NULL;
 		node = add_token_list_node(&u, tok_cmd_h);
 		if (node == NULL)
-		{
-			free_tokens(tok_exp_h);
-			free_tokens_in_list(*tok_cmd_h);
-			free_env(&mini->env);
-			puterr(ft_sprintf(": error: Memory allocation error (token_list)\n"), false);
-			exit(EXIT_FAILURE);
-		}
+			exit_node_failed(mini, tok_cmd_h, tok_exp_h);
 		if (u.current && u.current->type == TOKEN_PIPE)
 			u.current = u.current->next;
 	}

@@ -6,12 +6,11 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 11:07:12 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/09 11:08:26 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:57:18 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 t_err	free_n_list(t_w_split *n_list)
 {
@@ -42,7 +41,6 @@ t_err	set_n_list_and_frag(t_w_split *n_list)
 	}
 	return (ERR_NONE);
 }
-
 
 t_err	empty_var(t_w_split *n_list, t_token **out_list)
 {

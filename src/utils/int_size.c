@@ -1,33 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   empty_tab.c                                        :+:      :+:    :+:   */
+/*   int_size.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 15:29:49 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 14:37:01 by ehosta           ###   ########.fr       */
+/*   Created: 2025/05/10 10:49:30 by abonifac          #+#    #+#             */
+/*   Updated: 2025/05/10 10:52:28 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*empty_tab(void)
+/*
+ * Used in ft_sprintf
+*/
+
+size_t	_int_size(int n)
 {
-	static void	*tab[1] = {NULL};
+	size_t	i;
 
-	return (tab);
-}
-
-char	**empty_paths(void)
-{
-	static char	*tab[5] = {
-		"/usr/local/sbin",
-		"/usr/local/bin",
-		"/usr/bin",
-		"/usr/sbin",
-		"/snap/bin"
-	};
-
-	return (tab);
+	i = 0;
+	if (n == 0)
+		return (1);
+	if (n < 0)
+	{
+		n = -n;
+		i++;
+	}
+	while (n)
+	{
+		n /= 10;
+		i++;
+	}
+	return (i);
 }

@@ -6,94 +6,20 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 12:18:34 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 15:17:36 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_err	handle_last_rvalue(t_minishell *mini, t_utils *utils)
-{
-	char	*value;
-	char	*tmp;
-
-	value = ft_itoa(mini->last_status);
-	if (!value)
-	{
-		free(utils->s1);
-		return (ERR_MALLOC);
-	}
-	tmp = str_join_free(utils->s1, value);
-	free(value);
-	if (!tmp)
-		return (ERR_MALLOC);
-	utils->s1 = tmp;
-	utils->i = utils->j + 1;
-	return (ERR_NONE);
-}
-
-void	set_utils(t_utils *utils, char *var_name, char *input)
-{
-	utils->k = 0;
-	
-	// utils->len1 = utils->j - utils->i - 1;
-	while (utils->k < utils->len1)
-	{
-		var_name[utils->k] = input[utils->i + utils->k + 1];
-		utils->k++;
-	}
-	var_name[utils->k] = '\0';
-}
-
-t_err	handle_expand_char(t_utils *utils, t_minishell *mini, char *input)
-{
-	t_env_var	*env_var;
-	char		*var_name;
-	char		*value;
-	char		*tmp;
-
-	utils->len1 = utils->j - utils->i - 1;
-	var_name = ft_memalloc(utils->len1 + 1);
-	// free(var_name);
-	// var_name = NULL;
-	if (!var_name)
-		return (ERR_MALLOC);
-	// utils->k = 0;
-	// while (utils->k < utils->len1)
-	// {
-	// 	var_name[utils->k] = input[utils->i + utils->k + 1];
-	// 	utils->k++;
-	// }
-	// var_name[utils->k] = '\0';
-	set_utils(utils, var_name, input);
-	env_var = get_var(&mini->env, var_name);
-	free(var_name);
-	if (env_var)
-		value = ft_strdup(env_var->value);
-	else
-		value = ft_strdup("");
-	// free(value);
-	// value = NULL;
-	if (value == NULL)
-	{
-		// free(var_name);
-		// free(utils->s1);
-		return (ERR_MALLOC);
-	}
-	tmp = str_join_free(utils->s1, value);
-	free(value);
-	if (tmp == NULL)
-		return (ERR_MALLOC);
-	utils->s1 = tmp;
-	utils->i = utils->j;
-	return (ERR_NONE);
-}
 
 /*
  * Here we check if there is a $ in the fragmentstring
  * We use i and j to find the $ and the end of the variable
  * In handler functions we join everything in the string utils.s1
  * if there is no $ we joins the chars one by one
+ * if there is a ? we get the last return value
+ * if j > i + 1 it means there is a variable name
+ * else it means there is jus a signle $ so we print it 
  */
 char	*expand_fragment(const char *input, int quote, t_minishell *mini)
 {
@@ -108,44 +34,20 @@ char	*expand_fragment(const char *input, int quote, t_minishell *mini)
 	{
 		if (input[u.i] == '$' && quote != QUOTE_SINGLE)
 		{
-			u.j = u.i + 1;
-			incr_on_alnum((char *)input, &u.j);
+			incr_on_alnum((char *)input, &u.j, u.i + 1);
 			if (input[u.j] == '?')
 				st = handle_last_rvalue(mini, &u);
 			else if (u.j > u.i + 1)
 				st = handle_expand_char(&u, mini, (char *)input);
 			else
-                /* dollar isolé, traité comme caractère normal */
 				st = handle_normal_char(&u, (char *)input);
 		}
 		else
 			st = handle_normal_char(&u, (char *)input);
 		if (st != ERR_NONE)
-		{
-			free(u.s1);
-			return (NULL);
-		}
+			return (free_str_return_null(u.s1));
 	}
 	return (u.s1);
-}
-
-/*
- * Here we check if there is a double quote in the fragments
- * If there is one we set the quote type to QUOTE_DOUBLE
- */
-
-t_qtype	set_qtype_fragment(t_token *token_head)
-{
-	t_fragment	*tmp;
-
-	tmp = token_head->fragments;
-	while (tmp)
-	{
-		if (tmp->quote_type == QUOTE_DOUBLE)
-			return (QUOTE_DOUBLE);
-		tmp = tmp->next;
-	}
-	return (QUOTE_NONE);
 }
 
 static t_token	*create_new_token_from_word(const char *word,
@@ -178,14 +80,18 @@ static t_token	*create_new_token_from_word(const char *word,
 	return (token);
 }
 
-void	update_head_and_last(t_token **new_h, t_token **new_t,
-						  t_token *new_token)
+static t_err	helper_create_new_token(char **current, t_w_split **new_list,
+					t_token *token, t_token *n_tok)
 {
-	if (!*new_h)
-		*new_h = new_token;
-	else
-		(*new_t)->next = new_token;
-	*new_t = new_token;
+	n_tok = create_new_token_from_word(*current, token);
+	if (!n_tok)
+		return (ERR_MALLOC);
+	update_head_and_last(&(*new_list)->new_h, &(*new_list)->new_t, n_tok);
+	free(*current);
+	*current = ft_strdup("");
+	if (current == NULL)
+		return (ERR_MALLOC);
+	return (ERR_NONE);
 }
 
 /*
@@ -201,8 +107,8 @@ t_err	process_unquoted_frag(const char *expanded, char **current,
 {
 	int			i;
 	t_token		*n_tok;
-	t_err		st;
 
+	n_tok = NULL;
 	i = 0;
 	while (expanded[i])
 	{
@@ -210,15 +116,8 @@ t_err	process_unquoted_frag(const char *expanded, char **current,
 		{
 			if ((*current)[0] != '\0')
 			{
-				n_tok = create_new_token_from_word(*current, token);
-				// (void)token; test malloc
-				// n_tok = NULL; 
-				if (!n_tok)
-					return (ERR_MALLOC);
-				update_head_and_last(&(*new_list)->new_h, &(*new_list)->new_t, n_tok);
-				free(*current);
-				*current = ft_strdup("");
-				if (*current == NULL)
+				if (helper_create_new_token(current, new_list, token, n_tok)
+					!= ERR_NONE)
 					return (ERR_MALLOC);
 			}
 			while (expanded[i] && ft_isspace(expanded[i]))
@@ -226,18 +125,17 @@ t_err	process_unquoted_frag(const char *expanded, char **current,
 		}
 		else
 		{
-			st = add_char_to_string((char *)expanded, current, &i);
-			if (st != ERR_NONE)
-				return (st);
+			if (add_char_to_string((char *)expanded, current, &i) != ERR_NONE)
+				return (ERR_MALLOC);
 		}
 	}
 	return (ERR_NONE);
 }
 
 t_token	*add_new_token(t_token **new_h, t_token **new_t,
-					   char *current, t_token *token)
+						char *current, t_token *token)
 {
-	t_token *new_token;
+	t_token	*new_token;
 
 	new_token = create_new_token_from_word(current, token);
 	if (!new_token)

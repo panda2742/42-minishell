@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   empty_tab.c                                        :+:      :+:    :+:   */
+/*   exit_if_line_null.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 15:29:49 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 14:37:01 by ehosta           ###   ########.fr       */
+/*   Created: 2025/05/09 19:08:50 by abonifac          #+#    #+#             */
+/*   Updated: 2025/05/10 10:52:51 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*empty_tab(void)
+void	exit_if_line_null(char *line, t_minishell *minishell)
 {
-	static void	*tab[1] = {NULL};
-
-	return (tab);
-}
-
-char	**empty_paths(void)
-{
-	static char	*tab[5] = {
-		"/usr/local/sbin",
-		"/usr/local/bin",
-		"/usr/bin",
-		"/usr/sbin",
-		"/snap/bin"
-	};
-
-	return (tab);
+	if (!line)
+	{
+		free_env(&minishell->env);
+		line = NULL;
+		printf("exit\n");
+		exit(EXIT_FAILURE);
+	}
 }

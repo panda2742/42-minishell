@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   empty_tab.c                                        :+:      :+:    :+:   */
+/*   putwarn.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 15:29:49 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 14:37:01 by ehosta           ###   ########.fr       */
+/*   Created: 2025/05/13 14:11:24 by ehosta            #+#    #+#             */
+/*   Updated: 2025/05/13 14:12:25 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*empty_tab(void)
+void	putwarn(char *message, t_bool call_perror)
 {
-	static void	*tab[1] = {NULL};
-
-	return (tab);
-}
-
-char	**empty_paths(void)
-{
-	static char	*tab[5] = {
-		"/usr/local/sbin",
-		"/usr/local/bin",
-		"/usr/bin",
-		"/usr/sbin",
-		"/snap/bin"
-	};
-
-	return (tab);
+	ft_putstr_fd(YELLOW PROJECT_NAME, 2);
+	if (message)
+	{
+		if (call_perror)
+			perror(message);
+		else
+			ft_putstr_fd(message, 2);
+		free(message);
+	}
+	else
+	{
+		if (call_perror)
+			perror(": This is a simple warning (heap failure)");
+		else
+			ft_putstr_fd(": This is a simple warning (heap failure)\n", 2);
+	}
+	ft_putstr_fd(RESET, 2);
 }

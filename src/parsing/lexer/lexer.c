@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:59:55 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/08 17:23:07 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/13 10:48:36 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,9 @@ static t_fragment *
 	return (frag);
 }
 
-t_err	free_tok_return_st(t_token *token, t_token *out, t_err status)
+t_err	free_tok_return_st(t_token *token, t_err status)
 {
-	free(token);
-	free_tokens(out);
+	free_tokens(token);
 	return (status);
 }
 
@@ -81,7 +80,7 @@ static t_err	parse_word_token(const char *input, int *i, t_token **out)
 		else
 			st = parse_unquoted(token, input, i);
 		if (st != ERR_NONE)
-			return (free_tok_return_st(token, *out, st));
+			return (free_tok_return_st(token, st));
 	}
 	*out = token;
 	return (ERR_NONE);
@@ -92,12 +91,14 @@ static t_err	parse_word_token(const char *input, int *i, t_token **out)
  * we handle redirection/pipe tokens via handle_redir_pipe, or we build
  * a TOKEN_WORD token by accumulating its fragments.
  */
+
 t_err	ft_input(const char *input, t_token **output)
 {
 	t_token	*curr_token;
 	t_err	status;
 	int		i;
 
+	curr_token = NULL;
 	*output = NULL;
 	i = 0;
 	while (input[i])
@@ -111,6 +112,7 @@ t_err	ft_input(const char *input, t_token **output)
 			continue ;
 		}
 		status = parse_word_token(input, &i, &curr_token);
+		// status = ERR_MALLOC;
 		if (status != ERR_NONE)
 			return (status);
 		append_token(output, curr_token);

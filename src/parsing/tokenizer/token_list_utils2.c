@@ -1,33 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   empty_tab.c                                        :+:      :+:    :+:   */
+/*   token_list_utils2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 15:29:49 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 14:37:01 by ehosta           ###   ########.fr       */
+/*   Created: 2025/05/09 15:54:09 by abonifac          #+#    #+#             */
+/*   Updated: 2025/05/09 15:56:00 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*empty_tab(void)
+t_token_list	*add_token_failed(t_token_list *list, t_token *new_token)
 {
-	static void	*tab[1] = {NULL};
-
-	return (tab);
+	free(list);
+	if (new_token)
+		free(new_token);
+	return (NULL);
 }
 
-char	**empty_paths(void)
+void	set_values(t_token_list_h *utils)
 {
-	static char	*tab[5] = {
-		"/usr/local/sbin",
-		"/usr/local/bin",
-		"/usr/bin",
-		"/usr/sbin",
-		"/snap/bin"
-	};
-
-	return (tab);
+	utils->start = NULL;
+	utils->end = NULL;
 }

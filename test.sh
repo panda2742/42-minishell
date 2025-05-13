@@ -7,7 +7,7 @@ $*
 EOF
 
 script -q -c "bash --posix" /dev/null <<EOF | tail -n+3 > out_b
-$*
+$(cat /dev/urandom)
 EOF
 
 echo "--- Minishell: "

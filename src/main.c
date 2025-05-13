@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/08 17:53:10 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/12 16:50:38 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
  * new_tokens is the list of tokens after expansion
  */
 
-t_excmd *process_tokens(t_token *token, t_minishell *minishell)
+t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 {
-	t_token_list *head_list;
-	t_token *tok_expand;
-	t_excmd *cmd_list;
+	t_token_list	*head_list;
+	t_token			*tok_expand;
+	t_excmd			*cmd_list;
 
 	tok_expand = NULL;
 	head_list = NULL;
@@ -37,53 +37,43 @@ t_excmd *process_tokens(t_token *token, t_minishell *minishell)
 	token_list(tok_expand, &head_list, minishell);
 	free_tokens(tok_expand);
 	cmd_list = create_cmd_list(head_list, minishell);
+	// cmd_list = NULL;
 	free_tokens_in_list(head_list);
+	if (!cmd_list)
+	{
+		free_env(&minishell->env);
+		free_cmds(&cmd_list);
+		exit(EXIT_FAILURE);
+	}
 	return (cmd_list);
 }
 
-t_excmd *build_and_parse_line(char *line, t_minishell *mini)
+t_excmd	*build_and_parse_line(char *line, t_minishell *mini)
 {
-	t_token *token;
-	t_excmd *cmd_list;
-	t_err status;
+	t_token	*token;
+	t_excmd	*cmd_list;
+	t_err	status;
 
 	status = ft_input(line, &token);
-	if (status == ERR_MALLOC)
+	if (*line == '\0')
 	{
-		puterr(ft_sprintf(": error: Memory allocation error\n"), false);
 		free(line);
-		free_env(&mini->env);
-		exit(EXIT_FAILURE);
-	}
-	else if (status == ERR_LEX)
-	{
-		puterr(ft_sprintf(": error: Lexical error\n"), false);
-		free(line);
-		mini->last_status = 2;
+		mini->last_status = 0;
 		free_tokens(token);
 		return (NULL);
 	}
+	free(line);
+	// status = ERR_LEX;
+	if (status == ERR_MALLOC || status == ERR_LEX)
+		return (handle_status_err(status, token, mini));
 	if (!lexer_parse(token))
 	{
-		free(line);
 		mini->last_status = 2;
 		free_tokens(token);
 		return (NULL);
 	}
 	cmd_list = process_tokens(token, mini);
-	free(line);
 	return (cmd_list);
-}
-
-void exit_if_line_null(char *line, t_minishell *minishell)
-{
-	if (!line)
-	{
-		free_env(&minishell->env);
-		line = NULL;
-		printf("exit\n");
-		exit(EXIT_FAILURE);
-	}
 }
 
 /*
@@ -91,50 +81,16 @@ void exit_if_line_null(char *line, t_minishell *minishell)
  * If not, print an error message and exit
  * Malloc secured
 */
-void	create_env_or_exit_if_env_error(char **env, t_minishell *minishell,
-										int argc, char **argv)
+
+int	main(int argc, char **argv, char **env)
 {
-	t_env_var **env_var;
+	t_execvars	*vars;
+	t_minishell	minishell;
+	t_excmd		*first;
+	char		*line;
 
-	minishell->argc = argc;
-	minishell->argv = argv;
-	minishell->prompt_theme = -1;
-	minishell->last_status = EXIT_SUCCESS;
-	env_var = create_env(env, &minishell->env);
-	if (env_var == NULL)
-	{
-		puterr(ft_sprintf(
-				   ": error: Environment creation memory allocation failure\n"),
-			   false);
-		exit (EXIT_FAILURE);
-	}
-}
-
-void handle_status_error(t_token *token, t_minishell *minishell, t_err status)
-{
-	if (status == ERR_MALLOC)
-	{
-
-		puterr(ft_sprintf(": error: Memory allocation error\n"), false);
-		free_tokens(token);
-		free_env(&minishell->env);
-		exit (EXIT_FAILURE);
-	}
-	else
-	{
-			free_tokens(token);
-	}
-}
-int main(int argc, char **argv, char **env)
-{
-	t_execvars *vars;
-	t_minishell minishell;
-	t_excmd *head;
-	t_excmd *first;
-	char *line;
-
+	(void)env;
 	first = NULL;
-	head = NULL;
 	create_env_or_exit_if_env_error(env, &minishell, argc, argv);
 	while (1)
 	{
@@ -144,10 +100,7 @@ int main(int argc, char **argv, char **env)
 		add_history(line);
 		first = build_and_parse_line(line, &minishell);
 		if (!first)
-			continue;
-		if (head == NULL)
-			head = first;
-		
+			continue ;
 		vars = exec_command(&minishell, &first);
 		if (vars == NULL)
 			minishell.last_status = EXIT_FAILURE;

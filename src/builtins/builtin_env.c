@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:16 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/17 16:57:18 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/12 14:33:04 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static t_bool	_write_var(t_excmd *cmd, t_env_var *var)
 		if (write(1, U_BLUE, 7) == -1)
 			return (false);
 	}
-	if (write(1, var->name, ft_strlen(var->name)) == -1)
+	if (write(1, var->name, var->name_length) == -1)
 		return (false);
 	if (is_last)
 	{

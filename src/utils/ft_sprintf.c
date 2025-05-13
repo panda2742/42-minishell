@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_sprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:29:51 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/16 11:24:15 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/10 10:51:57 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static size_t	_total_len(const char *format, va_list args);
 static char		*_write_res(const char *format, va_list args, char *buffer);
 static char		*_handle_string(va_list args, size_t *i, char *buffer);
-static size_t	_int_size(int n);
 static char		*_handle_int(va_list args, size_t *i, char *buffer);
 
 char	*ft_sprintf(const char *format, ...)
@@ -61,26 +60,6 @@ static size_t	_total_len(const char *format, va_list args)
 		format++;
 	}
 	return (len);
-}
-
-static size_t	_int_size(int n)
-{
-	size_t	i;
-
-	i = 0;
-	if (n == 0)
-		return (1);
-	if (n < 0)
-	{
-		n = -n;
-		i++;
-	}
-	while (n)
-	{
-		n /= 10;
-		i++;
-	}
-	return (i);
 }
 
 static char	*_write_res(const char *format, va_list args, char *buffer)

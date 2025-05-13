@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 11:13:52 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:40:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <wait.h>
 # include <unistd.h>
 # include <stdint.h>
+# include <dirent.h>
+# include <sys/types.h>
 # include "libft.h"
 
 # ifndef PROJECT_NAME
@@ -103,6 +105,7 @@ typedef union u_errors
 		uint32_t	exc_fork : 1;
 		uint32_t	exc_access_fok : 1;
 		uint32_t	exc_access_xok : 1;
+		uint32_t	exc_directory : 1;
 		uint32_t	exc_execve : 1;
 	};
 	uint32_t	errors_raw;
@@ -196,12 +199,6 @@ typedef struct s_redir
 	 * The delimiter used for a Here Document. Set to NULL as default.
 	 */
 	char			*heredoc_del;
-	/**
-	 * If there is an Here Document, the content is firstly written into the
-	 * memory, and then put into a pipe's output file descriptor when it has to
-	 * be used. Set to NULL as default.
-	 */
-	char			*heredoc_content;
 	/**
 	 * Represents the open mode for the outfile. If this boolean is set to true,
 	 * it means the file is in append mode. Otherwise, it truncates.
@@ -401,17 +398,21 @@ t_env_var		*get_var(t_env_manager *env, const char *name);
 // ERRORS ----------------------------------------------------------------------
 
 void			puterr(char *message, t_bool call_perror);
+void			putwarn(char *message, t_bool call_perror);
 
 // EXEC ------------------------------------------------------------------------
 
-t_exit			heredoc(char *buffer, char *del, t_bool skip_writing);
+t_exit			heredoc(char *del, char **filepath ,t_bool skip_writing);
 t_excmd			*create_cmd(char *cmd_name, t_env_manager *env);
+t_redir			*free_redir_and_return_null(t_redir *redirect);
+void			update_last_next(t_redir **last, t_redir *redirect);
+t_excmd			*free_res_return_null(t_excmd *res);
 t_redir			*add_redirect(t_excmd *cmd, t_redir_type type,
 					t_redir *redirect);
 t_redir			*create_in_redirect(char *filepath);
 t_redir			*create_out_redirect(char *filepath, t_bool append_mode);
 t_redir			*create_heredoc_redirect(char *delimiter);
-void			read_heredocs(t_redir_manager *redirects_manager);
+void			clear_every_tmpfile(t_excmd **cmds);
 t_redir			*get_last_redirect(t_redir_manager *redirects_manager);
 t_execvars		*exec_command(t_minishell *minishell, t_excmd **cmds);
 t_cmdproto		load_builtin(const char *command_name, t_cmdproto *proto);
@@ -422,6 +423,9 @@ t_execvars		*create_execvars(t_minishell *minishell, t_excmd **cmds);
 void			reset_execvars(t_execvars *vars);
 void			exec_multiple_commands(t_execvars *vars);
 int				close_pipe(t_excmd *cmd, int streams);
+t_env_var		*ensure_var(t_env_manager *env, const char *name,
+					char *default_val);
+t_env_var		*init_var(t_env_manager *env, const char *name);
 
 // MEMORY ----------------------------------------------------------------------
 
@@ -436,6 +440,10 @@ void			sigint_handler(int signal);
 void			set_sig_action(void);
 void			print_cmds(t_excmd *cmd);
 void			print_cmd(t_excmd *cmd);
+char			*build_theme0(int last_status, const char *user,
+					const char *path);
+char			*build_theme1(int last_status, const char *path);
+char			*get_random_chars(uint8_t n);
 
 // PARSING ---------------------------------------------------------------------
 
@@ -446,11 +454,10 @@ t_excmd			*create_cmd_list(t_token_list *token_list_head,
 // LEXER ----------------------------------------------------------------------
 
 t_err			parse_quote_prefixed_fragment(t_token *token,
-								const char *input, int *i);
+					const char *input, int *i);
 int				parse_single_quote(t_token *token, const char *input, int *i);
 int				parse_double_quote(t_token *token, const char *input, int *i);
 int				parse_unquoted(t_token *token, const char *input, int *i);
-
 
 t_err			handle_redir_pipe(int *i, t_token **token_list,
 					const char *input);
@@ -468,8 +475,6 @@ t_err			ft_input(const char *input, t_token **output);
 char			*expand_fragment(const char *input, int quote,
 					t_minishell *mini);
 t_qtype			set_qtype_fragment(t_token *token_head);
-// t_err			word_split_token(t_token *token, t_minishell *mini,
-// 					t_token **out_list);
 t_fragment		*new_fragment(const char *start, size_t len,
 					t_qtype quote_type);
 void			append_fragment(t_token *token, t_fragment *frag);
@@ -491,12 +496,35 @@ t_err			empty_var(t_w_split *n_list, t_token **out_list);
 t_err			set_n_list_and_frag(t_w_split *n_list);
 t_err			free_n_list(t_w_split *n_list);
 
-
-
-
+t_qtype			set_qtype_fragment(t_token *token_head);
+void			update_head_and_last(t_token **new_h, t_token **new_t,
+					t_token *new_token);
+t_err			handle_last_rvalue(t_minishell *mini, t_utils *utils);
+void			set_var_name(t_utils *utils, char *var_name, char *input);
+t_err			handle_expand_char(t_utils *utils, t_minishell *mini,
+					char *input);
+void			free_tokens_list(t_token *tokens);
+void			free_tokens_in_list(t_token_list *head);
+void			update_head_tail(t_token_list_h *utils, t_token **new_token,
+					t_token **tmp);
+void			append_cmd_node(t_token_list **head, t_token_list *node);
+void			exit_node_failed(t_minishell *mini, t_token_list **tok_cmd_h,
+					t_token *tok_exp_h);
+t_token_list	*add_token_failed(t_token_list *list, t_token *new_token);
+void			set_values(t_token_list_h *utils);
 
 // UTILS -----------------------------------------------------------------------
 
+size_t			_int_size(int n);
+
+// MAIN_UTILS
+void			create_env_or_exit_if_env_error(char **env,
+					t_minishell *minishell, int argc, char **argv);
+void			exit_if_line_null(char *line, t_minishell *minishell);
+t_excmd			*handle_status_err(t_err status, t_token *token,
+					t_minishell *mini);
+
+// PARSING
 size_t			count_arg_words(t_token *token);
 char			*free_str_return_null(char *str);
 t_err			handle_normal_char(t_utils *utils, char *input);
@@ -506,9 +534,10 @@ char			*str_join_free(char *s1, const char *s2);
 int				ft_strcmp(char *s1, char *s2);
 char			*get_first_word(t_token *token);
 int				handle_is_redir_tokens(t_excmd *cmd, t_token *token);
-void			incr_on_alnum(char *str, int *j);
+void			incr_on_alnum(char *str, int *j, int i);
 char			*ft_sprintf(const char *format, ...);
 void			*empty_tab(void);
+char			**empty_paths(void);
 int				is_redir(t_token *head_token);
 char			*join_tokens_to_string(t_token *tokens);
 void			print_token_list(t_token_list *list);

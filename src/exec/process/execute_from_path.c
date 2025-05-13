@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:59:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 11:50:05 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 14:46:00 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	execute_from_path(t_excmd *cmd)
 	int			i;
 	t_env_var	*path_var;
 	char		*fullpath;
+	DIR			*dir;
 
 	if (cmd->name && ft_strchr(cmd->name, '/') == NULL)
 	{
@@ -30,7 +31,7 @@ void	execute_from_path(t_excmd *cmd)
 				cmd->paths = empty_tab();
 		}
 		else
-			cmd->paths = empty_tab();
+			cmd->paths = empty_paths();
 		i = 0;
 		while (cmd->paths[i])
 		{
@@ -59,23 +60,33 @@ void	execute_from_path(t_excmd *cmd)
 	}
 	else if (cmd->name && ft_strchr(cmd->name, '/'))
 	{
-		if (access(cmd->name, F_OK) != 0)
-			cmd->vars->errs.exc_access_fok = 1;
-		else if (access(cmd->name, X_OK) != 0)
-			cmd->vars->errs.exc_access_xok = 1;
-		else if (execve(cmd->name, cmd->argv, cmd->envp) == -1)
-			cmd->vars->errs.exc_execve = 1;
-	}
-	else
-	{
-		cmd->vars->errs.exc_access_fok = 1;
+		dir = opendir(cmd->name);
+		if (dir)
+		{
+			closedir(dir);
+			cmd->vars->errs.exc_directory = 1;
+		}
+		else
+		{
+			if (access(cmd->name, F_OK) != 0)
+				cmd->vars->errs.exc_access_fok = 1;
+			else if (access(cmd->name, X_OK) != 0)
+				cmd->vars->errs.exc_access_xok = 1;
+			else if (execve(cmd->name, cmd->argv, cmd->envp) == -1)
+				cmd->vars->errs.exc_execve = 1;
+		}
 	}
 	_print_err(cmd);
 }
 
 static void	_print_err(t_excmd *cmd)
 {
-	if (cmd->vars->errs.exc_access_xok)
+	if (cmd->vars->errs.exc_directory)
+	{
+		puterr(ft_sprintf(": %s: Is a directory\n", cmd->name), false);
+		cmd->vars->status = EXIT_CANNOT_EXEC;
+	}
+	else if (cmd->vars->errs.exc_access_xok)
 	{
 		puterr(ft_sprintf(": %s: Permission denied\n", cmd->name), false);
 		cmd->vars->status = EXIT_CANNOT_EXEC;
