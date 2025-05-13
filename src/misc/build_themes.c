@@ -3,16 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   build_themes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 13:39:42 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/11 13:47:26 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/13 16:36:10 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*build_theme0(int last_status, const char *user, const char *path)
+char	*build_theme0(const char *user, const char *path)
+{
+	char	*res;
+
+	res = ft_sprintf(
+			"@\001%s\002%s\001%s\002 \001%s\002%s\001%s\002 %s > ", B_GREEN, user, RESET, U_BLUE, path, RESET, PROJECT_NAME);
+	return (res);
+}
+
+char	*build_theme1(int last_status, const char *user, const char *path)
 {
 	char	*res;
 
@@ -31,7 +40,7 @@ char	*build_theme0(int last_status, const char *user, const char *path)
 	return (res);
 }
 
-char	*build_theme1(int last_status, const char *path)
+char	*build_theme2(int last_status, const char *path)
 {
 	char	*res;
 

@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 14:40:41 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 16:27:32 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -440,9 +440,10 @@ void			sigint_handler(int signal);
 void			set_sig_action(void);
 void			print_cmds(t_excmd *cmd);
 void			print_cmd(t_excmd *cmd);
-char			*build_theme0(int last_status, const char *user,
+char			*build_theme0(const char *user, const char *path);
+char			*build_theme1(int last_status, const char *user,
 					const char *path);
-char			*build_theme1(int last_status, const char *path);
+char			*build_theme2(int last_status, const char *path);
 char			*get_random_chars(uint8_t n);
 
 // PARSING ---------------------------------------------------------------------
