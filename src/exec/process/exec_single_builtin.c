@@ -20,7 +20,8 @@ void	exec_single_builtin(t_excmd *cmd)
 	}
 	if (cmd->out_redirects.size > 0 && get_last_redirect(&cmd->out_redirects) == NULL)
 	{
-		close(cmd->in_redirects.final_fd.fd);
+		if (cmd->in_redirects.final_fd.fd > STDERR_FILENO)
+			close(cmd->in_redirects.final_fd.fd);
 		cmd->vars->status = EXIT_FAILURE;
 		return ;
 	}
