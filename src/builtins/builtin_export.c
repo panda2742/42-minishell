@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:21 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 17:16:51 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 17:22:22 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_exit	builtin_export(t_excmd *c)
 {
 	if (c->argc == 1)
 		return (_no_args(c));
+	printf("%s\n", c->argv[1]);
 	return (EXIT_SUCCESS);
 }
 
