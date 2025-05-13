@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:40 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 11:17:33 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 14:17:27 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_exit	heredoc(char *del, char **filepath ,t_bool skip_writing)
 	char		*line;
 	char		*random_id;
 	int			heredoc_fd;
+	size_t		line_i;
 
 	random_id = get_random_chars(24);
 	*filepath = ft_sprintf("/tmp/minishell_heredoc_%s", random_id);
@@ -26,9 +27,16 @@ t_exit	heredoc(char *del, char **filepath ,t_bool skip_writing)
 	free(random_id);
 	if (heredoc_fd == -1)
 		return (EXIT_FAILURE);
+	line_i = 1;
 	while (1)
 	{
 		line = readline("> ");
+		if (!line)
+		{
+			putwarn(ft_sprintf(": warning: here-document at line %d delimited by end-of-file (wanted '%s')\n", line_i, del), false);
+			break ;
+		}
+		line_i++;
 		if (ft_strcmp(line, del) == 0)
 			break ;
 		if (skip_writing)
@@ -58,4 +66,30 @@ static int	_write_heredoc(int fd, char *buffer)
 	write(fd, buffer, buffer_len);
 	free(buffer);
 	return (EXIT_SUCCESS);
+}
+
+void	clear_every_tmpfile(t_excmd **cmds)
+{
+	t_excmd	*cmd;
+	t_redir	*last;
+
+	cmd = *cmds;
+	while (cmd)
+	{
+		if (cmd->in_redirects.size == 0)
+		{
+			cmd = cmd->next;
+			continue ;
+		}
+		last = *cmd->in_redirects.redirects;
+		while (last)
+		{
+			if (last->is_heredoc && last->next == NULL)
+				break ;
+			last = last->next;
+		}
+		if (last)
+			unlink(last->filepath);
+		cmd = cmd->next;
+	}
 }

@@ -17,7 +17,7 @@ override	HEADER_FILES	:=	minishell
 # The C source code files of the project
 override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export pwd unset)
 override	SRC_ENV_MANAGER	:=	create_env default_env env_to_strlst get_var
-override	SRC_ERRORS		:=	puterr
+override	SRC_ERRORS		:=	puterr putwarn
 override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
 								$(addprefix init/, create_cmd_utils create_cmd create_execvars create_redirect redirect_manager) \
 								$(addprefix process/, exec_multiple_commands exec_single_builtin exec_utils exec execute_from_path)
@@ -149,7 +149,7 @@ eh:
 	clear
 	$(MAKE) bonus
 	clear
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=/home/ehosta/Documents/42-minishell/.valgrind_suppress.txt ./$(NAME) -t 2
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=/home/ehosta/Documents/42-minishell/.valgrind_suppress.txt ./$(NAME) -t 0
 
 
 -include $(DEPS)

@@ -14,7 +14,6 @@ void	exec_multiple_commands(t_execvars *vars)
 	int		status;
 	pid_t	ended_pid;
 	int		wait_status;
-	t_redir	*last;
 
 	cmd = *vars->cmds;
 	while (cmd)
@@ -94,25 +93,7 @@ void	exec_multiple_commands(t_execvars *vars)
 		}
 		vars->nb_launched--;
 	}
-	cmd = *vars->cmds;
-	while (cmd)
-	{
-		if (cmd->in_redirects.size == 0)
-		{
-			cmd = cmd->next;
-			continue ;
-		}
-		last = *cmd->in_redirects.redirects;
-		while (last)
-		{
-			if (last->is_heredoc && last->next == NULL)
-				break ;
-			last = last->next;
-		}
-		if (last)
-			unlink(last->filepath);
-		cmd = cmd->next;
-	}
+	clear_every_tmpfile(vars->cmds);
 }
 
 static int	_setup_cmd(t_excmd *cmd)

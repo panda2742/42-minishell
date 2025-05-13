@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:59:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 14:32:02 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 14:23:35 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ void	execute_from_path(t_excmd *cmd)
 		else if (execve(cmd->name, cmd->argv, cmd->envp) == -1)
 			cmd->vars->errs.exc_execve = 1;
 	}
-	else
-	{
+	else if (cmd->name)
 		cmd->vars->errs.exc_access_fok = 1;
-	}
+	else
+		return ;
 	_print_err(cmd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 11:18:03 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 14:12:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -395,6 +395,7 @@ t_env_var		*get_var(t_env_manager *env, const char *name);
 // ERRORS ----------------------------------------------------------------------
 
 void			puterr(char *message, t_bool call_perror);
+void			putwarn(char *message, t_bool call_perror);
 
 // EXEC ------------------------------------------------------------------------
 
@@ -408,7 +409,7 @@ t_redir			*add_redirect(t_excmd *cmd, t_redir_type type,
 t_redir			*create_in_redirect(char *filepath);
 t_redir			*create_out_redirect(char *filepath, t_bool append_mode);
 t_redir			*create_heredoc_redirect(char *delimiter);
-void			read_heredocs(t_redir_manager *redirects_manager);
+void			clear_every_tmpfile(t_excmd **cmds);
 t_redir			*get_last_redirect(t_redir_manager *redirects_manager);
 t_execvars		*exec_command(t_minishell *minishell, t_excmd **cmds);
 t_cmdproto		load_builtin(const char *command_name, t_cmdproto *proto);
