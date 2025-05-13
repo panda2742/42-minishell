@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 16:27:32 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 17:11:50 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -388,12 +388,15 @@ t_exit			builtin_exit(t_excmd *c);
 t_exit			builtin_export(t_excmd *c);
 t_exit			builtin_pwd(t_excmd *c);
 t_exit			builtin_unset(t_excmd *c);
+t_bool			display_colors(t_excmd *cmd);
 
 // ENV_MANAGER -----------------------------------------------------------------
 
 t_env_var		**create_env(char **envp, t_env_manager *env);
 char			**env_to_strlst(t_env_manager *env);
 t_env_var		*get_var(t_env_manager *env, const char *name);
+t_env_var		**dup_env_vars(t_env_manager *env);
+void			free_dup_vars(t_env_var **vars);
 
 // ERRORS ----------------------------------------------------------------------
 
@@ -432,6 +435,7 @@ t_env_var		*init_var(t_env_manager *env, const char *name);
 void			free_cmds(t_excmd **cmds);
 void			free_one_cmd(t_excmd *cmd);
 void			free_env(t_env_manager *env);
+void			sort_env_list(t_env_var **head_ref);
 
 // MISC ------------------------------------------------------------------------
 
