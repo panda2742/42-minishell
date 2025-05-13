@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:19:34 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 16:01:59 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:18:32 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,6 @@ static void	_free_redirect(t_redir *elt)
 	{
 		free(elt->heredoc_del);
 		elt->heredoc_del = NULL;
-	}
-	if (elt->heredoc_content)
-	{
-		free(elt->heredoc_content);
-		elt->heredoc_content = NULL;
 	}
 }
 

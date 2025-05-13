@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 09:51:49 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 11:18:03 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,12 +197,6 @@ typedef struct s_redir
 	 */
 	char			*heredoc_del;
 	/**
-	 * If there is an Here Document, the content is firstly written into the
-	 * memory, and then put into a pipe's output file descriptor when it has to
-	 * be used. Set to NULL as default.
-	 */
-	char			*heredoc_content;
-	/**
 	 * Represents the open mode for the outfile. If this boolean is set to true,
 	 * it means the file is in append mode. Otherwise, it truncates.
 	 */
@@ -382,15 +376,6 @@ typedef struct s_token_list_h
 	t_token	*end;
 }	t_token_list_h;
 
-typedef struct s_hdfrag
-{
-	char			*buffer;
-	uint16_t		len;
-	uint16_t		total_len;
-	size_t			pos;
-	struct s_hdfrag	*next;
-}					t_hdfrag;
-
 // BUILTINS --------------------------------------------------------------------
 
 t_exit			builtin_cd(t_excmd *c);
@@ -413,7 +398,7 @@ void			puterr(char *message, t_bool call_perror);
 
 // EXEC ------------------------------------------------------------------------
 
-t_exit			heredoc(char **buffer, char *del, t_bool skip_writing);
+t_exit			heredoc(char *del, char **filepath ,t_bool skip_writing);
 t_excmd			*create_cmd(char *cmd_name, t_env_manager *env);
 t_redir			*free_redir_and_return_null(t_redir *redirect);
 void			update_last_next(t_redir **last, t_redir *redirect);

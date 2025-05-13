@@ -6,17 +6,19 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 11:20:46 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 11:31:37 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static t_bool	_load_env_strlst(t_execvars *vars);
+static void		_read_heredocs(t_redir_manager *redirects_manager);
 
 t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 {
 	t_execvars		*vars;
+	t_excmd			*cmd;
 
 	vars = create_execvars(minishell, cmds);
 	if (vars == NULL)
@@ -28,6 +30,12 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 		return (vars);
 	if (_load_env_strlst(vars) == false)
 		return (vars);
+	cmd = *cmds;
+	while (cmd)
+	{
+		_read_heredocs(&cmd->in_redirects);
+		cmd = cmd->next;
+	}
 	if (vars->nb_cmd == 1 && (*vars->cmds)->proto != NULL)
 		exec_single_builtin(*(vars->cmds));
 	else
@@ -35,6 +43,37 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 	free_cmds(vars->cmds);
 	ft_free_strtab(minishell->env.envlst);
 	return (vars);
+}
+
+static void	_read_heredocs(t_redir_manager *redirects_manager)
+{
+	t_redir	*elt;
+	size_t	nb_heredoc;
+	t_exit	heredoc_status;
+
+	nb_heredoc = -1;
+	elt = *redirects_manager->redirects;
+	while (elt)
+	{
+		if (elt->is_heredoc)
+		{
+			nb_heredoc++;
+			elt->heredoc_id = nb_heredoc;
+		}
+		elt = elt->next;
+	}
+	elt = *redirects_manager->redirects;
+	while (elt)
+	{
+		if (elt->is_heredoc)
+		{
+			heredoc_status = heredoc(
+				elt->heredoc_del,
+				&elt->filepath,
+				elt->heredoc_id != nb_heredoc && elt->next == NULL);
+		}
+		elt = elt->next;
+	}
 }
 
 static t_bool	_load_env_strlst(t_execvars *vars)

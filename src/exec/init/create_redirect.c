@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_redirect.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:48 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/10 11:37:38 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:18:18 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ t_redir	*create_in_redirect(char *filepath)
 	res->is_heredoc = false;
 	res->heredoc_id = -1;
 	res->heredoc_del = NULL;
-	res->heredoc_content = NULL;
 	res->out_append_mode = false;
 	res->next = NULL;
 	return (res);
@@ -58,7 +57,6 @@ t_redir	*create_out_redirect(char *filepath, t_bool append_mode)
 	res->is_heredoc = false;
 	res->heredoc_id = -1;
 	res->heredoc_del = NULL;
-	res->heredoc_content = NULL;
 	res->out_append_mode = append_mode;
 	res->next = NULL;
 	return (res);
@@ -77,7 +75,6 @@ t_redir	*create_heredoc_redirect(char *delimiter)
 	res->is_heredoc = true;
 	res->heredoc_id = -1;
 	res->heredoc_del = ft_strdup(delimiter);
-	res->heredoc_content = NULL;
 	res->out_append_mode = false;
 	res->next = NULL;
 	return (res);

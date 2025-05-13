@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_cmds.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:23:02 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/11 13:47:07 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:18:42 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ void	print_cmd(t_excmd *cmd)
 			else
 				printf(" %sOPEN%s", B_GREEN, RESET);
 			printf(" -> (%s%p%s)\n", U_MAGENTA, redir->next, RESET);
-			printf("[%p]     here_doc content:\n%s%s%s\n", cmd,
-				BLACK, redir->heredoc_content, RESET);
 			redir = redir->next;
 		}
 	}
