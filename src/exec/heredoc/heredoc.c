@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:40 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 14:17:27 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 14:47:30 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ t_exit	heredoc(char *del, char **filepath ,t_bool skip_writing)
 			putwarn(ft_sprintf(": warning: here-document at line %d delimited by end-of-file (wanted '%s')\n", line_i, del), false);
 			break ;
 		}
-		line_i++;
 		if (ft_strcmp(line, del) == 0)
 			break ;
+		line_i++;
 		if (skip_writing)
 			continue ;
 		_write_heredoc(heredoc_fd, line);

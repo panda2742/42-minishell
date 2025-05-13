@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 14:12:41 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 14:40:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <wait.h>
 # include <unistd.h>
 # include <stdint.h>
+# include <dirent.h>
+# include <sys/types.h>
 # include "libft.h"
 
 # ifndef PROJECT_NAME
@@ -103,6 +105,7 @@ typedef union u_errors
 		uint32_t	exc_fork : 1;
 		uint32_t	exc_access_fok : 1;
 		uint32_t	exc_access_xok : 1;
+		uint32_t	exc_directory : 1;
 		uint32_t	exc_execve : 1;
 	};
 	uint32_t	errors_raw;
