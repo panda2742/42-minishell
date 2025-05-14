@@ -71,7 +71,7 @@ t_env_var	*_create_new_var(char *identifier, unsigned char op,
 		puterr(ft_strdup(": Memory allocation error\n"), false);
 		return (NULL);
 	}
-	new_var->name = ft_strdup(identifier);
+	new_var->name = ft_strdup(identifier); //secure
 	free(identifier);
 	new_var->name_length = ft_strlen(new_var->name);
 	new_var->next = NULL;
@@ -82,7 +82,7 @@ t_env_var	*_create_new_var(char *identifier, unsigned char op,
 	}
 	else
 	{
-		new_var->value = ft_strdup(value);
+		new_var->value = ft_strdup(value); // secure
 		new_var->value_length = ft_strlen(new_var->value);
 	}
 	return (new_var);
@@ -102,7 +102,7 @@ void	_non_existing_var_op(unsigned char op, t_env_var *var, char *value)
 	}
 	if (op == 2)
 	{
-		new_value = ft_strjoin(var->value, value);
+		new_value = ft_strjoin(var->value, value); //secure
 		if (var->value)
 			free(var->value);
 		var->value = new_value;
