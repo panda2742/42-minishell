@@ -6,19 +6,54 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 14:25:39 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 15:35:07 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_bool	_load_env_strlst(t_execvars *vars);
 static t_exit	_read_heredocs(t_redir_manager *redirects_manager);
+
+static void	_handle_signal(t_execvars *vars)
+{
+	int				ttyfd;
+
+	if (g_last_signal == 5)
+	{
+		ttyfd = open("/dev/tty", O_RDWR);
+		if (ttyfd > STDERR_FILENO)
+		{
+			dup2(ttyfd, STDIN_FILENO);
+			close(ttyfd);
+		}
+		g_last_signal = 0;
+		vars->status = 130;
+	}
+}
+
+static t_bool	_setup_heredoc(t_excmd **cmds, t_execvars *vars)
+{
+	t_excmd			*cmd;
+
+	cmd = *cmds;
+	while (cmd)
+	{
+		if (cmd->in_redirects.size
+			&& _read_heredocs(&cmd->in_redirects) == EXIT_FAILURE)
+		{
+			clear_every_tmpfile(cmds);
+			puterr(ft_sprintf(": heredoc error.\n"), false);
+			vars->status = 1;
+			return (true);
+		}
+		cmd = cmd->next;
+	}
+	return (false);
+}
 
 t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 {
 	t_execvars		*vars;
-	t_excmd			*cmd;
 
 	vars = create_execvars(minishell, cmds);
 	if (vars == NULL)
@@ -26,22 +61,11 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 		puterr(ft_sprintf(": error:  Memory allocation error\n"), false);
 		return (NULL);
 	}
-	if (vars->nb_cmd == 0)
+	if (vars->nb_cmd == 0 || load_env_strlst(vars) == false)
 		return (vars);
-	if (_load_env_strlst(vars) == false)
+	if (_setup_heredoc(cmds, vars))
 		return (vars);
-	cmd = *cmds;
-	while (cmd)
-	{
-		if (cmd->in_redirects.size && _read_heredocs(&cmd->in_redirects) == EXIT_FAILURE)
-		{
-			clear_every_tmpfile(cmds);
-			puterr(ft_sprintf(": heredoc error.\n"), false);
-			vars->status = 1;
-			return (vars);
-		}
-		cmd = cmd->next;
-	}
+	_handle_signal(vars);
 	if (vars->nb_cmd == 1 && (*vars->cmds)->proto != NULL)
 		exec_single_builtin(*(vars->cmds));
 	else
@@ -51,11 +75,34 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 	return (vars);
 }
 
+static t_exit	_read_heredocs_next(t_redir_manager *redirects_manager,
+					size_t nb_heredoc)
+{
+	t_redir	*elt;
+	t_exit	heredoc_status;
+
+	elt = *redirects_manager->redirects;
+	while (elt)
+	{
+		if (elt->is_heredoc)
+		{
+			heredoc_status = heredoc(
+					elt->heredoc_del,
+					&elt->filepath,
+					elt->heredoc_id != nb_heredoc
+					&& elt->next == NULL);
+			if (heredoc_status == EXIT_FAILURE)
+				return (EXIT_FAILURE);
+		}
+		elt = elt->next;
+	}
+	return (EXIT_SUCCESS);
+}
+
 static t_exit	_read_heredocs(t_redir_manager *redirects_manager)
 {
 	t_redir	*elt;
 	size_t	nb_heredoc;
-	t_exit	heredoc_status;
 
 	nb_heredoc = -1;
 	elt = *redirects_manager->redirects;
@@ -68,42 +115,5 @@ static t_exit	_read_heredocs(t_redir_manager *redirects_manager)
 		}
 		elt = elt->next;
 	}
-	elt = *redirects_manager->redirects;
-	while (elt)
-	{
-		if (elt->is_heredoc)
-		{
-			heredoc_status = heredoc(
-				elt->heredoc_del,
-				&elt->filepath,
-				elt->heredoc_id != nb_heredoc && elt->next == NULL);
-			if (heredoc_status == EXIT_FAILURE)
-				return (EXIT_FAILURE);
-		}
-		elt = elt->next;
-	}
-	return (EXIT_SUCCESS);
-}
-
-static t_bool	_load_env_strlst(t_execvars *vars)
-{
-	t_excmd	*cmd;
-
-	vars->minishell->env.envlst = env_to_strlst(&vars->minishell->env);
-	if (vars->minishell->env.envlst == NULL)
-	{
-		vars->errs.exc_env_strlst = 1;
-		free(vars->cmds);
-		puterr(ft_sprintf(
-				": error: Pipeline init failure (memory allocation),\
-					killing %s\n" PROJECT_NAME), false);
-		return (false);
-	}
-	cmd = *vars->cmds;
-	while (cmd)
-	{
-		cmd->envp = vars->minishell->env.envlst;
-		cmd = cmd->next;
-	}
-	return (true);
+	return (_read_heredocs_next(redirects_manager, nb_heredoc));
 }

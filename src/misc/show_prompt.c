@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   show_prompt.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:39:24 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 11:44:10 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:46:25 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,15 +94,17 @@ static char	*_load_theme(t_minishell *minishell)
 		{
 			if (ft_strcmp(minishell->argv[2], "--theme")
 				&& ft_strcmp(minishell->argv[0], "-t"))
-				minishell->prompt_theme = ft_atoi(minishell->argv[2]) % 3;
+				minishell->prompt_theme = ft_atoi(minishell->argv[2]) % 4;
 		}
 	}
 	res = NULL;
 	if (minishell->prompt_theme == 0)
-		res = build_theme0(minishell->last_status, user, path);
+		res = build_theme0(user, path);
 	if (minishell->prompt_theme == 1)
-		res = build_theme1(minishell->last_status, path);
+		res = build_theme1(minishell->last_status, user, path);
 	if (minishell->prompt_theme == 2)
+		res = build_theme2(minishell->last_status, path);
+	if (minishell->prompt_theme == 3)
 		res = NULL;
 	free((char *)path);
 	return (res);

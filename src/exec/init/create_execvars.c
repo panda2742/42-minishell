@@ -1,4 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_execvars.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 14:18:16 by abonifac          #+#    #+#             */
+/*   Updated: 2025/05/14 14:23:30 by ehosta           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
+
+void	_set_args_to_zero(t_execvars *vars)
+{
+	vars->nb_launched = 0;
+	vars->status = EXIT_SUCCESS;
+	vars->errs.errors_raw = 0;
+}
 
 t_execvars	*create_execvars(t_minishell *minishell, t_excmd **cmds)
 {
@@ -23,9 +42,7 @@ t_execvars	*create_execvars(t_minishell *minishell, t_excmd **cmds)
 			cmd = cmd->next;
 		}
 	}
-	vars->nb_launched = 0;
-	vars->status = EXIT_SUCCESS;
-	vars->errs.errors_raw = 0;
+	_set_args_to_zero(vars);
 	vars->minishell = minishell;
 	return (vars);
 }

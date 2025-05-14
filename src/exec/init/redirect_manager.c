@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:51 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 11:26:57 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 15:55:47 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,17 @@
 static t_bool	_try_open(t_redir *last, t_redir_manager *redirects_manager);
 static t_redir	*_continue_loop(t_redir *last);
 
-t_redir	*mem_redir_fail(t_redir_manager *redirects_manager, t_redir *last)
+static void	_set_heredoc(t_redir *last)
 {
-	redirects_manager->problematic = last;
-	puterr(ft_sprintf(": error: Memory allocation error (redirects)\n"), false);
-	return (NULL);
+	last->fd.fd = open(last->filepath, O_RDONLY);
+	last->fd.type = STREAM_REDIR;
+}
+
+static void	_set_last(t_redir_manager *redirects_manager, t_redir *last)
+{
+	redirects_manager->last = last;
+	redirects_manager->final_fd.fd = last->fd.fd;
+	redirects_manager->final_fd.type = last->fd.type;
 }
 
 t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
@@ -35,11 +41,9 @@ t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 		if (!last->filepath && !last->is_heredoc)
 			return (mem_redir_fail(redirects_manager, last));
 		if (last->is_heredoc && last->next == NULL)
-		{
-			last->fd.fd = open(last->filepath, O_RDONLY);
-			last->fd.type = STREAM_REDIR;
+			_set_heredoc(last);
+		if (last->is_heredoc && last->next == NULL)
 			break ;
-		}
 		else if (_try_open(last, redirects_manager) == false)
 			return (NULL);
 		if (last->next)
@@ -49,9 +53,7 @@ t_redir	*get_last_redirect(t_redir_manager *redirects_manager)
 		}
 		break ;
 	}
-	redirects_manager->last = last;
-	redirects_manager->final_fd.fd = last->fd.fd;
-	redirects_manager->final_fd.type = last->fd.type;
+	_set_last(redirects_manager, last);
 	return (last);
 }
 

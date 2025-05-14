@@ -15,14 +15,14 @@ override	HEADER_FILES	:=	minishell
 
 
 # The C source code files of the project
-override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export pwd unset)
-override	SRC_ENV_MANAGER	:=	create_env default_env env_to_strlst get_var
+override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export export_utils pwd unset) builtins_utils export_utils1
+override	SRC_ENV_MANAGER	:=	create_env create_env_utils default_env dup_env env_to_strlst get_var
 override	SRC_ERRORS		:=	puterr putwarn
 override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
 								$(addprefix init/, create_cmd_utils create_cmd create_execvars create_redirect redirect_manager) \
-								$(addprefix process/, exec_multiple_commands exec_single_builtin exec_utils exec execute_from_path)
+								$(addprefix process/, exec_multiple_commands exec_multiple_commands_utils1 exec_multiple_commands_utils2 exec_single_builtin exec_utils exec execute_from_path)
 override	SRC_MEMORY		:=	free_cmds free_env
-override	SRC_MISC		:=	print_cmds show_prompt signals build_themes get_random_chars
+override	SRC_MISC		:=	show_prompt signals build_themes get_random_chars
 override	SRC_PARSING		:=	$(addprefix cmd/, cmd) \
 								$(addprefix lexer/, handle_redir_pipe lexer_parse lexer_quotes lexer_utils lexer) \
 								$(addprefix tokenizer/, expand_caller_utils expand_tokens_utils expand expand_tokens fragments token_lexer token_list_utils token_list_utils2 token_list word_split_token_utils) 
@@ -140,7 +140,7 @@ ab:
 	clear
 	$(MAKE) bonus
 	clear
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=.valgrind_suppress.txt ./$(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=.valgrind_suppress.txt ./$(NAME) -t 1
 
 
 .PHONY: eh
@@ -149,7 +149,7 @@ eh:
 	clear
 	$(MAKE) bonus
 	clear
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=/home/ehosta/Documents/42-minishell/.valgrind_suppress.txt ./$(NAME) -t 0
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-mismatched-frees=yes --track-fds=yes --trace-children=yes --suppressions=/home/ehosta/Documents/42-minishell/.valgrind_suppress.txt ./$(NAME)
 
 
 -include $(DEPS)

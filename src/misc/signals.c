@@ -6,49 +6,55 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:21:20 by ehosta            #+#    #+#             */
-/*   Updated: 2025/04/14 15:21:50 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:08:37 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/history.h>
 #include <readline/readline.h>
-#include <signal.h>
-#include <stddef.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include "minishell.h"
 
-void	sigint_handler(int signal)
+volatile sig_atomic_t	g_last_signal = 0;
+
+void	sigint_handler(int sig)
 {
-	(void)signal;
-	write(1, "\n", 1);
+	(void)sig;
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	rl_redisplay();
+	write(STDIN_FILENO, "\n", 1);
+	g_last_signal = 3;
 }
 
-/*
-	sigaction struct:
-		struct sigaction {
-			void (*sa_handler)(int);
-			sigset_t sa_mask;
-			int sa_flags;
-		};
-		- sa_handler: pointeur sur la fonction de gestion du signal
-		- sigemptyset: initialise le masque de signaux a bloquer,
-			en gros on ne bloque aucun signal
-		- sa_flags: flags pour la gestion du signal,
-			SA_RESTART pour redemarrer les appels systeme interrompus
-		- sigaction: Quand SIGINT arrive,
-			appelle sigint_handler et applique les options (sa_mask, sa_flags)
-		- signal: ignore SIGQUIT
-*/
-void	set_sig_action(void)
+/* We set it before readline to handle the signals main*/
+void	init_sighandler(void)
 {
-	struct sigaction	act;
-
-	act.sa_handler = &sigint_handler;
-	sigemptyset(&act.sa_mask);
-	act.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &act, NULL);
+	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	sigint_heredoc(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	g_last_signal = 5;
+	close(STDIN_FILENO);
+}
+
+/* We set it before readline to handle the signals fake heredoc*/
+void	init_sigheredoc(void)
+{
+	signal(SIGINT, sigint_heredoc);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	check_sigint(t_minishell *mini)
+{
+	if (g_last_signal == 3)
+	{
+		mini->last_status = 130;
+		g_last_signal = 0;
+	}
 }

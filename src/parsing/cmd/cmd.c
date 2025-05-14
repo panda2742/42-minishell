@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 15:18:54 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/08 15:35:43 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 14:26:43 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ static t_excmd	*set_cmd(t_excmd *cmd, t_token *token, t_minishell *minishell)
 	cmd->argc = token_lstsize(token);
 	count_args = count_arg_words(token);
 	cmd->argv = ft_memalloc(sizeof(char *) * (count_args + 1));
-	// free(cmd->argv);
-	// cmd->argv = NULL;
 	if (!cmd->argv)
 	{
 		free(cmd->name);
@@ -56,8 +54,6 @@ static int	build_redirs_and_args(t_excmd *cmd, t_token *token)
 		if (token->type == TOKEN_WORD)
 		{
 			cmd->argv[i++] = ft_strdup(token->text);
-			// free(cmd->argv[i - 1]);
-			// cmd->argv[i -1] = NULL;
 			if (!cmd->argv[i - 1])
 				return (0);
 			free(token->text);

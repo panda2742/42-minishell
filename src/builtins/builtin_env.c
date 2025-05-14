@@ -6,14 +6,13 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:16 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 14:33:04 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/13 16:48:31 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static t_bool	_write_var(t_excmd *cmd, t_env_var *var);
-static t_bool	_is_last(t_excmd *cmd);
 
 t_exit	builtin_env(t_excmd *c)
 {
@@ -40,7 +39,7 @@ static t_bool	_write_var(t_excmd *cmd, t_env_var *var)
 {
 	t_bool	is_last;
 
-	is_last = _is_last(cmd);
+	is_last = display_colors(cmd);
 	if (is_last)
 	{
 		if (write(1, U_BLUE, 7) == -1)
@@ -60,9 +59,4 @@ static t_bool	_write_var(t_excmd *cmd, t_env_var *var)
 	if (write(1, "\n", 1) == -1)
 		return (false);
 	return (true);
-}
-
-static t_bool	_is_last(t_excmd *cmd)
-{
-	return (cmd->next == NULL && cmd->out_redirects.size == 0);
 }

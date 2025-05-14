@@ -6,14 +6,12 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:29 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 14:30:29 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:58:01 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char			*_get_name(t_env_var *var, char *env_var);
-static char			*_get_value(t_env_var *var, char *env_var);
 static t_env_var	**_init_manager(char **envp, t_env_manager *env);
 static void			_increment_shlevel(t_env_manager *env);
 
@@ -28,29 +26,8 @@ t_env_var	**create_env(char **envp, t_env_manager *env)
 	i = -1;
 	env->vars[0] = NULL;
 	prev = NULL;
-	while (++i < env->env_size)
-	{
-		elt = ft_memalloc(sizeof(t_env_var));
-		if (elt == NULL)
-		{
-			free_env(env);
-			return (NULL);
-		}
-		elt->name = _get_name(elt, envp[i]);
-		if (elt->name == NULL)
-		{
-			free(elt);
-			free_env(env);
-			return (NULL);
-		}
-		elt->value = _get_value(elt, envp[i]);
-		elt->next = NULL;
-		if (!env->vars[0])
-			env->vars[0] = elt;
-		if (prev)
-			prev->next = elt;
-		prev = elt;
-	}
+	elt = NULL;
+	init_all_vars(env, envp, elt, i);
 	if (envp[0] == NULL)
 	{
 		init_var(env, "PWD");
@@ -61,44 +38,6 @@ t_env_var	**create_env(char **envp, t_env_manager *env)
 	}
 	_increment_shlevel(env);
 	return (env->vars);
-}
-
-static char	*_get_name(t_env_var *var, char *env_var)
-{
-	size_t	len;
-	char	*res;
-
-	len = 0;
-	while (env_var[len] && env_var[len] != '=')
-		len++;
-	var->name_length = len;
-	res = ft_memalloc(sizeof(char) * (len + 1));
-	if (res == NULL)
-		return (NULL);
-	ft_strlcpy(res, env_var, len + 1);
-	return (res);
-}
-
-static char	*_get_value(t_env_var *var, char *env_var)
-{
-	size_t	len;
-	char	*res;
-
-	while (*env_var && *env_var != '=')
-		env_var++;
-	var->value_length = 0;
-	if (!*env_var)
-		return (NULL);
-	env_var++;
-	len = 0;
-	while (env_var[len])
-		len++;
-	var->value_length = len;
-	res = ft_memalloc(sizeof(char) * (len + 1));
-	if (res == NULL)
-		return (NULL);
-	ft_strlcpy(res, env_var, len + 1);
-	return (res);
 }
 
 static t_env_var	**_init_manager(char **envp, t_env_manager *env)

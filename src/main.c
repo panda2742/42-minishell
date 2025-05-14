@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 16:50:38 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:07:30 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 	token_list(tok_expand, &head_list, minishell);
 	free_tokens(tok_expand);
 	cmd_list = create_cmd_list(head_list, minishell);
-	// cmd_list = NULL;
 	free_tokens_in_list(head_list);
 	if (!cmd_list)
 	{
@@ -63,12 +62,13 @@ t_excmd	*build_and_parse_line(char *line, t_minishell *mini)
 		return (NULL);
 	}
 	free(line);
-	// status = ERR_LEX;
 	if (status == ERR_MALLOC || status == ERR_LEX)
 		return (handle_status_err(status, token, mini));
 	if (!lexer_parse(token))
 	{
 		mini->last_status = 2;
+		if (token == NULL)
+			mini->last_status = 0;
 		free_tokens(token);
 		return (NULL);
 	}
@@ -89,13 +89,13 @@ int	main(int argc, char **argv, char **env)
 	t_excmd		*first;
 	char		*line;
 
-	(void)env;
 	first = NULL;
 	create_env_or_exit_if_env_error(env, &minishell, argc, argv);
 	while (1)
 	{
-		set_sig_action();
-		line = show_prompt(&minishell); // line secured
+		init_sighandler();
+		line = show_prompt(&minishell);
+		check_sigint(&minishell);
 		exit_if_line_null(line, &minishell);
 		add_history(line);
 		first = build_and_parse_line(line, &minishell);

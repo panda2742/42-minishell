@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:19 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 11:44:04 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 14:09:32 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ static void	_free_before_exit(t_excmd *c)
 	free_cmds(cmds);
 }
 
+static t_bool	_update_status_return_true(char *str, unsigned char *status)
+{
+	*status = (unsigned char)ft_atoi(str);
+	return (true);
+}
+
 static t_bool	_check_errors(t_excmd *c, unsigned char *status)
 {
 	size_t	i;
@@ -60,22 +66,19 @@ static t_bool	_check_errors(t_excmd *c, unsigned char *status)
 		y = ft_atoi(c->argv[i]);
 		if (y == 0)
 		{
-			if (_is_numeric_only(c->argv[i]) == false)			
+			if (_is_numeric_only(c->argv[i]) == false)
 			{
 				puterr(ft_sprintf(": exit: %s: numeric argument required\n",
-					c->argv[i]), false);
+						c->argv[i]), false);
 				*status = 2;
 			}
-			else 
+			else
 				*status = y;
 			return (true);
 		}
 	}
 	if (c->argc == 2)
-	{
-		*status = (unsigned char)ft_atoi(c->argv[1]);
-		return (true);
-	}
+		return (_update_status_return_true(c->argv[1], status));
 	puterr(ft_sprintf(": exit: too many arguments\n"), false);
 	return (false);
 }

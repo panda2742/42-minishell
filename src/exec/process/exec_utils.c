@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:07:18 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/07 11:25:45 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 15:44:23 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,27 @@ int	close_pipe(t_excmd *cmd, int streams)
 		cmd->pipe_open[1] = false;
 	}
 	return (res);
+}
+
+t_bool	load_env_strlst(t_execvars *vars)
+{
+	t_excmd	*cmd;
+
+	vars->minishell->env.envlst = env_to_strlst(&vars->minishell->env);
+	if (vars->minishell->env.envlst == NULL)
+	{
+		vars->errs.exc_env_strlst = 1;
+		free(vars->cmds);
+		puterr(ft_sprintf(
+				": error: Pipeline init failure (memory allocation),\
+					killing %s\n" PROJECT_NAME), false);
+		return (false);
+	}
+	cmd = *vars->cmds;
+	while (cmd)
+	{
+		cmd->envp = vars->minishell->env.envlst;
+		cmd = cmd->next;
+	}
+	return (true);
 }

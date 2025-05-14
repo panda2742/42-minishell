@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 14:40:41 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:04:02 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@
 # include <stdint.h>
 # include <dirent.h>
 # include <sys/types.h>
+# include <stdlib.h>
 # include "libft.h"
+# include <signal.h>
 
 # ifndef PROJECT_NAME
 #  define PROJECT_NAME "Minishell"
@@ -41,7 +43,7 @@
 /**
  * An alias to the int type, just to set the code more readable.
  */
-typedef int		t_exit;
+typedef int						t_exit;
 
 /*
  * Parsing
@@ -61,7 +63,8 @@ typedef enum e_token_type
 	TOKEN_REDIR_OUT,
 	TOKEN_APPEND,
 	TOKEN_HEREDOC,
-	TOKEN_REDIR_ARG
+	TOKEN_REDIR_ARG,
+	TOKEN_REDIR_ARG_HEREDOC
 }	t_token_type;
 
 typedef enum e_redir_type
@@ -341,7 +344,7 @@ typedef struct s_excmd
  * The parameter is a pointer to a s_command structure, defined above.
  */
 
-typedef t_exit	(*t_cmdproto)(t_excmd *);
+typedef t_exit					(*t_cmdproto)(t_excmd *);
 
 typedef struct s_execvars
 {
@@ -379,6 +382,8 @@ typedef struct s_token_list_h
 	t_token	*end;
 }	t_token_list_h;
 
+extern volatile sig_atomic_t	g_last_signal;
+
 // BUILTINS --------------------------------------------------------------------
 
 t_exit			builtin_cd(t_excmd *c);
@@ -388,12 +393,39 @@ t_exit			builtin_exit(t_excmd *c);
 t_exit			builtin_export(t_excmd *c);
 t_exit			builtin_pwd(t_excmd *c);
 t_exit			builtin_unset(t_excmd *c);
+t_bool			display_colors(t_excmd *cmd);
+char			*get_identifier(char *str);
+unsigned char	get_operation(char *str);
+char			*get_value(char *str);
+t_bool			valid_identifier_name(char *str);
+void			_do_op(t_env_manager *env, char *str);
+void			_existing_var_op(t_env_manager *env, char *identifier,
+					unsigned char op, char *value);
+void			_non_existing_var_op(unsigned char op, t_env_var *var,
+					char *value);
+t_env_var		*_create_new_var(char *identifier, unsigned char op,
+					char *value);
+
+void			_free_everything(t_excmd *cmd, t_execvars *vars, int status,
+					t_bool unlink_tmp);
+t_bool			_create_pipe_if_necessary(t_excmd *cmd);
+void			_child_life(t_execvars *vars, t_excmd *cmd);
+t_bool			_error_or_parent_life(int fork_id, t_execvars *vars,
+					t_excmd *cmd, pid_t *last_fork);
+void			_trigger_waits(t_execvars *vars, pid_t last_fork);
+int				_setup_cmd(t_excmd *cmd);
+int				_check_input_redir(t_excmd *cmd);
+int				_check_output_redir(t_excmd *cmd);
+int				_create_input_dup2_redir(t_excmd *cmd);
+int				_create_output_dup2_redir(t_excmd *cmd);
 
 // ENV_MANAGER -----------------------------------------------------------------
 
 t_env_var		**create_env(char **envp, t_env_manager *env);
 char			**env_to_strlst(t_env_manager *env);
 t_env_var		*get_var(t_env_manager *env, const char *name);
+t_env_var		**dup_env_vars(t_env_manager *env);
+void			free_dup_vars(t_env_var **vars);
 
 // ERRORS ----------------------------------------------------------------------
 
@@ -402,7 +434,7 @@ void			putwarn(char *message, t_bool call_perror);
 
 // EXEC ------------------------------------------------------------------------
 
-t_exit			heredoc(char *del, char **filepath ,t_bool skip_writing);
+t_exit			heredoc(char *del, char **filepath, t_bool skip_writing);
 t_excmd			*create_cmd(char *cmd_name, t_env_manager *env);
 t_redir			*free_redir_and_return_null(t_redir *redirect);
 void			update_last_next(t_redir **last, t_redir *redirect);
@@ -426,23 +458,31 @@ int				close_pipe(t_excmd *cmd, int streams);
 t_env_var		*ensure_var(t_env_manager *env, const char *name,
 					char *default_val);
 t_env_var		*init_var(t_env_manager *env, const char *name);
+void			init_all_vars(t_env_manager *env, char **envp, t_env_var *elt,
+					size_t i);
+t_bool			load_env_strlst(t_execvars *vars);
+t_redir			*mem_redir_fail(t_redir_manager *redirects_manager,
+					t_redir *last);
 
 // MEMORY ----------------------------------------------------------------------
 
 void			free_cmds(t_excmd **cmds);
 void			free_one_cmd(t_excmd *cmd);
 void			free_env(t_env_manager *env);
+void			sort_env_list(t_env_var **head_ref);
 
 // MISC ------------------------------------------------------------------------
 
 char			*show_prompt(t_minishell *minishell);
 void			sigint_handler(int signal);
-void			set_sig_action(void);
-void			print_cmds(t_excmd *cmd);
-void			print_cmd(t_excmd *cmd);
-char			*build_theme0(int last_status, const char *user,
+void			init_sighandler(void);
+void			init_sigheredoc(void);
+void			sigint_heredoc(int sig);
+void			check_sigint(t_minishell *mini);
+char			*build_theme0(const char *user, const char *path);
+char			*build_theme1(int last_status, const char *user,
 					const char *path);
-char			*build_theme1(int last_status, const char *path);
+char			*build_theme2(int last_status, const char *path);
 char			*get_random_chars(uint8_t n);
 
 // PARSING ---------------------------------------------------------------------

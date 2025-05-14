@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:59:55 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 10:48:36 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 14:29:09 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ t_err	ft_input(const char *input, t_token **output)
 			continue ;
 		}
 		status = parse_word_token(input, &i, &curr_token);
-		// status = ERR_MALLOC;
 		if (status != ERR_NONE)
 			return (status);
 		append_token(output, curr_token);

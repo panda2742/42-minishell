@@ -1,24 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_if_line_null.c                                :+:      :+:    :+:   */
+/*   exec_multiple_commands_utils1.c                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/09 19:08:50 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/14 11:25:19 by ehosta           ###   ########.fr       */
+/*   Created: 2025/05/14 15:24:04 by ehosta            #+#    #+#             */
+/*   Updated: 2025/05/14 17:05:00 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exit_if_line_null(char *line, t_minishell *minishell)
+void	_free_everything(t_excmd *cmd, t_execvars *vars, int status,
+				t_bool unlink_tmp)
 {
-	if (!line)
+	if (unlink_tmp)
 	{
-		free_env(&minishell->env);
-		line = NULL;
-		printf("exit\n");
-		exit(EXIT_FAILURE);
+		if (cmd->in_redirects.final_fd.type == STREAM_REDIR
+			&& cmd->in_redirects.last->is_heredoc == true)
+			unlink(cmd->in_redirects.last->filepath);
 	}
+	ft_free_strtab(cmd->vars->minishell->env.envlst);
+	free_env(&cmd->vars->minishell->env);
+	free_cmds(vars->cmds);
+	free(vars);
+	exit(status);
 }

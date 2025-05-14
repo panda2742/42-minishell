@@ -1,109 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_multiple_commands.c                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/14 15:24:04 by ehosta            #+#    #+#             */
+/*   Updated: 2025/05/14 17:04:40 by ehosta           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static int	_setup_cmd(t_excmd *cmd);
-static int	_check_input_redir(t_excmd *cmd);
-static int	_check_output_redir(t_excmd *cmd);
-static int	_create_input_dup2_redir(t_excmd *cmd);
-static int	_create_output_dup2_redir(t_excmd *cmd);
-
-void	exec_multiple_commands(t_execvars *vars)
+int	_setup_cmd(t_excmd *cmd)
 {
-	t_excmd	*cmd;
-	pid_t	fork_id;
-	pid_t	last_fork;
-	int		status;
-	pid_t	ended_pid;
-	int		wait_status;
-
-	cmd = *vars->cmds;
-	while (cmd)
-	{
-		// ouverture de la pipe si pas derniere cmd
-		if (cmd->id < cmd->vars->nb_cmd)
-		{
-			if (pipe(cmd->pipe) == -1)
-			{
-				// securiser l'ouverture de la pipe ici
-			}
-			cmd->pipe_open[0] = true;
-			cmd->pipe_open[1] = true;
-		}
-		fork_id = fork();
-		// child
-		if (fork_id == 0)
-		{
-			status = _setup_cmd(cmd);
-			close_pipe(cmd, 3);
-			if (cmd->prev)
-				close_pipe(cmd->prev, 1);
-			if (status != EXIT_SUCCESS)
-			{
-				ft_free_strtab(cmd->vars->minishell->env.envlst);
-				free_env(&cmd->vars->minishell->env);
-				free_cmds(vars->cmds);
-				free(vars);
-				exit(status);
-			}
-			if (cmd->proto == NULL)
-			{
-				execute_from_path(cmd);
-				if (cmd->in_redirects.final_fd.type == STREAM_REDIR && cmd->in_redirects.last->is_heredoc == true)
-					unlink(cmd->in_redirects.last->filepath);
-				ft_free_strtab(cmd->vars->minishell->env.envlst);
-				free_env(&cmd->vars->minishell->env);
-				status = vars->status;
-				free_cmds(vars->cmds);
-				free(vars);
-				exit(status);
-			}
-			else
-			{
-				status = cmd->proto(cmd);
-				if (cmd->in_redirects.final_fd.type == STREAM_REDIR && cmd->in_redirects.last->is_heredoc == true)
-					unlink(cmd->in_redirects.last->filepath);
-				ft_free_strtab(cmd->vars->minishell->env.envlst);
-				free_env(&cmd->vars->minishell->env);
-				free_cmds(vars->cmds);
-				free(vars);
-				exit(status);
-			}
-		}
-		if (fork_id < 0)
-		{
-			vars->status = EXIT_FORK_FAILED;
-			puterr(ft_sprintf(": Pipeline stopped; %d failed", fork_id), true);
-			close_pipe(cmd, 3);
-			break ;
-		}
-		close_pipe(cmd, 2);
-		if (cmd->prev)
-			close_pipe(cmd->prev, 1);
-		if (cmd->next == NULL)
-			last_fork = fork_id;
-		vars->nb_launched++;
-		cmd = cmd->next;
-	}
-	while (vars->nb_launched)
-	{
-		ended_pid = waitpid(-1, &wait_status, 0);
-		if (ended_pid == last_fork)
-		{
-			if (WIFEXITED(wait_status))
-				vars->status = WEXITSTATUS(wait_status);
-		}
-		vars->nb_launched--;
-	}
-	clear_every_tmpfile(vars->cmds);
-}
-
-static int	_setup_cmd(t_excmd *cmd)
-{
-	// ouverture du dernier redir
 	if (_check_input_redir(cmd) == EXIT_FAILURE)
 		return (cmd->vars->status);
 	if (_check_output_redir(cmd) == EXIT_FAILURE)
 		return (cmd->vars->status);
-	// creation des dups
 	if (_create_input_dup2_redir(cmd) == EXIT_FAILURE)
 	{
 		close_pipe(cmd, 3);
@@ -118,9 +32,10 @@ static int	_setup_cmd(t_excmd *cmd)
 	return (EXIT_SUCCESS);
 }
 
-static int	_check_input_redir(t_excmd *cmd)
+int	_check_input_redir(t_excmd *cmd)
 {
-	if (cmd->in_redirects.size > 0 && get_last_redirect(&cmd->in_redirects) == NULL)
+	if (cmd->in_redirects.size > 0
+		&& get_last_redirect(&cmd->in_redirects) == NULL)
 	{
 		cmd->vars->status = EXIT_FAILURE;
 		return (cmd->vars->status);
@@ -134,11 +49,13 @@ static int	_check_input_redir(t_excmd *cmd)
 	return (cmd->vars->status);
 }
 
-static int	_check_output_redir(t_excmd *cmd)
+int	_check_output_redir(t_excmd *cmd)
 {
-	if (cmd->out_redirects.size > 0 && get_last_redirect(&cmd->out_redirects) == NULL)
+	if (cmd->out_redirects.size > 0
+		&& get_last_redirect(&cmd->out_redirects) == NULL)
 	{
-		if (cmd->in_redirects.size > 0 && cmd->in_redirects.final_fd.type == STREAM_REDIR)
+		if (cmd->in_redirects.size > 0
+			&& cmd->in_redirects.final_fd.type == STREAM_REDIR)
 			close(cmd->in_redirects.final_fd.fd);
 		cmd->vars->status = EXIT_FAILURE;
 		return (cmd->vars->status);
@@ -151,35 +68,40 @@ static int	_check_output_redir(t_excmd *cmd)
 	return (cmd->vars->status);
 }
 
-static int	_create_input_dup2_redir(t_excmd *cmd)
+int	_create_input_dup2_redir(t_excmd *cmd)
 {
 	if (cmd->in_redirects.final_fd.type != STREAM_STD)
 	{
 		if (dup2(cmd->in_redirects.final_fd.fd, STDIN_FILENO) == -1)
 		{
-			puterr(ft_sprintf(": %s(%d) dup2 input error", cmd->name, cmd->id), true);
+			puterr(ft_sprintf(": %s(%d) dup2 input error", cmd->name, cmd->id),
+				true);
 			if (cmd->in_redirects.final_fd.type == STREAM_REDIR)
 				close(cmd->in_redirects.final_fd.fd);
-			if (cmd->out_redirects.size > 0 && cmd->out_redirects.final_fd.type == STREAM_REDIR)
+			if (cmd->out_redirects.size > 0
+				&& cmd->out_redirects.final_fd.type == STREAM_REDIR)
 				close(cmd->out_redirects.final_fd.fd);
 			cmd->vars->status = EXIT_FAILURE;
-			if (cmd->in_redirects.final_fd.type == STREAM_REDIR && cmd->in_redirects.last->is_heredoc == true)
+			if (cmd->in_redirects.final_fd.type == STREAM_REDIR
+				&& cmd->in_redirects.last->is_heredoc == true)
 				unlink(cmd->in_redirects.last->filepath);
 			return (cmd->vars->status);
 		}
-		if (cmd->in_redirects.final_fd.type == STREAM_REDIR && cmd->in_redirects.final_fd.fd > STDERR_FILENO)
+		if (cmd->in_redirects.final_fd.type == STREAM_REDIR
+			&& cmd->in_redirects.final_fd.fd > STDERR_FILENO)
 			close(cmd->in_redirects.final_fd.fd);
 	}
 	return (cmd->vars->status);
 }
 
-static int	_create_output_dup2_redir(t_excmd *cmd)
+int	_create_output_dup2_redir(t_excmd *cmd)
 {
 	if (cmd->out_redirects.final_fd.type != STREAM_STD)
 	{
 		if (dup2(cmd->out_redirects.final_fd.fd, STDOUT_FILENO) == -1)
 		{
-			puterr(ft_sprintf(": %s(%d) dup2 output error", cmd->name, cmd->id), true);
+			puterr(ft_sprintf(": %s(%d) dup2 output error", cmd->name, cmd->id),
+				true);
 			if (cmd->out_redirects.final_fd.type == STREAM_REDIR)
 				close(cmd->out_redirects.final_fd.fd);
 			cmd->vars->status = EXIT_FAILURE;
