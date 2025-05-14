@@ -6,7 +6,7 @@
 /*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 12:15:54 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:23:02 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@
 # define EXIT_CANNOT_EXEC 126
 # define EXIT_NOT_FOUND 127
 # define EXIT_FORK_FAILED 1
-
-extern volatile sig_atomic_t g_flag_signal;
 
 /**
  * An alias to the int type, just to set the code more readable.
@@ -383,7 +381,7 @@ typedef struct s_token_list_h
 	t_token	*end;
 }	t_token_list_h;
 
-extern int last_signal;
+extern volatile sig_atomic_t g_last_signal;
 
 // BUILTINS --------------------------------------------------------------------
 
@@ -452,9 +450,8 @@ void			sigint_handler(int signal);
 void 			init_sighandler();
 void 			init_sigheredoc(void);
 void 			sigint_heredoc(int sig);
-
+void 			check_sigint(t_minishell *mini);
 void			sig_here_doc(int signum);
-
 void 			check_flag_signal(t_minishell *mini);
 void			print_cmds(t_excmd *cmd);
 void			print_cmd(t_excmd *cmd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 11:19:34 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 12:25:15 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 		}
 		cmd = cmd->next;
 	}
-	if (last_signal == 5)
+	if (g_last_signal == 5)
 	{
 		ttyfd = open("/dev/tty", O_RDWR);
 		if (ttyfd > STDERR_FILENO)
@@ -51,7 +51,7 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 			dup2(ttyfd, STDIN_FILENO);
 			close(ttyfd);
 		}
-		last_signal = 0;
+		g_last_signal = 0;
 		vars->status = 130;
 	}
 	if (vars->nb_cmd == 1 && (*vars->cmds)->proto != NULL)
