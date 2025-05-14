@@ -36,15 +36,14 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 	free_tokens(token);
 	token_list(tok_expand, &head_list, minishell);
 	free_tokens(tok_expand);
-	print_token_list(head_list);
 	cmd_list = create_cmd_list(head_list, minishell);
 	free_tokens_in_list(head_list);
-	if (!cmd_list)
-	{
-		free_env(&minishell->env);
-		free_cmds(&cmd_list);
-		exit(EXIT_FAILURE);
-	}
+	// if (!cmd_list)
+	// {
+	// 	free_env(&minishell->env);
+	// 	free_cmds(&cmd_list);
+	// 	exit(EXIT_FAILURE);
+	// }
 	return (cmd_list);
 }
 

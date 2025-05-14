@@ -579,7 +579,6 @@ char			*ft_sprintf(const char *format, ...);
 void			*empty_tab(void);
 char			**empty_paths(void);
 int				is_redir(t_token *head_token);
-char			*join_tokens_to_string(t_token *tokens);
 void			print_token_list(t_token_list *list);
 void			skip_spaces(const char *input, int *i);
 size_t			token_lstsize(t_token *head);

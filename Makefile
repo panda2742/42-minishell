@@ -26,7 +26,7 @@ override	SRC_MISC		:=	show_prompt signals build_themes get_random_chars
 override	SRC_PARSING		:=	$(addprefix cmd/, cmd) \
 								$(addprefix lexer/, handle_redir_pipe lexer_parse lexer_quotes lexer_utils lexer) \
 								$(addprefix tokenizer/, expand_caller_utils expand_tokens_utils expand expand_tokens fragments token_lexer token_list_utils token_list_utils2 token_list word_split_token_utils) 
-override	SRC_UTILS		:=	$(addprefix parsing/, count_arg_words free_str_return_null ft_add_char ft_split_parser ft_str_join_free ft_strcmp get_first_word handle_is_redir_token incr_on_alnum is_redir join_token_to_string print_t_token_list skip_spaces token_lstsize) \
+override	SRC_UTILS		:=	$(addprefix parsing/, count_arg_words free_str_return_null ft_add_char ft_split_parser ft_str_join_free ft_strcmp get_first_word handle_is_redir_token incr_on_alnum is_redir print_t_token_list skip_spaces token_lstsize) \
 								$(addprefix main_utils/, create_env exit_if_line_null status_err) \
 								empty_tab \
 								ft_sprintf \
