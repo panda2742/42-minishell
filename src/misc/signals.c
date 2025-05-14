@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:21:20 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 13:59:10 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:13:50 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	sigint_handler(int sig)
 	g_last_signal = 3;
 }
 
-/* We set it before readline to handle the signals */
+/* We set it before readline to handle the signals main*/
 void	init_sighandler(void)
 {
 	signal(SIGINT, sigint_handler);
@@ -44,14 +44,14 @@ void	sigint_heredoc(int sig)
 	close(STDIN_FILENO);
 }
 
-/* on installe dans la boucle, avant chaque readline */
+/* We set it before readline to handle the signals fake heredoc*/
 void	init_sigheredoc(void)
 {
 	signal(SIGINT, sigint_heredoc);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void check_sigint(t_minishell *mini)
+void	check_sigint(t_minishell *mini)
 {
 	if (g_last_signal == 3)
 	{

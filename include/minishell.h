@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 13:58:03 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:13:44 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 /**
  * An alias to the int type, just to set the code more readable.
  */
-typedef int		t_exit;
+typedef int						t_exit;
 
 /*
  * Parsing
@@ -344,7 +344,7 @@ typedef struct s_excmd
  * The parameter is a pointer to a s_command structure, defined above.
  */
 
-typedef t_exit	(*t_cmdproto)(t_excmd *);
+typedef t_exit					(*t_cmdproto)(t_excmd *);
 
 typedef struct s_execvars
 {
@@ -382,7 +382,7 @@ typedef struct s_token_list_h
 	t_token	*end;
 }	t_token_list_h;
 
-extern volatile sig_atomic_t g_last_signal;
+extern volatile sig_atomic_t	g_last_signal;
 
 // BUILTINS --------------------------------------------------------------------
 
@@ -414,7 +414,7 @@ void			putwarn(char *message, t_bool call_perror);
 
 // EXEC ------------------------------------------------------------------------
 
-t_exit			heredoc(char *del, char **filepath ,t_bool skip_writing);
+t_exit			heredoc(char *del, char **filepath, t_bool skip_writing);
 t_excmd			*create_cmd(char *cmd_name, t_env_manager *env);
 t_redir			*free_redir_and_return_null(t_redir *redirect);
 void			update_last_next(t_redir **last, t_redir *redirect);
@@ -450,12 +450,11 @@ void			sort_env_list(t_env_var **head_ref);
 
 char			*show_prompt(t_minishell *minishell);
 void			sigint_handler(int signal);
-void 			init_sighandler();
-void 			init_sigheredoc(void);
-void 			sigint_heredoc(int sig);
-void 			check_sigint(t_minishell *mini);
+void			init_sighandler(void);
+void			init_sigheredoc(void);
+void			sigint_heredoc(int sig);
+void			check_sigint(t_minishell *mini);
 void			sig_here_doc(int signum);
-void 			check_flag_signal(t_minishell *mini);
 void			print_cmds(t_excmd *cmd);
 void			print_cmd(t_excmd *cmd);
 char			*build_theme0(const char *user, const char *path);

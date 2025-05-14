@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 14:10:58 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:13:22 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 	token_list(tok_expand, &head_list, minishell);
 	free_tokens(tok_expand);
 	cmd_list = create_cmd_list(head_list, minishell);
-	// cmd_list = NULL;
 	free_tokens_in_list(head_list);
 	if (!cmd_list)
 	{
@@ -63,7 +62,6 @@ t_excmd	*build_and_parse_line(char *line, t_minishell *mini)
 		return (NULL);
 	}
 	free(line);
-	// status = ERR_LEX;
 	if (status == ERR_MALLOC || status == ERR_LEX)
 		return (handle_status_err(status, token, mini));
 	if (!lexer_parse(token))
@@ -94,8 +92,8 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		init_sighandler();
+		line = show_prompt(&minishell);
 		check_sigint(&minishell);
-		line = show_prompt(&minishell); // line secured
 		exit_if_line_null(line, &minishell);
 		add_history(line);
 		first = build_and_parse_line(line, &minishell);
