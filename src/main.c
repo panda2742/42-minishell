@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 14:13:22 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:07:30 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ t_excmd	*build_and_parse_line(char *line, t_minishell *mini)
 	if (!lexer_parse(token))
 	{
 		mini->last_status = 2;
+		if (token == NULL)
+			mini->last_status = 0;
 		free_tokens(token);
 		return (NULL);
 	}

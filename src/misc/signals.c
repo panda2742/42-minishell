@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:21:20 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 17:06:19 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:08:37 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,9 @@ volatile sig_atomic_t	g_last_signal = 0;
 void	sigint_handler(int sig)
 {
 	(void)sig;
-	// rl_redisplay();
 	rl_replace_line("", 0);
-	write(STDIN_FILENO, "\n", 1);
 	rl_on_new_line();
-	rl_redisplay();
+	write(STDIN_FILENO, "\n", 1);
 	g_last_signal = 3;
 }
 
