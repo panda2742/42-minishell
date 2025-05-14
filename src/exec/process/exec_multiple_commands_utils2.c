@@ -32,6 +32,7 @@ void	_child_life(t_execvars *vars, t_excmd *cmd)
 	int		status;
 
 	signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
 	status = _setup_cmd(cmd);
 	close_pipe(cmd, 3);
 	if (cmd->prev)
@@ -101,6 +102,8 @@ void	exec_multiple_commands(t_execvars *vars)
 			break ;
 		cmd = cmd->next;
 	}
+	signal(SIGINT, SIG_IGN);
 	_trigger_waits(vars, last_fork);
+	init_sighandler();
 	clear_every_tmpfile(vars->cmds);
 }

@@ -82,7 +82,7 @@ t_env_var	*_create_new_var(char *identifier, unsigned char op,
 	}
 	else
 	{
-		new_var->value = ft_strdup(value);
+		new_var->value = ft_strdup(value); // a securiser
 		new_var->value_length = ft_strlen(new_var->value);
 	}
 	return (new_var);
@@ -96,13 +96,13 @@ void	_non_existing_var_op(unsigned char op, t_env_var *var, char *value)
 	{
 		if (var->value)
 			free(var->value);
-		var->value = ft_strdup(value);
+		var->value = ft_strdup(value); // a securiser
 		var->value_length = ft_strlen(var->value);
 		return ;
 	}
 	if (op == 2)
 	{
-		new_value = ft_strjoin(var->value, value);
+		new_value = ft_strjoin(var->value, value); //j ai une fonction ft_strjoin_free
 		if (var->value)
 			free(var->value);
 		var->value = new_value;
