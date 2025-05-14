@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:21:20 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 19:17:56 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:22:28 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include "minishell.h"
+
+int	last_signal = 0;
 
 /*
 	sigaction struct:
@@ -40,11 +42,28 @@ void sigint_handler(int sig)
     rl_on_new_line();
     rl_replace_line("", 0);
     rl_redisplay();
+	last_signal = 3;
 }
 
 /* on installe dans la boucle, avant chaque readline */
 void init_sighandler(void)
 {
     signal(SIGINT,  sigint_handler);
+    signal(SIGQUIT, SIG_IGN);
+}
+
+void sigint_heredoc(int sig)
+{
+    (void)sig;
+    write(STDOUT_FILENO, "\n", 1);
+    rl_on_new_line();
+	last_signal = 5;
+	close(STDIN_FILENO);
+}
+
+/* on installe dans la boucle, avant chaque readline */
+void init_sigheredoc(void)
+{
+    signal(SIGINT,  sigint_heredoc);
     signal(SIGQUIT, SIG_IGN);
 }

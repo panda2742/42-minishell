@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:21 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 09:31:24 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 10:03:32 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,21 @@
 static t_exit	_no_args(t_excmd *c);
 static t_bool	_write_var(t_excmd *cmd, t_env_var *var);
 static t_bool	_write_var_value(t_excmd *cmd, t_env_var *var);
+static char		*_get_export_tokens(char *str);
 
 t_exit	builtin_export(t_excmd *c)
 {
+	int	i;
+
 	if (c->argc == 1)
 		return (_no_args(c));
-	printf("%s\n", c->argv[1]);
+	i = 1;
+	while (i < c->argc)
+	{
+		printf("%s\n", c->argv[i]);
+		_get_export_tokens(c->argv[i]);
+		i++;
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -95,4 +104,17 @@ static t_bool	_write_var_value(t_excmd *cmd, t_env_var *var)
 	if (write(1, "\"\n", 2) == -1)
 		return (false);
 	return (true);
+}
+
+static char	*_get_export_tokens(char *str)
+{
+	char	*identifier;
+	// int		i;
+
+	identifier = get_identifier(str);
+	if (valid_identifier_name(identifier) == false)
+	{
+		puterr(ft_sprintf(": export: `%s': not a valid identifier\n", identifier), false);
+	}
+	return (identifier);
 }

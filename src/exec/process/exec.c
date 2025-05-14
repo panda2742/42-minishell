@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 15:36:32 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 11:19:34 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 {
 	t_execvars		*vars;
 	t_excmd			*cmd;
+	int				ttyfd;
 
 	vars = create_execvars(minishell, cmds);
 	if (vars == NULL)
@@ -41,6 +42,17 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 			return (vars);
 		}
 		cmd = cmd->next;
+	}
+	if (last_signal == 5)
+	{
+		ttyfd = open("/dev/tty", O_RDWR);
+		if (ttyfd > STDERR_FILENO)
+		{
+			dup2(ttyfd, STDIN_FILENO);
+			close(ttyfd);
+		}
+		last_signal = 0;
+		vars->status = 130;
 	}
 	if (vars->nb_cmd == 1 && (*vars->cmds)->proto != NULL)
 		exec_single_builtin(*(vars->cmds));

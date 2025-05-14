@@ -15,7 +15,7 @@ override	HEADER_FILES	:=	minishell
 
 
 # The C source code files of the project
-override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export pwd unset) builtins_utils
+override	SRC_BUILTINS	:=	$(addprefix builtin_,cd echo env exit export pwd unset) builtins_utils export_utils1
 override	SRC_ENV_MANAGER	:=	create_env default_env dup_env env_to_strlst get_var
 override	SRC_ERRORS		:=	puterr putwarn
 override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \

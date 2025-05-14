@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:40 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 19:19:51 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:20:26 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ t_exit	heredoc(char *del, char **filepath ,t_bool skip_writing)
 	line_i = 1;
 	while (1)
 	{
+		init_sigheredoc();
 		line = readline("> ");
 		if (!line)
 		{
-			putwarn(ft_sprintf(": warning: here-document at line %d delimited by end-of-file (wanted '%s')\n", line_i, del), false);
+			if (last_signal != 5)
+				putwarn(ft_sprintf(": warning: here-document at line %d delimited by end-of-file (wanted '%s')\n", line_i, del), false);
 			break ;
 		}
 		if (ft_strcmp(line, del) == 0)

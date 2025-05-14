@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 19:30:41 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:14:01 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,6 +383,8 @@ typedef struct s_token_list_h
 	t_token	*end;
 }	t_token_list_h;
 
+extern int last_signal;
+
 // BUILTINS --------------------------------------------------------------------
 
 t_exit			builtin_cd(t_excmd *c);
@@ -393,6 +395,8 @@ t_exit			builtin_export(t_excmd *c);
 t_exit			builtin_pwd(t_excmd *c);
 t_exit			builtin_unset(t_excmd *c);
 t_bool			display_colors(t_excmd *cmd);
+char			*get_identifier(char *str);
+t_bool			valid_identifier_name(char *str);
 
 // ENV_MANAGER -----------------------------------------------------------------
 
@@ -446,6 +450,8 @@ void			sort_env_list(t_env_var **head_ref);
 char			*show_prompt(t_minishell *minishell);
 void			sigint_handler(int signal);
 void			 init_sighandler(void);
+void 			init_sigheredoc(void);
+void 			sigint_heredoc(int sig);
 
 void			sig_here_doc(int signum);
 
