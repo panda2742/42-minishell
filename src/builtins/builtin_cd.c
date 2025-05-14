@@ -49,7 +49,7 @@ static void	_update_vars(t_env_manager *env)
 		if (pwd && pwd->value)
 			old_pwd->value = pwd->value;
 		else
-			old_pwd->value = ft_strdup("");
+			old_pwd->value = ft_strdup(""); //
 		old_pwd->value_length = ft_strlen(old_pwd->value);
 	}
 	if (pwd)
@@ -58,7 +58,7 @@ static void	_update_vars(t_env_manager *env)
 		if (cwd)
 			pwd->value = cwd;
 		else
-			pwd->value = ft_strdup("");
+			pwd->value = ft_strdup(""); //
 		pwd->value_length = ft_strlen(pwd->value);
 	}
 }

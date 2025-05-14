@@ -12,26 +12,26 @@
 
 #include "minishell.h"
 
-/*
- * Just used to build the raw string from the token list.
-*/
+// /*
+//  * Just used to build the raw string from the token list.
+// */
 
-char	*join_tokens_to_string(t_token *tokens)
-{
-	char	*result;
-	t_token	*tmp;
+// char	*join_tokens_to_string(t_token *tokens)
+// {
+// 	char	*result;
+// 	t_token	*tmp;
 
-	result = ft_strdup("");
-	tmp = tokens;
-	if (!result)
-		return (NULL);
-	while (tmp)
-	{
-		if (tmp->fragments && tmp->fragments->text)
-			result = str_join_free(result, tmp->fragments->text);
-		if (tmp->next)
-			result = str_join_free(result, " ");
-		tmp = tmp->next;
-	}
-	return (result);
-}
+// 	result = ft_strdup("");
+// 	tmp = tokens;
+// 	if (!result)
+// 		return (NULL);
+// 	while (tmp)
+// 	{
+// 		if (tmp->fragments && tmp->fragments->text)
+// 			result = str_join_free(result, tmp->fragments->text);
+// 		if (tmp->next)
+// 			result = str_join_free(result, " ");
+// 		tmp = tmp->next;
+// 	}
+// 	return (result);
+// }

@@ -70,7 +70,7 @@ t_redir	*create_heredoc_redirect(char *delimiter)
 	res->fd.type = STREAM_REDIR;
 	res->is_heredoc = true;
 	res->heredoc_id = -1;
-	res->heredoc_del = ft_strdup(delimiter);
+	res->heredoc_del = ft_strdup(delimiter); //
 	res->out_append_mode = false;
 	res->next = NULL;
 	return (res);

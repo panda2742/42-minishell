@@ -38,7 +38,10 @@ void	update_token_redir(t_token *list)
 
 int	ft_printf_error(char *str)
 {
-	ft_printf("%s", str);
+	size_t	len;
+
+	len = ft_strlen(str);
+	write(STDERR_FILENO, str, len);
 	return (0);
 }
 
@@ -46,10 +49,12 @@ static int	check_redir_error(t_token *token)
 {
 	if (token->next == NULL)
 		return (
-			ft_printf_error("syntax error near unexpected token `newline'\n"));
+			ft_printf_error
+			("Error: syntax error near unexpected token `newline'\n"));
 	if (token->next->type != TOKEN_WORD)
 		return (
-			ft_printf_error("syntax error near unexpected token `newline'\n"));
+			ft_printf_error
+			("Error: syntax error near unexpected token `newline'\n"));
 	update_token_redir(token);
 	return (1);
 }
@@ -57,9 +62,10 @@ static int	check_redir_error(t_token *token)
 static int	check_pipe_error(t_token *token)
 {
 	if (token->next == NULL)
-		return (ft_printf_error("Syntax error end with a | not allowed\n"));
+		return (ft_printf_error
+			("Error: syntax error end with a | not allowed\n"));
 	if (token->next->type == TOKEN_PIPE)
-		return (ft_printf_error("Syntax error || detected\n"));
+		return (ft_printf_error("Error: syntax error || detected\n"));
 	return (1);
 }
 
