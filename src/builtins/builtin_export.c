@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:21 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 17:22:22 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 09:31:24 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static t_exit	_no_args(t_excmd *c);
 static t_bool	_write_var(t_excmd *cmd, t_env_var *var);
+static t_bool	_write_var_value(t_excmd *cmd, t_env_var *var);
 
 t_exit	builtin_export(t_excmd *c)
 {
@@ -37,7 +38,7 @@ static t_exit	_no_args(t_excmd *c)
 	var = *vars;
 	while (++i < c->env->env_size && var)
 	{
-		if (!var->name || ft_strcmp(var->name, "_") == 0)
+		if (!var->name)
 		{
 			var = var->next;
 			continue ;
@@ -58,25 +59,40 @@ static t_bool	_write_var(t_excmd *cmd, t_env_var *var)
 	t_bool	is_last;
 
 	is_last = display_colors(cmd);
-	if (write(1, "export ", 8) == -1)
-		return (false);
 	if (is_last)
 	{
-		if (write(1, B_YELLOW, 7) == -1)
+		if (write(1, BLACK, 5) == -1)
 			return (false);
 	}
-	if (write(1, var->name, var->name_length) == -1)
+	if (write(1, "export ", 7) == -1)
 		return (false);
 	if (is_last)
 	{
 		if (write(1, RESET, 5) == -1)
 			return (false);
+		if (write(1, B_YELLOW, 7) == -1)
+			return (false);
 	}
-	if (write(1, "=", 1) == -1)
+	if (write(1, var->name, var->name_length) == -1)
+		return (false);
+	return (_write_var_value(cmd, var));
+}
+
+static t_bool	_write_var_value(t_excmd *cmd, t_env_var *var)
+{
+	t_bool	is_last;
+
+	is_last = display_colors(cmd);
+	if (is_last)
+	{
+		if (write(1, RESET, 5) == -1)
+			return (false);
+	}
+	if (write(1, "=\"", 2) == -1)
 		return (false);
 	if (write(1, var->value, ft_strlen(var->value)) == -1)
 		return (false);
-	if (write(1, "\n", 1) == -1)
+	if (write(1, "\"\n", 2) == -1)
 		return (false);
 	return (true);
 }
