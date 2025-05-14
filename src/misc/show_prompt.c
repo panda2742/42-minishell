@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:39:24 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 11:46:25 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:18:47 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*show_prompt(t_minishell *minishell)
 	char		*line;
 
 	if (!isatty(STDIN_FILENO))
-		return (readline(""));
+		return (readline("\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"));
 	res = _load_theme(minishell);
 	if (res == NULL)
 		return (readline(default_prompt));
