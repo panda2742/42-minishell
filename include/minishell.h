@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 15:20:59 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 15:56:59 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -447,6 +447,9 @@ t_env_var		*ensure_var(t_env_manager *env, const char *name,
 t_env_var		*init_var(t_env_manager *env, const char *name);
 void			init_all_vars(t_env_manager *env, char **envp, t_env_var *elt,
 					size_t i);
+t_bool			load_env_strlst(t_execvars *vars);
+t_redir			*mem_redir_fail(t_redir_manager *redirects_manager,
+					t_redir *last);
 
 // MEMORY ----------------------------------------------------------------------
 
