@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 13:58:49 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:10:58 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,8 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		init_sighandler();
-		line = show_prompt(&minishell); // line secured
 		check_sigint(&minishell);
+		line = show_prompt(&minishell); // line secured
 		exit_if_line_null(line, &minishell);
 		add_history(line);
 		first = build_and_parse_line(line, &minishell);
