@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 15:56:59 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:04:02 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -405,6 +405,19 @@ void			_non_existing_var_op(unsigned char op, t_env_var *var,
 					char *value);
 t_env_var		*_create_new_var(char *identifier, unsigned char op,
 					char *value);
+
+void			_free_everything(t_excmd *cmd, t_execvars *vars, int status,
+					t_bool unlink_tmp);
+t_bool			_create_pipe_if_necessary(t_excmd *cmd);
+void			_child_life(t_execvars *vars, t_excmd *cmd);
+t_bool			_error_or_parent_life(int fork_id, t_execvars *vars,
+					t_excmd *cmd, pid_t *last_fork);
+void			_trigger_waits(t_execvars *vars, pid_t last_fork);
+int				_setup_cmd(t_excmd *cmd);
+int				_check_input_redir(t_excmd *cmd);
+int				_check_output_redir(t_excmd *cmd);
+int				_create_input_dup2_redir(t_excmd *cmd);
+int				_create_output_dup2_redir(t_excmd *cmd);
 
 // ENV_MANAGER -----------------------------------------------------------------
 

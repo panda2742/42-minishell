@@ -20,7 +20,7 @@ override	SRC_ENV_MANAGER	:=	create_env create_env_utils default_env dup_env env_
 override	SRC_ERRORS		:=	puterr putwarn
 override	SRC_EXEC		:=	$(addprefix heredoc/, heredoc) \
 								$(addprefix init/, create_cmd_utils create_cmd create_execvars create_redirect redirect_manager) \
-								$(addprefix process/, exec_multiple_commands exec_single_builtin exec_utils exec execute_from_path)
+								$(addprefix process/, exec_multiple_commands exec_multiple_commands_utils1 exec_multiple_commands_utils2 exec_single_builtin exec_utils exec execute_from_path)
 override	SRC_MEMORY		:=	free_cmds free_env
 override	SRC_MISC		:=	show_prompt signals build_themes get_random_chars
 override	SRC_PARSING		:=	$(addprefix cmd/, cmd) \
