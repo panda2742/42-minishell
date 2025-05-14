@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 12:23:02 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 13:58:03 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 # include <stdint.h>
 # include <dirent.h>
 # include <sys/types.h>
+# include <stdlib.h>
 # include "libft.h"
-#include <signal.h>
+# include <signal.h>
 
 # ifndef PROJECT_NAME
 #  define PROJECT_NAME "Minishell"
@@ -394,6 +395,8 @@ t_exit			builtin_pwd(t_excmd *c);
 t_exit			builtin_unset(t_excmd *c);
 t_bool			display_colors(t_excmd *cmd);
 char			*get_identifier(char *str);
+unsigned char	get_operation(char *str);
+char			*get_value(char *str);
 t_bool			valid_identifier_name(char *str);
 
 // ENV_MANAGER -----------------------------------------------------------------

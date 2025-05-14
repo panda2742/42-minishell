@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:40 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 12:25:07 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 13:58:56 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_exit	heredoc(char *del, char **filepath ,t_bool skip_writing)
 	if (heredoc_fd == -1)
 		return (EXIT_FAILURE);
 	line_i = 1;
-	while (1)
+	while (last_signal != 5)
 	{
 		init_sigheredoc();
 		line = readline("> ");
