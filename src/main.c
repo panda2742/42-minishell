@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 11:25:24 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 12:15:58 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,14 @@ t_excmd	*build_and_parse_line(char *line, t_minishell *mini)
  * If not, print an error message and exit
  * Malloc secured
 */
-
+void check_sigint(t_minishell *mini)
+{
+	if (last_signal == 3)
+	{
+		mini->last_status = 130;
+		last_signal = 0;
+	}
+}
 
 int	main(int argc, char **argv, char **env)
 {
@@ -97,6 +104,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		init_sighandler();
 		line = show_prompt(&minishell); // line secured
+		check_sigint(&minishell);
 		exit_if_line_null(line, &minishell);
 		add_history(line);
 		first = build_and_parse_line(line, &minishell);

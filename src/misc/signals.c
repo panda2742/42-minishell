@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:21:20 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 11:22:28 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 12:16:25 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include "minishell.h"
 
-int	last_signal = 0;
+int last_signal = 0;
 
 /*
 	sigaction struct:
@@ -37,26 +37,26 @@ int	last_signal = 0;
 
 void sigint_handler(int sig)
 {
-    (void)sig;
-    write(STDOUT_FILENO, "\n", 1);
-    rl_on_new_line();
-    rl_replace_line("", 0);
-    rl_redisplay();
+	(void)sig;
+	rl_redisplay();
+	write(STDIN_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_redisplay();
 	last_signal = 3;
 }
 
 /* on installe dans la boucle, avant chaque readline */
 void init_sighandler(void)
 {
-    signal(SIGINT,  sigint_handler);
-    signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void sigint_heredoc(int sig)
 {
-    (void)sig;
-    write(STDOUT_FILENO, "\n", 1);
-    rl_on_new_line();
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
 	last_signal = 5;
 	close(STDIN_FILENO);
 }
@@ -64,6 +64,6 @@ void sigint_heredoc(int sig)
 /* on installe dans la boucle, avant chaque readline */
 void init_sigheredoc(void)
 {
-    signal(SIGINT,  sigint_heredoc);
-    signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, sigint_heredoc);
+	signal(SIGQUIT, SIG_IGN);
 }

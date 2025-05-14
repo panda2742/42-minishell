@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 11:14:01 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 12:15:54 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -449,7 +449,7 @@ void			sort_env_list(t_env_var **head_ref);
 
 char			*show_prompt(t_minishell *minishell);
 void			sigint_handler(int signal);
-void			 init_sighandler(void);
+void 			init_sighandler();
 void 			init_sigheredoc(void);
 void 			sigint_heredoc(int sig);
 
