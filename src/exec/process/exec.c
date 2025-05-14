@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 12:25:15 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:22:40 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 	cmd = *cmds;
 	while (cmd)
 	{
-		if (cmd->in_redirects.size && _read_heredocs(&cmd->in_redirects) == EXIT_FAILURE)
+		if (cmd->in_redirects.size
+			&& _read_heredocs(&cmd->in_redirects) == EXIT_FAILURE)
 		{
 			clear_every_tmpfile(cmds);
 			puterr(ft_sprintf(": heredoc error.\n"), false);
@@ -86,9 +87,10 @@ static t_exit	_read_heredocs(t_redir_manager *redirects_manager)
 		if (elt->is_heredoc)
 		{
 			heredoc_status = heredoc(
-				elt->heredoc_del,
-				&elt->filepath,
-				elt->heredoc_id != nb_heredoc && elt->next == NULL);
+					elt->heredoc_del,
+					&elt->filepath,
+					elt->heredoc_id != nb_heredoc
+					&& elt->next == NULL);
 			if (heredoc_status == EXIT_FAILURE)
 				return (EXIT_FAILURE);
 		}

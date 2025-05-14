@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 09:48:19 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 12:51:21 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:44:26 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ unsigned char	get_operation(char *str)
 char	*get_value(char *str)
 {
 	while (*str && (
-		ft_isalnum(*str)
-		|| *str == '_'
+			ft_isalnum(*str)
+			|| *str == '_'
 		))
 		str++;
 	while (*str && (
-		*str == '+' 
-		|| *str == '='
+			*str == '+'
+			|| *str == '='
 		))
 		str++;
 	return (str);

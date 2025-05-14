@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_lexer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 09:03:27 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 15:46:53 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 14:27:59 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ t_token	*ft_create_token(t_token_type type)
 	t_token	*new;
 
 	new = ft_memalloc(sizeof(t_token));
-	// new = NULL;
 	if (!new)
 		return (NULL);
 	new->is_first_word = false;

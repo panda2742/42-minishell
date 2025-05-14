@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:40 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 14:00:36 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 15:03:35 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,36 @@
 
 static int	_write_heredoc(int fd, char *buffer);
 
-t_exit	heredoc(char *del, char **filepath ,t_bool skip_writing)
+static int	_get_heredoc_fd(char **filepath)
 {
-	char		*line;
 	char		*random_id;
 	int			heredoc_fd;
-	size_t		line_i;
 
 	random_id = get_random_chars(24);
 	*filepath = ft_sprintf("/tmp/minishell_heredoc_%s", random_id);
 	heredoc_fd = open(*filepath, O_CREAT | O_TRUNC | O_RDWR, 0644);
 	free(random_id);
+	return (heredoc_fd);
+}
+
+static void	_print_error(size_t line_i, char *del, char *line)
+{
+	if (!line)
+	{
+		if (g_last_signal != 5)
+			putwarn(ft_sprintf(\
+": warning: here-document at line %d delimited by end-of-file (wanted '%s')\n",
+					line_i, del), false);
+	}
+}
+
+t_exit	heredoc(char *del, char **filepath, t_bool skip_writing)
+{
+	char		*line;
+	int			heredoc_fd;
+	size_t		line_i;
+
+	heredoc_fd = _get_heredoc_fd(filepath);
 	if (heredoc_fd == -1)
 		return (EXIT_FAILURE);
 	line_i = 1;
@@ -32,13 +51,9 @@ t_exit	heredoc(char *del, char **filepath ,t_bool skip_writing)
 	{
 		init_sigheredoc();
 		line = readline("> ");
-		if (!line)
-		{
-			if (g_last_signal != 5)
-				putwarn(ft_sprintf(": warning: here-document at line %d delimited by end-of-file (wanted '%s')\n", line_i, del), false);
-			break ;
-		}
-		if (ft_strcmp(line, del) == 0)
+		if (!line || ft_strcmp(line, del) == 0)
+			_print_error(line_i, del, line);
+		if (!line || ft_strcmp(line, del) == 0)
 			break ;
 		line_i++;
 		if (skip_writing)
@@ -47,7 +62,6 @@ t_exit	heredoc(char *del, char **filepath ,t_bool skip_writing)
 		write(heredoc_fd, "\n", 1);
 	}
 	close(heredoc_fd);
-
 	return (EXIT_SUCCESS);
 }
 

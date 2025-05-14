@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:48 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 11:18:18 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:22:58 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ t_redir	*create_in_redirect(char *filepath)
 	if (res == NULL)
 		return (NULL);
 	res->filepath = ft_strdup(filepath);
-	// free(res->filepath);
-	// res->filepath = NULL;
 	if (res->filepath == NULL)
 	{
 		free(res);
@@ -45,8 +43,6 @@ t_redir	*create_out_redirect(char *filepath, t_bool append_mode)
 	if (res == NULL)
 		return (NULL);
 	res->filepath = ft_strdup(filepath);
-	// free(res->filepath);
-	// res->filepath = NULL;
 	if (res->filepath == NULL)
 	{
 		free(res);

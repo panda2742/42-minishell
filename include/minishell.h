@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 14:13:44 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:20:59 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -398,6 +398,13 @@ char			*get_identifier(char *str);
 unsigned char	get_operation(char *str);
 char			*get_value(char *str);
 t_bool			valid_identifier_name(char *str);
+void			_do_op(t_env_manager *env, char *str);
+void			_existing_var_op(t_env_manager *env, char *identifier,
+					unsigned char op, char *value);
+void			_non_existing_var_op(unsigned char op, t_env_var *var,
+					char *value);
+t_env_var		*_create_new_var(char *identifier, unsigned char op,
+					char *value);
 
 // ENV_MANAGER -----------------------------------------------------------------
 
@@ -438,6 +445,8 @@ int				close_pipe(t_excmd *cmd, int streams);
 t_env_var		*ensure_var(t_env_manager *env, const char *name,
 					char *default_val);
 t_env_var		*init_var(t_env_manager *env, const char *name);
+void			init_all_vars(t_env_manager *env, char **envp, t_env_var *elt,
+					size_t i);
 
 // MEMORY ----------------------------------------------------------------------
 
@@ -454,9 +463,6 @@ void			init_sighandler(void);
 void			init_sigheredoc(void);
 void			sigint_heredoc(int sig);
 void			check_sigint(t_minishell *mini);
-void			sig_here_doc(int signum);
-void			print_cmds(t_excmd *cmd);
-void			print_cmd(t_excmd *cmd);
 char			*build_theme0(const char *user, const char *path);
 char			*build_theme1(int last_status, const char *user,
 					const char *path);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fragments.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:32 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/12 16:28:21 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 14:28:07 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,9 @@ t_fragment	*new_fragment(const char *start, size_t len, t_qtype quote_type)
 	t_fragment	*new;
 
 	new = ft_memalloc(sizeof(t_fragment));
-	// free(new);
-	// new = NULL;
 	if (!new)
 		return (NULL);
 	new->text = ft_memalloc(sizeof(char) * (len + 1));
-	// free(new->text);
-	// new->text = NULL;
 	if (!new->text)
 	{
 		free(new);

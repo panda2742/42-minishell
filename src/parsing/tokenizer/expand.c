@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:17:01 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/13 16:39:16 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 14:27:37 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ static t_err	handle_quote_none(t_fragment *frag, t_minishell *mini,
 	t_err	status;
 
 	expanded = expand_fragment(frag->text, frag->quote_type, mini);
-	// free(expanded);
-	// expanded = NULL;
 	if (!expanded)
 		return (ERR_MALLOC);
 	status = process_unquoted_frag(expanded, &new_list->current,

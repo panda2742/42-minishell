@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_list.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 09:07:43 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 15:56:12 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/14 14:28:44 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ t_err	set_node_tok_list(t_token *orig, t_token *out)
 	if (orig->fragments && orig->fragments->text)
 	{
 		out->text = ft_strdup(orig->fragments->text);
-		// free(out->text);
-		// out->text = NULL;
 		if (out->text == NULL)
 			return (ERR_MALLOC);
 	}
@@ -123,7 +121,6 @@ void	token_list(t_token *tok_exp_h, t_token_list **tok_cmd_h,
 			u.current = u.current->next;
 			u.end = u.current;
 		}
-		// head_tokens = NULL;
 		node = add_token_list_node(&u, tok_cmd_h);
 		if (node == NULL)
 			exit_node_failed(mini, tok_cmd_h, tok_exp_h);
