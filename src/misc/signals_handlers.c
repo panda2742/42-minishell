@@ -6,13 +6,11 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 11:07:18 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/15 16:39:30 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 16:40:24 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	_display_nl(char c);
 
 void	sigint_handler(int sig)
 {
