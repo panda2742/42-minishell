@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/15 12:14:54 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 14:41:11 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static t_exit	_read_heredocs(t_redir_manager *redirects_manager);
 
-static void	_handle_signal(t_execvars *vars)
+static t_bool	_handle_signal(void)
 {
 	int	ttyfd;
 
@@ -26,10 +26,9 @@ static void	_handle_signal(t_execvars *vars)
 			dup2(ttyfd, STDIN_FILENO);
 			close(ttyfd);
 		}
-		g_last_signal = SIG_NO;
-		vars->status = 130;
-		init_sighandler();
+		return (false);
 	}
+	return (true);
 }
 
 static t_bool	_setup_heredoc(t_excmd **cmds, t_execvars *vars)
@@ -67,12 +66,14 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 	init_sighandler_heredoc();
 	if (_setup_heredoc(cmds, vars))
 		return (vars);
-	_handle_signal(vars);
 	init_sighandler();
-	if (vars->nb_cmd == 1 && (*vars->cmds)->proto != NULL)
-		exec_single_builtin(*(vars->cmds));
-	else
-		exec_multiple_commands(vars);
+	if (_handle_signal() == true)
+	{
+		if (vars->nb_cmd == 1 && (*vars->cmds)->proto != NULL)
+			exec_single_builtin(*(vars->cmds));
+		else
+			exec_multiple_commands(vars);
+	}
 	free_cmds(vars->cmds);
 	ft_free_strtab(minishell->env.envlst);
 	return (vars);

@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:59:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 15:48:40 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 16:17:52 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,32 +62,45 @@ static t_bool	_test_path(t_excmd *cmd, char *path)
 	return (false);
 }
 
+static char	**_get_paths(t_excmd *cmd, t_env_var *path_var)
+{
+	cmd->paths = ft_split(path_var->value, ":");
+	if (cmd->paths == NULL)
+		cmd->paths = empty_paths();
+	if (cmd->paths[0] == NULL)
+	{
+		free(cmd->paths);
+		cmd->paths = empty_paths();
+	}
+	return (cmd->paths);
+}
+
 void	execute_from_path(t_excmd *cmd)
 {
 	int			i;
 	t_env_var	*path_var;
 
-	if (cmd->name && ft_strchr(cmd->name, '/') == NULL)
+	if (cmd->name)
 	{
-		path_var = get_var(&cmd->vars->minishell->env, "PATH");
-		if (path_var != NULL)
+		if (ft_strchr(cmd->name, '/') == NULL)
 		{
-			cmd->paths = ft_split(path_var->value, ":");
-			if (cmd->paths == NULL)
-				cmd->paths = empty_tab();
+			path_var = get_var(&cmd->vars->minishell->env, "PATH");
+			if (path_var != NULL)
+				cmd->paths = _get_paths(cmd, path_var);
+			else
+				cmd->paths = empty_paths();
+			i = 0;
+			while (cmd->paths[i])
+			{
+				if (_test_path(cmd, cmd->paths[i++]) == true)
+					break ;
+			}
 		}
 		else
-			cmd->paths = empty_paths();
-		i = 0;
-		while (cmd->paths[i])
-		{
-			if (_test_path(cmd, cmd->paths[i]) == true)
-				break ;
-			i++;
-		}
+			_execute_with_name(cmd);
 	}
-	else if (cmd->name && ft_strchr(cmd->name, '/'))
-		_execute_with_name(cmd);
+	else
+		cmd->vars->errs.exc_access_fok = 1;
 	_print_err(cmd);
 }
 

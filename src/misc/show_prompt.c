@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:39:24 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/15 10:49:16 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 14:22:47 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,13 @@ static char	*_load_theme(t_minishell *minishell)
 		}
 	}
 	res = NULL;
-	if (minishell->prompt_theme == 0)
+	if (minishell->prompt_theme == 3)
 		res = build_theme0(user, path);
 	if (minishell->prompt_theme == 1)
 		res = build_theme1(minishell->last_status, user, path);
 	if (minishell->prompt_theme == 2)
 		res = build_theme2(minishell->last_status, path);
-	if (minishell->prompt_theme == 3)
+	if (minishell->prompt_theme == 0)
 		res = NULL;
 	free((char *)path);
 	return (res);
