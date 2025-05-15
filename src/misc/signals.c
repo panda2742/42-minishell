@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:21:20 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 17:08:37 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 12:03:46 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,6 @@
 
 volatile sig_atomic_t	g_last_signal = 0;
 
-void	sigint_handler(int sig)
-{
-	(void)sig;
-	write(STDIN_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	g_last_signal = 3;
-}
 
 /* We set it before readline to handle the signals main*/
 void	init_sighandler(void)
@@ -35,17 +26,8 @@ void	init_sighandler(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	sigint_heredoc(int sig)
-{
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	g_last_signal = 5;
-	close(STDIN_FILENO);
-}
-
 /* We set it before readline to handle the signals fake heredoc*/
-void	init_sigheredoc(void)
+void	init_sighandler_heredoc(void)
 {
 	signal(SIGINT, sigint_heredoc);
 	signal(SIGQUIT, SIG_IGN);
@@ -53,9 +35,9 @@ void	init_sigheredoc(void)
 
 void	check_sigint(t_minishell *mini)
 {
-	if (g_last_signal == 3)
+	if (g_last_signal == SIG_C)
 	{
 		mini->last_status = 130;
-		g_last_signal = 0;
+		g_last_signal = SIG_NO;
 	}
 }

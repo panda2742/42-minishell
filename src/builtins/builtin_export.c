@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:21 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 14:44:25 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 11:43:11 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,16 +69,16 @@ static t_bool	_write_var(t_excmd *cmd, t_env_var *var)
 	is_last = display_colors(cmd);
 	if (is_last)
 	{
-		if (write(1, BLACK, 5) == -1)
+		if (write(1, BLACK, 7) == -1)
 			return (false);
 	}
 	if (write(1, "export ", 7) == -1)
 		return (false);
 	if (is_last)
 	{
-		if (write(1, RESET, 5) == -1)
+		if (write(1, RESET, 7) == -1)
 			return (false);
-		if (write(1, B_YELLOW, 7) == -1)
+		if (write(1, B_YELLOW, 9) == -1)
 			return (false);
 	}
 	if (write(1, var->name, var->name_length) == -1)
@@ -93,7 +93,7 @@ static t_bool	_write_var_value(t_excmd *cmd, t_env_var *var)
 	is_last = display_colors(cmd);
 	if (is_last)
 	{
-		if (write(1, RESET, 5) == -1)
+		if (write(1, RESET, 7) == -1)
 			return (false);
 	}
 	if (var->value)
@@ -102,10 +102,10 @@ static t_bool	_write_var_value(t_excmd *cmd, t_env_var *var)
 			return (false);
 		if (write(1, var->value, ft_strlen(var->value)) == -1)
 			return (false);
-		if (write(1, "\"", 2) == -1)
+		if (write(1, "\"", 1) == -1)
 			return (false);
 	}
-	if (write(1, "\n", 2) == -1)
+	if (write(1, "\n", 1) == -1)
 		return (false);
 	return (true);
 }

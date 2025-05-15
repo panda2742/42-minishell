@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 17:04:02 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 11:16:54 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@
 # define EXIT_CANNOT_EXEC 126
 # define EXIT_NOT_FOUND 127
 # define EXIT_FORK_FAILED 1
+
+# define SIG_NO 0
+# define SIG_C 1
+# define SIG_C_END 2
+# define SIG_HEREDOC 3
+# define SIG_HEREDOC_END 4
 
 /**
  * An alias to the int type, just to set the code more readable.
@@ -474,9 +480,9 @@ void			sort_env_list(t_env_var **head_ref);
 // MISC ------------------------------------------------------------------------
 
 char			*show_prompt(t_minishell *minishell);
-void			sigint_handler(int signal);
 void			init_sighandler(void);
-void			init_sigheredoc(void);
+void			init_sighandler_heredoc(void);
+void			sigint_handler(int sig);
 void			sigint_heredoc(int sig);
 void			check_sigint(t_minishell *mini);
 char			*build_theme0(const char *user, const char *path);

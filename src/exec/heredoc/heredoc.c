@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:40 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/15 09:39:53 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 12:14:46 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ t_exit	heredoc(char *del, char **filepath, t_bool skip_writing)
 	if (heredoc_fd == -1)
 		return (EXIT_FAILURE);
 	line_i = 1;
-	while (g_last_signal != 5)
+	while (g_last_signal != SIG_HEREDOC)
 	{
-		init_sigheredoc();
 		line = readline("> ");
-		if (!line || ft_strcmp(line, del) == 0)
+		if ((!line || ft_strcmp(line, del) == 0)
+			&& g_last_signal != SIG_HEREDOC)
 			_print_error(line_i, del, line);
 		if (!line || !del || ft_strcmp(line, del) == 0)
 			break ;

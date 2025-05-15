@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:19 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 14:09:32 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:16:29 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_exit	builtin_exit(t_excmd *c)
 		_free_before_exit(c);
 		exit(status);
 	}
-	return (0);
+	return (status);
 }
 
 static void	_free_before_exit(t_excmd *c)
@@ -79,7 +79,11 @@ static t_bool	_check_errors(t_excmd *c, unsigned char *status)
 	}
 	if (c->argc == 2)
 		return (_update_status_return_true(c->argv[1], status));
-	puterr(ft_sprintf(": exit: too many arguments\n"), false);
+	else
+	{
+		puterr(ft_sprintf(": exit: too many arguments\n"), false);
+		*status = 1;
+	}
 	return (false);
 }
 

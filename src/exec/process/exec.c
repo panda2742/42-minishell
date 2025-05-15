@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 08:57:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 15:35:07 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 12:14:54 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ static t_exit	_read_heredocs(t_redir_manager *redirects_manager);
 
 static void	_handle_signal(t_execvars *vars)
 {
-	int				ttyfd;
+	int	ttyfd;
 
-	if (g_last_signal == 5)
+	if (g_last_signal == SIG_HEREDOC)
 	{
 		ttyfd = open("/dev/tty", O_RDWR);
 		if (ttyfd > STDERR_FILENO)
@@ -26,8 +26,9 @@ static void	_handle_signal(t_execvars *vars)
 			dup2(ttyfd, STDIN_FILENO);
 			close(ttyfd);
 		}
-		g_last_signal = 0;
+		g_last_signal = SIG_NO;
 		vars->status = 130;
+		init_sighandler();
 	}
 }
 
@@ -63,9 +64,11 @@ t_execvars	*exec_command(t_minishell *minishell, t_excmd **cmds)
 	}
 	if (vars->nb_cmd == 0 || load_env_strlst(vars) == false)
 		return (vars);
+	init_sighandler_heredoc();
 	if (_setup_heredoc(cmds, vars))
 		return (vars);
 	_handle_signal(vars);
+	init_sighandler();
 	if (vars->nb_cmd == 1 && (*vars->cmds)->proto != NULL)
 		exec_single_builtin(*(vars->cmds));
 	else

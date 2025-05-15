@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:16 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 16:48:31 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 11:33:34 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ static t_bool	_write_var(t_excmd *cmd, t_env_var *var)
 	is_last = display_colors(cmd);
 	if (is_last)
 	{
-		if (write(1, U_BLUE, 7) == -1)
+		if (write(1, U_BLUE, 9) == -1)
 			return (false);
 	}
 	if (write(1, var->name, var->name_length) == -1)
 		return (false);
 	if (is_last)
 	{
-		if (write(1, RESET, 5) == -1)
+		if (write(1, RESET, 7) == -1)
 			return (false);
 	}
 	if (write(1, "=", 1) == -1)

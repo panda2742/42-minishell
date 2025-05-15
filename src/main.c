@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 17:07:30 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 11:09:22 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 	tok_expand = NULL;
 	head_list = NULL;
 	expand_caller(token, &tok_expand, minishell);
+	if (tok_expand == NULL)
+		minishell->last_status = 0;
 	free_tokens(token);
 	token_list(tok_expand, &head_list, minishell);
 	free_tokens(tok_expand);
