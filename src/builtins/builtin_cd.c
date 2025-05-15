@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:11 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 11:05:52 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/15 09:28:20 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	_update_vars(t_env_manager *env)
 		if (pwd && pwd->value)
 			old_pwd->value = pwd->value;
 		else
-			old_pwd->value = ft_strdup(""); //
+			old_pwd->value = ft_strdup("");
 		old_pwd->value_length = ft_strlen(old_pwd->value);
 	}
 	if (pwd)
@@ -58,7 +58,7 @@ static void	_update_vars(t_env_manager *env)
 		if (cwd)
 			pwd->value = cwd;
 		else
-			pwd->value = ft_strdup(""); //
+			pwd->value = ft_strdup("");
 		pwd->value_length = ft_strlen(pwd->value);
 	}
 }

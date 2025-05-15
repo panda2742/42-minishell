@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:04:48 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 14:22:58 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/15 09:28:41 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_redir	*create_heredoc_redirect(char *delimiter)
 	res->fd.type = STREAM_REDIR;
 	res->is_heredoc = true;
 	res->heredoc_id = -1;
-	res->heredoc_del = ft_strdup(delimiter); //
+	res->heredoc_del = ft_strdup(delimiter);
 	res->out_append_mode = false;
 	res->next = NULL;
 	return (res);
