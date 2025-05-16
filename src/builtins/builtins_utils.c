@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:45:45 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 14:44:25 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/16 16:50:11 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,11 @@ void	sort_env_list(t_env_var **head_ref)
 	sort_env_list(&a);
 	sort_env_list(&b);
 	*head_ref = _merge_sorted_lists(a, b);
+}
+
+t_bool	put_err_status_update(unsigned char *status)
+{
+	puterr(ft_sprintf(": exit: too many arguments\n"), false);
+	*status = 1;
+	return (false);
 }

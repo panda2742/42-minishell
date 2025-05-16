@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/15 11:16:54 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/16 16:53:15 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,6 +424,7 @@ int				_check_input_redir(t_excmd *cmd);
 int				_check_output_redir(t_excmd *cmd);
 int				_create_input_dup2_redir(t_excmd *cmd);
 int				_create_output_dup2_redir(t_excmd *cmd);
+t_bool			put_err_status_update(unsigned char *status);
 
 // ENV_MANAGER -----------------------------------------------------------------
 

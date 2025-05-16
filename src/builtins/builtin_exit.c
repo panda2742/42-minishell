@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
+/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:19 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/15 12:16:29 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/16 16:50:06 by abonifac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,7 @@ static t_bool	_check_errors(t_excmd *c, unsigned char *status)
 	if (c->argc == 2)
 		return (_update_status_return_true(c->argv[1], status));
 	else
-	{
-		puterr(ft_sprintf(": exit: too many arguments\n"), false);
-		*status = 1;
-	}
+		return (put_err_status_update(status));
 	return (false);
 }
 
