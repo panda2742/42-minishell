@@ -79,6 +79,12 @@ void	_trigger_waits(t_execvars *vars, pid_t last_fork)
 		{
 			if (WIFEXITED(wait_status))
 				vars->status = WEXITSTATUS(wait_status);
+			else if (WIFSIGNALED(wait_status)
+				&& WTERMSIG(wait_status) == SIGINT)
+			{
+				write(STDOUT_FILENO, "\n", 1);
+				vars->status = WEXITSTATUS(wait_status);
+			}
 		}
 		vars->nb_launched--;
 	}

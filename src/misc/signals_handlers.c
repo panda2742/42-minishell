@@ -25,7 +25,7 @@ void	sigint_handler(int sig)
 void	sigint_heredoc(int sig)
 {
 	(void)sig;
-	write(STDOUT_FILENO, "^C", 3);
+	write(STDOUT_FILENO, "^C", 2);
 	g_last_signal = SIG_HEREDOC;
 	close(STDIN_FILENO);
 }
