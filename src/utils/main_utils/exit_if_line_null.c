@@ -18,7 +18,7 @@ void	exit_if_line_null(char *line, t_minishell *minishell)
 	{
 		free_env(&minishell->env);
 		line = NULL;
-		printf("exit\n");
-		exit(EXIT_FAILURE);
+		write(STDOUT_FILENO, "exit\n", 5);
+		exit(EXIT_SUCCESS);
 	}
 }

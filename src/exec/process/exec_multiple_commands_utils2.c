@@ -70,6 +70,7 @@ t_bool	_error_or_parent_life(int fork_id, t_execvars *vars,
 void	_trigger_waits(t_execvars *vars, pid_t last_fork)
 {
 	int		wait_status;
+	int		sig;
 	pid_t	ended_pid;
 
 	while (vars->nb_launched)
@@ -79,11 +80,15 @@ void	_trigger_waits(t_execvars *vars, pid_t last_fork)
 		{
 			if (WIFEXITED(wait_status))
 				vars->status = WEXITSTATUS(wait_status);
-			else if (WIFSIGNALED(wait_status)
-				&& WTERMSIG(wait_status) == SIGINT)
+			else if (WIFSIGNALED(wait_status))
 			{
+				sig = WTERMSIG(wait_status);
+				if (sig == SIGINT)
+					vars->status = 128 + SIGINT;
+				else if (sig == SIGQUIT)
+					(write(1, "Quit (core dumped)", 12),
+						vars->status = 128 + SIGQUIT);
 				write(STDOUT_FILENO, "\n", 1);
-				vars->status = WEXITSTATUS(wait_status);
 			}
 		}
 		vars->nb_launched--;
