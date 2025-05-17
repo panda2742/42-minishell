@@ -99,6 +99,8 @@ void	execute_from_path(t_excmd *cmd)
 		else
 			_execute_with_name(cmd);
 	}
+	else if (cmd->in_redirects.size > 0 || cmd->out_redirects.size > 0) // i added this check it
+		cmd->vars->errs.exc_access_fok = 0;
 	else
 		cmd->vars->errs.exc_access_fok = 1;
 	_print_err(cmd);
@@ -118,7 +120,7 @@ static void	_print_err(t_excmd *cmd)
 	}
 	else if (cmd->vars->errs.exc_access_fok)
 	{
-		puterr(ft_sprintf(": %s: Command not found\n", cmd->name), false);
+		puterr(ft_sprintf(": %s: Command not found\n", cmd->name), false); // here for > a
 		cmd->vars->status = EXIT_NOT_FOUND;
 	}
 	else if (cmd->vars->errs.exc_execve)
