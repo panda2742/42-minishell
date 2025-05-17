@@ -120,7 +120,7 @@ static void	_print_err(t_excmd *cmd)
 	}
 	else if (cmd->vars->errs.exc_access_fok)
 	{
-		puterr(ft_sprintf(": %s: Command not found\n", cmd->name), false); // here for > a
+		puterr(ft_sprintf(": %s: Command not found\n", cmd->name), false);
 		cmd->vars->status = EXIT_NOT_FOUND;
 	}
 	else if (cmd->vars->errs.exc_execve)
