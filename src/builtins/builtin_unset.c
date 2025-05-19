@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:25 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/19 11:12:50 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/19 11:35:55 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ static void	_unset_var(t_excmd *c, int i)
 			free(var->value);
 			free(var);
 			c->env->env_size -= 1;
-			
 			break ;
 		}
 		prev = var;
