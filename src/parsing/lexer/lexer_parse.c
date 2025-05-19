@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:42:45 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/13 15:56:45 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:45:51 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,20 @@ void	update_token_redir(t_token *list)
 	}
 }
 
-int	ft_printf_error(char *str)
-{
-	size_t	len;
-
-	len = ft_strlen(str);
-	write(STDERR_FILENO, str, len);
-	return (0);
-}
-
 static int	check_redir_error(t_token *token)
 {
 	if (token->next == NULL)
-		return (
-			ft_printf_error
-			("Error: syntax error near unexpected token `newline'\n"));
+		puterr(ft_strdup(
+				": error: syntax error near unexpected token `newline'\n"),
+			false);
+	if (token->next == NULL)
+		return (0);
 	if (token->next->type != TOKEN_WORD)
-		return (
-			ft_printf_error
-			("Error: syntax error near unexpected token `newline'\n"));
+		puterr(ft_strdup(
+				": error: syntax error near unexpected token `newline'\n"),
+			false);
+	if (token->next->type != TOKEN_WORD)
+		return (0);
 	update_token_redir(token);
 	return (1);
 }
@@ -62,10 +57,14 @@ static int	check_redir_error(t_token *token)
 static int	check_pipe_error(t_token *token)
 {
 	if (token->next == NULL)
-		return (ft_printf_error
-			("Error: syntax error end with a | not allowed\n"));
+		puterr(ft_strdup(": error: syntax error, end with a | not allowed\n"),
+			false);
+	if (token->next == NULL)
+		return (0);
 	if (token->next->type == TOKEN_PIPE)
-		return (ft_printf_error("Error: syntax error || detected\n"));
+		puterr(ft_strdup(": error: syntax error, || detected\n"), false);
+	if (token->next->type == TOKEN_PIPE)
+		return (0);
 	return (1);
 }
 
@@ -77,8 +76,10 @@ int	lexer_parse(t_token *token)
 	if (list == NULL)
 		return (0);
 	if (list->type == TOKEN_PIPE)
-		return (
-			ft_printf_error("Error: syntax error near unexpected token `|'\n"));
+		puterr(ft_strdup(": error: syntax error near unexpected token `|'\n"),
+			false);
+	if (list->type == TOKEN_PIPE)
+		return (0);
 	while (list != NULL)
 	{
 		if (list->type == TOKEN_PIPE)

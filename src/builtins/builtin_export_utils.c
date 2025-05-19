@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 14:37:18 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/19 10:35:16 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:44:22 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	_do_op(t_env_manager *env, char *str)
 	t_env_var		*var;
 
 	identifier = get_identifier(str);
-	printf("identifier: %s\n", identifier);
 	if (valid_identifier_name(identifier) == false)
 	{
 		puterr(ft_sprintf(": export: `%s': not a valid identifier\n",
@@ -30,7 +29,7 @@ void	_do_op(t_env_manager *env, char *str)
 	op = get_operation(str);
 	if (op == 3)
 		puterr(ft_sprintf(": export: `%s': not a valid identifier\n",
-			str), false);
+				str), false);
 	if (op == 3)
 		return (free(identifier));
 	value = get_value(str);

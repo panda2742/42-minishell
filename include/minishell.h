@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/19 10:25:29 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:45:48 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -513,7 +513,6 @@ t_token			*add_new_token(t_token **new_h, t_token **new_t,
 t_err			process_unquoted_frag(const char *expanded, char **current,
 					t_w_split **new_list, t_token *token);
 void			update_token_redir(t_token *list);
-int				ft_printf_error(char *str);
 int				lexer_parse(t_token *token);
 int				is_char_redir_or_pipe(char c);
 void			print_tokens(t_token *tokens);
