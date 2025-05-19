@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 16:03:30 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/16 16:53:15 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:25:29 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -457,7 +457,7 @@ t_execvars		*exec_command(t_minishell *minishell, t_excmd **cmds);
 t_cmdproto		load_builtin(const char *command_name, t_cmdproto *proto);
 void			exec_single_builtin(t_excmd *cmd);
 char			*get_full_path(char *path, char *cmd_name);
-void			execute_from_path(t_excmd *cmd);
+void			execute_from_path(t_excmd *cmd, size_t redir_size);
 t_execvars		*create_execvars(t_minishell *minishell, t_excmd **cmds);
 void			reset_execvars(t_execvars *vars);
 void			exec_multiple_commands(t_execvars *vars);

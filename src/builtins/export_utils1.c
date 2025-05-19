@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 09:48:19 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 14:44:26 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:31:04 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,10 @@ t_bool	valid_identifier_name(char *str)
 	i = 0;
 	while (++i < len)
 	{
-		if (str[i] == '=' || (str[i] == '+' && str[i + 1] && str[i + 1] == '='))
+		if (str[i] == '=')
 			return (true);
+		if (str[i] == '+')
+			return (str[i + 1] && str[i + 1] == '=');
 		if (ft_isalnum(str[i]) == false && str[i] != '_')
 			return (false);
 	}

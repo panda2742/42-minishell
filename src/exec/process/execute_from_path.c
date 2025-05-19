@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 10:59:50 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/15 16:17:52 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:24:43 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static char	**_get_paths(t_excmd *cmd, t_env_var *path_var)
 	return (cmd->paths);
 }
 
-void	execute_from_path(t_excmd *cmd)
+void	execute_from_path(t_excmd *cmd, size_t redir_size)
 {
 	int			i;
 	t_env_var	*path_var;
@@ -99,10 +99,8 @@ void	execute_from_path(t_excmd *cmd)
 		else
 			_execute_with_name(cmd);
 	}
-	else if (cmd->in_redirects.size > 0 || cmd->out_redirects.size > 0) // i added this check it
-		cmd->vars->errs.exc_access_fok = 0;
 	else
-		cmd->vars->errs.exc_access_fok = 1;
+		cmd->vars->errs.exc_access_fok = redir_size == 0;
 	_print_err(cmd);
 }
 

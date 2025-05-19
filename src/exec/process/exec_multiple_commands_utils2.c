@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 15:24:04 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 17:04:55 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:25:46 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void	_child_life(t_execvars *vars, t_excmd *cmd)
 		_free_everything(cmd, vars, status, false);
 	if (cmd->proto == NULL)
 	{
-		execute_from_path(cmd);
+		execute_from_path(cmd,
+			cmd->in_redirects.size + cmd->out_redirects.size);
 		_free_everything(cmd, vars, vars->status, true);
 	}
 	else

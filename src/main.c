@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 08:24:15 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/16 16:13:00 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:26:05 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,6 @@ t_excmd	*process_tokens(t_token *token, t_minishell *minishell)
 	free_tokens(tok_expand);
 	cmd_list = create_cmd_list(head_list, minishell);
 	free_tokens_in_list(head_list);
-	// if (!cmd_list)
-	// {
-	// 	free_env(&minishell->env);
-	// 	free_cmds(&cmd_list);
-	// 	exit(EXIT_FAILURE);
-	// }
 	return (cmd_list);
 }
 
