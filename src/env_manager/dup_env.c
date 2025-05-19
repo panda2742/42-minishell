@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 16:53:45 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/14 14:51:02 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/19 11:16:00 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,11 @@ t_env_var	**dup_env_vars(t_env_manager *env)
 {
 	t_env_var	**res;
 
+	if (env->env_size == 0)
+		return (NULL);
 	res = ft_memalloc(sizeof(t_env_var *));
 	if (res == NULL)
 		return (NULL);
-	if (env->env_size == 0)
-	{
-		free(res);
-		return (NULL);
-	}
 	res[0] = NULL;
 	return (_fill_vars(res, env));
 }

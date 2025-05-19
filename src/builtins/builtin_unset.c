@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:00:25 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/09 12:03:11 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/19 11:12:50 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ t_exit	builtin_unset(t_excmd *c)
 	return (0);
 }
 
+static void	_check_empty_now(t_env_manager *env)
+{
+}
+
 static void	_unset_var(t_excmd *c, int i)
 {
 	t_env_var	*var;
@@ -48,6 +52,7 @@ static void	_unset_var(t_excmd *c, int i)
 			free(var->value);
 			free(var);
 			c->env->env_size -= 1;
+			
 			break ;
 		}
 		prev = var;
