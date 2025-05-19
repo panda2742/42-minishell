@@ -18,6 +18,7 @@ t_excmd	*handle_status_err(t_err status, t_token *token, t_minishell *mini)
 	{
 		puterr(ft_sprintf(": error: Memory allocation error\n"), false);
 		free_tokens(token);
+		mini->last_status = 1;
 		free_env(&mini->env);
 		exit(EXIT_FAILURE);
 	}

@@ -53,7 +53,6 @@ t_excmd	*build_and_parse_line(char *line, t_minishell *mini)
 	if (*line == '\0')
 	{
 		free(line);
-		mini->last_status = 0;
 		free_tokens(token);
 		return (NULL);
 	}
