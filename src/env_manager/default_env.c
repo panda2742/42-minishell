@@ -6,7 +6,7 @@
 /*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 14:12:21 by ehosta            #+#    #+#             */
-/*   Updated: 2025/05/15 09:28:32 by ehosta           ###   ########.fr       */
+/*   Updated: 2025/05/19 11:01:57 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,12 @@ t_env_var	*init_var(t_env_manager *env, const char *name)
 	last->next = var;
 	env->env_size++;
 	return (var);
+}
+
+t_bool	var_exists(t_env_manager *env, char *name)
+{
+	t_env_var	*var;
+
+	var = get_var(env, name);
+	return (var != NULL);
 }
