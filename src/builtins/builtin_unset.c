@@ -29,10 +29,6 @@ t_exit	builtin_unset(t_excmd *c)
 	return (0);
 }
 
-static void	_check_empty_now(t_env_manager *env)
-{
-}
-
 static void	_unset_var(t_excmd *c, int i)
 {
 	t_env_var	*var;

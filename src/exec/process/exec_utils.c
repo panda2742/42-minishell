@@ -89,3 +89,9 @@ t_bool	load_env_strlst(t_execvars *vars)
 	}
 	return (true);
 }
+
+void	print_core_dumped_and_st(t_execvars *vars)
+{
+	write(1, "Quit (core dumped)", 19);
+	vars->status = 128 + SIGQUIT;
+}

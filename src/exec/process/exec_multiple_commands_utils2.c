@@ -87,8 +87,7 @@ void	_trigger_waits(t_execvars *vars, pid_t last_fork)
 				if (sig == SIGINT)
 					vars->status = 128 + SIGINT;
 				else if (sig == SIGQUIT)
-					(write(1, "Quit (core dumped)", 19),
-						vars->status = 128 + SIGQUIT);
+					print_core_dumped_and_st(vars);
 				write(STDOUT_FILENO, "\n", 1);
 			}
 		}

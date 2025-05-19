@@ -471,6 +471,7 @@ t_bool			load_env_strlst(t_execvars *vars);
 t_redir			*mem_redir_fail(t_redir_manager *redirects_manager,
 					t_redir *last);
 t_bool			var_exists(t_env_manager *env, char *name);
+void			print_core_dumped_and_st(t_execvars *vars);
 
 // MEMORY ----------------------------------------------------------------------
 
