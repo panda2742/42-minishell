@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abonifac <abonifac@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: ehosta <ehosta@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 16:19:17 by abonifac          #+#    #+#             */
-/*   Updated: 2025/05/12 16:26:37 by abonifac         ###   ########.fr       */
+/*   Updated: 2025/05/21 09:53:08 by ehosta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	parse_single_quote(t_token *token, const char *input, int *i)
 		(*i)++;
 	if (input[*i] != '\'')
 	{
-		ft_printf("Quotes not closed\n");
+		puterr(ft_strdup(": error: quotes not closed\n"), false);
 		return (ERR_LEX);
 	}
 	frag = new_fragment(input + start, *i - start, QUOTE_SINGLE);
@@ -86,7 +86,7 @@ int	parse_double_quote(t_token *token, const char *input, int *i)
 		(*i)++;
 	if (input[*i] != '\"')
 	{
-		ft_printf("Quotes not closed\n");
+		puterr(ft_strdup(": error: quotes not closed\n"), false);
 		return (ERR_LEX);
 	}
 	frag = new_fragment(input + start, *i - start, QUOTE_DOUBLE);

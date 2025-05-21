@@ -1,4 +1,5 @@
 .history
+.vscode
 .make
 minishell
 minishell_tester
