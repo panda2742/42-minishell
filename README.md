@@ -30,7 +30,7 @@
 Replace `<n>` with a number from `0` to `3` to activate the desired theme.
 
 | Theme ID                                    | Capture                     |
-|---------------------------------------------|-----------------------------|
+|:--------------------------------------------|----------------------------:|
 | Theme 1 (`./minishell -t 0`, `./minishell`) | ![Theme 0](doc/theme-0.png) |
 | Theme 2 (`./minishell -t 1`)                | ![Theme 0](doc/theme-1.png) |
 | Theme 3 (`./minishell -t 2`)                | ![Theme 0](doc/theme-2.png) |
